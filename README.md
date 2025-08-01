@@ -1,2 +1,4 @@
 # BlueandCosmos
-BlueandCosmos is a one-stop platform for real-time celestial and Earth intelligence, combining AI-driven event detection, weather, climate trends, and disaster alerts from satellite data.
+BlueandCosmos is a unified AI-powered platform delivering real-time celestial and Earth intelligence. It combines astronomical event detection, live weather, climate trends, and disaster alerts using open satellite data for research, education, and public impact.
+
+
