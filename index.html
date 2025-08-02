@@ -60,6 +60,12 @@
       color: #d1d5db;
     }
 
+    .section img, .section iframe {
+      margin-top: 1rem;
+      max-width: 100%;
+      border-radius: 12px;
+    }
+
     a.button {
       display: inline-block;
       margin-top: 2rem;
@@ -81,13 +87,6 @@
       margin-top: 4rem;
       font-size: 0.9rem;
       color: #94a3b8;
-    }
-
-    img.apod {
-      max-width: 100%;
-      border-radius: 12px;
-      margin-bottom: 1rem;
-      margin-top: 1rem;
     }
 
     @media (max-width: 600px) {
@@ -116,6 +115,11 @@
     <p>Live weather updates, climate trend analysis, and disaster alerts—all from orbit.</p>
   </div>
 
+  <div class="section" id="apod">
+    <h2>📸 Astronomy Picture of the Day</h2>
+    <p>Loading NASA’s daily image...</p>
+  </div>
+
   <a class="button" href="#coming-soon">🚀 Launch Dashboard (Coming Soon)</a>
 
   <footer>
@@ -123,27 +127,32 @@
   </footer>
 
   <script>
-    const apiKey = 'DEMO_KEY'; // Replace with your own key
-    const apodUrl = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}`;
+    const apiKey = "DEMO_KEY"; // Replace with your own NASA API key
+    const apodSection = document.getElementById("apod");
 
-    fetch(apodUrl)
+    fetch(`https://api.nasa.gov/planetary/apod?api_key=${apiKey}`)
       .then(response => response.json())
       .then(data => {
-        if (data.media_type === 'image') {
-          const section = document.createElement('div');
-          section.className = 'section';
-          section.innerHTML = `
-            <h2>🛰️ NASA Astronomy Picture of the Day</h2>
-            <img class="apod" src="${data.url}" alt="NASA APOD" />
-            <p>${data.title}</p>
-            <p style="font-size: 0.9rem; color: #9ca3af;">${data.explanation}</p>
+        if (data.media_type === "image") {
+          apodSection.innerHTML = `
+            <h2>📸 Astronomy Picture of the Day</h2>
+            <img src="${data.url}" alt="${data.title}" />
+            <p>${data.title} — ${data.date}</p>
           `;
-          document.body.insertBefore(section, document.querySelector('footer'));
+        } else if (data.media_type === "video") {
+          apodSection.innerHTML = `
+            <h2>🎬 Astronomy Video of the Day</h2>
+            <iframe src="${data.url}" frameborder="0" allowfullscreen></iframe>
+            <p>${data.title} — ${data.date}</p>
+          `;
         } else {
-          console.log("Media type is not an image.");
+          apodSection.innerHTML = "<p>NASA APOD media type not supported.</p>";
         }
       })
-      .catch(error => console.error('Error fetching APOD:', error));
+      .catch(error => {
+        apodSection.innerHTML = "<p>Failed to load APOD. Please try again later.</p>";
+        console.error("APOD error:", error);
+      });
   </script>
 </body>
 </html>
