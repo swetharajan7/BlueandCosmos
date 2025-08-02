@@ -4,11 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BlueandCosmos</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     :root {
       --primary: #00bcd4;
       --background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-shadow: rgba(0, 188, 212, 0.2);
+      --text-light: #cbd5e1;
+      --text-muted: #94a3b8;
+      --hover-bg: #008c9e;
     }
 
     * {
@@ -23,45 +28,136 @@
       color: #fff;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
       align-items: center;
       min-height: 100vh;
       padding: 2rem;
       text-align: center;
     }
 
+    header {
+      margin-bottom: 1.5rem;
+    }
+
     h1 {
       font-size: 3rem;
-      margin-bottom: 0.5rem;
-      color: #ffffff;
+      margin-bottom: 0.2rem;
     }
 
     .tagline {
       font-size: 1.25rem;
-      color: #cbd5e1;
-      margin-bottom: 2rem;
+      color: var(--text-light);
+      margin-bottom: 3rem;
     }
 
-    .dashboard {
-      margin: 2rem auto;
-      max-width: 1000px;
+    /* Celestial Events Dashboard */
+    .celestial-dashboard {
+      max-width: 960px;
       width: 100%;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    .celestial-dashboard h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .celestial-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      text-align: center;
+    }
+
+    .celestial-card {
+      background: var(--card-bg);
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 0 10px var(--card-shadow);
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-light);
+      transition: background 0.3s ease;
+      cursor: default;
+    }
+
+    .celestial-card:hover {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 16px var(--card-shadow);
+    }
+
+    /* Main sections */
+    .section {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 16px;
+      max-width: 600px;
+      margin-bottom: 2rem;
+      box-shadow: 0 0 12px var(--card-shadow);
+    }
+
+    .section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section p {
+      font-size: 1rem;
+      color: var(--text-light);
+    }
+
+    .section img,
+    .section iframe {
+      margin-top: 1rem;
+      max-width: 100%;
+      border-radius: 12px;
+    }
+
+    a.button {
+      display: inline-block;
+      margin-top: 2rem;
+      background: var(--primary);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+    }
+
+    a.button:hover {
+      background: var(--hover-bg);
+    }
+
+    footer {
+      margin-top: 4rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* Dashboard Cards for Earth Monitoring */
+    .dashboard {
+      margin-top: 3rem;
+      max-width: 960px;
+      width: 100%;
+      text-align: center;
     }
 
     .dashboard h2 {
       font-size: 2rem;
       margin-bottom: 2rem;
-      color: #00bcd4;
     }
 
     .dashboard-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
+      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     }
 
     .dashboard-card {
-      background: rgba(255, 255, 255, 0.05);
+      background: var(--card-bg);
       padding: 1.5rem;
       border-radius: 16px;
       box-shadow: 0 0 10px rgba(0, 188, 212, 0.1);
@@ -76,18 +172,26 @@
     .dashboard-card h3 {
       font-size: 1.25rem;
       margin-bottom: 0.5rem;
-      color: #ffffff;
     }
 
     .dashboard-card p {
       font-size: 1rem;
-      color: #cbd5e1;
+      color: var(--text-light);
     }
 
-    footer {
-      margin-top: 4rem;
-      font-size: 0.9rem;
-      color: #94a3b8;
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+      .section {
+        padding: 1.5rem;
+      }
+      .celestial-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      }
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -97,78 +201,97 @@
     <p class="tagline">Exploring the Cosmos. Protecting the Earth.</p>
   </header>
 
-  <div class="dashboard">
+  <!-- Celestial Events Dashboard -->
+  <section class="celestial-dashboard" aria-label="Celestial events dashboard">
+    <h2>✨ Celestial Events</h2>
+    <div class="celestial-grid">
+      <div class="celestial-card">Meteor Showers</div>
+      <div class="celestial-card">Solar &amp; Lunar Eclipses</div>
+      <div class="celestial-card">Moon Phases</div>
+      <div class="celestial-card">Supermoons</div>
+      <div class="celestial-card">Planetary Alignments</div>
+      <div class="celestial-card">Aurora Borealis</div>
+      <div class="celestial-card">Aurora Australis</div>
+      <div class="celestial-card">Solstices &amp; Equinoxes</div>
+      <div class="celestial-card">Comets</div>
+    </div>
+  </section>
+
+  <!-- Celestial Intelligence Section -->
+  <section class="section" aria-label="Celestial intelligence">
+    <h2>🌌 Celestial Intelligence</h2>
+    <p>Track eclipses, meteor showers, and other space events in real-time using satellite data and AI.</p>
+  </section>
+
+  <!-- Earth Monitoring Section -->
+  <section class="section" aria-label="Earth monitoring">
+    <h2>🌍 Earth Monitoring</h2>
+    <p>Live weather updates, climate trend analysis, and disaster alerts—all from orbit.</p>
+  </section>
+
+  <!-- Astronomy Picture of the Day (APOD) Section -->
+  <section class="section" id="apod" aria-label="Astronomy Picture of the Day">
+    <h2>📸 Astronomy Picture of the Day</h2>
+    <p>Loading NASA’s daily image...</p>
+  </section>
+
+  <!-- Earth Monitoring Dashboard -->
+  <section class="dashboard" aria-label="Earth monitoring dashboard">
     <h2>🛰️ Space-Earth Dashboard</h2>
     <div class="dashboard-grid">
-      <div class="dashboard-card" id="weather-card">
+      <div class="dashboard-card">
         <h3>🌤️ Live Weather Updates</h3>
-        <p>Loading current weather...</p>
+        <p>Real-time global weather from satellite and open APIs.</p>
       </div>
-
       <div class="dashboard-card">
         <h3>📈 Climate Trend Analysis</h3>
-        <p>Coming soon: Historical climate data visualizations.</p>
+        <p>Track long-term climate indicators and anomalies.</p>
       </div>
-
       <div class="dashboard-card">
         <h3>🚨 Disaster Alerts</h3>
-        <p>Coming soon: Real-time alerts from NASA EONET.</p>
-      </div>
-
-      <div class="dashboard-card">
-        <h3>☄️ Meteor Showers & Eclipses</h3>
-        <p>Upcoming astronomical events around the world.</p>
-      </div>
-
-      <div class="dashboard-card">
-        <h3>🌕 Moon Phases & Supermoons</h3>
-        <p>Moon calendar and illumination levels.</p>
-      </div>
-
-      <div class="dashboard-card">
-        <h3>🪐 Planetary Alignments</h3>
-        <p>Track visible planets and celestial lineups.</p>
-      </div>
-
-      <div class="dashboard-card">
-        <h3>🌌 Auroras (Northern & Southern)</h3>
-        <p>Kp index and forecast from NOAA Space Weather Center.</p>
-      </div>
-
-      <div class="dashboard-card">
-        <h3>🌞 Solstices & Equinoxes</h3>
-        <p>Exact timings and hemispheric insights.</p>
-      </div>
-
-      <div class="dashboard-card">
-        <h3>🌠 Comets & Near Earth Objects</h3>
-        <p>Upcoming flybys and trajectories.</p>
+        <p>Global disaster warnings and visualizations.</p>
       </div>
     </div>
-  </div>
+  </section>
+
+  <a class="button" href="#coming-soon">🚀 Launch Dashboard (Coming Soon)</a>
 
   <footer>
-    <p>&copy; 2025 BlueandCosmos. Powered by OpenWeather & NASA APIs.</p>
+    <p>&copy; 2025 BlueandCosmos.</p>
   </footer>
 
   <script>
-    const apiKey = 'YOUR_API_KEY'; // Replace with your OpenWeatherMap API key
-    const city = 'New York'; // Replace with any city name
+    const apiKey = "DEMO_KEY"; // Replace with your NASA API key
+    const apodSection = document.getElementById("apod");
 
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`)
+    fetch(`https://api.nasa.gov/planetary/apod?api_key=${apiKey}`)
       .then(response => response.json())
       .then(data => {
-        const weatherCard = document.getElementById('weather-card');
-        weatherCard.innerHTML = `
-          <h3>🌤️ Weather in ${data.name}</h3>
-          <p>${data.weather[0].description}</p>
-          <p>🌡️ ${data.main.temp}&deg;C, 💧 Humidity: ${data.main.humidity}%</p>
-        `;
+        if (data.media_type === "image") {
+          apodSection.innerHTML = `
+            <h2>📸 Astronomy Picture of the Day</h2>
+            <img src="${data.url}" alt="${data.title}" />
+            <p>${data.title} — ${data.date}</p>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              Image Credit: <a href="https://apod.nasa.gov/apod/astropix.html" target="_blank" style="color: var(--primary);">NASA/APOD</a>
+            </p>
+          `;
+        } else if (data.media_type === "video") {
+          apodSection.innerHTML = `
+            <h2>🎬 Astronomy Video of the Day</h2>
+            <iframe src="${data.url}" frameborder="0" allowfullscreen></iframe>
+            <p>${data.title} — ${data.date}</p>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              Video Credit: <a href="https://apod.nasa.gov/apod/astropix.html" target="_blank" style="color: var(--primary);">NASA/APOD</a>
+            </p>
+          `;
+        } else {
+          apodSection.innerHTML = "<p>NASA APOD media type not supported.</p>";
+        }
       })
       .catch(error => {
-        const weatherCard = document.getElementById('weather-card');
-        weatherCard.innerHTML += '<p style="color:#f87171">Failed to load weather data.</p>';
-        console.error('Error fetching weather data:', error);
+        apodSection.innerHTML = "<p>Failed to load APOD. Please try again later.</p>";
+        console.error("APOD error:", error);
       });
   </script>
 </body>
