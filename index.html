@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BlueandCosmos</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
   <style>
@@ -298,7 +298,7 @@
   </footer>
 
   <script>
-    // NASA APOD
+    // NASA APOD Section
     const apiKey = "DEMO_KEY"; // Replace with your NASA API key
     const apodSection = document.getElementById("apod");
 
@@ -332,12 +332,12 @@
         console.error("APOD error:", error);
       });
 
-    // Weather Live
+    // Weather Live Section
     const weatherForm = document.getElementById('weather-form');
     const cityInput = document.getElementById('city-input');
     const weatherResult = document.getElementById('weather-result');
 
-    // Replace with your actual OpenWeatherMap API key
+    // IMPORTANT: Replace with your actual OpenWeatherMap API key
     const openWeatherApiKey = 'YOUR_OPENWEATHERMAP_API_KEY';
 
     function kelvinToCelsius(k) {
@@ -385,7 +385,7 @@
         });
     }
 
-    // Default load for a city, e.g., New York
+    // Load default city on page load
     fetchWeather('New York');
 
     weatherForm.addEventListener('submit', (e) => {
