@@ -97,48 +97,52 @@
         padding: 1.5rem;
       }
     }
+
+    /* ✅ MOVED INSIDE style tag */
+    .dashboard {
+      margin-top: 3rem;
+      max-width: 960px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .dashboard h2 {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .dashboard-card {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 0 10px rgba(0, 188, 212, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+    }
+
+    .dashboard-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 188, 212, 0.3);
+    }
+
+    .dashboard-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .dashboard-card p {
+      font-size: 1rem;
+      color: #cbd5e1;
+    }
   </style>
 </head>
-  .dashboard {
-  margin-top: 3rem;
-  max-width: 960px;
-  width: 100%;
-  text-align: center;
-}
 
-.dashboard h2 {
-  font-size: 2rem;
-  margin-bottom: 2rem;
-}
-
-.dashboard-grid {
-  display: grid;
-  gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-}
-
-.dashboard-card {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 1.5rem;
-  border-radius: 16px;
-  box-shadow: 0 0 10px rgba(0, 188, 212, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
-}
-
-.dashboard-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 188, 212, 0.3);
-}
-
-.dashboard-card h3 {
-  font-size: 1.25rem;
-  margin-bottom: 0.5rem;
-}
-
-.dashboard-card p {
-  font-size: 1rem;
-  color: #cbd5e1;
-}
+<!-- ✅ Body starts AFTER the head ends -->
 <body>
   <header>
     <h1>BlueandCosmos</h1>
@@ -163,65 +167,63 @@
   <a class="button" href="#coming-soon">🚀 Launch Dashboard (Coming Soon)</a>
 
   <div class="dashboard">
-  <h2>🛰️ Space-Earth Dashboard</h2>
-  
-  <div class="dashboard-grid">
-    <div class="dashboard-card">
-      <h3>🌤️ Live Weather Updates</h3>
-      <p>Real-time global weather from satellite and open APIs.</p>
-    </div>
-    
-    <div class="dashboard-card">
-      <h3>📈 Climate Trend Analysis</h3>
-      <p>Track long-term climate indicators and anomalies.</p>
-    </div>
-    
-    <div class="dashboard-card">
-      <h3>🚨 Disaster Alerts</h3>
-      <p>Global disaster warnings and visualizations.</p>
+    <h2>🛰️ Space-Earth Dashboard</h2>
+
+    <div class="dashboard-grid">
+      <div class="dashboard-card">
+        <h3>🌤️ Live Weather Updates</h3>
+        <p>Real-time global weather from satellite and open APIs.</p>
+      </div>
+
+      <div class="dashboard-card">
+        <h3>📈 Climate Trend Analysis</h3>
+        <p>Track long-term climate indicators and anomalies.</p>
+      </div>
+
+      <div class="dashboard-card">
+        <h3>🚨 Disaster Alerts</h3>
+        <p>Global disaster warnings and visualizations.</p>
+      </div>
     </div>
   </div>
-</div>
-  
-  
-  
+
   <footer>
     <p>&copy; 2025 BlueandCosmos.</p>
   </footer>
 
   <script>
-  const apiKey = "DEMO_KEY"; // Replace with your actual NASA API key
-  const apodSection = document.getElementById("apod");
+    const apiKey = "DEMO_KEY"; // Replace with your actual NASA API key
+    const apodSection = document.getElementById("apod");
 
-  fetch(`https://api.nasa.gov/planetary/apod?api_key=${apiKey}`)
-    .then(response => response.json())
-    .then(data => {
-      if (data.media_type === "image") {
-        apodSection.innerHTML = `
-          <h2>📸 Astronomy Picture of the Day</h2>
-          <img src="${data.url}" alt="${data.title}" />
-          <p>${data.title} — ${data.date}</p>
-          <p style="font-size: 0.85rem; color: #94a3b8;">
-            Image Credit: <a href="https://apod.nasa.gov/apod/astropix.html" target="_blank" style="color: #00bcd4;">NASA/APOD</a>
-          </p>
-        `;
-      } else if (data.media_type === "video") {
-        apodSection.innerHTML = `
-          <h2>🎬 Astronomy Video of the Day</h2>
-          <iframe src="${data.url}" frameborder="0" allowfullscreen></iframe>
-          <p>${data.title} — ${data.date}</p>
-          <p style="font-size: 0.85rem; color: #94a3b8;">
-            Video Credit: <a href="https://apod.nasa.gov/apod/astropix.html" target="_blank" style="color: #00bcd4;">NASA/APOD</a>
-          </p>
-        `;
-      } else {
-        apodSection.innerHTML = "<p>NASA APOD media type not supported.</p>";
-      }
-    })
-    .catch(error => {
-      apodSection.innerHTML = "<p>Failed to load APOD. Please try again later.</p>";
-      console.error("APOD error:", error);
-    });
-</script>
+    fetch(`https://api.nasa.gov/planetary/apod?api_key=${apiKey}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.media_type === "image") {
+          apodSection.innerHTML = `
+            <h2>📸 Astronomy Picture of the Day</h2>
+            <img src="${data.url}" alt="${data.title}" />
+            <p>${data.title} — ${data.date}</p>
+            <p style="font-size: 0.85rem; color: #94a3b8;">
+              Image Credit: <a href="https://apod.nasa.gov/apod/astropix.html" target="_blank" style="color: #00bcd4;">NASA/APOD</a>
+            </p>
+          `;
+        } else if (data.media_type === "video") {
+          apodSection.innerHTML = `
+            <h2>🎬 Astronomy Video of the Day</h2>
+            <iframe src="${data.url}" frameborder="0" allowfullscreen></iframe>
+            <p>${data.title} — ${data.date}</p>
+            <p style="font-size: 0.85rem; color: #94a3b8;">
+              Video Credit: <a href="https://apod.nasa.gov/apod/astropix.html" target="_blank" style="color: #00bcd4;">NASA/APOD</a>
+            </p>
+          `;
+        } else {
+          apodSection.innerHTML = "<p>NASA APOD media type not supported.</p>";
+        }
+      })
+      .catch(error => {
+        apodSection.innerHTML = "<p>Failed to load APOD. Please try again later.</p>";
+        console.error("APOD error:", error);
+      });
+  </script>
 </body>
 </html>
