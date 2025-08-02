@@ -114,5 +114,28 @@
   <footer>
     <p>&copy; 2025 BlueandCosmos.</p>
   </footer>
+  <script>
+  const apiKey = 'DEMO_KEY'; // Replace with your own NASA API key
+  const apodUrl = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}`;
+
+  fetch(apodUrl)
+    .then(response => response.json())
+    .then(data => {
+      if (data.media_type === 'image') {
+        const section = document.createElement('div');
+        section.className = 'section';
+        section.innerHTML = `
+          <h2>🛰️ NASA Astronomy Picture of the Day</h2>
+          <img src="${data.url}" alt="Astronomy Picture of the Day" style="max-width: 100%; border-radius: 12px; margin-bottom: 1rem;" />
+          <p>${data.title}</p>
+          <p style="font-size: 0.9rem; color: #9ca3af;">${data.explanation}</p>
+        `;
+        document.body.insertBefore(section, document.querySelector('footer'));
+      } else {
+        console.log("Today's media is not an image.");
+      }
+    })
+    .catch(error => console.error('Error fetching APOD:', error));
+</script>
 </body>
 </html>
