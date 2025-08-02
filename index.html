@@ -127,32 +127,31 @@
   </footer>
 
   <script>
-    const apiKey = "DEMO_KEY"; // Replace with your own NASA API key
-    const apodSection = document.getElementById("apod");
-
     fetch(`https://api.nasa.gov/planetary/apod?api_key=${apiKey}`)
-      .then(response => response.json())
-      .then(data => {
-        if (data.media_type === "image") {
-          apodSection.innerHTML = `
-            <h2>📸 Astronomy Picture of the Day</h2>
-            <img src="${data.url}" alt="${data.title}" />
-            <p>${data.title} — ${data.date}</p>
-          `;
-        } else if (data.media_type === "video") {
-          apodSection.innerHTML = `
-            <h2>🎬 Astronomy Video of the Day</h2>
-            <iframe src="${data.url}" frameborder="0" allowfullscreen></iframe>
-            <p>${data.title} — ${data.date}</p>
-          `;
-        } else {
-          apodSection.innerHTML = "<p>NASA APOD media type not supported.</p>";
-        }
-      })
-      .catch(error => {
-        apodSection.innerHTML = "<p>Failed to load APOD. Please try again later.</p>";
-        console.error("APOD error:", error);
-      });
+  .then(response => response.json())
+  .then(data => {
+    if (data.media_type === "image") {
+      apodSection.innerHTML = `
+        <h2>📸 Astronomy Picture of the Day</h2>
+        <img src="${data.url}" alt="${data.title}" />
+        <p>${data.title} — ${data.date}</p>
+        <p style="font-size: 0.85rem; color: #94a3b8;">Image Credit: NASA/APOD</p>
+      `;
+    } else if (data.media_type === "video") {
+      apodSection.innerHTML = `
+        <h2>🎬 Astronomy Video of the Day</h2>
+        <iframe src="${data.url}" frameborder="0" allowfullscreen></iframe>
+        <p>${data.title} — ${data.date}</p>
+        <p style="font-size: 0.85rem; color: #94a3b8;">Video Credit: NASA/APOD</p>
+      `;
+    } else {
+      apodSection.innerHTML = "<p>NASA APOD media type not supported.</p>";
+    }
+  })
+  .catch(error => {
+    apodSection.innerHTML = "<p>Failed to load APOD. Please try again later.</p>";
+    console.error("APOD error:", error);
+  });
   </script>
 </body>
 </html>
