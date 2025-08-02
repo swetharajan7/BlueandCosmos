@@ -23,7 +23,6 @@
       color: #fff;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
       min-height: 100vh;
       padding: 2rem;
@@ -38,7 +37,7 @@
     .tagline {
       font-size: 1.25rem;
       color: #cbd5e1;
-      margin-bottom: 3rem;
+      margin-bottom: 2.5rem;
     }
 
     .section {
@@ -60,7 +59,8 @@
       color: #d1d5db;
     }
 
-    .section img, .section iframe {
+    .section img,
+    .section iframe {
       margin-top: 1rem;
       max-width: 100%;
       border-radius: 12px;
@@ -83,22 +83,6 @@
       background: #008c9e;
     }
 
-    footer {
-      margin-top: 4rem;
-      font-size: 0.9rem;
-      color: #94a3b8;
-    }
-
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 2rem;
-      }
-      .section {
-        padding: 1.5rem;
-      }
-    }
-
-    /* ✅ MOVED INSIDE style tag */
     .dashboard {
       margin-top: 3rem;
       max-width: 960px;
@@ -113,13 +97,13 @@
 
     .dashboard-grid {
       display: grid;
-      gap: 2rem;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     }
 
     .dashboard-card {
       background: rgba(255, 255, 255, 0.05);
-      padding: 1.5rem;
+      padding: 1.25rem;
       border-radius: 16px;
       box-shadow: 0 0 10px rgba(0, 188, 212, 0.1);
       transition: transform 0.2s ease, box-shadow 0.3s ease;
@@ -131,24 +115,48 @@
     }
 
     .dashboard-card h3 {
-      font-size: 1.25rem;
-      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      color: #d1d5db;
     }
 
-    .dashboard-card p {
-      font-size: 1rem;
-      color: #cbd5e1;
+    footer {
+      margin-top: 4rem;
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+      .section {
+        padding: 1.5rem;
+      }
     }
   </style>
 </head>
-
-<!-- ✅ Body starts AFTER the head ends -->
 <body>
   <header>
     <h1>BlueandCosmos</h1>
     <p class="tagline">Exploring the Cosmos. Protecting the Earth.</p>
   </header>
 
+  <!-- Celestial Dashboard -->
+  <div class="dashboard">
+    <h2>✨ Celestial Dashboard</h2>
+    <div class="dashboard-grid">
+      <div class="dashboard-card"><h3>☄️ Meteor Showers</h3></div>
+      <div class="dashboard-card"><h3>🌑 Solar & Lunar Eclipses</h3></div>
+      <div class="dashboard-card"><h3>🌕 Moon Phases</h3></div>
+      <div class="dashboard-card"><h3>🌝 Supermoons</h3></div>
+      <div class="dashboard-card"><h3>🪐 Planetary Alignments & Positions</h3></div>
+      <div class="dashboard-card"><h3>🌌 Aurora Borealis & Australis</h3></div>
+      <div class="dashboard-card"><h3>🌞 Solstices & Equinoxes</h3></div>
+      <div class="dashboard-card"><h3>🌠 Comets</h3></div>
+    </div>
+  </div>
+
+  <!-- Earth Monitoring Section -->
   <div class="section">
     <h2>🌌 Celestial Intelligence</h2>
     <p>Track eclipses, meteor showers, and other space events in real-time using satellite data and AI.</p>
@@ -159,27 +167,27 @@
     <p>Live weather updates, climate trend analysis, and disaster alerts—all from orbit.</p>
   </div>
 
+  <!-- APOD Section -->
   <div class="section" id="apod">
     <h2>📸 Astronomy Picture of the Day</h2>
     <p>Loading NASA’s daily image...</p>
   </div>
 
+  <!-- Launch Button -->
   <a class="button" href="#coming-soon">🚀 Launch Dashboard (Coming Soon)</a>
 
+  <!-- Earth Dashboard -->
   <div class="dashboard">
     <h2>🛰️ Space-Earth Dashboard</h2>
-
     <div class="dashboard-grid">
       <div class="dashboard-card">
         <h3>🌤️ Live Weather Updates</h3>
         <p>Real-time global weather from satellite and open APIs.</p>
       </div>
-
       <div class="dashboard-card">
         <h3>📈 Climate Trend Analysis</h3>
         <p>Track long-term climate indicators and anomalies.</p>
       </div>
-
       <div class="dashboard-card">
         <h3>🚨 Disaster Alerts</h3>
         <p>Global disaster warnings and visualizations.</p>
@@ -187,10 +195,12 @@
     </div>
   </div>
 
+  <!-- Footer -->
   <footer>
-    <p>&copy; 2025 BlueandCosmos.</p>
+    <p>&copy; 2025 BlueandCosmos. Data courtesy of <a href="https://nasa.gov" target="_blank" style="color:#00bcd4;">NASA</a>.</p>
   </footer>
 
+  <!-- APOD Script -->
   <script>
     const apiKey = "DEMO_KEY"; // Replace with your actual NASA API key
     const apodSection = document.getElementById("apod");
