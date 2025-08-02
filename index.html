@@ -6,50 +6,90 @@
   <title>BlueandCosmos</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body {
+    :root {
+      --primary: #00bcd4;
+      --background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
+      padding: 0;
+    }
+
+    body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      background: var(--background);
       color: #fff;
-      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
       padding: 2rem;
+      text-align: center;
     }
-    header {
-      padding-top: 4rem;
-    }
+
     h1 {
-      font-size: 2.5rem;
+      font-size: 3rem;
       margin-bottom: 0.5rem;
     }
-    p.tagline {
-      font-size: 1.2rem;
+
+    .tagline {
+      font-size: 1.25rem;
       color: #cbd5e1;
-      margin-bottom: 2rem;
+      margin-bottom: 3rem;
     }
+
     .section {
-      margin-top: 4rem;
       background: rgba(255, 255, 255, 0.05);
       padding: 2rem;
-      border-radius: 12px;
+      border-radius: 16px;
+      max-width: 600px;
+      margin-bottom: 2rem;
+      box-shadow: 0 0 12px rgba(0, 188, 212, 0.2);
     }
+
+    .section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section p {
+      font-size: 1rem;
+      color: #d1d5db;
+    }
+
     a.button {
       display: inline-block;
       margin-top: 2rem;
-      background: #00bcd4;
+      background: var(--primary);
       color: white;
       padding: 0.75rem 1.5rem;
-      border-radius: 8px;
+      border-radius: 10px;
       text-decoration: none;
       font-weight: bold;
-      transition: background 0.3s;
+      font-size: 1rem;
+      transition: background 0.3s ease;
     }
+
     a.button:hover {
       background: #008c9e;
     }
+
     footer {
       margin-top: 4rem;
       font-size: 0.9rem;
       color: #94a3b8;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+      .section {
+        padding: 1.5rem;
+      }
     }
   </style>
 </head>
@@ -61,18 +101,18 @@
 
   <div class="section">
     <h2>🌌 Celestial Intelligence</h2>
-    <p>Real-time detection of astronomical events using AI—eclipses, meteor showers, ISS passes, and more.</p>
+    <p>Track eclipses, meteor showers, and other space events in real-time using satellite data and AI.</p>
   </div>
 
   <div class="section">
-    <h2>🌍 Earth Observation</h2>
-    <p>Monitor weather, track climate trends, and get disaster alerts with satellite-based Earth data.</p>
+    <h2>🌍 Earth Monitoring</h2>
+    <p>Live weather updates, climate trend analysis, and disaster alerts—all from orbit.</p>
   </div>
 
-  <a class="button" href="#coming-soon">Launch Dashboard (Coming Soon)</a>
+  <a class="button" href="#coming-soon">🚀 Launch Dashboard (Coming Soon)</a>
 
-<footer>
-  <p>&copy; 2025 BlueandCosmos.</p>
-</footer>
+  <footer>
+    <p>&copy; 2025 BlueandCosmos.</p>
+  </footer>
 </body>
 </html>
