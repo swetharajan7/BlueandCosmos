@@ -196,6 +196,89 @@
   </style>
 </head>
 <body>
+  <section class="section" id="weather-live" aria-label="Live Weather Updates">
+  <h2>🌐 Weather Live — Current Global Weather</h2>
+
+  <form id="weather-form" style="margin-bottom: 1rem;">
+    <input 
+      type="text" 
+      id="city-input" 
+      placeholder="Enter city name (e.g. New York)" 
+      style="padding: 0.5rem; border-radius: 8px; border: none; max-width: 250px;" 
+      required
+    />
+    <button type="submit" style="padding: 0.5rem 1rem; border-radius: 8px; background: var(--primary); color: white; border: none; cursor: pointer;">
+      Search
+    </button>
+  </form>
+
+  <div id="weather-result" style="font-size: 1.1rem; color: var(--text-light);"></div>
+</section>
+
+<script>
+  const weatherForm = document.getElementById('weather-form');
+  const cityInput = document.getElementById('city-input');
+  const weatherResult = document.getElementById('weather-result');
+
+  // Replace with your actual OpenWeatherMap API key
+  const openWeatherApiKey = 'YOUR_OPENWEATHERMAP_API_KEY';
+
+  function kelvinToCelsius(k) {
+    return (k - 273.15).toFixed(1);
+  }
+
+  function kelvinToFahrenheit(k) {
+    return ((k - 273.15) * 9/5 + 32).toFixed(1);
+  }
+
+  function displayWeather(data) {
+    const name = data.name;
+    const country = data.sys.country;
+    const tempK = data.main.temp;
+    const tempC = kelvinToCelsius(tempK);
+    const tempF = kelvinToFahrenheit(tempK);
+    const weatherDesc = data.weather[0].description;
+    const humidity = data.main.humidity;
+    const windSpeed = data.wind.speed;
+
+    weatherResult.innerHTML = `
+      <strong>${name}, ${country}</strong><br/>
+      Weather: ${weatherDesc}<br/>
+      Temperature: ${tempC} °C / ${tempF} °F<br/>
+      Humidity: ${humidity}%<br/>
+      Wind Speed: ${windSpeed} m/s
+    `;
+  }
+
+  function fetchWeather(city) {
+    weatherResult.textContent = 'Loading weather...';
+
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${openWeatherApiKey}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('City not found');
+        }
+        return response.json();
+      })
+      .then(data => {
+        displayWeather(data);
+      })
+      .catch(err => {
+        weatherResult.textContent = 'Error: ' + err.message;
+      });
+  }
+
+  // Default load for a city, e.g., New York
+  fetchWeather('New York');
+
+  weatherForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const city = cityInput.value.trim();
+    if (city) {
+      fetchWeather(city);
+    }
+  });
+</script>
   <header>
     <h1>BlueandCosmos</h1>
     <p class="tagline">Exploring the Cosmos. Protecting the Earth.</p>
