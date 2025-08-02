@@ -99,6 +99,46 @@
     }
   </style>
 </head>
+  .dashboard {
+  margin-top: 3rem;
+  max-width: 960px;
+  width: 100%;
+  text-align: center;
+}
+
+.dashboard h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.dashboard-card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 0 10px rgba(0, 188, 212, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 188, 212, 0.3);
+}
+
+.dashboard-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.dashboard-card p {
+  font-size: 1rem;
+  color: #cbd5e1;
+}
 <body>
   <header>
     <h1>BlueandCosmos</h1>
@@ -122,6 +162,29 @@
 
   <a class="button" href="#coming-soon">🚀 Launch Dashboard (Coming Soon)</a>
 
+  <div class="dashboard">
+  <h2>🛰️ Space-Earth Dashboard</h2>
+  
+  <div class="dashboard-grid">
+    <div class="dashboard-card">
+      <h3>🌤️ Live Weather Updates</h3>
+      <p>Real-time global weather from satellite and open APIs.</p>
+    </div>
+    
+    <div class="dashboard-card">
+      <h3>📈 Climate Trend Analysis</h3>
+      <p>Track long-term climate indicators and anomalies.</p>
+    </div>
+    
+    <div class="dashboard-card">
+      <h3>🚨 Disaster Alerts</h3>
+      <p>Global disaster warnings and visualizations.</p>
+    </div>
+  </div>
+</div>
+  
+  
+  
   <footer>
     <p>&copy; 2025 BlueandCosmos.</p>
   </footer>
