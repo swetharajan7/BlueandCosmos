@@ -103,21 +103,11 @@
       color: var(--primary);
     }
 
-    img {
-      max-width: 100%;
-      border-radius: 12px;
-    }
-
-    iframe {
-      width: 100%;
-      height: 200px;
-      border-radius: 12px;
-    }
-
     a {
       color: var(--primary);
       text-decoration: none;
     }
+
     a:hover {
       text-decoration: underline;
     }
@@ -134,20 +124,20 @@
       color: #888;
     }
 
-    /* Celestial Events links style */
     #celestial-events ul {
       list-style: none;
       padding-left: 0;
     }
+
     #celestial-events li {
       margin: 0.5rem 0;
       font-weight: 600;
     }
+
     #celestial-events li a {
       color: var(--primary);
     }
 
-    /* Weather form */
     #weather form {
       margin-bottom: 1rem;
       display: flex;
@@ -164,11 +154,13 @@
       outline: none;
       transition: border-color 0.3s;
     }
+
     body.dark #weather input[type="text"] {
       border: 1px solid var(--border-dark);
       background: var(--card-bg-dark);
       color: var(--text-dark);
     }
+
     #weather input[type="text"]:focus {
       border-color: var(--primary);
     }
@@ -183,10 +175,10 @@
       cursor: pointer;
       transition: background-color 0.3s;
     }
+
     #weather button:hover {
       background: var(--accent);
     }
-
   </style>
 </head>
 <body>
@@ -206,36 +198,36 @@
 
     <div class="card" id="weather">
       <h2>🌤️ Live Weather</h2>
-      <form id="weather-form" aria-label="Search weather by city">
+      <form id="weather-form">
         <input type="text" id="city-input" placeholder="Enter city name (e.g. New York)" required />
         <button type="submit">Search</button>
       </form>
       <div id="weather-result">
         <p>Loading weather for New York...</p>
       </div>
-      <p style="font-size: 0.75rem; color: #666; margin-top: 0.5rem;">
-        Weather data by <a href="https://openweathermap.org/" target="_blank" rel="noopener noreferrer">OpenWeather.org</a>
+      <p style="font-size: 0.75rem; color: #666;">
+        Weather data by <a href="https://openweathermap.org/" target="_blank">OpenWeather.org</a>
       </p>
     </div>
 
     <div class="card" id="celestial-events">
       <h2>🔭 Celestial Events</h2>
       <ul>
-        <li><a href="meteor-showers.html" target="_blank" rel="noopener noreferrer">Meteor Showers</a></li>
-        <li><a href="solar-lunar-eclipses.html" target="_blank" rel="noopener noreferrer">Solar & Lunar Eclipses</a></li>
-        <li><a href="moon-phases-supermoons.html" target="_blank" rel="noopener noreferrer">Moon Phases & Supermoons</a></li>
-        <li><a href="planetary-alignments.html" target="_blank" rel="noopener noreferrer">Planetary Alignments</a></li>
-        <li><a href="auroras.html" target="_blank" rel="noopener noreferrer">Auroras (North/South)</a></li>
-        <li><a href="solstices-equinoxes.html" target="_blank" rel="noopener noreferrer">Solstices & Equinoxes</a></li>
-        <li><a href="comets.html" target="_blank" rel="noopener noreferrer">Comet Watch</a></li>
+        <li><a href="meteor-showers.html" target="_blank">Meteor Showers</a></li>
+        <li><a href="solar-lunar-eclipses.html" target="_blank">Solar & Lunar Eclipses</a></li>
+        <li><a href="moon-phases-supermoons.html" target="_blank">Moon Phases & Supermoons</a></li>
+        <li><a href="planetary-alignments.html" target="_blank">Planetary Alignments</a></li>
+        <li><a href="auroras.html" target="_blank">Auroras (North/South)</a></li>
+        <li><a href="solstices-equinoxes.html" target="_blank">Solstices & Equinoxes</a></li>
+        <li><a href="comets.html" target="_blank">Comet Watch</a></li>
       </ul>
     </div>
 
     <div class="card" id="nyt-science">
       <h2>📰 Latest in Science & Astronomy (NYT)</h2>
       <p>Loading articles...</p>
-      <p style="font-size: 0.75rem; color: #666; margin-top: 0.5rem;">
-        Articles by <a href="https://www.nytimes.com/" target="_blank" rel="noopener noreferrer">The New York Times</a>
+      <p style="font-size: 0.75rem; color: #666;">
+        Articles by <a href="https://www.nytimes.com/" target="_blank">The New York Times</a>
       </p>
     </div>
   </main>
@@ -265,11 +257,11 @@
         `;
       });
 
-    // OpenWeather with city search
+    // OpenWeather – dynamic city support
     const weatherForm = document.getElementById('weather-form');
     const cityInput = document.getElementById('city-input');
     const weatherResult = document.getElementById('weather-result');
-    const OPENWEATHER_API_KEY = 'YOUR_OPENWEATHER_API_KEY'; // Replace with your API key
+    const OPENWEATHER_API_KEY = '1557651ee4d280ab5e111aeee2e174e1';
 
     function displayWeather(data) {
       weatherResult.innerHTML = `
@@ -280,45 +272,54 @@
       `;
     }
 
-   function fetchWeather(city) {
-  weatherResult.innerHTML = `<p>Loading weather for ${city}...</p>`;
-fetch("https://api.openweathermap.org/data/2.5/weather?q=New York&appid=1557651ee4d280ab5e111aeee2e174e1&units=metric")
-  .then(res => {
-      if (!res.ok) throw new Error('City not found');
-      return res.json();
-    })
-    .then(data => {
-      displayWeather(data);
-    })
-    .catch(() => {
-      weatherResult.innerHTML = `<p>Error loading weather data for "${city}". Please try another city.</p>`;
+    function fetchWeather(city) {
+      weatherResult.innerHTML = `<p>Loading weather for ${city}...</p>`;
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${OPENWEATHER_API_KEY}&units=metric`)
+        .then(res => {
+          if (!res.ok) throw new Error('City not found');
+          return res.json();
+        })
+        .then(displayWeather)
+        .catch(() => {
+          weatherResult.innerHTML = `<p>Error loading weather data for "${city}". Please try another city.</p>`;
+        });
+    }
+
+    weatherForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const city = cityInput.value.trim();
+      if (city) fetchWeather(city);
     });
-}
+
+    // Load default weather for New York
+    fetchWeather("New York");
 
     // NYT Science
     fetch("https://api.nytimes.com/svc/topstories/v2/science.json?api-key=eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD")
-  .then(res => res.json())
-  .then(data => {
-    const nyt = document.getElementById("nyt-science");
-    nyt.innerHTML = `<h2>📰 Latest in Science & Astronomy (NYT)</h2>`;
-    data.results.slice(0, 5).forEach(article => {
-      nyt.innerHTML += `
-        <div class="news-article">
-          <a href="${article.url}" target="_blank"><strong>${article.title}</strong></a>
-          <p style="font-size: 0.9rem;">${article.abstract}</p>
-        </div>
-      `;
-    });
-    nyt.innerHTML += `
-      <p style="font-size: 0.8rem; color: #777; margin-top: 1rem;">
-        News from <a href="https://www.nytimes.com/section/science" target="_blank" style="color: #00bcd4;">The New York Times</a>
-      </p>
-    `;
-  }).catch(() => {
-    document.getElementById("nyt-science").innerHTML = "<p>Failed to load articles.</p>";
-  });
+      .then(res => res.json())
+      .then(data => {
+        const nyt = document.getElementById("nyt-science");
+        nyt.innerHTML = `<h2>📰 Latest in Science & Astronomy (NYT)</h2>`;
+        data.results.slice(0, 5).forEach(article => {
+          nyt.innerHTML += `
+            <div class="news-article">
+              <a href="${article.url}" target="_blank"><strong>${article.title}</strong></a>
+              <p style="font-size: 0.9rem;">${article.abstract}</p>
+            </div>
+          `;
+        });
+        nyt.innerHTML += `
+          <p style="font-size: 0.8rem; color: #777; margin-top: 1rem;">
+            News from <a href="https://www.nytimes.com/section/science" target="_blank" style="color: #00bcd4;">The New York Times</a>
+          </p>
+        `;
+      })
+      .catch(() => {
+        document.getElementById("nyt-science").innerHTML = "<p>Failed to load articles.</p>";
+      });
   </script>
 </body>
 </html>
+
 
 
