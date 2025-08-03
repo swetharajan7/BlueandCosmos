@@ -396,7 +396,7 @@
     const weatherForm = document.getElementById('weather-form');
     const cityInput = document.getElementById('city-input');
     const weatherResult = document.getElementById('weather-result');
-    const OPENWEATHER_API_KEY = 'YOUR_OPENWEATHER_API_KEY'; // Replace with your API key
+    const OPENWEATHER_API_KEY = '1557651ee4d280ab5e111aeee2e174e1'; // Your OpenWeather API key
 
     function displayWeather(data) {
       weatherResult.innerHTML = `
@@ -409,7 +409,7 @@
 
     function fetchWeather(city) {
       weatherResult.innerHTML = `<p>Loading weather for ${city}...</p>`;
-      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${1557651ee4d280ab5e111aeee2e174e1}&units=metric`)
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${OPENWEATHER_API_KEY}&units=metric`)
         .then(res => {
           if (!res.ok) throw new Error('City not found');
           return res.json();
@@ -434,8 +434,8 @@
     fetchWeather('New York');
 
     // NYT Science
-    const NYT_API_KEY = 'eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD'; // Replace with your API key
-    fetch(`https://api.nytimes.com/svc/topstories/v2/science.json?api-key=${eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD}`)
+    const NYT_API_KEY = 'eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD'; // Your NYT API key
+    fetch(`https://api.nytimes.com/svc/topstories/v2/science.json?api-key=${NYT_API_KEY}`)
       .then(res => res.json())
       .then(data => {
         const nyt = document.getElementById("nyt-science");
@@ -486,7 +486,48 @@
     const chatbotInput = document.getElementById('chatbot-input');
     const chatbotSubmit = document.getElementById('chatbot-submit');
 
-    chatbotSubmit.addEventListener('click
+    chatbotSubmit.addEventListener('click', () => {
+      const message = chatbotInput.value.trim();
+      if (!message) return;
+
+      const userMessage = document.createElement('div');
+      userMessage.textContent = `You: ${message}`;
+      userMessage.style.fontWeight = '600';
+      chatbotMessages.appendChild(userMessage);
+
+      const botMessage = document.createElement('div');
+      botMessage.textContent = `Bot: ${message}`; // Echo back
+      chatbotMessages.appendChild(botMessage);
+
+      chatbotInput.value = '';
+      chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    });
+
+    chatbotInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        chatbotSubmit.click();
+      }
+    });
+
+    // Subscription form (UI only)
+    const subscriptionForm = document.getElementById('subscription-form');
+    const subscriptionMessage = document.getElementById('subscription-message');
+
+    subscriptionForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const emailInput = document.getElementById('subscription-email');
+      const email = emailInput.value.trim();
+      if (email) {
+        subscriptionMessage.style.display = 'block';
+        subscriptionMessage.textContent = `Thanks for subscribing, ${email}! (Subscription backend not implemented)`;
+        emailInput.value = '';
+      }
+    });
+  </script>
+</body>
+</html>
+
 
 
 
