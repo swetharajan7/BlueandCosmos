@@ -50,6 +50,12 @@
       border-bottom: 1px solid var(--border-dark);
     }
 
+    /* Fix: header h1 color */
+    header h1 {
+      color: var(--primary);
+      margin: 0;
+    }
+
     .toggle {
       cursor: pointer;
       padding: 0.5rem 1rem;
@@ -182,7 +188,6 @@
     </div>
     <button class="toggle" onclick="toggleTheme()">Toggle Mode</button>
   </header>
-
   <main>
     <div id="apod" class="card"></div>
 
@@ -236,8 +241,8 @@
       document.body.classList.toggle("dark");
     }
 
-    // NASA APOD
-    fetch("https://api.nasa.gov/planetary/apod?api_key=YOUR_NASA_API_KEY_HERE")
+    // NASA APOD with your API key
+    fetch("https://api.nasa.gov/planetary/apod?api_key=CysEgHwCtuZgj1UMT2GwnlufWt9F5HfLTbRtPwea")
       .then(res => res.json())
       .then(data => {
         const apod = document.getElementById("apod");
@@ -249,6 +254,10 @@
           <p>${data.title} — ${data.date}</p>
           <p style="font-size:0.85rem; color:#777;">Credit: NASA/APOD</p>
         `;
+      })
+      .catch(() => {
+        const apod = document.getElementById("apod");
+        apod.innerHTML = `<p>Failed to load Astronomy Picture of the Day.</p>`;
       });
 
     // OpenWeather with city search
@@ -372,3 +381,4 @@
   </script>
 </body>
 </html>
+
