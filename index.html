@@ -155,6 +155,11 @@
       margin-top: 0.5rem;
       font-style: italic;
     }
+    .typing-indicator {
+      font-style: italic;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
     @media(max-width: 500px) {
       main {
         padding: 1rem;
@@ -205,6 +210,7 @@
     <div class="card">
       <h2>🤖 Ask BlueBot</h2>
       <div class="chat-log" id="chat-box"></div>
+      <div id="typing-indicator" class="typing-indicator" style="display:none;">BlueBot is typing...</div>
       <form id="chat-form">
         <input type="text" id="chat-input" placeholder="Ask me about space..." autocomplete="off" />
         <button type="submit">Send</button>
@@ -324,14 +330,24 @@
         document.getElementById('mission-tracker').innerHTML = '<p>Failed to load mission data.</p>';
       });
 
-    // Chatbot via Netlify Function (example, replace URL accordingly)
+    // Chatbot via Netlify Function (replace URL if needed)
+    const chatBox = document.getElementById('chat-box');
+    const typingIndicator = document.getElementById('typing-indicator');
+
+    // Friendly greeting on load
+    window.addEventListener('DOMContentLoaded', () => {
+      chatBox.innerHTML += `<div><strong>BlueBot:</strong> Hello! Ask me anything about space and astronomy.</div>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
     document.getElementById('chat-form').addEventListener('submit', async e => {
       e.preventDefault();
       const msg = document.getElementById('chat-input').value.trim();
       if (!msg) return;
-      const log = document.getElementById('chat-box');
-      log.innerHTML += `<div><strong>You:</strong> ${msg}</div>`;
-      log.scrollTop = log.scrollHeight;
+      chatBox.innerHTML += `<div><strong>You:</strong> ${msg}</div>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      typingIndicator.style.display = 'block';
 
       try {
         const resp = await fetch('/.netlify/functions/bluebot', {
@@ -340,15 +356,18 @@
           body: JSON.stringify({ message: msg }),
         });
         const json = await resp.json();
+        typingIndicator.style.display = 'none';
+
         if (json.reply) {
-          log.innerHTML += `<div><strong>BlueBot:</strong> ${json.reply}</div>`;
+          chatBox.innerHTML += `<div><strong>BlueBot:</strong> ${json.reply}</div>`;
         } else {
-          log.innerHTML += `<div><strong>BlueBot:</strong> Sorry, I couldn’t get a response.</div>`;
+          chatBox.innerHTML += `<div><strong>BlueBot:</strong> Sorry, I couldn’t get a response.</div>`;
         }
       } catch {
-        log.innerHTML += `<div><strong>BlueBot:</strong> Sorry, I can’t answer right now.</div>`;
+        typingIndicator.style.display = 'none';
+        chatBox.innerHTML += `<div><strong>BlueBot:</strong> Sorry, I can’t answer right now.</div>`;
       }
-      log.scrollTop = log.scrollHeight;
+      chatBox.scrollTop = chatBox.scrollHeight;
       document.getElementById('chat-input').value = '';
     });
 
