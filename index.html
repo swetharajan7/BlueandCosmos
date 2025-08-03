@@ -174,194 +174,7 @@
     }
   </style>
 </head>
-  <script>
-  // Dark mode toggle
-  function toggleTheme() {
-    document.body.classList.toggle("dark");
-  }
-
-  // NASA APOD
-  fetch("https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY")
-    .then(res => res.json())
-    .then(data => {
-      const apod = document.getElementById("apod");
-      apod.innerHTML = `
-        <h2>📸 Astronomy Picture of the Day</h2>
-        ${data.media_type === "image"
-          ? `<img src="${data.url}" alt="${data.title}" style="max-height:300px; width:auto;" />`
-          : `<iframe src="${data.url}" allowfullscreen style="max-height:300px;"></iframe>`}
-        <p>${data.title} — ${data.date}</p>
-        <p style="font-size:0.85rem; color:#777;">Credit: NASA/APOD</p>
-      `;
-    });
-
-  // OpenWeather with city search
-  const weatherForm = document.getElementById('weather-form');
-  const cityInput = document.getElementById('city-input');
-  const weatherResult = document.getElementById('weather-result');
-  const OPENWEATHER_API_KEY = '1557651ee4d280ab5e111aeee2e174e1';
-
-  function displayWeather(data) {
-    weatherResult.innerHTML = `
-      <p><strong>${data.weather[0].main}:</strong> ${data.weather[0].description}</p>
-      <p>🌡️ Temp: ${data.main.temp}°C | 💧 Humidity: ${data.main.humidity}%</p>
-      <p>🌬️ Wind: ${data.wind.speed} m/s</p>
-      <p>📍 ${data.name}, ${data.sys.country}</p>
-    `;
-  }
-
-  function fetchWeather(city) {
-    weatherResult.innerHTML = `<p>Loading weather for ${city}...</p>`;
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${OPENWEATHER_API_KEY}&units=metric`)
-      .then(res => {
-        if (!res.ok) throw new Error('City not found');
-        return res.json();
-      })
-      .then(displayWeather)
-      .catch(() => {
-        weatherResult.innerHTML = `<p>Error loading weather data for "${city}". Please try another city.</p>`;
-      });
-  }
-
-  weatherForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const city = cityInput.value.trim();
-    if (city) fetchWeather(city);
-  });
-
-  // Initial weather load
-  fetchWeather('New York');
-
-  // NYT Science
-  fetch("https://api.nytimes.com/svc/topstories/v2/science.json?api-key=eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD")
-    .then(res => res.json())
-    .then(data => {
-      const nyt = document.getElementById("nyt-science");
-      nyt.innerHTML = `<h2>📰 Latest in Science & Astronomy (NYT)</h2>`;
-      data.results.slice(0, 5).forEach(article => {
-        nyt.innerHTML += `
-          <div class="news-article">
-            <a href="${article.url}" target="_blank"><strong>${article.title}</strong></a>
-            <p style="font-size: 0.9rem;">${article.abstract}</p>
-          </div>
-        `;
-      });
-      nyt.innerHTML += `
-        <p style="font-size: 0.8rem; color: #777; margin-top: 1rem;">
-          News from <a href="https://www.nytimes.com/section/science" target="_blank" style="color: #00bcd4;">The New York Times</a>
-        </p>
-      `;
-    }).catch(() => {
-      document.getElementById("nyt-science").innerHTML = "<p>Failed to load articles.</p>";
-    });
-
-  // Planetary Alignment Viewer (Milestone 2 Placeholder)
-  const planetaryAlignments = document.getElementById("planetary-alignments");
-  planetaryAlignments.innerHTML = `
-    <h2>🪐 Planetary Alignments</h2>
-    <p><strong>Coming Soon:</strong> Interactive visualizer showing real-time planetary positions.</p>
-    <p style="font-size: 0.8rem; color: #777;">In development — powered by Solar System Dynamics APIs.</p>
-  `;
-
-  // Space Mission Tracker (Milestone 1)
-  const missionTracker = document.getElementById("mission-tracker");
-  fetch("https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=5")
-    .then(res => res.json())
-    .then(data => {
-      missionTracker.innerHTML = `<h2>🚀 Upcoming Space Missions</h2>`;
-      data.results.forEach(launch => {
-        missionTracker.innerHTML += `
-          <div style="margin-bottom:1rem;">
-            <strong>${launch.name}</strong><br />
-            🗓️ ${new Date(launch.net).toLocaleString()}<br />
-            📍 ${launch.pad.name}, ${launch.pad.location.name}
-          </div>
-        `;
-      });
-    })
-    .catch(() => {
-      missionTracker.innerHTML = `<p>Failed to load launch data.</p>`;
-    });
-
-  // AI Chatbot Placeholder (Milestone 3)
-  const chatForm = document.getElementById("chat-form");
-  const chatBox = document.getElementById("chat-box");
-
-  chatForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    const input = document.getElementById("chat-input");
-    const message = input.value.trim();
-    if (!message) return;
-
-    chatBox.innerHTML += `<div><strong>You:</strong> ${message}</div>`;
-    chatBox.innerHTML += `<div><strong>BlueBot:</strong> Echoing back: ${message}</div>`;
-    chatBox.scrollTop = chatBox.scrollHeight;
-    input.value = "";
-  });
-
-  // Email Subscription (Milestone 4 UI only)
-  const subscribeForm = document.getElementById("subscribe-form");
-  const subscribeStatus = document.getElementById("subscribe-status");
-
-  subscribeForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    const email = document.getElementById("email-input").value.trim();
-    if (email) {
-      subscribeStatus.innerText = "🚀 Thanks for subscribing! (Backend in progress)";
-      subscribeForm.reset();
-    } else {
-      subscribeStatus.innerText = "Please enter a valid email.";
-    }
-  });
-</script>
-
 <body>
-  <main>
-  <div id="apod" class="card"></div>
-
-  <div class="card">
-    <h2>🌤️ Live Weather</h2>
-    <form id="weather-form">
-      <input type="text" id="city-input" placeholder="Enter city (e.g. New York)" />
-      <button type="submit">Get Weather</button>
-    </form>
-    <div id="weather-result" style="margin-top:1rem;"></div>
-    <p style="font-size: 0.8rem; color: #777;">Weather data via OpenWeather.org</p>
-  </div>
-
-  <div id="nyt-science" class="card"></div>
-
-  <div id="mission-tracker" class="card"></div>
-
-  <div id="planetary-alignments" class="card"></div>
-
-  <div class="card">
-    <h2>🤖 AI Chatbot</h2>
-    <div class="chatbox">
-      <div id="chat-box" class="chat-log"></div>
-      <form id="chat-form">
-        <input type="text" id="chat-input" placeholder="Ask BlueBot something..." />
-        <button type="submit">Send</button>
-      </form>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>📬 Subscribe for Updates</h2>
-    <form id="subscribe-form">
-      <input type="email" id="email-input" placeholder="Enter your email" />
-      <button type="submit">Subscribe</button>
-    </form>
-    <p id="subscribe-status" style="margin-top: 1rem;"></p>
-  </div>
-</main>
-
-<footer>
-  <p>Weather: <a href="https://openweather.org" target="_blank">OpenWeather</a> |
-     News: <a href="https://nytimes.com/section/science" target="_blank">The New York Times</a> |
-     Space Data: <a href="https://thespacedevs.com/" target="_blank">Launch Library 2</a>
-  </p>
-</footer>
   <header>
     <div>
       <h1>BlueandCosmos</h1>
@@ -370,4 +183,192 @@
     <button class="toggle" onclick="toggleTheme()">Toggle Mode</button>
   </header>
 
+  <main>
+    <div id="apod" class="card"></div>
 
+    <div class="card">
+      <h2>🌤️ Live Weather</h2>
+      <form id="weather-form">
+        <input type="text" id="city-input" placeholder="Enter city (e.g. New York)" />
+        <button type="submit">Get Weather</button>
+      </form>
+      <div id="weather-result" style="margin-top:1rem;"></div>
+      <p style="font-size: 0.8rem; color: #777;">Weather data via OpenWeather.org</p>
+    </div>
+
+    <div id="nyt-science" class="card"></div>
+
+    <div id="mission-tracker" class="card"></div>
+
+    <div id="planetary-alignments" class="card"></div>
+
+    <div class="card">
+      <h2>🤖 AI Chatbot</h2>
+      <div class="chatbox">
+        <div id="chat-box" class="chat-log"></div>
+        <form id="chat-form">
+          <input type="text" id="chat-input" placeholder="Ask BlueBot something..." />
+          <button type="submit">Send</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📬 Subscribe for Updates</h2>
+      <form id="subscribe-form">
+        <input type="email" id="email-input" placeholder="Enter your email" />
+        <button type="submit">Subscribe</button>
+      </form>
+      <p id="subscribe-status" style="margin-top: 1rem;"></p>
+    </div>
+  </main>
+
+  <footer>
+    <p>Weather: <a href="https://openweather.org" target="_blank">OpenWeather</a> |
+       News: <a href="https://nytimes.com/section/science" target="_blank">The New York Times</a> |
+       Space Data: <a href="https://thespacedevs.com/" target="_blank">Launch Library 2</a>
+    </p>
+  </footer>
+
+  <script>
+    // Dark mode toggle
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+    }
+
+    // NASA APOD
+    fetch("https://api.nasa.gov/planetary/apod?api_key=YOUR_NASA_API_KEY_HERE")
+      .then(res => res.json())
+      .then(data => {
+        const apod = document.getElementById("apod");
+        apod.innerHTML = `
+          <h2>📸 Astronomy Picture of the Day</h2>
+          ${data.media_type === "image"
+            ? `<img src="${data.url}" alt="${data.title}" style="max-height:300px; width:auto;" />`
+            : `<iframe src="${data.url}" allowfullscreen style="max-height:300px;"></iframe>`}
+          <p>${data.title} — ${data.date}</p>
+          <p style="font-size:0.85rem; color:#777;">Credit: NASA/APOD</p>
+        `;
+      });
+
+    // OpenWeather with city search
+    const weatherForm = document.getElementById('weather-form');
+    const cityInput = document.getElementById('city-input');
+    const weatherResult = document.getElementById('weather-result');
+    const OPENWEATHER_API_KEY = '1557651ee4d280ab5e111aeee2e174e1';
+
+    function displayWeather(data) {
+      weatherResult.innerHTML = `
+        <p><strong>${data.weather[0].main}:</strong> ${data.weather[0].description}</p>
+        <p>🌡️ Temp: ${data.main.temp}°C | 💧 Humidity: ${data.main.humidity}%</p>
+        <p>🌬️ Wind: ${data.wind.speed} m/s</p>
+        <p>📍 ${data.name}, ${data.sys.country}</p>
+      `;
+    }
+
+    function fetchWeather(city) {
+      weatherResult.innerHTML = `<p>Loading weather for ${city}...</p>`;
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${OPENWEATHER_API_KEY}&units=metric`)
+        .then(res => {
+          if (!res.ok) throw new Error('City not found');
+          return res.json();
+        })
+        .then(displayWeather)
+        .catch(() => {
+          weatherResult.innerHTML = `<p>Error loading weather data for "${city}". Please try another city.</p>`;
+        });
+    }
+
+    weatherForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const city = cityInput.value.trim();
+      if (city) fetchWeather(city);
+    });
+
+    // Initial weather load
+    fetchWeather('New York');
+
+    // NYT Science
+    fetch("https://api.nytimes.com/svc/topstories/v2/science.json?api-key=eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD")
+      .then(res => res.json())
+      .then(data => {
+        const nyt = document.getElementById("nyt-science");
+        nyt.innerHTML = `<h2>📰 Latest in Science & Astronomy (NYT)</h2>`;
+        data.results.slice(0, 5).forEach(article => {
+          nyt.innerHTML += `
+            <div class="news-article">
+              <a href="${article.url}" target="_blank"><strong>${article.title}</strong></a>
+              <p style="font-size: 0.9rem;">${article.abstract}</p>
+            </div>
+          `;
+        });
+        nyt.innerHTML += `
+          <p style="font-size: 0.8rem; color: #777; margin-top: 1rem;">
+            News from <a href="https://www.nytimes.com/section/science" target="_blank" style="color: #00bcd4;">The New York Times</a>
+          </p>
+        `;
+      }).catch(() => {
+        document.getElementById("nyt-science").innerHTML = "<p>Failed to load articles.</p>";
+      });
+
+    // Planetary Alignment Viewer (Milestone 2 Placeholder)
+    const planetaryAlignments = document.getElementById("planetary-alignments");
+    planetaryAlignments.innerHTML = `
+      <h2>🪐 Planetary Alignments</h2>
+      <p><strong>Coming Soon:</strong> Interactive visualizer showing real-time planetary positions.</p>
+      <p style="font-size: 0.8rem; color: #777;">In development — powered by Solar System Dynamics APIs.</p>
+    `;
+
+    // Space Mission Tracker (Milestone 1)
+    const missionTracker = document.getElementById("mission-tracker");
+    fetch("https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=5")
+      .then(res => res.json())
+      .then(data => {
+        missionTracker.innerHTML = `<h2>🚀 Upcoming Space Missions</h2>`;
+        data.results.forEach(launch => {
+          missionTracker.innerHTML += `
+            <div style="margin-bottom:1rem;">
+              <strong>${launch.name}</strong><br />
+              🗓️ ${new Date(launch.net).toLocaleString()}<br />
+              📍 ${launch.pad.name}, ${launch.pad.location.name}
+            </div>
+          `;
+        });
+      })
+      .catch(() => {
+        missionTracker.innerHTML = `<p>Failed to load launch data.</p>`;
+      });
+
+    // AI Chatbot Placeholder (Milestone 3)
+    const chatForm = document.getElementById("chat-form");
+    const chatBox = document.getElementById("chat-box");
+
+    chatForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const input = document.getElementById("chat-input");
+      const message = input.value.trim();
+      if (!message) return;
+
+      chatBox.innerHTML += `<div><strong>You:</strong> ${message}</div>`;
+      chatBox.innerHTML += `<div><strong>BlueBot:</strong> Echoing back: ${message}</div>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+      input.value = "";
+    });
+
+    // Email Subscription (Milestone 4 UI only)
+    const subscribeForm = document.getElementById("subscribe-form");
+    const subscribeStatus = document.getElementById("subscribe-status");
+
+    subscribeForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const email = document.getElementById("email-input").value.trim();
+      if (email) {
+        subscribeStatus.innerText = "🚀 Thanks for subscribing! (Backend in progress)";
+        subscribeForm.reset();
+      } else {
+        subscribeStatus.innerText = "Please enter a valid email.";
+      }
+    });
+  </script>
+</body>
+</html>
