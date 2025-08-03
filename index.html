@@ -194,7 +194,7 @@
       });
 
     // OpenWeather (New York)
-    fetch("https://api.openweathermap.org/data/2.5/weather?q=New York&appid=YOUR_OPENWEATHER_API_KEY&units=metric")
+    fetch("https://api.openweathermap.org/data/2.5/weather?q=New York&appid=1557651ee4d280ab5e111aeee2e174e1&units=metric")
       .then(res => res.json())
       .then(data => {
         const weather = document.getElementById("weather");
@@ -209,7 +209,7 @@
       });
 
     // NYT Science
-    fetch("https://api.nytimes.com/svc/topstories/v2/science.json?api-key=YOUR_NYT_API_KEY")
+   fetch("https://api.nytimes.com/svc/topstories/v2/science.json?api-key=eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD")
       .then(res => res.json())
       .then(data => {
         const nyt = document.getElementById("nyt-science");
