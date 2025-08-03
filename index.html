@@ -282,8 +282,8 @@
 
    function fetchWeather(city) {
   weatherResult.innerHTML = `<p>Loading weather for ${city}...</p>`;
-  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=1557651ee4d280ab5e111aeee2e174e1&units=metric`)
-    .then(res => {
+fetch("https://api.openweathermap.org/data/2.5/weather?q=New York&appid=1557651ee4d280ab5e111aeee2e174e1&units=metric")
+  .then(res => {
       if (!res.ok) throw new Error('City not found');
       return res.json();
     })
