@@ -115,11 +115,11 @@
     </div>
   </main>
   <footer>
-    <p>Weather via OpenWeather | News via NYT Science | Space data via Launch Library 2</p>
+    <p>BlueandCosmos 2025</p>
   </footer>
   <script>
-    // theme toggle
     function toggleTheme(){ document.body.classList.toggle('dark'); }
+
     const OPEN_WEATHER_KEY = '1557651ee4d280ab5e111aeee2e174e1';
     const NYT_KEY = 'eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD';
     const NASA_KEY = 'CysEgHwCtuZgj1UMT2GwnlufWt9F5HfLTbRtPwea';
@@ -133,7 +133,8 @@
             ? `<img src="${data.url}" alt="${data.title}" />`
             : `<iframe src="${data.url}" allowfullscreen></iframe>`
           }
-          <p>${data.title} — ${data.date}</p>`;
+          <p>${data.title} — ${data.date}</p>
+          <p style="font-size:0.8rem; color:#777;">Image via NASA APOD</p>`;
       });
 
     // Weather
@@ -155,6 +156,7 @@
       .then(r=>r.json()).then(d=>{
         const el = document.getElementById('nyt-science'); el.innerHTML='<h2>📰 NYT Science & Astronomy</h2>';
         d.results.slice(0,5).forEach(a=> el.innerHTML += `<p><a href="${a.url}" target="_blank"><strong>${a.title}</strong></a><br><small>${a.abstract}</small></p>`);
+        el.innerHTML += `<p style="font-size:0.8rem; color:#777;">Articles via The New York Times</p>`;
       });
 
     // Random Fact
@@ -163,14 +165,14 @@
       'A day on Venus is longer than a year on Venus.',
       'There are more stars in the universe than grains of sand on Earth.'
     ];
-    document.getElementById('fact-card').innerHTML += `<p>${facts[Math.floor(Math.random()*facts.length)]}</p>`;
+    document.getElementById('fact-card').innerHTML += `<p>${facts[Math.floor(Math.random()*facts.length)]}</p><p style="font-size:0.8rem; color:#777;">Fact source: NASA Science</p>`;
 
     // Missions
     fetch('https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=5')
       .then(r=>r.json()).then(d=>{
         let html='<h2>🚀 Upcoming Missions</h2>';
         d.results.forEach(m=> html+=`<p><strong>${m.name}</strong><br>${new Date(m.net).toLocaleString()} at ${m.pad.name}</p>`);
-        document.getElementById('mission-tracker').innerHTML = html;
+        document.getElementById('mission-tracker').innerHTML = html + `<p style="font-size:0.8rem; color:#777;">Missions via Launch Library 2</p>`;
       });
 
     // Chatbot via OpenAI
@@ -212,5 +214,3 @@
   </script>
 </body>
 </html>
-
-
