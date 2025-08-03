@@ -280,31 +280,20 @@
       `;
     }
 
-    function fetchWeather(city) {
-      weatherResult.innerHTML = `<p>Loading weather for ${city}...</p>`;
-     fetch("https://api.openweathermap.org/data/2.5/weather?q=New York&appid=1557651ee4d280ab5e111aeee2e174e1&units=metric")
-        .then(res => {
-          if (!res.ok) throw new Error('City not found');
-          return res.json();
-        })
-        .then(data => {
-          displayWeather(data);
-        })
-        .catch(() => {
-          weatherResult.innerHTML = `<p>Error loading weather data for "${city}". Please try another city.</p>`;
-        });
-    }
-
-    // Default load
-    fetchWeather('New York');
-
-    weatherForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const city = cityInput.value.trim();
-      if (city) {
-        fetchWeather(city);
-      }
+   function fetchWeather(city) {
+  weatherResult.innerHTML = `<p>Loading weather for ${city}...</p>`;
+  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=YOUR_OPENWEATHER_API_KEY&units=metric`)
+    .then(res => {
+      if (!res.ok) throw new Error('City not found');
+      return res.json();
+    })
+    .then(data => {
+      displayWeather(data);
+    })
+    .catch(() => {
+      weatherResult.innerHTML = `<p>Error loading weather data for "${city}". Please try another city.</p>`;
     });
+}
 
     // NYT Science
     fetch("https://api.nytimes.com/svc/topstories/v2/science.json?api-key=eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD")
