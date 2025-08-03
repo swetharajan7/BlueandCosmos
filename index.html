@@ -193,38 +193,45 @@
         `;
       });
 
-    // OpenWeather (New York)
-    fetch("https://api.openweathermap.org/data/2.5/weather?q=New York&appid=1557651ee4d280ab5e111aeee2e174e1&units=metric")
-      .then(res => res.json())
-      .then(data => {
-        const weather = document.getElementById("weather");
-        weather.innerHTML = `
-          <h2>🌤️ Live Weather - New York</h2>
-          <p><strong>${data.weather[0].main}:</strong> ${data.weather[0].description}</p>
-          <p>🌡️ Temp: ${data.main.temp}°C | 💧 Humidity: ${data.main.humidity}%</p>
-          <p>🌬️ Wind: ${data.wind.speed} m/s</p>
-        `;
-      }).catch(() => {
-        document.getElementById("weather").innerHTML = "<p>Error loading weather data.</p>";
-      });
+   fetch("https://api.openweathermap.org/data/2.5/weather?q=New York&appid=1557651ee4d280ab5e111aeee2e174e1&units=metric")
+  .then(res => res.json())
+  .then(data => {
+    const weather = document.getElementById("weather");
+    weather.innerHTML = `
+      <h2>🌤️ Live Weather - New York</h2>
+      <p><strong>${data.weather[0].main}:</strong> ${data.weather[0].description}</p>
+      <p>🌡️ Temp: ${data.main.temp}°C | 💧 Humidity: ${data.main.humidity}%</p>
+      <p>🌬️ Wind: ${data.wind.speed} m/s</p>
+      <p style="font-size: 0.8rem; color: #777; margin-top: 0.5rem;">
+        Weather data provided by <a href="https://openweathermap.org/" target="_blank" style="color: #00bcd4;">OpenWeather</a>
+      </p>
+    `;
+  }).catch(() => {
+    document.getElementById("weather").innerHTML = "<p>Error loading weather data.</p>";
+  });
 
     // NYT Science
    fetch("https://api.nytimes.com/svc/topstories/v2/science.json?api-key=eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD")
-      .then(res => res.json())
-      .then(data => {
-        const nyt = document.getElementById("nyt-science");
-        nyt.innerHTML = `<h2>📰 Latest in Science & Astronomy (NYT)</h2>`;
-        data.results.slice(0, 5).forEach(article => {
-          nyt.innerHTML += `
-            <div class="news-article">
-              <a href="${article.url}" target="_blank"><strong>${article.title}</strong></a>
-              <p style="font-size: 0.9rem;">${article.abstract}</p>
-            </div>
-          `;
-        });
-      }).catch(() => {
-        document.getElementById("nyt-science").innerHTML = "<p>Failed to load articles.</p>";
-      });
+  .then(res => res.json())
+  .then(data => {
+    const nyt = document.getElementById("nyt-science");
+    nyt.innerHTML = `<h2>📰 Latest in Science & Astronomy (NYT)</h2>`;
+    data.results.slice(0, 5).forEach(article => {
+      nyt.innerHTML += `
+        <div class="news-article">
+          <a href="${article.url}" target="_blank"><strong>${article.title}</strong></a>
+          <p style="font-size: 0.9rem;">${article.abstract}</p>
+        </div>
+      `;
+    });
+    nyt.innerHTML += `
+      <p style="font-size: 0.8rem; color: #777; margin-top: 1rem;">
+        News from <a href="https://www.nytimes.com/section/science" target="_blank" style="color: #00bcd4;">The New York Times</a>
+      </p>
+    `;
+  }).catch(() => {
+    document.getElementById("nyt-science").innerHTML = "<p>Failed to load articles.</p>";
+  });
   </script>
 </body>
 </html>
