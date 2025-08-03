@@ -316,6 +316,52 @@
 </script>
 
 <body>
+  <main>
+  <div id="apod" class="card"></div>
+
+  <div class="card">
+    <h2>🌤️ Live Weather</h2>
+    <form id="weather-form">
+      <input type="text" id="city-input" placeholder="Enter city (e.g. New York)" />
+      <button type="submit">Get Weather</button>
+    </form>
+    <div id="weather-result" style="margin-top:1rem;"></div>
+    <p style="font-size: 0.8rem; color: #777;">Weather data via OpenWeather.org</p>
+  </div>
+
+  <div id="nyt-science" class="card"></div>
+
+  <div id="mission-tracker" class="card"></div>
+
+  <div id="planetary-alignments" class="card"></div>
+
+  <div class="card">
+    <h2>🤖 AI Chatbot</h2>
+    <div class="chatbox">
+      <div id="chat-box" class="chat-log"></div>
+      <form id="chat-form">
+        <input type="text" id="chat-input" placeholder="Ask BlueBot something..." />
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📬 Subscribe for Updates</h2>
+    <form id="subscribe-form">
+      <input type="email" id="email-input" placeholder="Enter your email" />
+      <button type="submit">Subscribe</button>
+    </form>
+    <p id="subscribe-status" style="margin-top: 1rem;"></p>
+  </div>
+</main>
+
+<footer>
+  <p>Weather: <a href="https://openweather.org" target="_blank">OpenWeather</a> |
+     News: <a href="https://nytimes.com/section/science" target="_blank">The New York Times</a> |
+     Space Data: <a href="https://thespacedevs.com/" target="_blank">Launch Library 2</a>
+  </p>
+</footer>
   <header>
     <div>
       <h1>BlueandCosmos</h1>
