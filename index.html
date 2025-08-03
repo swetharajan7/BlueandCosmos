@@ -282,7 +282,7 @@
 
     function fetchWeather(city) {
       weatherResult.innerHTML = `<p>Loading weather for ${city}...</p>`;
-      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${OPENWEATHER_API_KEY}&units=metric`)
+     fetch("https://api.openweathermap.org/data/2.5/weather?q=New York&appid=1557651ee4d280ab5e111aeee2e174e1&units=metric")
         .then(res => {
           if (!res.ok) throw new Error('City not found');
           return res.json();
@@ -307,32 +307,27 @@
     });
 
     // NYT Science
-    const NYT_API_KEY = 'YOUR_NYT_API_KEY'; // Replace with your NYT API key
-    fetch(`https://api.nytimes.com/svc/topstories/v2/science.json?api-key=${NYT_API_KEY}`)
-      .then(res => res.json())
-      .then(data => {
-        const nyt = document.getElementById("nyt-science");
-        if (!data.results || data.results.length === 0) {
-          nyt.innerHTML = "<p>No articles found.</p>";
-          return;
-        }
-        let html = `<h2>📰 Latest in Science & Astronomy (NYT)</h2>`;
-        data.results.slice(0, 5).forEach(article => {
-          html += `
-            <div class="news-article">
-              <a href="${article.url}" target="_blank" rel="noopener noreferrer"><strong>${article.title}</strong></a>
-              <p style="font-size: 0.9rem;">${article.abstract}</p>
-            </div>
-          `;
-        });
-        html += `<p style="font-size: 0.75rem; color: #666; margin-top: 0.5rem;">
-          Articles by <a href="https://www.nytimes.com/" target="_blank" rel="noopener noreferrer">The New York Times</a>
-        </p>`;
-        nyt.innerHTML = html;
-      })
-      .catch(() => {
-        document.getElementById("nyt-science").innerHTML = "<p>Failed to load articles.</p>";
-      });
+    fetch("https://api.nytimes.com/svc/topstories/v2/science.json?api-key=eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD")
+  .then(res => res.json())
+  .then(data => {
+    const nyt = document.getElementById("nyt-science");
+    nyt.innerHTML = `<h2>📰 Latest in Science & Astronomy (NYT)</h2>`;
+    data.results.slice(0, 5).forEach(article => {
+      nyt.innerHTML += `
+        <div class="news-article">
+          <a href="${article.url}" target="_blank"><strong>${article.title}</strong></a>
+          <p style="font-size: 0.9rem;">${article.abstract}</p>
+        </div>
+      `;
+    });
+    nyt.innerHTML += `
+      <p style="font-size: 0.8rem; color: #777; margin-top: 1rem;">
+        News from <a href="https://www.nytimes.com/section/science" target="_blank" style="color: #00bcd4;">The New York Times</a>
+      </p>
+    `;
+  }).catch(() => {
+    document.getElementById("nyt-science").innerHTML = "<p>Failed to load articles.</p>";
+  });
   </script>
 </body>
 </html>
