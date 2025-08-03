@@ -2,215 +2,233 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BlueandCosmos</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css"/>
   <style>
     :root {
-      --primary: #2196f3; --accent: #ff4081;
-      --background-light: #fff; --background-dark: #121212;
-      --text-light: #1a1a1a; --text-dark: #f5f5f5;
-      --card-bg-light: #f5f5f5; --card-bg-dark: #1e1e1e;
-      --border-light: #e0e0e0; --border-dark: #333;
+      --blue: #1976d2;
+      --bright: #ff4081;
+      --border: #ccc;
     }
+
     body {
-      font-family: 'Inter', sans-serif; margin: 0; padding: 0;
-      background: var(--background-light); color: var(--text-light);
-      transition: background-color 0.3s, color 0.3s;
+      margin: 0;
+      font-family: sans-serif;
+      background: #fff;
+      color: #111;
+      transition: background 0.3s, color 0.3s;
     }
+
     body.dark {
-      background: var(--background-dark); color: var(--text-dark);
+      background: #121212;
+      color: #eee;
     }
+
+    .dark .card {
+      background: #1e1e1e;
+      border-color: #444;
+    }
+
     header {
-      position: sticky; top: 0; background: var(--background-light);
-      padding: 1rem 2rem; display: flex; justify-content: space-between;
-      align-items: center; border-bottom: 1px solid var(--border-light); z-index: 1000;
+      position: sticky;
+      top: 0;
+      background: var(--blue);
+      color: white;
+      padding: 0.7rem 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
     }
-    body.dark header { background: var(--background-dark); border-bottom:1px solid var(--border-dark); }
-    header h1 { color: var(--primary); margin:0; }
-    .toggle { cursor: pointer; padding:0.5rem 1rem; background:var(--accent);
-      color:#fff; border:none; border-radius:20px; font-weight: bold; }
-    main {
-      padding: 2rem; display: grid; gap: 2rem;
-      grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); align-items: start;
+
+    .toggle {
+      cursor: pointer;
+      font-size: 1.2rem;
     }
-    .card { background:var(--card-bg-light); border-radius:16px;
-      padding:1.5rem; box-shadow:0 2px 10px rgba(0,0,0,0.1);
-      transition:0.3s ease; border:1px solid var(--border-light); }
-    body.dark .card { background:var(--card-bg-dark); border:1px solid var(--border-dark); }
-    .card h2 { margin-top:0; color:var(--primary); }
-    img, iframe { max-width:100%; border-radius:12px; }
-    footer { text-align:center; margin-top:4rem; padding:1rem;
-      font-size:0.9rem; color:#888; }
-    input[type="text"], input[type="email"] {
-      padding:0.5rem; border-radius:8px; border:1px solid var(--border-light); width:70%;
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 1rem;
+      justify-content: space-evenly;
     }
-    button { padding:0.5rem 1rem; background:var(--primary);
-      color:#fff; border:none; border-radius:8px; cursor:pointer; }
-    button:hover { background:var(--accent); }
-    .chat-log { font-size:0.9rem; color:#333; max-height:150px;
-      overflow-y:auto; margin-bottom:1rem; }
-    body.dark .chat-log { color:#ddd; }
-    @media(max-width:500px){ main { padding:1rem; grid-template-columns:1fr; } }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      flex: 1 1 350px;
+      max-width: 500px;
+      background: white;
+    }
+
+    img, video {
+      max-width: 100%;
+      border-radius: 8px;
+      max-height: 300px;
+    }
+
+    .news-article {
+      margin-bottom: 1rem;
+    }
+
+    .chat-log {
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      padding: 0.5rem;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+      background: #f9f9f9;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
   </style>
 </head>
 <body>
   <header>
-    <div><h1>BlueandCosmos</h1><p class="tagline">Exploring the Cosmos. Protecting the Earth.</p></div>
-    <button class="toggle" onclick="toggleTheme()">Toggle Mode</button>
+    <h1 style="margin: 0;">BlueandCosmos</h1>
+    <div class="toggle" onclick="document.body.classList.toggle('dark')">🌓</div>
   </header>
-  <main>
-    <!-- APOD -->
-    <div id="apod" class="card"></div>
+
+  <div class="container">
+    <!-- NASA APOD -->
+    <div class="card" id="apod">
+      <h2>📸 Astronomy Picture of the Day</h2>
+      <p>Loading...</p>
+      <p style="font-size: 0.8rem;">Image credit: NASA</p>
+    </div>
 
     <!-- Weather -->
     <div class="card">
       <h2>🌤️ Live Weather</h2>
-      <form id="weather-form">
-        <input type="text" id="city-input" placeholder="City name" required /><button>Search</button>
-      </form>
-      <div id="weather-result"></div>
-      <p style="font-size:0.8rem; color:#777;">Weather via OpenWeather.org</p>
+      <input type="text" id="city" placeholder="Enter city name (e.g. New York)" />
+      <button onclick="getWeather()">Search</button>
+      <div id="weather"><p>Loading weather for New York...</p></div>
+      <p style="font-size: 0.8rem;">Weather data by <a href="https://openweather.org" target="_blank">OpenWeather.org</a></p>
     </div>
 
-    <!-- NYT News -->
-    <div id="nyt-science" class="card"></div>
+    <!-- NYT Science -->
+    <div class="card" id="nyt-science">
+      <h2>📰 Latest in Science (NYT)</h2>
+      <p>Loading articles...</p>
+      <p style="font-size: 0.8rem;">Source: <a href="https://nytimes.com/section/science" target="_blank">The New York Times</a></p>
+    </div>
 
-    <!-- Daily Fact -->
-    <div id="fact-card" class="card"><h2>💡 Did You Know?</h2></div>
-
-    <!-- Planetary Alignments View -->
+    <!-- Celestial Events -->
     <div class="card">
-      <h2>🪐 Planetary Alignments</h2>
-      <iframe src="https://www.heavens-above.com/planetsummary.aspx" style="height:250px;" frameborder="0"></iframe>
+      <h2>🌌 Celestial Events</h2>
+      <ul>
+        <li><a href="/events/meteor-showers.html">Meteor Showers</a></li>
+        <li><a href="/events/lunar-eclipses.html">Lunar Eclipses</a></li>
+        <li><a href="/events/planetary-alignments.html">Planetary Alignments</a></li>
+      </ul>
     </div>
-
-    <!-- Mission Tracker -->
-    <div id="mission-tracker" class="card"></div>
 
     <!-- Chatbot -->
     <div class="card">
       <h2>🤖 Ask BlueBot</h2>
       <div class="chat-log" id="chat-box"></div>
       <form id="chat-form">
-        <input type="text" id="chat-input" placeholder="Ask me about space..." />
+        <input type="text" id="chat-input" placeholder="Ask me about space..." required />
         <button type="submit">Send</button>
       </form>
     </div>
 
     <!-- Subscription -->
     <div class="card">
-      <h2>📬 Subscribe</h2>
-      <form id="subscribe-form">
-        <input type="email" id="email-input" placeholder="Email" required />
-        <button type="submit">Subscribe</button>
-      </form>
-      <p id="subscribe-status"></p>
+      <h2>📩 Stay Updated</h2>
+      <p>Coming soon: subscribe to cosmic updates.</p>
     </div>
+  </div>
 
-    <!-- Celestial events navigation -->
-    <div class="card">
-      <h2>📅 Celestial Events</h2>
-      <p><a href="events.html">Explore upcoming events</a></p>
-    </div>
-  </main>
   <footer>
-    <p>BlueandCosmos 2025</p>
+    BlueandCosmos 2025
   </footer>
+
   <script>
-    function toggleTheme(){ document.body.classList.toggle('dark'); }
-
-    const OPEN_WEATHER_KEY = '1557651ee4d280ab5e111aeee2e174e1';
-    const NYT_KEY = 'eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD';
-    const NASA_KEY = 'CysEgHwCtuZgj1UMT2GwnlufWt9F5HfLTbRtPwea';
-
     // APOD
-    fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}`)
-      .then(r=>r.json()).then(data=>{
-        document.getElementById('apod').innerHTML = `
+    fetch("https://api.nasa.gov/planetary/apod?api_key=CysEgHwCtuZgj1UMT2GwnlufWt9F5HfLTbRtPwea")
+      .then(res => res.json())
+      .then(data => {
+        const apod = document.getElementById("apod");
+        apod.innerHTML = `
           <h2>📸 Astronomy Picture of the Day</h2>
-          ${data.media_type==='image'
-            ? `<img src="${data.url}" alt="${data.title}" />`
-            : `<iframe src="${data.url}" allowfullscreen></iframe>`
-          }
-          <p>${data.title} — ${data.date}</p>
-          <p style="font-size:0.8rem; color:#777;">Image via NASA APOD</p>`;
+          ${data.media_type === "video" ? 
+            `<iframe src="${data.url}" frameborder="0" allowfullscreen></iframe>` :
+            `<img src="${data.url}" alt="${data.title}" />`}
+          <p>${data.title}</p>
+          <p style="font-size: 0.8rem;">${data.explanation}</p>
+          <p style="font-size: 0.8rem;">Image credit: NASA</p>
+        `;
       });
 
     // Weather
-    document.getElementById('weather-form').addEventListener('submit', e=>{
-      e.preventDefault();
-      const city = document.getElementById('city-input').value.trim();
-      document.getElementById('weather-result').textContent = `Loading weather for ${city}...`;
-      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${OPEN_WEATHER_KEY}&units=metric`)
-        .then(r=>r.json())
-        .then(data=>{ document.getElementById('weather-result').innerHTML = `
+    function getWeather() {
+      const city = document.getElementById("city").value || "New York";
+      document.getElementById("weather").innerHTML = `<p>Loading weather for ${city}...</p>`;
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=1557651ee4d280ab5e111aeee2e174e1&units=metric`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("weather").innerHTML = `
             <p><strong>${data.weather[0].main}:</strong> ${data.weather[0].description}</p>
             <p>🌡️ Temp: ${data.main.temp}°C | 💧 Humidity: ${data.main.humidity}%</p>
-            <p>📍 ${data.name}, ${data.sys.country}</p>`;
-        }).catch(()=>{document.getElementById('weather-result').textContent='Error fetching weather.'});
-    });
+            <p>🌬️ Wind: ${data.wind.speed} m/s</p>
+            <p>📍 ${data.name}, ${data.sys.country}</p>
+          `;
+        })
+        .catch(() => {
+          document.getElementById("weather").innerHTML = "<p>Error loading weather data.</p>";
+        });
+    }
+    getWeather();
 
     // NYT Science
-    fetch(`https://api.nytimes.com/svc/topstories/v2/science.json?api-key=${NYT_KEY}`)
-      .then(r=>r.json()).then(d=>{
-        const el = document.getElementById('nyt-science'); el.innerHTML='<h2>📰 NYT Science & Astronomy</h2>';
-        d.results.slice(0,5).forEach(a=> el.innerHTML += `<p><a href="${a.url}" target="_blank"><strong>${a.title}</strong></a><br><small>${a.abstract}</small></p>`);
-        el.innerHTML += `<p style="font-size:0.8rem; color:#777;">Articles via The New York Times</p>`;
+    fetch("https://api.nytimes.com/svc/topstories/v2/science.json?api-key=eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD")
+      .then(res => res.json())
+      .then(data => {
+        const nyt = document.getElementById("nyt-science");
+        nyt.innerHTML = `<h2>📰 Latest in Science (NYT)</h2>`;
+        data.results.slice(0, 5).forEach(article => {
+          nyt.innerHTML += `
+            <div class="news-article">
+              <a href="${article.url}" target="_blank"><strong>${article.title}</strong></a>
+              <p style="font-size: 0.9rem;">${article.abstract}</p>
+            </div>
+          `;
+        });
+        nyt.innerHTML += `<p style="font-size: 0.8rem;">Source: <a href="https://nytimes.com/section/science" target="_blank">The New York Times</a></p>`;
       });
 
-    // Random Fact
-    const facts = [
-      'Jupiter’s Great Red Spot is 3x Earth’s diameter!',
-      'A day on Venus is longer than a year on Venus.',
-      'There are more stars in the universe than grains of sand on Earth.'
-    ];
-    document.getElementById('fact-card').innerHTML += `<p>${facts[Math.floor(Math.random()*facts.length)]}</p><p style="font-size:0.8rem; color:#777;">Fact source: NASA Science</p>`;
-
-    // Missions
-    fetch('https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=5')
-      .then(r=>r.json()).then(d=>{
-        let html='<h2>🚀 Upcoming Missions</h2>';
-        d.results.forEach(m=> html+=`<p><strong>${m.name}</strong><br>${new Date(m.net).toLocaleString()} at ${m.pad.name}</p>`);
-        document.getElementById('mission-tracker').innerHTML = html + `<p style="font-size:0.8rem; color:#777;">Missions via Launch Library 2</p>`;
-      });
-
-    // Chatbot via OpenAI
-    document.getElementById('chat-form').addEventListener('submit', async e=>{
+    // Chatbot
+    document.getElementById('chat-form').addEventListener('submit', async e => {
       e.preventDefault();
       const msg = document.getElementById('chat-input').value.trim();
-      if(!msg) return;
+      if (!msg) return;
       const log = document.getElementById('chat-box');
       log.innerHTML += `<div><strong>You:</strong> ${msg}</div>`;
       try {
-        const resp = await fetch('https://api.openai.com/v1/chat/completions', {
-          method:'POST', headers:{
-            'Content-Type':'application/json',
-            'Authorization': 'Bearer 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'
-          },
-          body: JSON.stringify({ model:'gpt-3.5-turbo',
-            messages:[{role:'system', content:'You are an astronomy assistant.'},{role:'user',content:msg}]
-          })
+        const resp = await fetch('/.netlify/functions/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: msg })
         });
-        const j = await resp.json();
-        const bot = j.choices[0].message.content;
-        log.innerHTML += `<div><strong>BlueBot:</strong> ${bot}</div>`;
+        const data = await resp.json();
+        log.innerHTML += `<div><strong>BlueBot:</strong> ${data.reply}</div>`;
       } catch {
         log.innerHTML += `<div><strong>BlueBot:</strong> Sorry, I can’t answer right now.</div>`;
       }
       log.scrollTop = log.scrollHeight;
-      document.getElementById('chat-input').value='';
-    });
-
-    // Subscription placeholder
-    document.getElementById('subscribe-form').addEventListener('submit', e=>{
-      e.preventDefault();
-      const em=document.getElementById('email-input').value.trim();
-      document.getElementById('subscribe-status').innerText = em
-        ? `Thanks! Subscription feature coming soon.`
-        : 'Please enter an email.';
-      e.target.reset();
+      document.getElementById('chat-input').value = '';
     });
   </script>
 </body>
 </html>
+
