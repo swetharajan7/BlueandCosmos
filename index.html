@@ -7,56 +7,138 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --primary: #2196f3; --accent: #ff4081;
-      --background-light: #fff; --background-dark: #121212;
-      --text-light: #1a1a1a; --text-dark: #f5f5f5;
-      --card-bg-light: #f5f5f5; --card-bg-dark: #1e1e1e;
-      --border-light: #e0e0e0; --border-dark: #333;
+      --primary: #2196f3;
+      --accent: #ff4081;
+      --background-light: #fff;
+      --background-dark: #121212;
+      --text-light: #1a1a1a;
+      --text-dark: #f5f5f5;
+      --card-bg-light: #f5f5f5;
+      --card-bg-dark: #1e1e1e;
+      --border-light: #e0e0e0;
+      --border-dark: #333;
     }
     body {
-      font-family: 'Inter', sans-serif; margin: 0; padding: 0;
-      background: var(--background-light); color: var(--text-light);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: var(--background-light);
+      color: var(--text-light);
       transition: background-color 0.3s, color 0.3s;
     }
     body.dark {
-      background: var(--background-dark); color: var(--text-dark);
+      background: var(--background-dark);
+      color: var(--text-dark);
     }
     header {
-      position: sticky; top: 0; background: var(--background-light);
-      padding: 1rem 2rem; display: flex; justify-content: space-between;
-      align-items: center; border-bottom: 1px solid var(--border-light); z-index: 1000;
+      position: sticky;
+      top: 0;
+      background: var(--background-light);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-light);
+      z-index: 1000;
     }
-    body.dark header { background: var(--background-dark); border-bottom:1px solid var(--border-dark); }
-    header h1 { color: var(--primary); margin:0; }
-    .toggle { cursor: pointer; padding:0.5rem 1rem; background:var(--accent);
-      color:#fff; border:none; border-radius:20px; font-weight: bold; }
+    body.dark header {
+      background: var(--background-dark);
+      border-bottom: 1px solid var(--border-dark);
+    }
+    header h1 {
+      color: var(--primary);
+      margin: 0;
+    }
+    .tagline {
+      font-size: 0.85rem;
+      margin: 0;
+      color: gray;
+    }
+    .toggle {
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      font-weight: bold;
+    }
     main {
-      padding: 2rem; display: grid; gap: 2rem;
-      grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); align-items: start;
+      padding: 2rem;
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      align-items: start;
     }
-    .card { background:var(--card-bg-light); border-radius:16px;
-      padding:1.5rem; box-shadow:0 2px 10px rgba(0,0,0,0.1);
-      transition:0.3s ease; border:1px solid var(--border-light); }
-    body.dark .card { background:var(--card-bg-dark); border:1px solid var(--border-dark); }
-    .card h2 { margin-top:0; color:var(--primary); }
-    img, iframe { max-width:100%; border-radius:12px; }
-    footer { text-align:center; margin-top:4rem; padding:1rem;
-      font-size:0.9rem; color:#888; }
-    input[type="text"], input[type="email"] {
-      padding:0.5rem; border-radius:8px; border:1px solid var(--border-light); width:70%;
+    .card {
+      background: var(--card-bg-light);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      transition: 0.3s ease;
+      border: 1px solid var(--border-light);
     }
-    button { padding:0.5rem 1rem; background:var(--primary);
-      color:#fff; border:none; border-radius:8px; cursor:pointer; }
-    button:hover { background:var(--accent); }
-    .chat-log { font-size:0.9rem; color:#333; max-height:150px;
-      overflow-y:auto; margin-bottom:1rem; }
-    body.dark .chat-log { color:#ddd; }
-    @media(max-width:500px){ main { padding:1rem; grid-template-columns:1fr; } }
+    body.dark .card {
+      background: var(--card-bg-dark);
+      border: 1px solid var(--border-dark);
+    }
+    .card h2 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+    img, iframe {
+      max-width: 100%;
+      border-radius: 12px;
+    }
+    footer {
+      text-align: center;
+      margin-top: 4rem;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #888;
+    }
+    input[type="text"],
+    input[type="email"] {
+      padding: 0.5rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-light);
+      width: 70%;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: var(--accent);
+    }
+    .chat-log {
+      font-size: 0.9rem;
+      color: #333;
+      max-height: 150px;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+    }
+    body.dark .chat-log {
+      color: #ddd;
+    }
+    @media(max-width: 500px) {
+      main {
+        padding: 1rem;
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
   <header>
-    <div><h1>BlueandCosmos</h1><p class="tagline">Exploring the Cosmos. Protecting the Earth.</p></div>
+    <div>
+      <h1>BlueandCosmos</h1>
+      <p class="tagline">Exploring the Cosmos. Protecting the Earth.</p>
+    </div>
     <button class="toggle" onclick="toggleTheme()">Toggle Mode</button>
   </header>
   <main>
@@ -67,10 +149,11 @@
     <div class="card">
       <h2>🌤️ Live Weather</h2>
       <form id="weather-form">
-        <input type="text" id="city-input" placeholder="City name" required /><button>Search</button>
+        <input type="text" id="city-input" placeholder="City name" required />
+        <button>Search</button>
       </form>
       <div id="weather-result"></div>
-      <p style="font-size:0.8rem; color:#777;">Weather via OpenWeather.org</p>
+      <p style="font-size: 0.8rem; color: #777;">Weather via OpenWeather.org</p>
     </div>
 
     <!-- NYT News -->
@@ -82,7 +165,7 @@
     <!-- Planetary Alignments View -->
     <div class="card">
       <h2>🪐 Planetary Alignments</h2>
-      <iframe src="https://www.heavens-above.com/planetsummary.aspx" style="height:250px;" frameborder="0"></iframe>
+      <iframe src="https://www.heavens-above.com/planetsummary.aspx" style="height: 250px;" frameborder="0"></iframe>
     </div>
 
     <!-- Mission Tracker -->
@@ -91,11 +174,9 @@
     <!-- Chatbot -->
     <div class="card">
       <h2>🤖 Ask BlueBot</h2>
-      <div class="chat-log" id="chat-box"></div>
-      <form id="chat-form">
-        <input type="text" id="chat-input" placeholder="Ask me about space..." autocomplete="off" />
-        <button type="submit">Send</button>
-      </form>
+      <div class="chat-log" id="chat-box">
+        <p>BlueBot is temporarily offline while we work on a secure backend. Stay tuned!</p>
+      </div>
     </div>
 
     <!-- Subscription -->
@@ -118,116 +199,89 @@
     <p>BlueandCosmos 2025</p>
   </footer>
 
-<script>
-  // Theme toggle
-  function toggleTheme() { document.body.classList.toggle('dark'); }
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+    }
 
-  // API Keys
-  const OPEN_WEATHER_KEY = '1557651ee4d280ab5e111aeee2e174e1';
-  const NYT_KEY = 'eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD';
-  const NASA_KEY = 'CysEgHwCtuZgj1UMT2GwnlufWt9F5HfLTbRtPwea';
+    const NASA_KEY = 'CysEgHwCtuZgj1UMT2GwnlufWt9F5HfLTbRtPwea';
+    const OPEN_WEATHER_KEY = '1557651ee4d280ab5e111aeee2e174e1';
+    const NYT_KEY = 'eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD';
 
-  // APOD
-  fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}`)
-    .then(r => r.json())
-    .then(data => {
-      document.getElementById('apod').innerHTML = `
-        <h2>📸 Astronomy Picture of the Day</h2>
-        ${data.media_type === 'image' ? `<img src="${data.url}" alt="${data.title}" />` : `<iframe src="${data.url}" allowfullscreen></iframe>`}
-        <p>${data.title} — ${data.date}</p>
-        <p style="font-size:0.8rem; color:#777;">Credit: NASA/APOD</p>
-      `;
-    });
-
-  // Weather
-  document.getElementById('weather-form').addEventListener('submit', e => {
-    e.preventDefault();
-    const city = document.getElementById('city-input').value.trim();
-    document.getElementById('weather-result').textContent = `Loading weather for ${city}...`;
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${OPEN_WEATHER_KEY}&units=metric`)
+    // APOD
+    fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}`)
       .then(r => r.json())
       .then(data => {
-        if(data.cod !== 200) throw new Error('City not found');
-        document.getElementById('weather-result').innerHTML = `
-          <p><strong>${data.weather[0].main}:</strong> ${data.weather[0].description}</p>
-          <p>🌡️ Temp: ${data.main.temp}°C | 💧 Humidity: ${data.main.humidity}%</p>
-          <p>📍 ${data.name}, ${data.sys.country}</p>
-        `;
-      }).catch(() => {
-        document.getElementById('weather-result').textContent = 'Error fetching weather.';
+        document.getElementById('apod').innerHTML = `
+          <h2>📸 Astronomy Picture of the Day</h2>
+          ${data.media_type === 'image'
+            ? `<img src="${data.url}" alt="${data.title}" />`
+            : `<iframe src="${data.url}" allowfullscreen></iframe>`}
+          <p>${data.title} — ${data.date}</p>
+          <p style="font-size: 0.8rem; color: #777;">Credit: NASA APOD</p>`;
       });
-  });
 
-  // NYT Science
-  fetch(`https://api.nytimes.com/svc/topstories/v2/science.json?api-key=${NYT_KEY}`)
-    .then(r => r.json())
-    .then(d => {
-      const el = document.getElementById('nyt-science');
-      el.innerHTML = '<h2>📰 NYT Science & Astronomy</h2>';
-      d.results.slice(0, 5).forEach(a => {
-        el.innerHTML += `<p><a href="${a.url}" target="_blank"><strong>${a.title}</strong></a><br><small>${a.abstract}</small></p>`;
-      });
-      el.innerHTML += `<p style="font-size:0.8rem; color:#777;">News from <a href="https://www.nytimes.com/section/science" target="_blank">The New York Times</a></p>`;
+    // Weather
+    document.getElementById('weather-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const city = document.getElementById('city-input').value.trim();
+      document.getElementById('weather-result').textContent = `Loading weather for ${city}...`;
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${OPEN_WEATHER_KEY}&units=metric`)
+        .then(r => r.json())
+        .then(data => {
+          document.getElementById('weather-result').innerHTML = `
+            <p><strong>${data.weather[0].main}:</strong> ${data.weather[0].description}</p>
+            <p>🌡️ Temp: ${data.main.temp}°C | 💧 Humidity: ${data.main.humidity}%</p>
+            <p>📍 ${data.name}, ${data.sys.country}</p>`;
+        }).catch(() => {
+          document.getElementById('weather-result').textContent = 'Error fetching weather.';
+        });
     });
 
-  // Random Fact
-  const facts = [
-    'Jupiter’s Great Red Spot is 3x Earth’s diameter!',
-    'A day on Venus is longer than a year on Venus.',
-    'There are more stars in the universe than grains of sand on Earth.'
-  ];
-  document.getElementById('fact-card').innerHTML += `<p>${facts[Math.floor(Math.random() * facts.length)]}</p>`;
-
-  // Missions
-  fetch('https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=5')
-    .then(r => r.json())
-    .then(d => {
-      let html = '<h2>🚀 Upcoming Missions</h2>';
-      d.results.forEach(m => {
-        html += `<p><strong>${m.name}</strong><br>${new Date(m.net).toLocaleString()} at ${m.pad.name}</p>`;
+    // NYT Science
+    fetch(`https://api.nytimes.com/svc/topstories/v2/science.json?api-key=${NYT_KEY}`)
+      .then(r => r.json())
+      .then(d => {
+        const el = document.getElementById('nyt-science');
+        el.innerHTML = '<h2>📰 NYT Science & Astronomy</h2>';
+        d.results.slice(0, 5).forEach(a => {
+          el.innerHTML += `<p><a href="${a.url}" target="_blank"><strong>${a.title}</strong></a><br><small>${a.abstract}</small></p>`;
+        });
+        el.innerHTML += `<p style="font-size: 0.8rem; color: #777;">Source: New York Times Science</p>`;
       });
-      document.getElementById('mission-tracker').innerHTML = html;
+
+    // Random Fact
+    const facts = [
+      'Jupiter’s Great Red Spot is 3x Earth’s diameter!',
+      'A day on Venus is longer than a year on Venus.',
+      'There are more stars in the universe than grains of sand on Earth.'
+    ];
+    document.getElementById('fact-card').innerHTML += `
+      <p>${facts[Math.floor(Math.random() * facts.length)]}</p>
+      <p style="font-size: 0.8rem; color: #777;">Source: NASA Solar System Exploration</p>`;
+
+    // Missions
+    fetch('https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=5')
+      .then(r => r.json())
+      .then(d => {
+        let html = '<h2>🚀 Upcoming Missions</h2>';
+        d.results.forEach(m => {
+          html += `<p><strong>${m.name}</strong><br>${new Date(m.net).toLocaleString()} at ${m.pad.name}</p>`;
+        });
+        html += `<p style="font-size: 0.8rem; color: #777;">Launch data via Launch Library 2</p>`;
+        document.getElementById('mission-tracker').innerHTML = html;
+      });
+
+    // Subscription placeholder
+    document.getElementById('subscribe-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const em = document.getElementById('email-input').value.trim();
+      document.getElementById('subscribe-status').innerText = em
+        ? `Thanks! Subscription feature coming soon.`
+        : 'Please enter an email.';
+      e.target.reset();
     });
-
-  // Chatbot with Netlify function
-  const chatForm = document.getElementById('chat-form');
-  const chatBox = document.getElementById('chat-box');
-
-  chatForm.addEventListener('submit', async e => {
-    e.preventDefault();
-    const msg = document.getElementById('chat-input').value.trim();
-    if (!msg) return;
-    chatBox.innerHTML += `<div><strong>You:</strong> ${msg}</div>`;
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    try {
-      const response = await fetch('/.netlify/functions/bluebot', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: msg }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        chatBox.innerHTML += `<div><strong>BlueBot:</strong> ${data.reply}</div>`;
-      } else {
-        chatBox.innerHTML += `<div><strong>BlueBot:</strong> Sorry, I can’t answer right now.</div>`;
-      }
-    } catch {
-      chatBox.innerHTML += `<div><strong>BlueBot:</strong> Sorry, I can’t answer right now.</div>`;
-    }
-    chatBox.scrollTop = chatBox.scrollHeight;
-    chatForm.reset();
-  });
-
-  // Subscription placeholder
-  document.getElementById('subscribe-form').addEventListener('submit', e => {
-    e.preventDefault();
-    const em = document.getElementById('email-input').value.trim();
-    document.getElementById('subscribe-status').innerText = em
-      ? `Thanks! Subscription feature coming soon.`
-      : 'Please enter an email.';
-    e.target.reset();
-  });
-</script>
+  </script>
 </body>
 </html>
+
