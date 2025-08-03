@@ -103,11 +103,17 @@
       color: var(--primary);
     }
 
+    img, iframe {
+      max-width: 100%;
+      max-height: 300px;
+      border-radius: 12px;
+      object-fit: cover;
+    }
+
     a {
       color: var(--primary);
       text-decoration: none;
     }
-
     a:hover {
       text-decoration: underline;
     }
@@ -128,12 +134,10 @@
       list-style: none;
       padding-left: 0;
     }
-
     #celestial-events li {
       margin: 0.5rem 0;
       font-weight: 600;
     }
-
     #celestial-events li a {
       color: var(--primary);
     }
@@ -152,19 +156,12 @@
       border: 1px solid var(--border-light);
       font-size: 1rem;
       outline: none;
-      transition: border-color 0.3s;
     }
-
     body.dark #weather input[type="text"] {
       border: 1px solid var(--border-dark);
       background: var(--card-bg-dark);
       color: var(--text-dark);
     }
-
-    #weather input[type="text"]:focus {
-      border-color: var(--primary);
-    }
-
     #weather button {
       padding: 0 1rem;
       border-radius: 12px;
@@ -173,9 +170,7 @@
       color: white;
       font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.3s;
     }
-
     #weather button:hover {
       background: var(--accent);
     }
@@ -199,14 +194,14 @@
     <div class="card" id="weather">
       <h2>🌤️ Live Weather</h2>
       <form id="weather-form">
-        <input type="text" id="city-input" placeholder="Enter city name (e.g. New York)" required />
+        <input type="text" id="city-input" placeholder="Enter city name (e.g. Tokyo)" required />
         <button type="submit">Search</button>
       </form>
       <div id="weather-result">
         <p>Loading weather for New York...</p>
       </div>
       <p style="font-size: 0.75rem; color: #666;">
-        Weather data by <a href="https://openweathermap.org/" target="_blank">OpenWeather.org</a>
+        Weather data by <a href="https://openweathermap.org/" target="_blank" rel="noopener noreferrer">OpenWeather.org</a>
       </p>
     </div>
 
@@ -227,7 +222,7 @@
       <h2>📰 Latest in Science & Astronomy (NYT)</h2>
       <p>Loading articles...</p>
       <p style="font-size: 0.75rem; color: #666;">
-        Articles by <a href="https://www.nytimes.com/" target="_blank">The New York Times</a>
+        Articles by <a href="https://www.nytimes.com/section/science" target="_blank">The New York Times</a>
       </p>
     </div>
   </main>
@@ -237,7 +232,6 @@
   </footer>
 
   <script>
-    // Dark mode toggle
     function toggleTheme() {
       document.body.classList.toggle("dark");
     }
@@ -257,11 +251,11 @@
         `;
       });
 
-    // OpenWeather – dynamic city support
-    const weatherForm = document.getElementById('weather-form');
-    const cityInput = document.getElementById('city-input');
-    const weatherResult = document.getElementById('weather-result');
-    const OPENWEATHER_API_KEY = '1557651ee4d280ab5e111aeee2e174e1';
+    // Weather API (dynamic search)
+    const weatherForm = document.getElementById("weather-form");
+    const cityInput = document.getElementById("city-input");
+    const weatherResult = document.getElementById("weather-result");
+    const OPENWEATHER_API_KEY = "1557651ee4d280ab5e111aeee2e174e1"; // Replace if needed
 
     function displayWeather(data) {
       weatherResult.innerHTML = `
@@ -274,24 +268,24 @@
 
     function fetchWeather(city) {
       weatherResult.innerHTML = `<p>Loading weather for ${city}...</p>`;
-      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${OPENWEATHER_API_KEY}&units=metric`)
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${OPENWEATHER_API_KEY}&units=metric`)
         .then(res => {
-          if (!res.ok) throw new Error('City not found');
+          if (!res.ok) throw new Error("City not found");
           return res.json();
         })
-        .then(displayWeather)
+        .then(data => displayWeather(data))
         .catch(() => {
           weatherResult.innerHTML = `<p>Error loading weather data for "${city}". Please try another city.</p>`;
         });
     }
 
-    weatherForm.addEventListener('submit', (e) => {
+    weatherForm.addEventListener("submit", e => {
       e.preventDefault();
       const city = cityInput.value.trim();
       if (city) fetchWeather(city);
     });
 
-    // Load default weather for New York
+    // Load default city (New York) on start
     fetchWeather("New York");
 
     // NYT Science
@@ -309,7 +303,7 @@
           `;
         });
         nyt.innerHTML += `
-          <p style="font-size: 0.8rem; color: #777; margin-top: 1rem;">
+          <p style="font-size: 0.8rem; color: #777;">
             News from <a href="https://www.nytimes.com/section/science" target="_blank" style="color: #00bcd4;">The New York Times</a>
           </p>
         `;
@@ -320,6 +314,7 @@
   </script>
 </body>
 </html>
+
 
 
 
