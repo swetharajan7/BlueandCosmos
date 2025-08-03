@@ -409,7 +409,7 @@
 
     function fetchWeather(city) {
       weatherResult.innerHTML = `<p>Loading weather for ${city}...</p>`;
-      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${OPENWEATHER_API_KEY}&units=metric`)
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${1557651ee4d280ab5e111aeee2e174e1}&units=metric`)
         .then(res => {
           if (!res.ok) throw new Error('City not found');
           return res.json();
@@ -434,8 +434,8 @@
     fetchWeather('New York');
 
     // NYT Science
-    const NYT_API_KEY = 'YOUR_NYT_API_KEY'; // Replace with your API key
-    fetch(`https://api.nytimes.com/svc/topstories/v2/science.json?api-key=${NYT_API_KEY}`)
+    const NYT_API_KEY = 'eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD'; // Replace with your API key
+    fetch(`https://api.nytimes.com/svc/topstories/v2/science.json?api-key=${eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD}`)
       .then(res => res.json())
       .then(data => {
         const nyt = document.getElementById("nyt-science");
