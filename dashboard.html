@@ -3,29 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BlueandCosmos Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Barlow&display=swap" rel="stylesheet">
+  <title>Dashboard | BlueandCosmos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&family=Orbitron:wght@500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --primary: #2196f3;
-      --accent: #ff4081;
-      --bg-light: #fff;
+      --accent: #2196f3;
+      --highlight: #ff4081;
+      --bg-light: #ffffff;
       --bg-dark: #121212;
-      --text-light: #1a1a1a;
-      --text-dark: #f5f5f5;
-      --card-light: #f5f5f5;
+      --text-light: #111;
+      --text-dark: #f0f0f0;
+      --card-light: #f9f9f9;
       --card-dark: #1e1e1e;
-      --border-light: #e0e0e0;
+      --border-light: #ddd;
       --border-dark: #333;
     }
 
     body {
-      font-family: 'Barlow', sans-serif;
       margin: 0;
-      padding: 0;
+      font-family: 'Barlow', sans-serif;
       background: var(--bg-light);
       color: var(--text-light);
-      transition: background-color 0.3s, color 0.3s;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     body.dark {
@@ -36,14 +35,13 @@
     header {
       position: sticky;
       top: 0;
+      z-index: 1000;
       background: var(--bg-light);
-      color: var(--primary);
-      padding: 1rem 2rem;
+      border-bottom: 1px solid var(--border-light);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--border-light);
-      z-index: 1000;
+      padding: 1rem 2rem;
     }
 
     body.dark header {
@@ -52,46 +50,48 @@
     }
 
     header h1 {
-      font-family: 'Orbitron', sans-serif;
       margin: 0;
-      font-size: 1.6rem;
-    }
-
-    nav a {
-      margin-left: 1rem;
-      text-decoration: none;
-      color: var(--primary);
-      font-weight: 600;
-    }
-
-    nav a:hover {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
       color: var(--accent);
     }
 
-    .toggle {
-      background: var(--accent);
-      color: white;
+    nav a {
+      margin: 0 0.75rem;
+      text-decoration: none;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    nav a:hover {
+      color: var(--highlight);
+    }
+
+    .toggle-button {
+      background: var(--highlight);
+      color: #fff;
       border: none;
-      padding: 0.5rem 1rem;
       border-radius: 20px;
+      padding: 0.5rem 1rem;
       cursor: pointer;
       font-weight: bold;
     }
 
     main {
+      padding: 1.5rem;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1rem;
-      padding: 2rem;
+      gap: 1.5rem;
     }
 
     .card {
       background: var(--card-light);
-      padding: 1.5rem;
       border-radius: 12px;
+      padding: 1.5rem;
       border: 1px solid var(--border-light);
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      transition: 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      min-height: 200px;
+      transition: background 0.3s ease;
     }
 
     body.dark .card {
@@ -99,44 +99,38 @@
       border: 1px solid var(--border-dark);
     }
 
-    h2 {
-      color: var(--primary);
-    }
-
-    img, iframe {
-      max-width: 100%;
-      border-radius: 8px;
-      margin-top: 1rem;
+    .card h2 {
+      margin-top: 0;
+      color: var(--accent);
+      font-family: 'Orbitron', sans-serif;
     }
 
     footer {
       text-align: center;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      padding: 2rem 1rem;
       color: #888;
-      margin-top: 2rem;
-      padding: 1rem;
     }
 
-    .source-credit {
-      font-size: 0.8rem;
-      margin-top: 0.5rem;
-      color: #666;
+    a {
+      color: var(--accent);
     }
 
-    body.dark .source-credit {
-      color: #aaa;
+    .loading {
+      font-style: italic;
+      color: gray;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 500px) {
       header {
         flex-direction: column;
-        align-items: flex-start;
         gap: 0.5rem;
       }
 
-      nav a {
-        margin-left: 0;
-        margin-right: 1rem;
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
       }
     }
   </style>
@@ -146,119 +140,75 @@
     <h1>BlueandCosmos</h1>
     <nav>
       <a href="index.html">Home</a>
-      <a href="#weather">Weather</a>
       <a href="#apod">APOD</a>
-      <a href="#news">News</a>
-      <a href="#launches">Launches</a>
+      <a href="#weather">Weather</a>
+      <a href="#nyt">NYT</a>
+      <a href="#fact">Fact</a>
+      <a href="#launches">Missions</a>
+      <a href="#events">Events</a>
+      <a href="#chatbot">Chatbot</a>
     </nav>
-    <button class="toggle" onclick="toggleTheme()">Toggle Mode</button>
+    <button class="toggle-button" onclick="toggleDarkMode()">Toggle Mode</button>
   </header>
 
   <main>
-    <!-- Astronomy Picture of the Day -->
-    <div class="card" id="apod">
-      <h2>📸 Astronomy Picture of the Day</h2>
-      <p>Loading...</p>
+    <div id="apod" class="card">
+      <h2>📸 Astronomy Picture</h2>
+      <p class="loading">Loading NASA APOD...</p>
     </div>
 
-    <!-- Weather -->
-    <div class="card" id="weather">
-      <h2>🌤️ Live Weather</h2>
-      <input type="text" id="city" placeholder="Enter city (e.g. Tokyo)" />
-      <button onclick="getWeather()">Search</button>
-      <div id="weather-result">Fetching weather for New York...</div>
-      <div class="source-credit">Weather via <a href="https://openweather.org" target="_blank">OpenWeather</a></div>
+    <div id="weather" class="card">
+      <h2>🌤️ Weather Live</h2>
+      <input type="text" id="city-input" placeholder="Enter city" />
+      <button onclick="fetchWeather()">Search</button>
+      <div id="weather-result" class="loading">Loading default weather...</div>
+      <p style="font-size:0.8rem;">Source: <a href="https://openweather.org" target="_blank">OpenWeather.org</a></p>
     </div>
 
-    <!-- NYT Science News -->
-    <div class="card" id="news">
-      <h2>📰 Latest Science News</h2>
-      <div id="nyt-news">Loading articles...</div>
-      <div class="source-credit">News from <a href="https://www.nytimes.com/section/science" target="_blank">NYT Science</a></div>
+    <div id="nyt" class="card">
+      <h2>📰 NYT Science</h2>
+      <div class="loading">Fetching latest articles...</div>
+      <p style="font-size:0.8rem;">Source: <a href="https://nytimes.com/section/science" target="_blank">New York Times</a></p>
     </div>
 
-    <!-- Launch Tracker -->
-    <div class="card" id="launches">
-      <h2>🚀 Upcoming Space Launches</h2>
-      <div id="launch-list">Loading data...</div>
-      <div class="source-credit">Launch Library 2 API</div>
+    <div id="fact" class="card">
+      <h2>💡 Space Fact</h2>
+      <div class="loading">Loading random fact...</div>
+      <p style="font-size:0.8rem;">Source: <a href="https://space-facts.com" target="_blank">space-facts.com</a></p>
+    </div>
+
+    <div id="launches" class="card">
+      <h2>🚀 Launch Tracker</h2>
+      <div class="loading">Loading upcoming missions...</div>
+      <p style="font-size:0.8rem;">Source: <a href="https://thespacedevs.com/ll2" target="_blank">Launch Library 2</a></p>
+    </div>
+
+    <div id="events" class="card">
+      <h2>🌠 Celestial Events</h2>
+      <div class="loading">Fetching current events...</div>
+      <p style="font-size:0.8rem;">Source: <a href="https://in-the-sky.org" target="_blank">in-the-sky.org</a></p>
+    </div>
+
+    <div id="chatbot" class="card">
+      <h2>🤖 Ask BlueBot</h2>
+      <p>Chat integration available via Netlify function.</p>
     </div>
   </main>
 
   <footer>BlueandCosmos 2025</footer>
 
   <script>
-    function toggleTheme() {
+    function toggleDarkMode() {
       document.body.classList.toggle("dark");
-      localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+      localStorage.setItem("bc-theme", document.body.classList.contains("dark") ? "dark" : "light");
     }
 
-    window.onload = () => {
-      if (localStorage.getItem("theme") === "dark") {
-        document.body.classList.add("dark");
-      }
-    };
-
-    // APOD
-    fetch("https://api.nasa.gov/planetary/apod?api_key=CysEgHwCtuZgj1UMT2GwnlufWt9F5HfLTbRtPwea")
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById("apod").innerHTML = `
-          <h2>📸 Astronomy Picture of the Day</h2>
-          <h3>${data.title}</h3>
-          ${data.media_type === "image"
-            ? `<img src="${data.url}" alt="${data.title}">`
-            : `<iframe src="${data.url}" frameborder="0" allowfullscreen></iframe>`
-          }
-          <p>${data.explanation}</p>
-          <p class="source-credit">Credit: NASA</p>
-        `;
-      });
-
-    // Weather
-    function getWeather() {
-      const city = document.getElementById("city").value || "New York";
-      const apiKey = "1557651ee4d280ab5e111aeee2e174e1";
-      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`)
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById("weather-result").innerHTML = `
-            <p><strong>${data.weather[0].main}:</strong> ${data.weather[0].description}</p>
-            <p>🌡️ Temp: ${data.main.temp}°C | 💧 Humidity: ${data.main.humidity}%</p>
-            <p>📍 ${data.name}, ${data.sys.country}</p>
-          `;
-        });
+    if (localStorage.getItem("bc-theme") === "dark") {
+      document.body.classList.add("dark");
     }
 
-    // NYT Science
-    fetch("https://api.nytimes.com/svc/topstories/v2/science.json?api-key=eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD")
-      .then(res => res.json())
-      .then(data => {
-        const container = document.getElementById("nyt-news");
-        container.innerHTML = "";
-        data.results.slice(0, 5).forEach(article => {
-          container.innerHTML += `
-            <div>
-              <a href="${article.url}" target="_blank"><strong>${article.title}</strong></a>
-              <p>${article.abstract}</p>
-            </div>
-          `;
-        });
-      });
-
-    // Launch Tracker
-    fetch("https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=5")
-      .then(res => res.json())
-      .then(data => {
-        const container = document.getElementById("launch-list");
-        container.innerHTML = "";
-        data.results.forEach(launch => {
-          container.innerHTML += `
-            <div><strong>${launch.name}</strong><br>${new Date(launch.net).toLocaleString()}</div>
-            <hr>
-          `;
-        });
-      });
+    // Additional fetch scripts for APOD, weather, NYT, etc. can be placed here
   </script>
 </body>
 </html>
+
