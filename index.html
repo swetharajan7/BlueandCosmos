@@ -126,14 +126,14 @@
     #chat-window {
       max-height: 200px;
       overflow-y: auto;
-      background-color: #f4f4f4;
       padding: 0.5rem;
+      background: #f0f0f0;
       border-radius: 8px;
       margin-bottom: 0.5rem;
     }
 
     .dark-mode #chat-window {
-      background-color: #333;
+      background: #333;
     }
 
     @media (max-width: 480px) {
@@ -202,7 +202,7 @@
       <p>Enter your email to receive cosmic insights!</p>
       <input type="email" id="email-input" placeholder="Your email" />
       <button onclick="subscribe()">Subscribe</button>
-      <p id="subscription-message"></p>
+      <p id="subscribe-message" style="margin-top:0.5rem;"></p>
     </div>
 
     <!-- Chatbot -->
@@ -220,23 +220,27 @@
   <footer>BlueandCosmos 2025</footer>
 
   <script>
-    // Persisted dark mode
+    // Persistent Dark Mode
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add("dark-mode");
+    }
+
     function toggleDarkMode() {
       document.body.classList.toggle("dark-mode");
-      localStorage.setItem("darkMode", document.body.classList.contains("dark-mode"));
-    }
-    if (localStorage.getItem("darkMode") === "true") {
-      document.body.classList.add("dark-mode");
+      localStorage.setItem('darkMode', document.body.classList.contains("dark-mode"));
     }
 
     // NASA APOD
     fetch("https://api.nasa.gov/planetary/apod?api_key=CysEgHwCtuZgj1UMT2GwnlufWt9F5HfLTbRtPwea")
       .then(res => res.json())
       .then(data => {
+        const media = data.media_type === "image"
+          ? `<img src="${data.url}" alt="${data.title}" loading="lazy" />`
+          : `<iframe width="100%" height="300" src="${data.url}" frameborder="0" allowfullscreen></iframe>`;
         document.getElementById("apod").innerHTML = `
           <h2>📸 Astronomy Picture of the Day</h2>
           <h3>${data.title}</h3>
-          <img src="${data.url}" alt="${data.title}" loading="lazy">
+          ${media}
           <p>${data.explanation}</p>
           <p style="font-size: 0.8rem;">Image Credit: NASA</p>
         `;
@@ -244,7 +248,7 @@
         document.getElementById("apod").innerHTML += "<p>Could not load image.</p>";
       });
 
-    // Weather
+    // OpenWeather
     document.getElementById("weather-btn").addEventListener("click", () => {
       const city = document.getElementById("city").value || "New York";
       const key = "1557651ee4d280ab5e111aeee2e174e1";
@@ -269,7 +273,7 @@
         });
     });
 
-    // NYT
+    // NYT Science
     fetch("https://api.nytimes.com/svc/topstories/v2/science.json?api-key=eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD")
       .then(res => res.json())
       .then(data => {
@@ -326,35 +330,33 @@
         document.getElementById("event-list").innerHTML = "<li>Could not load celestial events.</li>";
       });
 
-    // Subscription
+    // Email Subscription
     function subscribe() {
       const input = document.getElementById("email-input");
-      const message = document.getElementById("subscription-message");
-      const email = input.value;
-      const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-      if (!emailRegex.test(email)) {
-        message.style.color = "red";
-        message.textContent = "Please enter a valid email address.";
+      const msg = document.getElementById("subscribe-message");
+      const email = input.value.trim();
+      const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      if (!valid) {
+        msg.textContent = "Please enter a valid email.";
+        msg.style.color = "red";
         return;
       }
-      message.style.color = "green";
-      message.textContent = "Thank you for subscribing!";
+      msg.textContent = "Thank you for subscribing!";
+      msg.style.color = "green";
       input.value = "";
     }
 
-    // Placeholder for chatbot
+    // Chatbot placeholder
     function sendToBlueBot() {
       const input = document.getElementById("chat-input");
-      const windowEl = document.getElementById("chat-window");
-      const userText = input.value.trim();
-      if (!userText) return;
-      const userMsg = `<div><strong>You:</strong> ${userText}</div>`;
-      const botMsg = `<div><strong>BlueBot:</strong> I'm still learning. Stay tuned!</div>`;
-      windowEl.innerHTML += userMsg + botMsg;
-      windowEl.scrollTop = windowEl.scrollHeight;
+      const message = input.value.trim();
+      if (!message) return;
+      const chat = document.getElementById("chat-window");
+      chat.innerHTML += `<div><strong>You:</strong> ${message}</div>`;
+      chat.innerHTML += `<div><strong>BlueBot:</strong> Sorry, I can’t answer right now.</div>`;
       input.value = "";
+      chat.scrollTop = chat.scrollHeight;
     }
   </script>
 </body>
 </html>
-
