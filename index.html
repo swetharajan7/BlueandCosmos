@@ -6,17 +6,33 @@
   <title>BlueandCosmos</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
+    :root {
+      --accent-color: #2196f3;
+      --highlight-color: #ff4081;
+      --bg-light: #fff;
+      --bg-dark: #111;
+      --card-light: #fafafa;
+      --card-dark: #222;
+      --border-light: #ccc;
+      --border-dark: #444;
+      --text-light: #000;
+      --text-dark: #fff;
+      --credit-color: #777;
+    }
+
     body {
       font-family: 'Segoe UI', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #fff;
-      color: #000;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: background-color 0.3s, color 0.3s;
     }
+
     header {
       position: sticky;
       top: 0;
-      background-color: #2196f3;
+      background-color: var(--accent-color);
       color: white;
       padding: 1rem;
       z-index: 1000;
@@ -24,63 +40,96 @@
       justify-content: space-between;
       align-items: center;
     }
+
     header h1 {
       margin: 0;
       font-size: 1.5rem;
     }
+
     .toggle-button {
-      background: #ff4081;
+      background: var(--highlight-color);
       border: none;
-      padding: 0.5rem;
+      padding: 0.5rem 1rem;
       border-radius: 5px;
       color: white;
+      font-weight: bold;
       cursor: pointer;
     }
+
     main {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 1rem;
       padding: 1rem;
     }
+
     .card {
-      border: 1px solid #ccc;
+      border: 1px solid var(--border-light);
       border-radius: 12px;
       padding: 1rem;
-      background: #fafafa;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      background: var(--card-light);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      transition: background-color 0.3s, color 0.3s;
     }
+
     img {
       max-width: 100%;
       border-radius: 10px;
+      max-height: 300px;
+      object-fit: cover;
     }
+
     footer {
       text-align: center;
       padding: 1rem;
       font-size: 0.9rem;
-      color: #777;
+      color: var(--credit-color);
     }
+
     a {
-      color: #2196f3;
+      color: var(--accent-color);
       text-decoration: none;
     }
+
     .news-article {
       margin-bottom: 1rem;
     }
+
     .source-credit {
       font-size: 0.8rem;
       color: #555;
       margin-top: 1rem;
     }
+
     .dark-mode {
-      background-color: #111;
-      color: white;
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
     }
+
     .dark-mode .card {
-      background-color: #222;
-      border-color: #444;
+      background-color: var(--card-dark);
+      border-color: var(--border-dark);
     }
+
     .dark-mode a {
       color: #90caf9;
+    }
+
+    input, button {
+      font-size: 1rem;
+    }
+
+    #weather, #news, #launch-list, #event-list {
+      min-height: 50px;
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 1.2rem;
+      }
+      .toggle-button {
+        padding: 0.4rem 0.8rem;
+      }
     }
   </style>
 </head>
@@ -94,13 +143,13 @@
     <!-- APOD -->
     <div class="card" id="apod">
       <h2>📸 Astronomy Picture of the Day</h2>
-      <p>Loading...</p>
+      <p>Loading image...</p>
     </div>
 
     <!-- Weather Live -->
     <div class="card" id="weather-card">
       <h2>🌤️ Live Weather</h2>
-      <input type="text" id="city" placeholder="Enter city name (e.g. Tokyo)" />
+      <input type="text" id="city" placeholder="Enter city (e.g. Tokyo)" />
       <button id="weather-btn">Search</button>
       <div id="weather">Loading weather for New York...</div>
       <div class="source-credit">Weather data by <a href="https://openweather.org" target="_blank">OpenWeather.org</a></div>
@@ -109,29 +158,29 @@
     <!-- NYT Science News -->
     <div class="card" id="nyt-science">
       <h2>📰 Science News</h2>
-      <div id="news">Loading articles...</div>
-      <div class="source-credit">Articles from <a href="https://www.nytimes.com/section/science" target="_blank">The New York Times</a></div>
+      <div id="news">Fetching articles...</div>
+      <div class="source-credit">Articles from <a href="https://www.nytimes.com/section/science" target="_blank">NYT</a></div>
     </div>
 
     <!-- Space Fact -->
     <div class="card" id="fact">
       <h2>🌌 Space Fact of the Day</h2>
-      <p id="space-fact">Loading fact...</p>
+      <p id="space-fact">Fetching a cool fact...</p>
       <div class="source-credit">Fact source: <a href="https://space-facts.com" target="_blank">space-facts.com</a></div>
     </div>
 
     <!-- Launch Tracker -->
     <div class="card" id="launches">
       <h2>🚀 Upcoming Space Missions</h2>
-      <ul id="launch-list">Loading launch data...</ul>
+      <ul id="launch-list"><li>Loading launches...</li></ul>
       <div class="source-credit">Launch data from <a href="https://thespacedevs.com/ll2" target="_blank">Launch Library 2</a></div>
     </div>
 
     <!-- Celestial Events -->
     <div class="card" id="celestial-events">
       <h2>🌠 Celestial Events</h2>
-      <ul id="event-list">Loading events...</ul>
-      <div class="source-credit">Event data from <a href="https://in-the-sky.org" target="_blank">in-the-sky.org</a></div>
+      <ul id="event-list"><li>Loading events...</li></ul>
+      <div class="source-credit">Data from <a href="https://in-the-sky.org" target="_blank">in-the-sky.org</a></div>
     </div>
 
     <!-- Subscription Form -->
@@ -154,139 +203,112 @@
     </div>
   </main>
 
-  <footer>
-    BlueandCosmos 2025
-  </footer>
+  <footer>BlueandCosmos 2025</footer>
 
-<script>
-  // Dark mode toggle
-  function toggleDarkMode() {
-    document.body.classList.toggle('dark-mode');
-  }
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+    }
 
-  // NASA Astronomy Picture of the Day
-  fetch("https://api.nasa.gov/planetary/apod?api_key=CysEgHwCtuZgj1UMT2GwnlufWt9F5HfLTbRtPwea")
-    .then(res => res.json())
-    .then(data => {
-      const apod = document.getElementById("apod");
-      apod.innerHTML = `
-        <h2>📸 Astronomy Picture of the Day</h2>
-        <h3>${data.title}</h3>
-        ${data.media_type === "image" 
-          ? `<img src="${data.url}" alt="${data.title}" style="max-height: 300px; width: 100%; object-fit: cover;">` 
-          : `<iframe src="${data.url}" frameborder="0" allowfullscreen style="width: 100%; height: 300px;"></iframe>`
-        }
-        <p style="font-size: 0.9rem;">${data.explanation}</p>
-        <p style="font-size: 0.8rem;">Image Credit: NASA</p>
-      `;
-    }).catch(() => {
-      document.getElementById("apod").innerHTML = "<p>Failed to load image.</p>";
-    });
-
-  // OpenWeather - Live weather by city
-  document.getElementById("weather-btn").addEventListener("click", () => {
-    const city = document.getElementById("city").value || "New York";
-    const key = "1557651ee4d280ab5e111aeee2e174e1";
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${key}&units=metric`;
-
-    const weatherDiv = document.getElementById("weather");
-    weatherDiv.innerHTML = `<p>Loading weather for ${city}...</p>`;
-
-    fetch(url)
+    // NASA APOD
+    fetch("https://api.nasa.gov/planetary/apod?api_key=CysEgHwCtuZgj1UMT2GwnlufWt9F5HfLTbRtPwea")
       .then(res => res.json())
       .then(data => {
-        if (data.cod !== 200) {
-          weatherDiv.innerHTML = `<p>City not found. Please try again.</p>`;
-          return;
-        }
-        weatherDiv.innerHTML = `
-          <h2>🌤️ Live Weather</h2>
-          <p><strong>${data.weather[0].main}:</strong> ${data.weather[0].description}</p>
-          <p>🌡️ Temp: ${data.main.temp}°C | 💧 Humidity: ${data.main.humidity}%</p>
-          <p>🌬️ Wind: ${data.wind.speed} m/s</p>
-          <p>📍 ${data.name}, ${data.sys.country}</p>
-          <p style="font-size: 0.8rem;">Weather data by <a href="https://openweather.org" target="_blank">OpenWeather.org</a></p>
+        document.getElementById("apod").innerHTML = `
+          <h2>📸 Astronomy Picture of the Day</h2>
+          <h3>${data.title}</h3>
+          <img src="${data.url}" alt="${data.title}">
+          <p>${data.explanation}</p>
+          <p style="font-size: 0.8rem;">Image Credit: NASA</p>
         `;
-      })
-      .catch(() => {
-        weatherDiv.innerHTML = "<p>Error loading weather data.</p>";
+      }).catch(() => {
+        document.getElementById("apod").innerHTML += "<p>Could not load image.</p>";
       });
-  });
 
-  // NYT Science News
-  fetch("https://api.nytimes.com/svc/topstories/v2/science.json?api-key=eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD")
-    .then(res => res.json())
-    .then(data => {
-      const nyt = document.getElementById("nyt-science");
-      nyt.innerHTML = `<h2>📰 Latest in Science & Astronomy</h2>`;
-      data.results.slice(0, 5).forEach(article => {
-        nyt.innerHTML += `
-          <div class="news-article">
-            <a href="${article.url}" target="_blank"><strong>${article.title}</strong></a>
-            <p style="font-size: 0.9rem;">${article.abstract}</p>
-          </div>
-        `;
-      });
-      nyt.innerHTML += `<p style="font-size: 0.8rem;">News by <a href="https://www.nytimes.com/section/science" target="_blank">The New York Times</a></p>`;
-    }).catch(() => {
-      document.getElementById("nyt-science").innerHTML = "<p>Failed to load NYT articles.</p>";
+    // OpenWeather
+    document.getElementById("weather-btn").addEventListener("click", () => {
+      const city = document.getElementById("city").value || "New York";
+      const key = "1557651ee4d280ab5e111aeee2e174e1";
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=metric`;
+      document.getElementById("weather").innerHTML = `<p>Loading weather for ${city}...</p>`;
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          const weather = document.getElementById("weather");
+          if (data.cod !== 200) {
+            weather.innerHTML = `<p>City not found.</p>`;
+            return;
+          }
+          weather.innerHTML = `
+            <p><strong>${data.weather[0].main}:</strong> ${data.weather[0].description}</p>
+            <p>🌡️ Temp: ${data.main.temp}°C | 💧 Humidity: ${data.main.humidity}%</p>
+            <p>🌬️ Wind: ${data.wind.speed} m/s</p>
+            <p>📍 ${data.name}, ${data.sys.country}</p>
+          `;
+        }).catch(() => {
+          document.getElementById("weather").innerHTML = "<p>Could not load weather.</p>";
+        });
     });
 
-  // Fact of the Day (simple rotation)
-  const facts = [
-    "A day on Venus is longer than its year.",
-    "Neutron stars can spin at a rate of 600 rotations per second.",
-    "The Sun accounts for 99.86% of the mass in the solar system.",
-    "There may be a planet made of diamonds.",
-    "A spoonful of neutron star weighs about a billion tons."
-  ];
-  document.getElementById("fact").innerHTML = `
-    <h2>🌌 Space Fact of the Day</h2>
-    <p>${facts[Math.floor(Math.random() * facts.length)]}</p>
-    <p style="font-size: 0.8rem;">Source: NASA & ESA archives</p>
-  `;
-
-  // Launch Library 2 - Upcoming launches
-  fetch("https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=5")
-    .then(res => res.json())
-    .then(data => {
-      const launchList = document.getElementById("launches");
-      launchList.innerHTML = `<h2>🚀 Upcoming Space Launches</h2>`;
-      data.results.forEach(launch => {
-        launchList.innerHTML += `
-          <div class="news-article">
-            <strong>${launch.name}</strong>
-            <p>🚩 Launch Window: ${new Date(launch.net).toLocaleString()}</p>
-            <p>📍 Location: ${launch.pad.name}</p>
-          </div>
-        `;
+    // NYT Science
+    fetch("https://api.nytimes.com/svc/topstories/v2/science.json?api-key=eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD")
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("news");
+        container.innerHTML = "";
+        data.results.slice(0, 5).forEach(article => {
+          container.innerHTML += `
+            <div class="news-article">
+              <a href="${article.url}" target="_blank"><strong>${article.title}</strong></a>
+              <p>${article.abstract}</p>
+            </div>
+          `;
+        });
+      }).catch(() => {
+        document.getElementById("news").innerHTML = "<p>Could not load news.</p>";
       });
-      launchList.innerHTML += `<p style="font-size: 0.8rem;">Data via <a href="https://thespacedevs.com" target="_blank">Launch Library 2</a></p>`;
-    })
-    .catch(() => {
-      document.getElementById("launches").innerHTML = "<p>Launch data not available.</p>";
-    });
 
-  // Celestial Events (scraped via Netlify function)
-  const today = new Date();
-  const yyyy = today.getFullYear();
-  const mm = today.getMonth() + 1;
-  const dd = today.getDate();
-  fetch(`/.netlify/functions/celestial-events?year=${yyyy}&month=${mm}&day=${dd}`)
-    .then(res => res.json())
-    .then(data => {
-      const events = document.getElementById("celestial-events");
-      events.innerHTML = `<h2>🌠 Celestial Events Today</h2>`;
-      data.events.forEach((event, idx) => {
-        events.innerHTML += `<div>${event}</div>`;
+    // Fact of the Day
+    const facts = [
+      "A day on Venus is longer than its year.",
+      "Neutron stars can spin at 600 rotations per second.",
+      "The Sun accounts for 99.86% of the solar system's mass.",
+      "There may be a planet made of diamonds.",
+      "A spoonful of neutron star weighs a billion tons."
+    ];
+    document.getElementById("space-fact").textContent = facts[Math.floor(Math.random() * facts.length)];
+
+    // Launch Tracker
+    fetch("https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=5")
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("launch-list");
+        container.innerHTML = "";
+        data.results.forEach(launch => {
+          container.innerHTML += `
+            <li><strong>${launch.name}</strong> - ${new Date(launch.net).toLocaleString()}</li>
+          `;
+        });
+      }).catch(() => {
+        document.getElementById("launch-list").innerHTML = "<li>Could not load launches.</li>";
       });
-      events.innerHTML += `<p style="font-size: 0.8rem;">Data from <a href="https://in-the-sky.org/" target="_blank">in-the-sky.org</a></p>`;
-    })
-    .catch(() => {
-      document.getElementById("celestial-events").innerHTML = "<p>Celestial events unavailable.</p>";
-    });
-</script>
+
+    // Celestial Events
+    const today = new Date();
+    fetch(`/.netlify/functions/celestial-events?year=${today.getFullYear()}&month=${today.getMonth()+1}&day=${today.getDate()}`)
+      .then(res => res.json())
+      .then(data => {
+        const eventList = document.getElementById("event-list");
+        eventList.innerHTML = "";
+        data.events.forEach((event, i) => {
+          eventList.innerHTML += `<li><a href="/events/${i}" target="_blank">${event}</a></li>`;
+        });
+      }).catch(() => {
+        document.getElementById("event-list").innerHTML = "<li>Could not load celestial events.</li>";
+      });
+  </script>
 </body>
 </html>
+
 
 
