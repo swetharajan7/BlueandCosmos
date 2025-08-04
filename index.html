@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BlueandCosmos</title>
-  <link rel="stylesheet" href="styles.css" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Barlow:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     :root {
       --accent-color: #2196f3;
@@ -21,7 +22,7 @@
     }
 
     body {
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Barlow', sans-serif;
       margin: 0;
       padding: 0;
       background-color: var(--bg-light);
@@ -43,7 +44,8 @@
 
     header h1 {
       margin: 0;
-      font-size: 1.5rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
     }
 
     .toggle-button {
@@ -70,6 +72,10 @@
       background: var(--card-light);
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
       transition: background-color 0.3s, color 0.3s;
+    }
+
+    .card h2 {
+      font-family: 'Orbitron', sans-serif;
     }
 
     img {
@@ -123,22 +129,9 @@
       min-height: 50px;
     }
 
-    #chat-window {
-      max-height: 200px;
-      overflow-y: auto;
-      padding: 0.5rem;
-      background: #f0f0f0;
-      border-radius: 8px;
-      margin-bottom: 0.5rem;
-    }
-
-    .dark-mode #chat-window {
-      background: #333;
-    }
-
     @media (max-width: 480px) {
       header h1 {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
       }
       .toggle-button {
         padding: 0.4rem 0.8rem;
@@ -154,209 +147,184 @@
 
   <main>
     <!-- APOD -->
-    <div class="card" id="apod">
-      <h2>📸 Astronomy Picture of the Day</h2>
-      <p>Loading image...</p>
-    </div>
+    <div class="card" id="apod"><h2>📸 Astronomy Picture of the Day</h2><p>Loading image...</p></div>
 
-    <!-- Weather Live -->
+    <!-- Weather -->
     <div class="card" id="weather-card">
       <h2>🌤️ Live Weather</h2>
       <input type="text" id="city" placeholder="Enter city (e.g. Tokyo)" />
       <button id="weather-btn">Search</button>
       <div id="weather">Loading weather for New York...</div>
-      <div class="source-credit">Weather data by <a href="https://openweather.org" target="_blank">OpenWeather.org</a></div>
+      <div class="source-credit">Weather by <a href="https://openweather.org" target="_blank">OpenWeather.org</a></div>
     </div>
 
-    <!-- NYT Science News -->
+    <!-- NYT Science -->
     <div class="card" id="nyt-science">
       <h2>📰 Science News</h2>
       <div id="news">Fetching articles...</div>
       <div class="source-credit">Articles from <a href="https://www.nytimes.com/section/science" target="_blank">NYT</a></div>
     </div>
 
-    <!-- Space Fact -->
+    <!-- Fact -->
     <div class="card" id="fact">
       <h2>🌌 Space Fact of the Day</h2>
-      <p id="space-fact">Fetching a cool fact...</p>
-      <div class="source-credit">Fact source: <a href="https://space-facts.com" target="_blank">space-facts.com</a></div>
+      <p id="space-fact">Loading...</p>
+      <div class="source-credit">Fact from <a href="https://space-facts.com" target="_blank">space-facts.com</a></div>
     </div>
 
-    <!-- Launch Tracker -->
+    <!-- Launches -->
     <div class="card" id="launches">
-      <h2>🚀 Upcoming Space Missions</h2>
-      <ul id="launch-list"><li>Loading launches...</li></ul>
-      <div class="source-credit">Launch data from <a href="https://thespacedevs.com/ll2" target="_blank">Launch Library 2</a></div>
+      <h2>🚀 Space Missions</h2>
+      <ul id="launch-list"><li>Loading...</li></ul>
+      <div class="source-credit">Launch Library 2</div>
     </div>
 
     <!-- Celestial Events -->
     <div class="card" id="celestial-events">
       <h2>🌠 Celestial Events</h2>
-      <ul id="event-list"><li>Loading events...</li></ul>
+      <ul id="event-list"><li>Loading...</li></ul>
       <div class="source-credit">Data from <a href="https://in-the-sky.org" target="_blank">in-the-sky.org</a></div>
     </div>
 
-    <!-- Subscription Form -->
+    <!-- Subscribe -->
     <div class="card">
-      <h2>📬 Subscribe for Updates</h2>
-      <p>Enter your email to receive cosmic insights!</p>
-      <input type="email" id="email-input" placeholder="Your email" />
-      <button onclick="subscribe()">Subscribe</button>
-      <p id="subscribe-message" style="margin-top:0.5rem;"></p>
+      <h2>📬 Subscribe</h2>
+      <form id="subscribe-form">
+        <input type="email" id="email-input" placeholder="Your email" />
+        <button type="submit">Subscribe</button>
+      </form>
+      <p id="subscribe-status"></p>
     </div>
 
     <!-- Chatbot -->
     <div class="card">
       <h2>🤖 Ask BlueBot</h2>
-      <div id="chat-window">
-        <div><strong>You:</strong> tell me about life on Mars</div>
-        <div><strong>BlueBot:</strong> Sorry, I can’t answer right now.</div>
-      </div>
-      <input type="text" id="chat-input" placeholder="Ask me about space..." />
-      <button onclick="sendToBlueBot()">Send</button>
+      <div id="chat-window" style="max-height: 150px; overflow-y: auto; font-size: 0.9rem;"></div>
+      <form id="chat-form">
+        <input type="text" id="chat-input" placeholder="Ask me about space..." />
+        <button type="submit">Send</button>
+      </form>
     </div>
   </main>
 
   <footer>BlueandCosmos 2025</footer>
 
   <script>
-    // Persistent Dark Mode
-    if (localStorage.getItem('darkMode') === 'true') {
-      document.body.classList.add("dark-mode");
-    }
+    const OPEN_WEATHER_KEY = '1557651ee4d280ab5e111aeee2e174e1';
+    const NYT_KEY = 'eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD';
+    const NASA_KEY = 'CysEgHwCtuZgj1UMT2GwnlufWt9F5HfLTbRtPwea';
 
     function toggleDarkMode() {
       document.body.classList.toggle("dark-mode");
-      localStorage.setItem('darkMode', document.body.classList.contains("dark-mode"));
+      localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
     }
 
-    // NASA APOD
-    fetch("https://api.nasa.gov/planetary/apod?api_key=CysEgHwCtuZgj1UMT2GwnlufWt9F5HfLTbRtPwea")
+    window.onload = () => {
+      if (localStorage.getItem("theme") === "dark") document.body.classList.add("dark-mode");
+    };
+
+    // APOD
+    fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}`)
       .then(res => res.json())
       .then(data => {
-        const media = data.media_type === "image"
-          ? `<img src="${data.url}" alt="${data.title}" loading="lazy" />`
-          : `<iframe width="100%" height="300" src="${data.url}" frameborder="0" allowfullscreen></iframe>`;
         document.getElementById("apod").innerHTML = `
           <h2>📸 Astronomy Picture of the Day</h2>
           <h3>${data.title}</h3>
-          ${media}
+          ${data.media_type === "image"
+            ? `<img src="${data.url}" alt="${data.title}" />`
+            : `<iframe src="${data.url}" frameborder="0" allowfullscreen></iframe>`
+          }
           <p>${data.explanation}</p>
           <p style="font-size: 0.8rem;">Image Credit: NASA</p>
         `;
-      }).catch(() => {
-        document.getElementById("apod").innerHTML += "<p>Could not load image.</p>";
       });
 
-    // OpenWeather
+    // Weather
     document.getElementById("weather-btn").addEventListener("click", () => {
       const city = document.getElementById("city").value || "New York";
-      const key = "1557651ee4d280ab5e111aeee2e174e1";
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=metric`;
-      document.getElementById("weather").innerHTML = `<p>Loading weather for ${city}...</p>`;
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${OPEN_WEATHER_KEY}&units=metric`;
+      document.getElementById("weather").innerHTML = `Loading weather for ${city}...`;
       fetch(url)
         .then(res => res.json())
         .then(data => {
-          const weather = document.getElementById("weather");
-          if (data.cod !== 200) {
-            weather.innerHTML = `<p>City not found.</p>`;
-            return;
-          }
-          weather.innerHTML = `
+          if (data.cod !== 200) throw new Error();
+          document.getElementById("weather").innerHTML = `
             <p><strong>${data.weather[0].main}:</strong> ${data.weather[0].description}</p>
             <p>🌡️ Temp: ${data.main.temp}°C | 💧 Humidity: ${data.main.humidity}%</p>
             <p>🌬️ Wind: ${data.wind.speed} m/s</p>
-            <p>📍 ${data.name}, ${data.sys.country}</p>
-          `;
+            <p>📍 ${data.name}, ${data.sys.country}</p>`;
         }).catch(() => {
-          document.getElementById("weather").innerHTML = "<p>Could not load weather.</p>";
+          document.getElementById("weather").innerHTML = "<p>City not found.</p>";
         });
     });
 
-    // NYT Science
-    fetch("https://api.nytimes.com/svc/topstories/v2/science.json?api-key=eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD")
+    // NYT
+    fetch(`https://api.nytimes.com/svc/topstories/v2/science.json?api-key=${NYT_KEY}`)
       .then(res => res.json())
       .then(data => {
-        const container = document.getElementById("news");
-        container.innerHTML = "";
+        const news = document.getElementById("news");
+        news.innerHTML = "";
         data.results.slice(0, 5).forEach(article => {
-          container.innerHTML += `
+          news.innerHTML += `
             <div class="news-article">
               <a href="${article.url}" target="_blank"><strong>${article.title}</strong></a>
               <p>${article.abstract}</p>
-            </div>
-          `;
+            </div>`;
         });
-      }).catch(() => {
-        document.getElementById("news").innerHTML = "<p>Could not load news.</p>";
       });
 
-    // Fact of the Day
+    // Fact
     const facts = [
       "A day on Venus is longer than its year.",
       "Neutron stars can spin at 600 rotations per second.",
       "The Sun accounts for 99.86% of the solar system's mass.",
-      "There may be a planet made of diamonds.",
-      "A spoonful of neutron star weighs a billion tons."
+      "A spoon of neutron star weighs a billion tons.",
     ];
     document.getElementById("space-fact").textContent = facts[Math.floor(Math.random() * facts.length)];
 
-    // Launch Tracker
+    // Launches
     fetch("https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=5")
       .then(res => res.json())
       .then(data => {
-        const container = document.getElementById("launch-list");
-        container.innerHTML = "";
-        data.results.forEach(launch => {
-          container.innerHTML += `
-            <li><strong>${launch.name}</strong> - ${new Date(launch.net).toLocaleString()}</li>
-          `;
+        const list = document.getElementById("launch-list");
+        list.innerHTML = "";
+        data.results.forEach(l => {
+          list.innerHTML += `<li><strong>${l.name}</strong> – ${new Date(l.net).toLocaleString()}</li>`;
         });
-      }).catch(() => {
-        document.getElementById("launch-list").innerHTML = "<li>Could not load launches.</li>";
       });
 
     // Celestial Events
-    const today = new Date();
-    fetch(`/.netlify/functions/celestial-events?year=${today.getFullYear()}&month=${today.getMonth()+1}&day=${today.getDate()}`)
+    const now = new Date();
+    fetch(`/.netlify/functions/celestial-events?year=${now.getFullYear()}&month=${now.getMonth()+1}&day=${now.getDate()}`)
       .then(res => res.json())
       .then(data => {
         const eventList = document.getElementById("event-list");
         eventList.innerHTML = "";
-        data.events.forEach((event, i) => {
-          eventList.innerHTML += `<li><a href="/events/${i}" target="_blank">${event}</a></li>`;
+        data.events.forEach((ev, i) => {
+          eventList.innerHTML += `<li><a href="/events/${i}" target="_blank">${ev}</a></li>`;
         });
-      }).catch(() => {
-        document.getElementById("event-list").innerHTML = "<li>Could not load celestial events.</li>";
       });
 
-    // Email Subscription
-    function subscribe() {
-      const input = document.getElementById("email-input");
-      const msg = document.getElementById("subscribe-message");
-      const email = input.value.trim();
-      const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-      if (!valid) {
-        msg.textContent = "Please enter a valid email.";
-        msg.style.color = "red";
-        return;
-      }
-      msg.textContent = "Thank you for subscribing!";
-      msg.style.color = "green";
-      input.value = "";
-    }
+    // Subscribe
+    document.getElementById("subscribe-form").addEventListener("submit", e => {
+      e.preventDefault();
+      const email = document.getElementById("email-input").value;
+      document.getElementById("subscribe-status").textContent = email ? "Thanks! Coming soon." : "Please enter a valid email.";
+    });
 
     // Chatbot placeholder
-    function sendToBlueBot() {
+    document.getElementById("chat-form").addEventListener("submit", e => {
+      e.preventDefault();
       const input = document.getElementById("chat-input");
-      const message = input.value.trim();
-      if (!message) return;
-      const chat = document.getElementById("chat-window");
-      chat.innerHTML += `<div><strong>You:</strong> ${message}</div>`;
-      chat.innerHTML += `<div><strong>BlueBot:</strong> Sorry, I can’t answer right now.</div>`;
+      const msg = input.value.trim();
+      if (!msg) return;
+      const box = document.getElementById("chat-window");
+      box.innerHTML += `<div><strong>You:</strong> ${msg}</div>`;
+      box.innerHTML += `<div><strong>BlueBot:</strong> Sorry, I can’t answer right now.</div>`;
+      box.scrollTop = box.scrollHeight;
       input.value = "";
-      chat.scrollTop = chat.scrollHeight;
-    }
+    });
   </script>
 </body>
 </html>
+
