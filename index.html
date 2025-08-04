@@ -105,3 +105,178 @@
       <div id="weather">Loading weather for New York...</div>
       <div class="source-credit">Weather data by <a href="https://openweather.org" target="_blank">OpenWeather.org</a></div>
     </div>
+        <!-- NYT Science News -->
+    <div class="card" id="nyt-science">
+      <h2>📰 Science News</h2>
+      <div id="news">Loading articles...</div>
+      <div class="source-credit">Articles from <a href="https://www.nytimes.com/section/science" target="_blank">The New York Times</a></div>
+    </div>
+
+    <!-- Space Fact -->
+    <div class="card" id="fact">
+      <h2>🌌 Space Fact of the Day</h2>
+      <p id="space-fact">Loading fact...</p>
+      <div class="source-credit">Fact source: <a href="https://space-facts.com" target="_blank">space-facts.com</a></div>
+    </div>
+
+    <!-- Launch Tracker -->
+    <div class="card" id="launches">
+      <h2>🚀 Upcoming Space Missions</h2>
+      <ul id="launch-list">Loading launch data...</ul>
+      <div class="source-credit">Launch data from <a href="https://thespacedevs.com/ll2" target="_blank">Launch Library 2</a></div>
+    </div>
+
+    <!-- Celestial Events -->
+    <div class="card" id="celestial-events">
+      <h2>🌠 Celestial Events</h2>
+      <ul id="event-list">Loading events...</ul>
+      <div class="source-credit">Event data from <a href="https://in-the-sky.org" target="_blank">in-the-sky.org</a></div>
+    </div>
+
+    <!-- Subscription Form -->
+    <div class="card">
+      <h2>📬 Subscribe for Updates</h2>
+      <p>Enter your email to receive cosmic insights!</p>
+      <input type="email" placeholder="Your email" />
+      <button>Subscribe</button>
+    </div>
+
+    <!-- Chatbot -->
+    <div class="card">
+      <h2>🤖 Ask BlueBot</h2>
+      <div id="chat-window">
+        <div><strong>You:</strong> tell me about life on Mars</div>
+        <div><strong>BlueBot:</strong> Sorry, I can’t answer right now.</div>
+      </div>
+      <input type="text" id="chat-input" placeholder="Ask me about space..." />
+      <button onclick="sendToBlueBot()">Send</button>
+    </div>
+
+  </main>
+
+  <footer>
+    BlueandCosmos 2025
+  </footer>
+<script>
+// NASA Astronomy Picture of the Day
+fetch("https://api.nasa.gov/planetary/apod?api_key=CysEgHwCtuZgj1UMT2GwnlufWt9F5HfLTbRtPwea")
+  .then(res => res.json())
+  .then(data => {
+    const apod = document.getElementById("apod");
+    apod.innerHTML = `
+      <h2>📸 Astronomy Picture of the Day</h2>
+      <h3>${data.title}</h3>
+      <img src="${data.url}" alt="${data.title}" style="max-height: 300px; width: 100%; object-fit: cover;">
+      <p style="font-size: 0.9rem;">${data.explanation}</p>
+      <p style="font-size: 0.8rem;">Image Credit: NASA</p>
+    `;
+  }).catch(() => {
+    document.getElementById("apod").innerHTML = "<p>Failed to load image.</p>";
+  });
+
+// OpenWeather - Live weather by city
+document.getElementById("weather-btn").addEventListener("click", () => {
+  const city = document.getElementById("city").value || "New York";
+  const key = "1557651ee4d280ab5e111aeee2e174e1";
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${key}&units=metric`;
+
+  document.getElementById("weather").innerHTML = `<p>Loading weather for ${city}...</p>`;
+
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      const weather = document.getElementById("weather");
+      if (data.cod !== 200) {
+        weather.innerHTML = `<p>City not found. Please try again.</p>`;
+        return;
+      }
+      weather.innerHTML = `
+        <h2>🌤️ Live Weather</h2>
+        <p><strong>${data.weather[0].main}:</strong> ${data.weather[0].description}</p>
+        <p>🌡️ Temp: ${data.main.temp}°C | 💧 Humidity: ${data.main.humidity}%</p>
+        <p>🌬️ Wind: ${data.wind.speed} m/s</p>
+        <p>📍 ${data.name}, ${data.sys.country}</p>
+        <p style="font-size: 0.8rem;">Weather data by <a href="https://openweather.org" target="_blank">OpenWeather.org</a></p>
+      `;
+    })
+    .catch(() => {
+      document.getElementById("weather").innerHTML = "<p>Error loading weather data.</p>";
+    });
+});
+
+// NYT Science News
+fetch("https://api.nytimes.com/svc/topstories/v2/science.json?api-key=eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD")
+  .then(res => res.json())
+  .then(data => {
+    const nyt = document.getElementById("nyt-science");
+    nyt.innerHTML = `<h2>📰 Latest in Science & Astronomy</h2>`;
+    data.results.slice(0, 5).forEach(article => {
+      nyt.innerHTML += `
+        <div class="news-article">
+          <a href="${article.url}" target="_blank"><strong>${article.title}</strong></a>
+          <p style="font-size: 0.9rem;">${article.abstract}</p>
+        </div>
+      `;
+    });
+    nyt.innerHTML += `<p style="font-size: 0.8rem;">News by <a href="https://www.nytimes.com/section/science" target="_blank">The New York Times</a></p>`;
+  }).catch(() => {
+    document.getElementById("nyt-science").innerHTML = "<p>Failed to load NYT articles.</p>";
+  });
+
+// Fact of the Day (simple rotation)
+const facts = [
+  "A day on Venus is longer than its year.",
+  "Neutron stars can spin at a rate of 600 rotations per second.",
+  "The Sun accounts for 99.86% of the mass in the solar system.",
+  "There may be a planet made of diamonds.",
+  "A spoonful of neutron star weighs about a billion tons."
+];
+document.getElementById("fact").innerHTML = `
+  <h2>🌌 Space Fact of the Day</h2>
+  <p>${facts[Math.floor(Math.random() * facts.length)]}</p>
+  <p style="font-size: 0.8rem;">Source: NASA & ESA archives</p>
+`;
+
+// Launch Library 2 - Upcoming launches
+fetch("https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=5")
+  .then(res => res.json())
+  .then(data => {
+    const launchList = document.getElementById("launches");
+    launchList.innerHTML = `<h2>🚀 Upcoming Space Launches</h2>`;
+    data.results.forEach(launch => {
+      launchList.innerHTML += `
+        <div class="news-article">
+          <strong>${launch.name}</strong>
+          <p>🚩 Launch Window: ${new Date(launch.net).toLocaleString()}</p>
+          <p>📍 Location: ${launch.pad.name}</p>
+        </div>
+      `;
+    });
+    launchList.innerHTML += `<p style="font-size: 0.8rem;">Data via <a href="https://thespacedevs.com" target="_blank">Launch Library 2</a></p>`;
+  })
+  .catch(() => {
+    document.getElementById("launches").innerHTML = "<p>Launch data not available.</p>";
+  });
+
+// Celestial Events (scraped via Netlify function)
+const today = new Date();
+const yyyy = today.getFullYear();
+const mm = today.getMonth() + 1;
+const dd = today.getDate();
+fetch(`/.netlify/functions/celestial-events?year=${yyyy}&month=${mm}&day=${dd}`)
+  .then(res => res.json())
+  .then(data => {
+    const events = document.getElementById("celestial-events");
+    events.innerHTML = `<h2>🌠 Celestial Events Today</h2>`;
+    data.events.forEach((event, idx) => {
+      events.innerHTML += `<div><a href="/events/${yyyy}-${mm}-${dd}-event${idx}" target="_blank">${event}</a></div>`;
+    });
+    events.innerHTML += `<p style="font-size: 0.8rem;">Data from <a href="https://in-the-sky.org/" target="_blank">in-the-sky.org</a></p>`;
+  })
+  .catch(() => {
+    document.getElementById("celestial-events").innerHTML = "<p>Celestial events unavailable.</p>";
+  });
+</script>
+</body>
+</html>
+
