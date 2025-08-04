@@ -20,8 +20,7 @@
     }
     body {
       font-family: 'Inter', sans-serif;
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
       background: var(--background-light);
       color: var(--text-light);
       transition: background-color 0.3s, color 0.3s;
@@ -49,11 +48,6 @@
       color: var(--primary);
       margin: 0;
     }
-    .tagline {
-      font-size: 0.85rem;
-      margin: 0;
-      color: gray;
-    }
     .toggle {
       cursor: pointer;
       padding: 0.5rem 1rem;
@@ -74,7 +68,7 @@
       background: var(--card-bg-light);
       border-radius: 16px;
       padding: 1.5rem;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       transition: 0.3s ease;
       border: 1px solid var(--border-light);
     }
@@ -97,8 +91,7 @@
       font-size: 0.9rem;
       color: #888;
     }
-    input[type="text"],
-    input[type="email"] {
+    input[type="text"], input[type="email"], input[type="date"] {
       padding: 0.5rem;
       border-radius: 8px;
       border: 1px solid var(--border-light);
@@ -115,173 +108,80 @@
     button:hover {
       background: var(--accent);
     }
-    .chat-log {
-      font-size: 0.9rem;
-      color: #333;
-      max-height: 150px;
+    .event-list p {
+      margin: 0.5rem 0;
+      font-size: 0.95rem;
+    }
+    .event-list {
+      max-height: 200px;
       overflow-y: auto;
-      margin-bottom: 1rem;
-    }
-    body.dark .chat-log {
-      color: #ddd;
-    }
-    @media(max-width: 500px) {
-      main {
-        padding: 1rem;
-        grid-template-columns: 1fr;
-      }
     }
   </style>
 </head>
 <body>
   <header>
-    <div>
-      <h1>BlueandCosmos</h1>
-      <p class="tagline">Exploring the Cosmos. Protecting the Earth.</p>
-    </div>
+    <h1>BlueandCosmos</h1>
     <button class="toggle" onclick="toggleTheme()">Toggle Mode</button>
   </header>
   <main>
-    <!-- APOD -->
+    <!-- Astronomy Picture of the Day -->
     <div id="apod" class="card"></div>
 
-    <!-- Weather -->
+    <!-- Celestial Events from in-the-sky.org -->
     <div class="card">
-      <h2>🌤️ Live Weather</h2>
-      <form id="weather-form">
-        <input type="text" id="city-input" placeholder="City name" required />
-        <button>Search</button>
-      </form>
-      <div id="weather-result"></div>
-      <p style="font-size: 0.8rem; color: #777;">Weather via OpenWeather.org</p>
-    </div>
-
-    <!-- NYT News -->
-    <div id="nyt-science" class="card"></div>
-
-    <!-- Daily Fact -->
-    <div id="fact-card" class="card"><h2>💡 Did You Know?</h2></div>
-
-    <!-- Planetary Alignments View -->
-    <div class="card">
-      <h2>🪐 Planetary Alignments</h2>
-      <iframe src="https://www.heavens-above.com/planetsummary.aspx" style="height: 250px;" frameborder="0"></iframe>
-    </div>
-
-    <!-- Mission Tracker -->
-    <div id="mission-tracker" class="card"></div>
-
-    <!-- Chatbot -->
-    <div class="card">
-      <h2>🤖 Ask BlueBot</h2>
-      <div class="chat-log" id="chat-box">
-        <p>BlueBot is temporarily offline while we work on a secure backend. Stay tuned!</p>
-      </div>
-    </div>
-
-    <!-- Subscription -->
-    <div class="card">
-      <h2>📬 Subscribe</h2>
-      <form id="subscribe-form">
-        <input type="email" id="email-input" placeholder="Email" required />
-        <button type="submit">Subscribe</button>
-      </form>
-      <p id="subscribe-status"></p>
-    </div>
-
-    <!-- Celestial events navigation -->
-    <div class="card">
-      <h2>📅 Celestial Events</h2>
-      <p><a href="events.html">Explore upcoming events</a></p>
+      <h2>📅 Astronomical Events</h2>
+      <input type="date" id="astro-date" />
+      <button onclick="fetchEvents()">Get Events</button>
+      <div id="event-output" class="event-list"></div>
+      <p style="font-size: 0.8rem; color: #777;">Source: in-the-sky.org</p>
     </div>
   </main>
   <footer>
     <p>BlueandCosmos 2025</p>
   </footer>
-
   <script>
     function toggleTheme() {
       document.body.classList.toggle('dark');
     }
 
-    const NASA_KEY = 'CysEgHwCtuZgj1UMT2GwnlufWt9F5HfLTbRtPwea';
-    const OPEN_WEATHER_KEY = '1557651ee4d280ab5e111aeee2e174e1';
-    const NYT_KEY = 'eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD';
-
-    // APOD
-    fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}`)
+    // Astronomy Picture of the Day
+    fetch("https://api.nasa.gov/planetary/apod?api_key=CysEgHwCtuZgj1UMT2GwnlufWt9F5HfLTbRtPwea")
       .then(r => r.json())
       .then(data => {
         document.getElementById('apod').innerHTML = `
           <h2>📸 Astronomy Picture of the Day</h2>
-          ${data.media_type === 'image'
+          ${data.media_type === "image"
             ? `<img src="${data.url}" alt="${data.title}" />`
             : `<iframe src="${data.url}" allowfullscreen></iframe>`}
           <p>${data.title} — ${data.date}</p>
-          <p style="font-size: 0.8rem; color: #777;">Credit: NASA APOD</p>`;
+          <p style="font-size: 0.8rem; color: #777;">Source: NASA APOD</p>
+        `;
       });
 
-    // Weather
-    document.getElementById('weather-form').addEventListener('submit', e => {
-      e.preventDefault();
-      const city = document.getElementById('city-input').value.trim();
-      document.getElementById('weather-result').textContent = `Loading weather for ${city}...`;
-      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${OPEN_WEATHER_KEY}&units=metric`)
-        .then(r => r.json())
+    // Fetch Celestial Events
+    function fetchEvents() {
+      const dateInput = document.getElementById("astro-date").value;
+      if (!dateInput) return;
+
+      const [year, month, day] = dateInput.split("-");
+      const output = document.getElementById("event-output");
+      output.innerHTML = "Loading events...";
+
+      fetch(`/.netlify/functions/events?year=${year}&month=${month}&day=${day}`)
+        .then(res => res.json())
         .then(data => {
-          document.getElementById('weather-result').innerHTML = `
-            <p><strong>${data.weather[0].main}:</strong> ${data.weather[0].description}</p>
-            <p>🌡️ Temp: ${data.main.temp}°C | 💧 Humidity: ${data.main.humidity}%</p>
-            <p>📍 ${data.name}, ${data.sys.country}</p>`;
-        }).catch(() => {
-          document.getElementById('weather-result').textContent = 'Error fetching weather.';
+          if (data.error) {
+            output.innerHTML = `<p>${data.error}</p>`;
+          } else if (data.events.length === 0) {
+            output.innerHTML = `<p>No events found.</p>`;
+          } else {
+            output.innerHTML = data.events.map(e => `<p>• ${e}</p>`).join('');
+          }
+        })
+        .catch(() => {
+          output.innerHTML = `<p>Could not load events.</p>`;
         });
-    });
-
-    // NYT Science
-    fetch(`https://api.nytimes.com/svc/topstories/v2/science.json?api-key=${NYT_KEY}`)
-      .then(r => r.json())
-      .then(d => {
-        const el = document.getElementById('nyt-science');
-        el.innerHTML = '<h2>📰 NYT Science & Astronomy</h2>';
-        d.results.slice(0, 5).forEach(a => {
-          el.innerHTML += `<p><a href="${a.url}" target="_blank"><strong>${a.title}</strong></a><br><small>${a.abstract}</small></p>`;
-        });
-        el.innerHTML += `<p style="font-size: 0.8rem; color: #777;">Source: New York Times Science</p>`;
-      });
-
-    // Random Fact
-    const facts = [
-      'Jupiter’s Great Red Spot is 3x Earth’s diameter!',
-      'A day on Venus is longer than a year on Venus.',
-      'There are more stars in the universe than grains of sand on Earth.'
-    ];
-    document.getElementById('fact-card').innerHTML += `
-      <p>${facts[Math.floor(Math.random() * facts.length)]}</p>
-      <p style="font-size: 0.8rem; color: #777;">Source: NASA Solar System Exploration</p>`;
-
-    // Missions
-    fetch('https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=5')
-      .then(r => r.json())
-      .then(d => {
-        let html = '<h2>🚀 Upcoming Missions</h2>';
-        d.results.forEach(m => {
-          html += `<p><strong>${m.name}</strong><br>${new Date(m.net).toLocaleString()} at ${m.pad.name}</p>`;
-        });
-        html += `<p style="font-size: 0.8rem; color: #777;">Launch data via Launch Library 2</p>`;
-        document.getElementById('mission-tracker').innerHTML = html;
-      });
-
-    // Subscription placeholder
-    document.getElementById('subscribe-form').addEventListener('submit', e => {
-      e.preventDefault();
-      const em = document.getElementById('email-input').value.trim();
-      document.getElementById('subscribe-status').innerText = em
-        ? `Thanks! Subscription feature coming soon.`
-        : 'Please enter an email.';
-      e.target.reset();
-    });
+    }
   </script>
 </body>
 </html>
-
