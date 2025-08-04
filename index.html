@@ -4,137 +4,141 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BlueandCosmos</title>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Barlow:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Barlow&display=swap" rel="stylesheet">
   <style>
     :root {
-      --accent-color: #2196f3;
-      --highlight-color: #ff4081;
-      --bg-light: #fff;
-      --bg-dark: #111;
-      --card-light: #fafafa;
-      --card-dark: #222;
-      --border-light: #ccc;
-      --border-dark: #444;
-      --text-light: #000;
-      --text-dark: #fff;
-      --credit-color: #777;
+      --primary: #2196f3;
+      --accent: #ff4081;
+      --background-light: #fff;
+      --background-dark: #121212;
+      --text-light: #1a1a1a;
+      --text-dark: #f5f5f5;
+      --card-bg-light: #f5f5f5;
+      --card-bg-dark: #1e1e1e;
+      --border-light: #e0e0e0;
+      --border-dark: #333;
     }
 
     body {
       font-family: 'Barlow', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: var(--bg-light);
+      background-color: var(--background-light);
       color: var(--text-light);
       transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.dark {
+      background-color: var(--background-dark);
+      color: var(--text-dark);
     }
 
     header {
       position: sticky;
       top: 0;
-      background-color: var(--accent-color);
-      color: white;
-      padding: 1rem;
-      z-index: 1000;
+      background-color: var(--background-light);
+      color: var(--primary);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid var(--border-light);
+      z-index: 1000;
+    }
+
+    body.dark header {
+      background-color: var(--background-dark);
+      border-bottom: 1px solid var(--border-dark);
     }
 
     header h1 {
-      margin: 0;
       font-family: 'Orbitron', sans-serif;
       font-size: 1.8rem;
+      margin: 0;
     }
 
-    .toggle-button {
-      background: var(--highlight-color);
-      border: none;
+    nav a {
+      margin-left: 1rem;
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    .toggle {
       padding: 0.5rem 1rem;
-      border-radius: 5px;
+      border: none;
+      background: var(--accent);
       color: white;
-      font-weight: bold;
+      border-radius: 20px;
       cursor: pointer;
+      font-weight: bold;
     }
 
-    main {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1rem;
-      padding: 1rem;
+    .hero {
+      text-align: center;
+      padding: 4rem 2rem;
     }
 
-    .card {
-      border: 1px solid var(--border-light);
-      border-radius: 12px;
-      padding: 1rem;
-      background: var(--card-light);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    .card h2 {
+    .hero h2 {
       font-family: 'Orbitron', sans-serif;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
     }
 
-    img {
-      max-width: 100%;
-      border-radius: 10px;
-      max-height: 300px;
-      object-fit: cover;
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+
+    .cta {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .cta:hover {
+      background: var(--accent);
     }
 
     footer {
       text-align: center;
-      padding: 1rem;
       font-size: 0.9rem;
-      color: var(--credit-color);
+      color: #888;
+      padding: 2rem 1rem;
     }
 
-    a {
-      color: var(--accent-color);
-      text-decoration: none;
-    }
-
-    .news-article {
-      margin-bottom: 1rem;
-    }
-
-    .source-credit {
-      font-size: 0.8rem;
-      color: #555;
-      margin-top: 1rem;
-    }
-
-    .dark-mode {
-      background-color: var(--bg-dark);
-      color: var(--text-dark);
-    }
-
-    .dark-mode .card {
-      background-color: var(--card-dark);
-      border-color: var(--border-dark);
-    }
-
-    .dark-mode a {
+    body.dark nav a {
       color: #90caf9;
     }
 
-    input, button {
-      font-size: 1rem;
+    body.dark .hero p {
+      color: #ccc;
     }
 
-    #weather, #news, #launch-list, #event-list {
-      min-height: 50px;
-    }
-
-    @media (max-width: 480px) {
-      header h1 {
-        font-size: 1.4rem;
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
       }
-      .toggle-button {
-        padding: 0.4rem 0.8rem;
+
+      nav a {
+        margin-left: 0;
+        margin-right: 1rem;
+      }
+
+      .hero h2 {
+        font-size: 2rem;
       }
     }
   </style>
@@ -142,189 +146,35 @@
 <body>
   <header>
     <h1>BlueandCosmos</h1>
-    <button class="toggle-button" onclick="toggleDarkMode()">Toggle Mode</button>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="https://www.nasa.gov/">NASA</a>
+      <a href="https://in-the-sky.org/">Sky Events</a>
+    </nav>
+    <button class="toggle" onclick="toggleTheme()">Toggle Mode</button>
   </header>
 
-  <main>
-    <!-- APOD -->
-    <div class="card" id="apod"><h2>📸 Astronomy Picture of the Day</h2><p>Loading image...</p></div>
-
-    <!-- Weather -->
-    <div class="card" id="weather-card">
-      <h2>🌤️ Live Weather</h2>
-      <input type="text" id="city" placeholder="Enter city (e.g. Tokyo)" />
-      <button id="weather-btn">Search</button>
-      <div id="weather">Loading weather for New York...</div>
-      <div class="source-credit">Weather by <a href="https://openweather.org" target="_blank">OpenWeather.org</a></div>
-    </div>
-
-    <!-- NYT Science -->
-    <div class="card" id="nyt-science">
-      <h2>📰 Science News</h2>
-      <div id="news">Fetching articles...</div>
-      <div class="source-credit">Articles from <a href="https://www.nytimes.com/section/science" target="_blank">NYT</a></div>
-    </div>
-
-    <!-- Fact -->
-    <div class="card" id="fact">
-      <h2>🌌 Space Fact of the Day</h2>
-      <p id="space-fact">Loading...</p>
-      <div class="source-credit">Fact from <a href="https://space-facts.com" target="_blank">space-facts.com</a></div>
-    </div>
-
-    <!-- Launches -->
-    <div class="card" id="launches">
-      <h2>🚀 Space Missions</h2>
-      <ul id="launch-list"><li>Loading...</li></ul>
-      <div class="source-credit">Launch Library 2</div>
-    </div>
-
-    <!-- Celestial Events -->
-    <div class="card" id="celestial-events">
-      <h2>🌠 Celestial Events</h2>
-      <ul id="event-list"><li>Loading...</li></ul>
-      <div class="source-credit">Data from <a href="https://in-the-sky.org" target="_blank">in-the-sky.org</a></div>
-    </div>
-
-    <!-- Subscribe -->
-    <div class="card">
-      <h2>📬 Subscribe</h2>
-      <form id="subscribe-form">
-        <input type="email" id="email-input" placeholder="Your email" />
-        <button type="submit">Subscribe</button>
-      </form>
-      <p id="subscribe-status"></p>
-    </div>
-
-    <!-- Chatbot -->
-    <div class="card">
-      <h2>🤖 Ask BlueBot</h2>
-      <div id="chat-window" style="max-height: 150px; overflow-y: auto; font-size: 0.9rem;"></div>
-      <form id="chat-form">
-        <input type="text" id="chat-input" placeholder="Ask me about space..." />
-        <button type="submit">Send</button>
-      </form>
-    </div>
-  </main>
+  <section class="hero">
+    <h2>Exploring the Cosmos. Protecting the Earth.</h2>
+    <p>Welcome to BlueandCosmos — your personalized dashboard for space weather, astronomy, news, and celestial insights. Built for curious minds and starry dreamers.</p>
+    <a href="dashboard.html" class="cta">Launch the Dashboard 🚀</a>
+  </section>
 
   <footer>BlueandCosmos 2025</footer>
 
   <script>
-    const OPEN_WEATHER_KEY = '1557651ee4d280ab5e111aeee2e174e1';
-    const NYT_KEY = 'eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD';
-    const NASA_KEY = 'CysEgHwCtuZgj1UMT2GwnlufWt9F5HfLTbRtPwea';
-
-    function toggleDarkMode() {
-      document.body.classList.toggle("dark-mode");
-      localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+      localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
     }
 
-    window.onload = () => {
-      if (localStorage.getItem("theme") === "dark") document.body.classList.add("dark-mode");
-    };
-
-    // APOD
-    fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}`)
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById("apod").innerHTML = `
-          <h2>📸 Astronomy Picture of the Day</h2>
-          <h3>${data.title}</h3>
-          ${data.media_type === "image"
-            ? `<img src="${data.url}" alt="${data.title}" />`
-            : `<iframe src="${data.url}" frameborder="0" allowfullscreen></iframe>`
-          }
-          <p>${data.explanation}</p>
-          <p style="font-size: 0.8rem;">Image Credit: NASA</p>
-        `;
-      });
-
-    // Weather
-    document.getElementById("weather-btn").addEventListener("click", () => {
-      const city = document.getElementById("city").value || "New York";
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${OPEN_WEATHER_KEY}&units=metric`;
-      document.getElementById("weather").innerHTML = `Loading weather for ${city}...`;
-      fetch(url)
-        .then(res => res.json())
-        .then(data => {
-          if (data.cod !== 200) throw new Error();
-          document.getElementById("weather").innerHTML = `
-            <p><strong>${data.weather[0].main}:</strong> ${data.weather[0].description}</p>
-            <p>🌡️ Temp: ${data.main.temp}°C | 💧 Humidity: ${data.main.humidity}%</p>
-            <p>🌬️ Wind: ${data.wind.speed} m/s</p>
-            <p>📍 ${data.name}, ${data.sys.country}</p>`;
-        }).catch(() => {
-          document.getElementById("weather").innerHTML = "<p>City not found.</p>";
-        });
-    });
-
-    // NYT
-    fetch(`https://api.nytimes.com/svc/topstories/v2/science.json?api-key=${NYT_KEY}`)
-      .then(res => res.json())
-      .then(data => {
-        const news = document.getElementById("news");
-        news.innerHTML = "";
-        data.results.slice(0, 5).forEach(article => {
-          news.innerHTML += `
-            <div class="news-article">
-              <a href="${article.url}" target="_blank"><strong>${article.title}</strong></a>
-              <p>${article.abstract}</p>
-            </div>`;
-        });
-      });
-
-    // Fact
-    const facts = [
-      "A day on Venus is longer than its year.",
-      "Neutron stars can spin at 600 rotations per second.",
-      "The Sun accounts for 99.86% of the solar system's mass.",
-      "A spoon of neutron star weighs a billion tons.",
-    ];
-    document.getElementById("space-fact").textContent = facts[Math.floor(Math.random() * facts.length)];
-
-    // Launches
-    fetch("https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=5")
-      .then(res => res.json())
-      .then(data => {
-        const list = document.getElementById("launch-list");
-        list.innerHTML = "";
-        data.results.forEach(l => {
-          list.innerHTML += `<li><strong>${l.name}</strong> – ${new Date(l.net).toLocaleString()}</li>`;
-        });
-      });
-
-    // Celestial Events
-    const now = new Date();
-    fetch(`/.netlify/functions/celestial-events?year=${now.getFullYear()}&month=${now.getMonth()+1}&day=${now.getDate()}`)
-      .then(res => res.json())
-      .then(data => {
-        const eventList = document.getElementById("event-list");
-        eventList.innerHTML = "";
-        data.events.forEach((ev, i) => {
-          eventList.innerHTML += `<li><a href="/events/${i}" target="_blank">${ev}</a></li>`;
-        });
-      });
-
-    // Subscribe
-    document.getElementById("subscribe-form").addEventListener("submit", e => {
-      e.preventDefault();
-      const email = document.getElementById("email-input").value;
-      document.getElementById("subscribe-status").textContent = email ? "Thanks! Coming soon." : "Please enter a valid email.";
-    });
-
-    // Chatbot placeholder
-    document.getElementById("chat-form").addEventListener("submit", e => {
-      e.preventDefault();
-      const input = document.getElementById("chat-input");
-      const msg = input.value.trim();
-      if (!msg) return;
-      const box = document.getElementById("chat-window");
-      box.innerHTML += `<div><strong>You:</strong> ${msg}</div>`;
-      box.innerHTML += `<div><strong>BlueBot:</strong> Sorry, I can’t answer right now.</div>`;
-      box.scrollTop = box.scrollHeight;
-      input.value = "";
+    // On load, apply saved theme
+    window.addEventListener("DOMContentLoaded", () => {
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "dark") {
+        document.body.classList.add("dark");
+      }
     });
   </script>
 </body>
 </html>
-
