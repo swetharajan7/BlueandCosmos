@@ -4,134 +4,179 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BlueandCosmos</title>
-  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      font-family: 'Work Sans', sans-serif;
-      background-color: #fff;
-      color: #222;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+    :root {
+      --accent: #2196f3;
+      --highlight: #ff4081;
+      --light-bg: #ffffff;
+      --dark-bg: #121212;
+      --text-light: #000;
+      --text-dark: #fff;
     }
+
+    body {
+      font-family: 'Work Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--light-bg);
+      color: var(--text-light);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.dark {
+      background-color: var(--dark-bg);
+      color: var(--text-dark);
+    }
+
     header {
-      background-color: #2196f3;
-      color: white;
-      padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 1rem 2rem;
+      background-color: var(--accent);
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
+
     header h1 {
       margin: 0;
-      font-size: 2rem;
+      font-size: 1.8rem;
     }
-    .moon-toggle {
+
+    .toggle-btn {
+      font-size: 1.5rem;
       background: none;
       border: none;
-      font-size: 1.5rem;
       cursor: pointer;
       color: white;
     }
+
     main {
-      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       text-align: center;
       padding: 2rem;
     }
+
     main img {
-      max-width: 300px;
-      border-radius: 10px;
-      margin-top: 1.5rem;
+      max-width: 100%;
+      height: auto;
+      border-radius: 16px;
+      margin: 2rem 0;
+      max-height: 400px;
     }
-    a.button {
-      display: inline-block;
+
+    .cta {
       margin-top: 2rem;
-      padding: 0.8rem 1.5rem;
-      background-color: #ff4081;
-      color: white;
-      border-radius: 5px;
+    }
+
+    .cta a {
       text-decoration: none;
+      background-color: var(--accent);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
       font-weight: bold;
-      transition: background-color 0.3s;
+      font-size: 1.1rem;
+      transition: background 0.3s;
     }
-    a.button:hover {
-      background-color: #e73370;
+
+    .cta a:hover {
+      background-color: var(--highlight);
     }
+
     footer {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
       padding: 1rem 2rem;
-      background-color: #f5f5f5;
-      font-size: 0.9rem;
-      flex-wrap: wrap;
-    }
-    .footer-left, .footer-right {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
-    .footer-left a, .footer-right a {
-      text-decoration: none;
+      background-color: #f1f1f1;
       color: #555;
+      font-size: 0.9rem;
+    }
+
+    .footer-left,
+    .footer-center,
+    .footer-right {
+      flex: 1 1 100%;
+      text-align: center;
+      margin: 0.5rem 0;
+    }
+
+    @media (min-width: 600px) {
+      .footer-left,
+      .footer-center,
+      .footer-right {
+        flex: 1;
+        text-align: center;
+      }
+
+      .footer-left {
+        text-align: left;
+      }
+
+      .footer-right {
+        text-align: right;
+      }
+    }
+
+    .social-icons a {
+      margin: 0 0.5rem;
+      color: #555;
+      text-decoration: none;
+      font-size: 1.2rem;
       transition: color 0.3s;
     }
-    .footer-left a:hover, .footer-right a:hover {
-      color: #2196f3;
-    }
-    .dark-mode {
-      background-color: #121212;
-      color: #f5f5f5;
-    }
-    .dark-mode header {
-      background-color: #1e1e1e;
-    }
-    .dark-mode footer {
-      background-color: #1a1a1a;
-      color: #ccc;
-    }
-    .dark-mode .footer-left a, .dark-mode .footer-right a {
-      color: #aaa;
-    }
-    .dark-mode .footer-left a:hover, .dark-mode .footer-right a:hover {
-      color: #90caf9;
+
+    .social-icons a:hover {
+      color: var(--accent);
     }
   </style>
 </head>
 <body>
   <header>
     <h1>BlueandCosmos</h1>
-    <button class="moon-toggle" onclick="toggleDarkMode()">🌙</button>
+    <button class="toggle-btn" onclick="toggleTheme()">🌙</button>
   </header>
 
   <main>
     <h2>Exploring the Cosmos. Protecting the Earth.</h2>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/North_America_from_low_orbiting_satellite_-_Apollo_16_-_NASA_-_Restoration.jpg/640px-North_America_from_low_orbiting_satellite_-_Apollo_16_-_NASA_-_Restoration.jpg" alt="Earth from Space - North America">
-    <a class="button" href="dashboard.html">Go to Dashboard 🚀</a>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg" alt="Earth from Apollo 17">
+    <div class="cta">
+      <a href="dashboard.html">Go to Dashboard</a>
+    </div>
   </main>
 
   <footer>
     <div class="footer-left">
-      <a href="https://play.google.com/store" target="_blank">Google Play</a>
-      <a href="https://www.apple.com/app-store/" target="_blank">App Store</a>
+      <a href="#">App Store</a> | <a href="#">Google Play</a>
     </div>
-    <div class="footer-right">
-      <a href="https://twitter.com" target="_blank">Twitter</a>
-      <a href="https://facebook.com" target="_blank">Facebook</a>
-      <a href="https://instagram.com" target="_blank">Instagram</a>
-      <a href="https://linkedin.com" target="_blank">LinkedIn</a>
-      <a href="https://discord.com" target="_blank">Discord</a>
+    <div class="footer-center">
+      BlueandCosmos 2025
+    </div>
+    <div class="footer-right social-icons">
+      <a href="https://twitter.com" target="_blank" aria-label="Twitter">🐦</a>
+      <a href="https://facebook.com" target="_blank" aria-label="Facebook">📘</a>
+      <a href="https://instagram.com" target="_blank" aria-label="Instagram">📸</a>
+      <a href="https://linkedin.com" target="_blank" aria-label="LinkedIn">💼</a>
+      <a href="https://discord.com" target="_blank" aria-label="Discord">💬</a>
     </div>
   </footer>
 
   <script>
-    function toggleDarkMode() {
-      document.body.classList.toggle("dark-mode");
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+
+    // Load saved theme
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
     }
   </script>
 </body>
