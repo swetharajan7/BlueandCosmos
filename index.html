@@ -3,27 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="BlueandCosmos: Explore astronomy, weather, space news, missions, and celestial events with an AI chatbot.">
-  <meta property="og:title" content="BlueandCosmos" />
-  <meta property="og:description" content="A space discovery dashboard powered by real-time data and AI." />
-  <meta property="og:image" content="https://www.blueandcosmos.com/og-image.jpg" />
-  <meta property="og:url" content="https://www.blueandcosmos.com/" />
-  <meta name="theme-color" content="#2196f3" />
   <title>BlueandCosmos</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
     :root {
       --accent-color: #2196f3;
       --highlight-color: #ff4081;
-      --bg-light: #ffffff;
-      --bg-dark: #111111;
+      --bg-light: #fff;
+      --bg-dark: #111;
       --card-light: #fafafa;
-      --card-dark: #1e1e1e;
+      --card-dark: #222;
       --border-light: #ccc;
       --border-dark: #444;
       --text-light: #000;
       --text-dark: #fff;
-      --credit-color: #888;
+      --credit-color: #777;
     }
 
     body {
@@ -75,11 +69,7 @@
       padding: 1rem;
       background: var(--card-light);
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-      transition: background-color 0.3s, color 0.3s, transform 0.2s;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
+      transition: background-color 0.3s, color 0.3s;
     }
 
     img {
@@ -107,7 +97,7 @@
 
     .source-credit {
       font-size: 0.8rem;
-      color: #666;
+      color: #555;
       margin-top: 1rem;
     }
 
@@ -133,27 +123,17 @@
       min-height: 50px;
     }
 
-    /* Focus Styles */
-    button:focus-visible,
-    input:focus-visible,
-    .toggle-button:focus-visible {
-      outline: 3px solid var(--highlight-color);
-      outline-offset: 2px;
+    #chat-window {
+      max-height: 200px;
+      overflow-y: auto;
+      background-color: #f4f4f4;
+      padding: 0.5rem;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
     }
 
-    /* Loading Spinner */
-    .spinner {
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid var(--accent-color);
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      animation: spin 1s linear infinite;
-      margin: 0 auto;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    .dark-mode #chat-window {
+      background-color: #333;
     }
 
     @media (max-width: 480px) {
@@ -168,81 +148,95 @@
 </head>
 <body>
   <header>
-    <h1 tabindex="0">BlueandCosmos</h1>
-    <button class="toggle-button" onclick="toggleDarkMode()" aria-label="Toggle light/dark mode">Toggle Mode</button>
+    <h1>BlueandCosmos</h1>
+    <button class="toggle-button" onclick="toggleDarkMode()">Toggle Mode</button>
   </header>
 
   <main>
-    <div class="card" id="apod" tabindex="0">
+    <!-- APOD -->
+    <div class="card" id="apod">
       <h2>📸 Astronomy Picture of the Day</h2>
-      <div class="spinner" aria-label="Loading APOD..."></div>
+      <p>Loading image...</p>
     </div>
 
-    <div class="card" id="weather-card" tabindex="0">
+    <!-- Weather Live -->
+    <div class="card" id="weather-card">
       <h2>🌤️ Live Weather</h2>
-      <input type="text" id="city" placeholder="Enter city" aria-label="City input" />
-      <button id="weather-btn" aria-label="Search weather">Search</button>
-      <div id="weather"><div class="spinner" aria-label="Loading weather..."></div></div>
+      <input type="text" id="city" placeholder="Enter city (e.g. Tokyo)" />
+      <button id="weather-btn">Search</button>
+      <div id="weather">Loading weather for New York...</div>
       <div class="source-credit">Weather data by <a href="https://openweather.org" target="_blank">OpenWeather.org</a></div>
     </div>
 
-    <div class="card" id="nyt-science" tabindex="0">
+    <!-- NYT Science News -->
+    <div class="card" id="nyt-science">
       <h2>📰 Science News</h2>
-      <div id="news"><div class="spinner" aria-label="Loading science news..."></div></div>
+      <div id="news">Fetching articles...</div>
       <div class="source-credit">Articles from <a href="https://www.nytimes.com/section/science" target="_blank">NYT</a></div>
     </div>
 
-    <div class="card" id="fact" tabindex="0">
+    <!-- Space Fact -->
+    <div class="card" id="fact">
       <h2>🌌 Space Fact of the Day</h2>
       <p id="space-fact">Fetching a cool fact...</p>
       <div class="source-credit">Fact source: <a href="https://space-facts.com" target="_blank">space-facts.com</a></div>
     </div>
 
-    <div class="card" id="launches" tabindex="0">
+    <!-- Launch Tracker -->
+    <div class="card" id="launches">
       <h2>🚀 Upcoming Space Missions</h2>
       <ul id="launch-list"><li>Loading launches...</li></ul>
       <div class="source-credit">Launch data from <a href="https://thespacedevs.com/ll2" target="_blank">Launch Library 2</a></div>
     </div>
 
-    <div class="card" id="celestial-events" tabindex="0">
+    <!-- Celestial Events -->
+    <div class="card" id="celestial-events">
       <h2>🌠 Celestial Events</h2>
       <ul id="event-list"><li>Loading events...</li></ul>
       <div class="source-credit">Data from <a href="https://in-the-sky.org" target="_blank">in-the-sky.org</a></div>
     </div>
 
-    <div class="card" tabindex="0">
+    <!-- Subscription Form -->
+    <div class="card">
       <h2>📬 Subscribe for Updates</h2>
       <p>Enter your email to receive cosmic insights!</p>
-      <input type="email" placeholder="Your email" aria-label="Your email" />
-      <button>Subscribe</button>
+      <input type="email" id="email-input" placeholder="Your email" />
+      <button onclick="subscribe()">Subscribe</button>
+      <p id="subscription-message"></p>
     </div>
 
-    <div class="card" tabindex="0">
+    <!-- Chatbot -->
+    <div class="card">
       <h2>🤖 Ask BlueBot</h2>
-      <div id="chat-window" aria-live="polite">
+      <div id="chat-window">
         <div><strong>You:</strong> tell me about life on Mars</div>
         <div><strong>BlueBot:</strong> Sorry, I can’t answer right now.</div>
       </div>
-      <input type="text" id="chat-input" placeholder="Ask me about space..." aria-label="Chat input" />
-      <button onclick="sendToBlueBot()" aria-label="Send to chatbot">Send</button>
+      <input type="text" id="chat-input" placeholder="Ask me about space..." />
+      <button onclick="sendToBlueBot()">Send</button>
     </div>
   </main>
 
   <footer>BlueandCosmos 2025</footer>
 
   <script>
+    // Persisted dark mode
     function toggleDarkMode() {
       document.body.classList.toggle("dark-mode");
+      localStorage.setItem("darkMode", document.body.classList.contains("dark-mode"));
+    }
+    if (localStorage.getItem("darkMode") === "true") {
+      document.body.classList.add("dark-mode");
     }
 
-    // APOD
+    // NASA APOD
     fetch("https://api.nasa.gov/planetary/apod?api_key=CysEgHwCtuZgj1UMT2GwnlufWt9F5HfLTbRtPwea")
       .then(res => res.json())
       .then(data => {
         document.getElementById("apod").innerHTML = `
           <h2>📸 Astronomy Picture of the Day</h2>
           <h3>${data.title}</h3>
-          <img src="${data.url}" alt="${data.title}">
+          <img src="${data.url}" alt="${data.title}" loading="lazy">
           <p>${data.explanation}</p>
           <p style="font-size: 0.8rem;">Image Credit: NASA</p>
         `;
@@ -250,12 +244,12 @@
         document.getElementById("apod").innerHTML += "<p>Could not load image.</p>";
       });
 
-    // OpenWeather
+    // Weather
     document.getElementById("weather-btn").addEventListener("click", () => {
       const city = document.getElementById("city").value || "New York";
       const key = "1557651ee4d280ab5e111aeee2e174e1";
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=metric`;
-      document.getElementById("weather").innerHTML = `<div class="spinner" aria-label="Loading weather for ${city}..."></div>`;
+      document.getElementById("weather").innerHTML = `<p>Loading weather for ${city}...</p>`;
       fetch(url)
         .then(res => res.json())
         .then(data => {
@@ -332,25 +326,34 @@
         document.getElementById("event-list").innerHTML = "<li>Could not load celestial events.</li>";
       });
 
-    // BlueBot Chat Submit via Enter
-    const chatInput = document.getElementById("chat-input");
-    chatInput.addEventListener("keydown", function(e) {
-      if (e.key === "Enter") {
-        sendToBlueBot();
+    // Subscription
+    function subscribe() {
+      const input = document.getElementById("email-input");
+      const message = document.getElementById("subscription-message");
+      const email = input.value;
+      const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+      if (!emailRegex.test(email)) {
+        message.style.color = "red";
+        message.textContent = "Please enter a valid email address.";
+        return;
       }
-    });
+      message.style.color = "green";
+      message.textContent = "Thank you for subscribing!";
+      input.value = "";
+    }
 
+    // Placeholder for chatbot
     function sendToBlueBot() {
-      const input = chatInput.value.trim();
-      if (!input) return;
-      const chatWindow = document.getElementById("chat-window");
-      chatWindow.innerHTML += `<div><strong>You:</strong> ${input}</div>`;
-      chatWindow.innerHTML += `<div><strong>BlueBot:</strong> Thinking...</div>`;
-      chatInput.value = "";
+      const input = document.getElementById("chat-input");
+      const windowEl = document.getElementById("chat-window");
+      const userText = input.value.trim();
+      if (!userText) return;
+      const userMsg = `<div><strong>You:</strong> ${userText}</div>`;
+      const botMsg = `<div><strong>BlueBot:</strong> I'm still learning. Stay tuned!</div>`;
+      windowEl.innerHTML += userMsg + botMsg;
+      windowEl.scrollTop = windowEl.scrollHeight;
+      input.value = "";
     }
   </script>
 </body>
 </html>
-
-
-
