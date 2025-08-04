@@ -4,142 +4,72 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BlueandCosmos</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Barlow&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Barlow&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --primary: #2196f3;
-      --accent: #ff4081;
-      --background-light: #fff;
-      --background-dark: #121212;
-      --text-light: #1a1a1a;
-      --text-dark: #f5f5f5;
-      --card-bg-light: #f5f5f5;
-      --card-bg-dark: #1e1e1e;
-      --border-light: #e0e0e0;
-      --border-dark: #333;
+      --accent: #2196f3;
+      --highlight: #ff4081;
+      --bg: #fff;
+      --dark-bg: #121212;
+      --text: #000;
+      --dark-text: #fff;
+      --card-bg: #f9f9f9;
+      --dark-card: #1e1e1e;
     }
-
     body {
       font-family: 'Barlow', sans-serif;
       margin: 0;
-      padding: 0;
-      background-color: var(--background-light);
-      color: var(--text-light);
-      transition: background-color 0.3s, color 0.3s;
+      background-color: var(--bg);
+      color: var(--text);
+      transition: background 0.3s, color 0.3s;
     }
-
     body.dark {
-      background-color: var(--background-dark);
-      color: var(--text-dark);
+      background-color: var(--dark-bg);
+      color: var(--dark-text);
     }
-
     header {
-      position: sticky;
-      top: 0;
-      background-color: var(--background-light);
-      color: var(--primary);
+      background: var(--accent);
+      padding: 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 2rem;
-      border-bottom: 1px solid var(--border-light);
+      position: sticky;
+      top: 0;
       z-index: 1000;
     }
-
-    body.dark header {
-      background-color: var(--background-dark);
-      border-bottom: 1px solid var(--border-dark);
-    }
-
     header h1 {
       font-family: 'Orbitron', sans-serif;
-      font-size: 1.8rem;
       margin: 0;
+      font-size: 1.5rem;
+      color: white;
     }
-
     nav a {
+      color: white;
       margin-left: 1rem;
       text-decoration: none;
-      color: var(--primary);
-      font-weight: 600;
-    }
-
-    nav a:hover {
-      color: var(--accent);
-    }
-
-    .toggle {
-      padding: 0.5rem 1rem;
-      border: none;
-      background: var(--accent);
-      color: white;
-      border-radius: 20px;
-      cursor: pointer;
       font-weight: bold;
     }
-
-    .hero {
-      text-align: center;
-      padding: 4rem 2rem;
-    }
-
-    .hero h2 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .hero p {
-      font-size: 1.2rem;
-      max-width: 600px;
-      margin: 0 auto 2rem;
-    }
-
-    .cta {
-      padding: 0.8rem 1.5rem;
-      font-size: 1rem;
-      background: var(--primary);
+    .toggle-btn {
+      background: var(--highlight);
       color: white;
       border: none;
+      padding: 0.5rem 1rem;
       border-radius: 8px;
       cursor: pointer;
-      text-decoration: none;
     }
-
-    .cta:hover {
-      background: var(--accent);
+    main {
+      text-align: center;
+      padding: 2rem 1rem;
     }
-
+    .hero {
+      max-width: 600px;
+      margin: 0 auto;
+    }
     footer {
       text-align: center;
       font-size: 0.9rem;
-      color: #888;
-      padding: 2rem 1rem;
-    }
-
-    body.dark nav a {
-      color: #90caf9;
-    }
-
-    body.dark .hero p {
-      color: #ccc;
-    }
-
-    @media (max-width: 600px) {
-      header {
-        flex-direction: column;
-        gap: 0.5rem;
-        align-items: flex-start;
-      }
-
-      nav a {
-        margin-left: 0;
-        margin-right: 1rem;
-      }
-
-      .hero h2 {
-        font-size: 2rem;
-      }
+      margin-top: 2rem;
+      color: #777;
     }
   </style>
 </head>
@@ -147,34 +77,34 @@
   <header>
     <h1>BlueandCosmos</h1>
     <nav>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="https://www.nasa.gov/">NASA</a>
-      <a href="https://in-the-sky.org/">Sky Events</a>
+      <a href="dashboard.html#apod">APOD</a>
+      <a href="dashboard.html#weather">Weather</a>
+      <a href="dashboard.html#nyt-science">Science News</a>
+      <a href="dashboard.html#launches">Launches</a>
+      <a href="dashboard.html#events">Events</a>
+      <a href="dashboard.html#chatbot">Chatbot</a>
     </nav>
-    <button class="toggle" onclick="toggleTheme()">Toggle Mode</button>
+    <button class="toggle-btn" onclick="toggleDark()">Toggle Mode</button>
   </header>
 
-  <section class="hero">
-    <h2>Exploring the Cosmos. Protecting the Earth.</h2>
-    <p>Welcome to BlueandCosmos — your personalized dashboard for space weather, astronomy, news, and celestial insights. Built for curious minds and starry dreamers.</p>
-    <a href="dashboard.html" class="cta">Launch the Dashboard 🚀</a>
-  </section>
+  <main>
+    <div class="hero">
+      <h2>Exploring the Cosmos, Protecting the Earth</h2>
+      <p>BlueandCosmos brings you the universe in real-time. Stay updated with astronomy, space launches, celestial events, and more.</p>
+      <a href="dashboard.html" style="display: inline-block; margin-top: 1rem; background: var(--accent); color: white; padding: 0.7rem 1.2rem; border-radius: 6px; text-decoration: none;">Enter Dashboard</a>
+    </div>
+  </main>
 
   <footer>BlueandCosmos 2025</footer>
 
   <script>
-    function toggleTheme() {
-      document.body.classList.toggle("dark");
+    function toggleDark() {
+      document.body.classList.toggle('dark');
       localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
     }
-
-    // On load, apply saved theme
-    window.addEventListener("DOMContentLoaded", () => {
-      const savedTheme = localStorage.getItem("theme");
-      if (savedTheme === "dark") {
-        document.body.classList.add("dark");
-      }
-    });
+    if (localStorage.getItem("theme") === "dark") {
+      document.body.classList.add("dark");
+    }
   </script>
 </body>
 </html>
