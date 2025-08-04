@@ -2,186 +2,106 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BlueandCosmos</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
   <style>
-    :root {
-      --primary: #2196f3;
-      --accent: #ff4081;
-      --background-light: #fff;
-      --background-dark: #121212;
-      --text-light: #1a1a1a;
-      --text-dark: #f5f5f5;
-      --card-bg-light: #f5f5f5;
-      --card-bg-dark: #1e1e1e;
-      --border-light: #e0e0e0;
-      --border-dark: #333;
-    }
     body {
-      font-family: 'Inter', sans-serif;
-      margin: 0; padding: 0;
-      background: var(--background-light);
-      color: var(--text-light);
-      transition: background-color 0.3s, color 0.3s;
-    }
-    body.dark {
-      background: var(--background-dark);
-      color: var(--text-dark);
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fff;
+      color: #000;
     }
     header {
       position: sticky;
       top: 0;
-      background: var(--background-light);
-      padding: 1rem 2rem;
+      background-color: #2196f3;
+      color: white;
+      padding: 1rem;
+      z-index: 1000;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--border-light);
-      z-index: 1000;
-    }
-    body.dark header {
-      background: var(--background-dark);
-      border-bottom: 1px solid var(--border-dark);
     }
     header h1 {
-      color: var(--primary);
       margin: 0;
+      font-size: 1.5rem;
     }
-    .toggle {
-      cursor: pointer;
-      padding: 0.5rem 1rem;
-      background: var(--accent);
-      color: #fff;
+    .toggle-button {
+      background: #ff4081;
       border: none;
-      border-radius: 20px;
-      font-weight: bold;
+      padding: 0.5rem;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
     }
     main {
-      padding: 2rem;
       display: grid;
-      gap: 2rem;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      align-items: start;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1rem;
+      padding: 1rem;
     }
     .card {
-      background: var(--card-bg-light);
-      border-radius: 16px;
-      padding: 1.5rem;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      transition: 0.3s ease;
-      border: 1px solid var(--border-light);
-    }
-    body.dark .card {
-      background: var(--card-bg-dark);
-      border: 1px solid var(--border-dark);
-    }
-    .card h2 {
-      margin-top: 0;
-      color: var(--primary);
-    }
-    img, iframe {
-      max-width: 100%;
+      border: 1px solid #ccc;
       border-radius: 12px;
+      padding: 1rem;
+      background: #fafafa;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    img {
+      max-width: 100%;
+      border-radius: 10px;
     }
     footer {
       text-align: center;
-      margin-top: 4rem;
       padding: 1rem;
       font-size: 0.9rem;
-      color: #888;
+      color: #777;
     }
-    input[type="text"], input[type="email"], input[type="date"] {
-      padding: 0.5rem;
-      border-radius: 8px;
-      border: 1px solid var(--border-light);
-      width: 70%;
+    a {
+      color: #2196f3;
+      text-decoration: none;
     }
-    button {
-      padding: 0.5rem 1rem;
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
+    .news-article {
+      margin-bottom: 1rem;
     }
-    button:hover {
-      background: var(--accent);
+    .source-credit {
+      font-size: 0.8rem;
+      color: #555;
+      margin-top: 1rem;
     }
-    .event-list p {
-      margin: 0.5rem 0;
-      font-size: 0.95rem;
+    .dark-mode {
+      background-color: #111;
+      color: white;
     }
-    .event-list {
-      max-height: 200px;
-      overflow-y: auto;
+    .dark-mode .card {
+      background-color: #222;
+      border-color: #444;
+    }
+    .dark-mode a {
+      color: #90caf9;
     }
   </style>
 </head>
 <body>
   <header>
     <h1>BlueandCosmos</h1>
-    <button class="toggle" onclick="toggleTheme()">Toggle Mode</button>
+    <button class="toggle-button" onclick="toggleDarkMode()">Toggle Mode</button>
   </header>
+
   <main>
-    <!-- Astronomy Picture of the Day -->
-    <div id="apod" class="card"></div>
-
-    <!-- Celestial Events from in-the-sky.org -->
-    <div class="card">
-      <h2>📅 Astronomical Events</h2>
-      <input type="date" id="astro-date" />
-      <button onclick="fetchEvents()">Get Events</button>
-      <div id="event-output" class="event-list"></div>
-      <p style="font-size: 0.8rem; color: #777;">Source: in-the-sky.org</p>
+    <!-- APOD -->
+    <div class="card" id="apod">
+      <h2>📸 Astronomy Picture of the Day</h2>
+      <p>Loading...</p>
     </div>
-  </main>
-  <footer>
-    <p>BlueandCosmos 2025</p>
-  </footer>
-  <script>
-    function toggleTheme() {
-      document.body.classList.toggle('dark');
-    }
 
-    // Astronomy Picture of the Day
-    fetch("https://api.nasa.gov/planetary/apod?api_key=CysEgHwCtuZgj1UMT2GwnlufWt9F5HfLTbRtPwea")
-      .then(r => r.json())
-      .then(data => {
-        document.getElementById('apod').innerHTML = `
-          <h2>📸 Astronomy Picture of the Day</h2>
-          ${data.media_type === "image"
-            ? `<img src="${data.url}" alt="${data.title}" />`
-            : `<iframe src="${data.url}" allowfullscreen></iframe>`}
-          <p>${data.title} — ${data.date}</p>
-          <p style="font-size: 0.8rem; color: #777;">Source: NASA APOD</p>
-        `;
-      });
-
-    // Fetch Celestial Events
-    function fetchEvents() {
-      const dateInput = document.getElementById("astro-date").value;
-      if (!dateInput) return;
-
-      const [year, month, day] = dateInput.split("-");
-      const output = document.getElementById("event-output");
-      output.innerHTML = "Loading events...";
-
-      fetch(`/.netlify/functions/events?year=${year}&month=${month}&day=${day}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.error) {
-            output.innerHTML = `<p>${data.error}</p>`;
-          } else if (data.events.length === 0) {
-            output.innerHTML = `<p>No events found.</p>`;
-          } else {
-            output.innerHTML = data.events.map(e => `<p>• ${e}</p>`).join('');
-          }
-        })
-        .catch(() => {
-          output.innerHTML = `<p>Could not load events.</p>`;
-        });
-    }
-  </script>
-</body>
-</html>
+    <!-- Weather Live -->
+    <div class="card" id="weather-card">
+      <h2>🌤️ Live Weather</h2>
+      <input type="text" id="city" placeholder="Enter city name (e.g. Tokyo)" />
+      <button onclick="getWeather()">Search</button>
+      <div id="weather">Loading weather for New York...</div>
+      <div class="source-credit">Weather data by <a href="https://openweather.org" target="_blank">OpenWeather.org</a></div>
+    </div>
