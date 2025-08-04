@@ -6,18 +6,33 @@
   <title>BlueandCosmos</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
+    :root {
+      --accent-color: #2196f3;
+      --highlight-color: #ff4081;
+      --bg-light: #fff;
+      --bg-dark: #111;
+      --card-light: #fafafa;
+      --card-dark: #222;
+      --border-light: #ccc;
+      --border-dark: #444;
+      --text-light: #000;
+      --text-dark: #fff;
+      --credit-color: #777;
+    }
+
     body {
       font-family: 'Segoe UI', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #fff;
-      color: #000;
+      background-color: var(--bg-light);
+      color: var(--text-light);
       transition: background-color 0.3s, color 0.3s;
     }
+
     header {
       position: sticky;
       top: 0;
-      background-color: #2196f3;
+      background-color: var(--accent-color);
       color: white;
       padding: 1rem;
       z-index: 1000;
@@ -25,188 +40,323 @@
       justify-content: space-between;
       align-items: center;
     }
+
     header h1 {
       margin: 0;
       font-size: 1.5rem;
     }
+
     .toggle-button {
-      background: #ff4081;
+      background: var(--highlight-color);
       border: none;
       padding: 0.5rem 1rem;
       border-radius: 5px;
       color: white;
+      font-weight: bold;
       cursor: pointer;
-      font-size: 0.9rem;
     }
+
     main {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 1rem;
       padding: 1rem;
     }
+
     .card {
-      border: 1px solid #ccc;
+      border: 1px solid var(--border-light);
       border-radius: 12px;
       padding: 1rem;
-      background: #fafafa;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      opacity: 0;
-      transform: translateY(10px);
-      animation: fadeIn 0.6s forwards;
+      background: var(--card-light);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      transition: background-color 0.3s, color 0.3s, transform 0.2s ease;
     }
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+
+    .card:hover {
+      transform: scale(1.02);
     }
+
     img {
       max-width: 100%;
       border-radius: 10px;
+      max-height: 300px;
+      object-fit: cover;
     }
+
     footer {
       text-align: center;
       padding: 1rem;
       font-size: 0.9rem;
-      color: #777;
+      color: var(--credit-color);
     }
+
     a {
-      color: #2196f3;
+      color: var(--accent-color);
       text-decoration: none;
     }
+
     .news-article {
       margin-bottom: 1rem;
     }
+
     .source-credit {
       font-size: 0.8rem;
       color: #555;
       margin-top: 1rem;
     }
+
     .dark-mode {
-      background-color: #111;
-      color: white;
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
     }
+
     .dark-mode .card {
-      background-color: #222;
-      border-color: #444;
+      background-color: var(--card-dark);
+      border-color: var(--border-dark);
     }
+
     .dark-mode a {
       color: #90caf9;
     }
-    input, textarea, button {
-      width: 100%;
-      margin-top: 0.5rem;
-      padding: 0.5rem;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-      font-family: inherit;
+
+    input, button {
+      font-size: 1rem;
     }
-    button {
-      background-color: #2196f3;
-      color: white;
-      border: none;
-      cursor: pointer;
+
+    #weather, #news, #launch-list, #event-list {
+      min-height: 50px;
     }
-    button:hover {
-      background-color: #1976d2;
+
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--accent-color);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
     }
-    .chat-response {
-      background-color: #e0f7fa;
-      padding: 0.5rem;
-      margin-top: 0.5rem;
-      border-radius: 5px;
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
-    .dark-mode .chat-response {
-      background-color: #263238;
+
+    #chat-window {
+      max-height: 150px;
+      overflow-y: auto;
+      margin-bottom: 0.5rem;
+    }
+
+    #chat-input {
+      width: calc(100% - 60px);
+    }
+
+    .visually-hidden {
+      position: absolute;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      height: 1px;
+      width: 1px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 1.2rem;
+      }
+      .toggle-button {
+        padding: 0.4rem 0.8rem;
+      }
     }
   </style>
 </head>
 <body>
   <header role="banner">
     <h1>BlueandCosmos</h1>
-    <button class="toggle-button" onclick="toggleDarkMode()" aria-label="Toggle light or dark mode">Toggle Mode</button>
+    <button class="toggle-button" onclick="toggleDarkMode()" aria-label="Toggle light/dark mode">Toggle Mode</button>
   </header>
 
   <main role="main">
-    <!-- APOD -->
-    <section class="card" id="apod" aria-label="Astronomy Picture of the Day">
+    <div class="card" id="apod" aria-live="polite">
       <h2>📸 Astronomy Picture of the Day</h2>
-      <p>Loading...</p>
-    </section>
+      <div class="spinner"></div>
+    </div>
 
-    <!-- Weather Live -->
-    <section class="card" id="weather-card" aria-label="Live Weather Search">
+    <div class="card" id="weather-card">
       <h2>🌤️ Live Weather</h2>
-      <label for="city">Enter city:</label>
-      <input type="text" id="city" placeholder="e.g., Tokyo" aria-label="City name input" />
+      <label for="city" class="visually-hidden">City</label>
+      <input type="text" id="city" placeholder="Enter city (e.g. Tokyo)" aria-label="City name" />
       <button id="weather-btn">Search</button>
-      <div id="weather">Loading weather for New York...</div>
+      <div id="weather" aria-live="polite"><div class="spinner"></div></div>
       <div class="source-credit">Weather data by <a href="https://openweather.org" target="_blank">OpenWeather.org</a></div>
-    </section>
+    </div>
 
-    <!-- NYT Science News -->
-    <section class="card" id="nyt-science" aria-label="Latest Science News">
+    <div class="card" id="nyt-science">
       <h2>📰 Science News</h2>
-      <div id="news">Loading articles...</div>
-      <div class="source-credit">Articles from <a href="https://www.nytimes.com/section/science" target="_blank">The New York Times</a></div>
-    </section>
+      <div id="news"><div class="spinner"></div></div>
+      <div class="source-credit">Articles from <a href="https://www.nytimes.com/section/science" target="_blank">NYT</a></div>
+    </div>
 
-    <!-- Space Fact -->
-    <section class="card" id="fact" aria-label="Space Fact of the Day">
+    <div class="card" id="fact">
       <h2>🌌 Space Fact of the Day</h2>
-      <p id="space-fact">Loading fact...</p>
+      <p id="space-fact">Fetching a cool fact...</p>
       <div class="source-credit">Fact source: <a href="https://space-facts.com" target="_blank">space-facts.com</a></div>
-    </section>
+    </div>
 
-    <!-- Launch Tracker -->
-    <section class="card" id="launches" aria-label="Upcoming Space Missions">
+    <div class="card" id="launches">
       <h2>🚀 Upcoming Space Missions</h2>
-      <ul id="launch-list">Loading launch data...</ul>
+      <ul id="launch-list"><li><div class="spinner"></div></li></ul>
       <div class="source-credit">Launch data from <a href="https://thespacedevs.com/ll2" target="_blank">Launch Library 2</a></div>
-    </section>
+    </div>
 
-    <!-- Celestial Events -->
-    <section class="card" id="celestial-events" aria-label="Celestial Events">
+    <div class="card" id="celestial-events">
       <h2>🌠 Celestial Events</h2>
-      <ul id="event-list">Loading events...</ul>
-      <div class="source-credit">Event data from <a href="https://in-the-sky.org" target="_blank">in-the-sky.org</a></div>
-    </section>
+      <ul id="event-list"><li><div class="spinner"></div></li></ul>
+      <div class="source-credit">Data from <a href="https://in-the-sky.org" target="_blank">in-the-sky.org</a></div>
+    </div>
 
-    <!-- Subscription Form -->
-    <section class="card" aria-label="Email Subscription">
+    <div class="card">
       <h2>📬 Subscribe for Updates</h2>
-      <label for="email">Email</label>
-      <input type="email" id="email" placeholder="Your email" aria-label="Enter your email" />
+      <p>Enter your email to receive cosmic insights!</p>
+      <input type="email" placeholder="Your email" aria-label="Email address" />
       <button>Subscribe</button>
-    </section>
+    </div>
 
-    <!-- Chatbot -->
-    <section class="card" aria-label="Ask BlueBot Chat Interface">
+    <div class="card">
       <h2>🤖 Ask BlueBot</h2>
-      <div id="chat-window" aria-live="polite" aria-atomic="true">
+      <div id="chat-window" role="log" aria-live="polite">
         <div><strong>You:</strong> tell me about life on Mars</div>
-        <div class="chat-response"><strong>BlueBot:</strong> Sorry, I can’t answer right now.</div>
+        <div><strong>BlueBot:</strong> Sorry, I can’t answer right now.</div>
       </div>
-      <label for="chat-input">Ask something about space:</label>
-      <textarea id="chat-input" rows="3" placeholder="Ask me about space..." aria-label="Ask a question"></textarea>
-      <button onclick="sendToBlueBot()">Send</button>
-    </section>
+      <input type="text" id="chat-input" placeholder="Ask me about space..." aria-label="Chat input" />
+      <button onclick="sendToBlueBot()" id="chat-send">Send</button>
+    </div>
   </main>
 
-  <footer role="contentinfo">
-    BlueandCosmos 2025
-  </footer>
+  <footer role="contentinfo">BlueandCosmos 2025</footer>
 
   <script>
     function toggleDarkMode() {
       document.body.classList.toggle("dark-mode");
     }
+
+    // NASA APOD
+    fetch("https://api.nasa.gov/planetary/apod?api_key=CysEgHwCtuZgj1UMT2GwnlufWt9F5HfLTbRtPwea")
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("apod").innerHTML = `
+          <h2>📸 Astronomy Picture of the Day</h2>
+          <h3>${data.title}</h3>
+          <img src="${data.url}" alt="${data.title}">
+          <p>${data.explanation}</p>
+          <p style="font-size: 0.8rem;">Image Credit: NASA</p>
+        `;
+      }).catch(() => {
+        document.getElementById("apod").innerHTML += "<p>Could not load image.</p>";
+      });
+
+    // Weather
+    document.getElementById("weather-btn").addEventListener("click", fetchWeather);
+    function fetchWeather() {
+      const city = document.getElementById("city").value || "New York";
+      const key = "1557651ee4d280ab5e111aeee2e174e1";
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=metric`;
+      const container = document.getElementById("weather");
+      container.innerHTML = `<div class="spinner"></div>`;
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          if (data.cod !== 200) {
+            container.innerHTML = `<p>City not found.</p>`;
+            return;
+          }
+          container.innerHTML = `
+            <p><strong>${data.weather[0].main}:</strong> ${data.weather[0].description}</p>
+            <p>🌡️ Temp: ${data.main.temp}°C | 💧 Humidity: ${data.main.humidity}%</p>
+            <p>🌬️ Wind: ${data.wind.speed} m/s</p>
+            <p>📍 ${data.name}, ${data.sys.country}</p>
+          `;
+        }).catch(() => {
+          container.innerHTML = "<p>Could not load weather.</p>";
+        });
+    }
+
+    // NYT News
+    fetch("https://api.nytimes.com/svc/topstories/v2/science.json?api-key=eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD")
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("news");
+        container.innerHTML = "";
+        data.results.slice(0, 5).forEach(article => {
+          container.innerHTML += `
+            <div class="news-article">
+              <a href="${article.url}" target="_blank"><strong>${article.title}</strong></a>
+              <p>${article.abstract}</p>
+            </div>
+          `;
+        });
+      }).catch(() => {
+        document.getElementById("news").innerHTML = "<p>Could not load news.</p>";
+      });
+
+    // Fact of the Day
+    const facts = [
+      "A day on Venus is longer than its year.",
+      "Neutron stars can spin at 600 rotations per second.",
+      "The Sun accounts for 99.86% of the solar system's mass.",
+      "There may be a planet made of diamonds.",
+      "A spoonful of neutron star weighs a billion tons."
+    ];
+    document.getElementById("space-fact").textContent = facts[Math.floor(Math.random() * facts.length)];
+
+    // Launch Tracker
+    fetch("https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=5")
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("launch-list");
+        container.innerHTML = "";
+        data.results.forEach(launch => {
+          container.innerHTML += `
+            <li><strong>${launch.name}</strong> - ${new Date(launch.net).toLocaleString()}</li>
+          `;
+        });
+      }).catch(() => {
+        document.getElementById("launch-list").innerHTML = "<li>Could not load launches.</li>";
+      });
+
+    // Celestial Events
+    const today = new Date();
+    fetch(`/.netlify/functions/celestial-events?year=${today.getFullYear()}&month=${today.getMonth()+1}&day=${today.getDate()}`)
+      .then(res => res.json())
+      .then(data => {
+        const eventList = document.getElementById("event-list");
+        eventList.innerHTML = "";
+        data.events.forEach((event, i) => {
+          eventList.innerHTML += `<li><a href="/events/${i}" target="_blank">${event}</a></li>`;
+        });
+      }).catch(() => {
+        document.getElementById("event-list").innerHTML = "<li>Could not load celestial events.</li>";
+      });
+
+    // Chat input enter key
+    document.getElementById("chat-input").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") document.getElementById("chat-send").click();
+    });
+
+    function sendToBlueBot() {
+      const input = document.getElementById("chat-input");
+      const chatWindow = document.getElementById("chat-window");
+      if (!input.value.trim()) return;
+      chatWindow.innerHTML += `<div><strong>You:</strong> ${input.value}</div>`;
+      chatWindow.innerHTML += `<div><strong>BlueBot:</strong> Thinking...</div>`;
+      input.value = "";
+      // TODO: Connect to OpenAI Netlify function
+    }
   </script>
-  <!-- Your existing API script blocks stay unchanged and follow below -->
 </body>
 </html>
-
 
 
 
