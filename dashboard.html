@@ -3,212 +3,290 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard | BlueandCosmos</title>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&family=Orbitron:wght@500&display=swap" rel="stylesheet" />
+  <title>BlueandCosmos Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --accent: #2196f3;
-      --highlight: #ff4081;
-      --bg-light: #ffffff;
-      --bg-dark: #121212;
-      --text-light: #111;
-      --text-dark: #f0f0f0;
-      --card-light: #f9f9f9;
-      --card-dark: #1e1e1e;
-      --border-light: #ddd;
-      --border-dark: #333;
+      --accent-color: #2196f3;
+      --highlight-color: #ff4081;
+      --bg-light: #fff;
+      --bg-dark: #111;
+      --card-light: #fafafa;
+      --card-dark: #222;
+      --text-light: #000;
+      --text-dark: #fff;
+      --border-light: #ccc;
+      --border-dark: #444;
+      --credit-color: #777;
     }
 
     body {
+      font-family: 'Work Sans', sans-serif;
       margin: 0;
-      font-family: 'Barlow', sans-serif;
-      background: var(--bg-light);
+      padding: 0;
+      background-color: var(--bg-light);
       color: var(--text-light);
-      transition: background-color 0.3s ease, color 0.3s ease;
+      transition: background-color 0.3s, color 0.3s;
     }
 
-    body.dark {
-      background: var(--bg-dark);
+    body.dark-mode {
+      background-color: var(--bg-dark);
       color: var(--text-dark);
     }
 
     header {
       position: sticky;
       top: 0;
-      z-index: 1000;
-      background: var(--bg-light);
-      border-bottom: 1px solid var(--border-light);
+      background-color: var(--accent-color);
+      color: white;
+      padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 2rem;
-    }
-
-    body.dark header {
-      background: var(--bg-dark);
-      border-bottom: 1px solid var(--border-dark);
+      z-index: 1000;
     }
 
     header h1 {
       margin: 0;
-      font-family: 'Orbitron', sans-serif;
       font-size: 1.5rem;
-      color: var(--accent);
     }
 
     nav a {
-      margin: 0 0.75rem;
+      color: white;
+      margin-left: 1rem;
       text-decoration: none;
       font-weight: 600;
-      color: var(--accent);
     }
 
     nav a:hover {
-      color: var(--highlight);
+      text-decoration: underline;
     }
 
     .toggle-button {
-      background: var(--highlight);
-      color: #fff;
+      background: none;
       border: none;
-      border-radius: 20px;
-      padding: 0.5rem 1rem;
+      font-size: 1.5rem;
+      color: white;
       cursor: pointer;
-      font-weight: bold;
     }
 
     main {
-      padding: 1.5rem;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
+      gap: 1rem;
+      padding: 1rem;
     }
 
     .card {
       background: var(--card-light);
-      border-radius: 12px;
-      padding: 1.5rem;
       border: 1px solid var(--border-light);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      min-height: 200px;
-      transition: background 0.3s ease;
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: background-color 0.3s, color 0.3s;
     }
 
-    body.dark .card {
-      background: var(--card-dark);
-      border: 1px solid var(--border-dark);
+    body.dark-mode .card {
+      background-color: var(--card-dark);
+      border-color: var(--border-dark);
     }
 
-    .card h2 {
+    h2 {
+      color: var(--accent-color);
       margin-top: 0;
-      color: var(--accent);
-      font-family: 'Orbitron', sans-serif;
+    }
+
+    .source-credit {
+      font-size: 0.8rem;
+      color: var(--credit-color);
+      margin-top: 1rem;
+    }
+
+    img, iframe {
+      max-width: 100%;
+      border-radius: 10px;
     }
 
     footer {
       text-align: center;
-      font-size: 0.85rem;
-      padding: 2rem 1rem;
-      color: #888;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: var(--credit-color);
     }
 
-    a {
-      color: var(--accent);
+    .dark-mode a {
+      color: #90caf9;
     }
 
-    .loading {
-      font-style: italic;
-      color: gray;
+    input, button {
+      font-family: 'Work Sans', sans-serif;
+      font-size: 1rem;
     }
 
-    @media (max-width: 500px) {
+    .btn {
+      background-color: var(--highlight-color);
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #ff1c73;
+    }
+
+    @media (max-width: 480px) {
       header {
         flex-direction: column;
-        gap: 0.5rem;
+        align-items: flex-start;
       }
-
       nav {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
+        margin-top: 0.5rem;
       }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>BlueandCosmos</h1>
+    <h1>BlueandCosmos Dashboard</h1>
     <nav>
       <a href="index.html">Home</a>
       <a href="#apod">APOD</a>
-      <a href="#weather">Weather</a>
-      <a href="#nyt">NYT</a>
+      <a href="#weather-card">Weather</a>
+      <a href="#nyt-science">News</a>
       <a href="#fact">Fact</a>
       <a href="#launches">Missions</a>
-      <a href="#events">Events</a>
-      <a href="#chatbot">Chatbot</a>
+      <a href="#celestial-events">Events</a>
     </nav>
-    <button class="toggle-button" onclick="toggleDarkMode()">Toggle Mode</button>
+    <button class="toggle-button" onclick="toggleDarkMode()">🌙</button>
   </header>
 
   <main>
-    <div id="apod" class="card">
-      <h2>📸 Astronomy Picture</h2>
-      <p class="loading">Loading NASA APOD...</p>
+    <!-- Each section has matching IDs for anchor links -->
+    <div class="card" id="apod">
+      <h2>📸 Astronomy Picture of the Day</h2>
+      <p>Loading...</p>
     </div>
 
-    <div id="weather" class="card">
-      <h2>🌤️ Weather Live</h2>
-      <input type="text" id="city-input" placeholder="Enter city" />
-      <button onclick="fetchWeather()">Search</button>
-      <div id="weather-result" class="loading">Loading default weather...</div>
-      <p style="font-size:0.8rem;">Source: <a href="https://openweather.org" target="_blank">OpenWeather.org</a></p>
+    <div class="card" id="weather-card">
+      <h2>🌤️ Live Weather</h2>
+      <input type="text" id="city" placeholder="City (e.g. Paris)" />
+      <button class="btn" onclick="getWeather()">Search</button>
+      <div id="weather"></div>
+      <div class="source-credit">Weather by <a href="https://openweather.org" target="_blank">OpenWeather.org</a></div>
     </div>
 
-    <div id="nyt" class="card">
-      <h2>📰 NYT Science</h2>
-      <div class="loading">Fetching latest articles...</div>
-      <p style="font-size:0.8rem;">Source: <a href="https://nytimes.com/section/science" target="_blank">New York Times</a></p>
+    <div class="card" id="nyt-science">
+      <h2>📰 Science News</h2>
+      <div id="news"></div>
+      <div class="source-credit">News from <a href="https://nytimes.com/section/science" target="_blank">NYT</a></div>
     </div>
 
-    <div id="fact" class="card">
-      <h2>💡 Space Fact</h2>
-      <div class="loading">Loading random fact...</div>
-      <p style="font-size:0.8rem;">Source: <a href="https://space-facts.com" target="_blank">space-facts.com</a></p>
+    <div class="card" id="fact">
+      <h2>🌌 Space Fact</h2>
+      <p id="space-fact">Loading...</p>
+      <div class="source-credit">Source: <a href="https://space-facts.com" target="_blank">space-facts.com</a></div>
     </div>
 
-    <div id="launches" class="card">
-      <h2>🚀 Launch Tracker</h2>
-      <div class="loading">Loading upcoming missions...</div>
-      <p style="font-size:0.8rem;">Source: <a href="https://thespacedevs.com/ll2" target="_blank">Launch Library 2</a></p>
+    <div class="card" id="launches">
+      <h2>🚀 Space Missions</h2>
+      <ul id="launch-list"><li>Loading...</li></ul>
+      <div class="source-credit">Data from <a href="https://thespacedevs.com" target="_blank">Launch Library 2</a></div>
     </div>
 
-    <div id="events" class="card">
+    <div class="card" id="celestial-events">
       <h2>🌠 Celestial Events</h2>
-      <div class="loading">Fetching current events...</div>
-      <p style="font-size:0.8rem;">Source: <a href="https://in-the-sky.org" target="_blank">in-the-sky.org</a></p>
-    </div>
-
-    <div id="chatbot" class="card">
-      <h2>🤖 Ask BlueBot</h2>
-      <p>Chat integration available via Netlify function.</p>
+      <ul id="event-list"><li>Loading...</li></ul>
+      <div class="source-credit">Data from <a href="https://in-the-sky.org" target="_blank">in-the-sky.org</a></div>
     </div>
   </main>
 
-  <footer>BlueandCosmos 2025</footer>
+  <footer>
+    BlueandCosmos 2025
+  </footer>
 
   <script>
     function toggleDarkMode() {
-      document.body.classList.toggle("dark");
-      localStorage.setItem("bc-theme", document.body.classList.contains("dark") ? "dark" : "light");
+      document.body.classList.toggle("dark-mode");
     }
 
-    if (localStorage.getItem("bc-theme") === "dark") {
-      document.body.classList.add("dark");
+    // APOD
+    fetch("https://api.nasa.gov/planetary/apod?api_key=CysEgHwCtuZgj1UMT2GwnlufWt9F5HfLTbRtPwea")
+      .then(r => r.json())
+      .then(data => {
+        document.getElementById("apod").innerHTML += `
+          <h3>${data.title}</h3>
+          <img src="${data.url}" alt="${data.title}">
+          <p>${data.explanation}</p>
+          <div class="source-credit">Image Credit: NASA</div>
+        `;
+      });
+
+    // Weather
+    function getWeather() {
+      const city = document.getElementById("city").value || "New York";
+      const key = "1557651ee4d280ab5e111aeee2e174e1";
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=metric`;
+
+      fetch(url)
+        .then(r => r.json())
+        .then(data => {
+          document.getElementById("weather").innerHTML = `
+            <p><strong>${data.weather[0].main}:</strong> ${data.weather[0].description}</p>
+            <p>🌡️ Temp: ${data.main.temp}°C</p>
+            <p>📍 ${data.name}, ${data.sys.country}</p>
+          `;
+        });
     }
 
-    // Additional fetch scripts for APOD, weather, NYT, etc. can be placed here
+    // NYT News
+    fetch("https://api.nytimes.com/svc/topstories/v2/science.json?api-key=eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD")
+      .then(r => r.json())
+      .then(data => {
+        const news = document.getElementById("news");
+        data.results.slice(0, 5).forEach(article => {
+          news.innerHTML += `
+            <div><a href="${article.url}" target="_blank"><strong>${article.title}</strong></a>
+            <p>${article.abstract}</p></div>
+          `;
+        });
+      });
+
+    // Space Fact
+    const facts = [
+      "A day on Venus is longer than its year.",
+      "Neutron stars spin 600 times per second.",
+      "Sun makes up 99.86% of solar system mass.",
+      "There may be a diamond planet.",
+      "A spoon of neutron star weighs a billion tons."
+    ];
+    document.getElementById("space-fact").textContent = facts[Math.floor(Math.random() * facts.length)];
+
+    // Launches
+    fetch("https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=5")
+      .then(r => r.json())
+      .then(data => {
+        const list = document.getElementById("launch-list");
+        list.innerHTML = "";
+        data.results.forEach(l => {
+          list.innerHTML += `<li><strong>${l.name}</strong> – ${new Date(l.net).toLocaleString()}</li>`;
+        });
+      });
+
+    // Celestial Events
+    const today = new Date();
+    fetch(`/.netlify/functions/celestial-events?year=${today.getFullYear()}&month=${today.getMonth()+1}&day=${today.getDate()}`)
+      .then(r => r.json())
+      .then(data => {
+        const list = document.getElementById("event-list");
+        list.innerHTML = "";
+        data.events.forEach((event, i) => {
+          list.innerHTML += `<li><a href="/events/${i}" target="_blank">${event}</a></li>`;
+        });
+      });
   </script>
 </body>
 </html>
+
 
