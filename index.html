@@ -6,29 +6,62 @@
   <title>BlueandCosmos</title>
   <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
+    :root {
+      --blue: #0033a0;
+      --text-light: #fff;
+      --text-dark: #000;
+      --bg-light: #fff;
+      --bg-dark: #121212;
+    }
+
     body {
       margin: 0;
       font-family: 'Work Sans', sans-serif;
-      background-color: #fff;
-      color: #000;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      transition: background-color 0.3s, color 0.3s;
     }
+
     header {
-      background-color: #0033a0; /* Old Glory Blue */
+      background-color: var(--blue);
       color: white;
-      padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 1rem 2rem;
       flex-wrap: wrap;
     }
-    header a {
+
+    .brand a {
       color: white;
       text-decoration: none;
       font-weight: bold;
-      font-size: 1.25rem;
+      font-size: 1.1rem;
     }
+
+    nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .toggle {
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+
     .hero {
-      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Solar_System_size_to_scale.svg/1280px-Solar_System_size_to_scale.svg.png') no-repeat center center/cover;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/4/4f/Solar_System_size_to_scale.svg') no-repeat center center/cover;
       height: 80vh;
       display: flex;
       justify-content: center;
@@ -37,6 +70,7 @@
       color: white;
       position: relative;
     }
+
     .hero::after {
       content: 'Image credit: National Geographic';
       position: absolute;
@@ -44,7 +78,11 @@
       right: 10px;
       font-size: 0.75rem;
       color: #ccc;
+      background: rgba(0,0,0,0.4);
+      padding: 4px 6px;
+      border-radius: 4px;
     }
+
     footer {
       background-color: #0033a0;
       color: white;
@@ -54,39 +92,47 @@
       gap: 1.5rem;
       text-align: center;
     }
+
     .footer-section {
       display: flex;
       flex-direction: column;
       align-items: center;
     }
+
     .footer-section img {
       width: 100px;
       margin: 0.5rem 0;
     }
+
     .footer-section a {
       color: white;
       text-decoration: none;
       margin: 0.25rem 0;
       font-size: 0.9rem;
     }
+
     .footer-brand {
       font-weight: bold;
       font-size: 1rem;
       margin-bottom: 0.5rem;
     }
+
     .social-icons img {
       width: 30px;
       height: 30px;
       margin: 0.25rem;
     }
+
     @media (max-width: 600px) {
-      header a {
-        font-size: 1rem;
-        text-align: center;
-        width: 100%;
+      nav {
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1rem;
       }
+
       .hero {
         font-size: 0.9rem;
+        height: 60vh;
       }
     }
   </style>
@@ -95,14 +141,21 @@
 
   <!-- Header -->
   <header>
-    <a href="index.html">
-      BlueandCosmos – Exploring the Cosmos. Protecting the Earth.
-    </a>
+    <div class="brand">
+      <a href="index.html">BlueandCosmos – Exploring the Cosmos. Protecting the Earth.</a>
+    </div>
+    <nav>
+      <a href="#">About</a>
+      <a href="#">News</a>
+      <a href="#">Livestream</a>
+      <a href="dashboard.html">Dashboard</a>
+      <span class="toggle" id="themeToggle">🌙</span>
+    </nav>
   </header>
 
   <!-- Hero Section -->
   <section class="hero">
-    <!-- Background image and credit overlayed -->
+    <!-- Background + image credit -->
   </section>
 
   <!-- Footer -->
@@ -138,6 +191,34 @@
     </div>
   </footer>
 
+  <!-- Theme Toggle Script -->
+  <script>
+    const toggleBtn = document.getElementById('themeToggle');
+    const body = document.body;
+
+    // Set saved theme on load
+    if (localStorage.getItem('theme') === 'dark') {
+      body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-dark');
+      body.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-light');
+      toggleBtn.textContent = '☀️';
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      if (body.style.backgroundColor === 'rgb(18, 18, 18)') {
+        // Switch to light
+        body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-light');
+        body.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-dark');
+        toggleBtn.textContent = '🌙';
+        localStorage.setItem('theme', 'light');
+      } else {
+        // Switch to dark
+        body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-dark');
+        body.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-light');
+        toggleBtn.textContent = '☀️';
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+  </script>
 </body>
 </html>
 
