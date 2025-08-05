@@ -17,6 +17,7 @@
       --text-dark: #fff;
       --border-light: #ccc;
       --border-dark: #444;
+      --flag-blue: #0061A8; /* Flag Blue */
     }
 
     body {
@@ -55,14 +56,15 @@
       text-decoration: none;
       margin: 0 0.75rem;
       font-weight: 500;
+      transition: color 0.3s ease-in-out;
     }
 
     nav a:hover {
-      text-decoration: underline;
+      color: var(--flag-blue); /* Change to Flag Blue on hover */
     }
 
     .toggle-btn {
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       background: none;
       border: none;
       cursor: pointer;
@@ -151,10 +153,9 @@
     <h1><a href="index.html" style="color: white; text-decoration: none;">BlueandCosmos</a></h1>
     <div>
       <nav>
-        <a href="#weather">Weather</a>
-        <a href="#events">Celestial Events</a>
-        <a href="#gallery">Gallery</a>
-        <a href="#game">Game & Educational Content</a>
+        <a href="https://external-link.com/productivity" target="_blank">Productivity & Workflow Tools</a>
+        <a href="https://external-link.com/games" target="_blank">Games & Entertainment</a>
+        <a href="https://external-link.com/education" target="_blank">Educational Content</a>
       </nav>
     </div>
     <button class="toggle-btn" onclick="toggleTheme()">🌙</button>
@@ -207,12 +208,14 @@
 
   <script>
     function toggleTheme() {
-      document.body.classList.toggle('dark');
-      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+      const currentTheme = document.body.classList.toggle('dark');
+      localStorage.setItem('theme', currentTheme ? 'dark' : 'light');
+      document.querySelector('.toggle-btn').innerHTML = currentTheme ? '☀️' : '🌙'; // Change icon to sun/moon
     }
 
     if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark');
+      document.querySelector('.toggle-btn').innerHTML = '☀️'; // Sun icon for dark mode
     }
 
     // Weather
@@ -255,4 +258,3 @@
   </script>
 </body>
 </html>
-
