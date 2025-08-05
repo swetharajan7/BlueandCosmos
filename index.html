@@ -37,8 +37,8 @@
 
     .hero {
       position: relative;
-      height: 100vh;
-      background: url('https://cdn.pixabay.com/photo/2015/09/18/19/03/space-940335_960_720.jpg') no-repeat center center/cover;
+      height: calc(100vh - 120px); /* Adjust based on header and footer height */
+      background: url('https://www.nationalgeographic.com/science/article/see-a-rare-alignment-of-all-the-planets-in-the-night-sky') no-repeat center center/cover;
       background-attachment: fixed;
       animation: moveBackground 15s linear infinite;
     }
@@ -304,5 +304,6 @@
   </script>
 </body>
 </html>
+
 
 
