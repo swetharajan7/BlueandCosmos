@@ -93,6 +93,24 @@
       display: block;
     }
 
+    .toggle-group {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .shop-link {
+      color: white;
+      font-weight: 500;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .shop-link span {
+      margin-left: 0.3rem;
+    }
+
     .toggle-btn {
       font-size: 1.5rem;
       background: none;
@@ -175,6 +193,10 @@
         flex-direction: column;
         align-items: flex-start;
       }
+
+      .toggle-group {
+        margin-top: 1rem;
+      }
     }
   </style>
 </head>
@@ -182,7 +204,6 @@
   <header>
     <h1><a href="index.html" style="color: white; text-decoration: none;">BlueandCosmos</a></h1>
     <nav>
-      <!-- External Links -->
       <div class="dropdown">
         <a href="#">External Links</a>
         <div class="dropdown-content">
@@ -194,7 +215,6 @@
         </div>
       </div>
 
-      <!-- Productivity & Workflow Tools -->
       <div class="dropdown">
         <a href="#">Productivity & Workflows</a>
         <div class="dropdown-content">
@@ -205,7 +225,6 @@
         </div>
       </div>
 
-      <!-- Games & Entertainment -->
       <div class="dropdown">
         <a href="#">Games & Entertainment</a>
         <div class="dropdown-content">
@@ -215,7 +234,6 @@
         </div>
       </div>
 
-      <!-- Educational Apps -->
       <div class="dropdown">
         <a href="#">Educational Apps</a>
         <div class="dropdown-content">
@@ -225,7 +243,10 @@
         </div>
       </div>
     </nav>
-    <button class="toggle-btn" onclick="toggleTheme()">🌙</button>
+    <div class="toggle-group">
+      <a href="https://your-shop-link.com" target="_blank" class="shop-link">👜<span>SHOP</span></a>
+      <button class="toggle-btn" onclick="toggleTheme()">🌙</button>
+    </div>
   </header>
 
   <main>
@@ -280,7 +301,6 @@
       document.querySelector('.toggle-btn').innerHTML = isDark ? '☀️' : '🌙';
     }
 
-    // Set icon and theme on load
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
       document.body.classList.add('dark');
@@ -289,7 +309,6 @@
       document.querySelector('.toggle-btn').innerHTML = '🌙';
     }
 
-    // Weather Fetch
     function getWeather() {
       const city = document.getElementById("city").value || "New York";
       const key = "1557651ee4d280ab5e111aeee2e174e1";
@@ -308,7 +327,6 @@
         });
     }
 
-    // Celestial Events Fetch
     const now = new Date();
     fetch(`/.netlify/functions/celestial-events?year=${now.getFullYear()}&month=${now.getMonth() + 1}&day=${now.getDate()}`)
       .then(res => res.json())
@@ -323,7 +341,6 @@
         document.getElementById("event-list").innerHTML = "<li>Unable to load celestial events.</li>";
       });
 
-    // Chat placeholder
     function sendToBlueBot() {
       const input = document.getElementById("chat-input");
       const msg = input.value.trim();
@@ -336,4 +353,5 @@
   </script>
 </body>
 </html>
+
 
