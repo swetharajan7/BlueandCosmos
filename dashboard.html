@@ -17,339 +17,221 @@
       --text-dark: #fff;
       --border-light: #ccc;
       --border-dark: #444;
-      --flag-blue: #0061A8;
     }
 
     body {
-      font-family: 'Work Sans', sans-serif;
       margin: 0;
-      padding: 0;
-      background: var(--light-bg);
+      font-family: 'Work Sans', sans-serif;
+      background-color: var(--light-bg);
       color: var(--text-light);
-      transition: background 0.3s, color 0.3s;
-    }
-
-    body.dark {
-      background: var(--dark-bg);
-      color: var(--text-dark);
+      transition: background-color 0.3s, color 0.3s;
     }
 
     header {
+      background-color: var(--accent);
+      color: white;
+      padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: var(--accent);
-      color: white;
-      padding: 1rem 2rem;
+      flex-wrap: wrap;
       position: sticky;
       top: 0;
-      z-index: 1000;
-      flex-wrap: wrap;
+      z-index: 999;
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 1.8rem;
-    }
-
-    nav a {
+    .brand a {
       color: white;
       text-decoration: none;
-      margin: 0 0.75rem;
-      font-weight: 500;
-      transition: color 0.3s ease-in-out;
+      font-weight: bold;
+      font-size: 1.3rem;
     }
 
-    nav a:hover {
-      color: var(--flag-blue);
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
     }
 
-    .dropdown {
+    nav > .dropdown {
       position: relative;
-      display: inline-block;
+    }
+
+    nav a, .dropdown-btn {
+      color: white;
+      text-decoration: none;
+      font-size: 1rem;
+      position: relative;
+      cursor: pointer;
+    }
+
+    nav a::after, .dropdown-btn::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -3px;
+      left: 0;
+      background-color: var(--highlight);
+      transition: width 0.3s;
+    }
+
+    nav a:hover::after, .dropdown-btn:hover::after {
+      width: 100%;
     }
 
     .dropdown-content {
       display: none;
       position: absolute;
-      background-color: var(--accent);
-      min-width: 180px;
-      z-index: 1;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      top: 100%;
+      background-color: #0046c0;
+      padding: 0.5rem;
+      border-radius: 4px;
+      min-width: 200px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      z-index: 1000;
     }
 
     .dropdown-content a {
-      color: white;
-      padding: 10px 14px;
-      text-decoration: none;
       display: block;
+      padding: 0.4rem 0.75rem;
+      color: white;
+      text-decoration: none;
+      font-size: 0.95rem;
     }
 
     .dropdown-content a:hover {
-      background-color: var(--flag-blue);
+      background-color: #0056d0;
     }
 
     .dropdown:hover .dropdown-content {
       display: block;
     }
 
-    .toggle-group {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .shop-link {
-      color: white;
-      font-weight: 500;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-    }
-
-    .shop-link span {
-      margin-left: 0.3rem;
-    }
-
-    .toggle-btn {
-      font-size: 1.5rem;
-      background: none;
-      border: none;
+    .toggle {
       cursor: pointer;
-      color: white;
+      font-size: 1.3rem;
+    }
+
+    .shop-icon {
+      font-size: 1.2rem;
+      margin-left: 0.75rem;
     }
 
     main {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1rem;
       padding: 2rem;
     }
 
     .card {
-      background: var(--card-light);
+      background-color: var(--card-light);
       border: 1px solid var(--border-light);
+      padding: 1.5rem;
       border-radius: 12px;
-      padding: 1rem;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      transition: background 0.3s, border 0.3s;
+      margin-bottom: 1.5rem;
+      transition: background-color 0.3s, border-color 0.3s;
     }
 
-    body.dark .card {
-      background: var(--card-dark);
+    body.dark-mode {
+      background-color: var(--dark-bg);
+      color: var(--text-dark);
+    }
+
+    body.dark-mode .card {
+      background-color: var(--card-dark);
       border-color: var(--border-dark);
     }
 
-    h2 {
-      margin-top: 0;
-      color: var(--accent);
-    }
-
-    img {
-      max-width: 100%;
-      border-radius: 10px;
-    }
-
-    .source-credit {
-      font-size: 0.8rem;
-      margin-top: 0.5rem;
-      color: gray;
-    }
-
-    input, button {
-      padding: 0.5rem;
-      border-radius: 6px;
-      border: 1px solid var(--border-light);
-      font-size: 1rem;
-    }
-
-    button {
-      background: var(--accent);
-      color: white;
-      cursor: pointer;
-      border: none;
-    }
-
-    button:hover {
-      background: var(--highlight);
-    }
-
     footer {
+      background-color: var(--accent);
+      color: white;
       text-align: center;
       padding: 1rem;
-      font-size: 0.9rem;
-      color: gray;
     }
 
-    #chat-window {
-      max-height: 150px;
-      overflow-y: auto;
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
-    }
+    @media (max-width: 768px) {
+      nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+      }
 
-    @media (max-width: 500px) {
       header {
         flex-direction: column;
         align-items: flex-start;
-      }
-
-      .toggle-group {
-        margin-top: 1rem;
       }
     }
   </style>
 </head>
 <body>
+
+  <!-- Header -->
   <header>
-    <h1><a href="index.html" style="color: white; text-decoration: none;">BlueandCosmos</a></h1>
+    <div class="brand">
+      <a href="index.html">BlueandCosmos</a>
+    </div>
     <nav>
       <div class="dropdown">
-        <a href="#">External Links</a>
+        <span class="dropdown-btn">Productivity & Workflows</span>
         <div class="dropdown-content">
-          <a href="https://apod.nasa.gov/apod/astropix.html" target="_blank">NASA APOD</a>
-          <a href="https://in-the-sky.org" target="_blank">Celestial Events</a>
-          <a href="https://www.nytimes.com/section/science" target="_blank">NYT Science News</a>
-          <a href="https://www.nasa.gov/launchschedule" target="_blank">Space Launches</a>
-          <a href="https://space-facts.com" target="_blank">Astronomy Fact of the Day</a>
+          <a href="#">Workflow Automations</a>
+          <a href="#">Resume Helpers</a>
+          <a href="#">Content Tools</a>
+          <a href="#">Calendar Organizers</a>
         </div>
       </div>
-
       <div class="dropdown">
-        <a href="#">Productivity & Workflows</a>
+        <span class="dropdown-btn">Games & Entertainment</span>
         <div class="dropdown-content">
-          <a href="https://external-link.com/workflow-automations" target="_blank">Workflow Automations</a>
-          <a href="https://external-link.com/resume-helpers" target="_blank">Resume Helpers</a>
-          <a href="https://external-link.com/content-tools" target="_blank">Content Tools</a>
-          <a href="https://external-link.com/calendar-organizers" target="_blank">Calendar Organizers</a>
+          <a href="#">Games</a>
+          <a href="#">Interactive Storytelling</a>
+          <a href="#">Visual Experiences</a>
         </div>
       </div>
-
       <div class="dropdown">
-        <a href="#">Games & Entertainment</a>
+        <span class="dropdown-btn">Educational Apps</span>
         <div class="dropdown-content">
-          <a href="https://external-link.com/games" target="_blank">Games</a>
-          <a href="https://external-link.com/interactive-storytelling" target="_blank">Interactive Storytelling</a>
-          <a href="https://external-link.com/visual-experiences" target="_blank">Visual Experiences</a>
+          <a href="#">Interactive Tutorials</a>
+          <a href="#">Onboarding Tools</a>
+          <a href="#">AI-Enhanced Learning</a>
         </div>
       </div>
-
-      <div class="dropdown">
-        <a href="#">Educational Apps</a>
-        <div class="dropdown-content">
-          <a href="https://external-link.com/interactive-tutorials" target="_blank">Interactive Tutorials</a>
-          <a href="https://external-link.com/onboarding-tools" target="_blank">Onboarding Tools</a>
-          <a href="https://external-link.com/ai-enhanced-learning" target="_blank">AI Learning Platforms</a>
-        </div>
-      </div>
+      <a href="#">External Links</a>
+      <span class="toggle" id="themeToggle">🌙</span>
+      <span class="shop-icon">👜 SHOP</span>
     </nav>
-    <div class="toggle-group">
-      <a href="https://your-shop-link.com" target="_blank" class="shop-link">👜<span>SHOP</span></a>
-      <button class="toggle-btn" onclick="toggleTheme()">🌙</button>
-    </div>
   </header>
 
+  <!-- Main content -->
   <main>
-    <!-- Weather -->
-    <div class="card" id="weather">
-      <h2>🌤️ Weather</h2>
-      <input type="text" id="city" placeholder="Enter city" />
-      <button onclick="getWeather()">Search</button>
-      <div id="weather-result">Loading weather...</div>
-      <div class="source-credit">Source: <a href="https://openweather.org" target="_blank">OpenWeather</a></div>
-    </div>
-
-    <!-- Celestial Events -->
-    <div class="card" id="events">
-      <h2>🌠 Celestial Events</h2>
-      <ul id="event-list"><li>Loading events...</li></ul>
-      <div class="source-credit">Source: <a href="https://in-the-sky.org" target="_blank">in-the-sky.org</a></div>
-    </div>
-
-    <!-- Gallery -->
-    <div class="card" id="gallery">
-      <h2>🎨 Gallery</h2>
-      <p>Gallery content coming soon...</p>
-    </div>
-
-    <!-- Game & Educational Content -->
-    <div class="card" id="game">
-      <h2>🎮 Game & Educational Content</h2>
-      <p>Explore interactive games and educational resources!</p>
-    </div>
-
-    <!-- Chatbot -->
-    <div class="card" id="chatbot">
-      <h2>🤖 Ask BlueBot</h2>
-      <div id="chat-window">
-        <div><strong>You:</strong> What's the largest planet?</div>
-        <div><strong>BlueBot:</strong> Sorry, I can’t answer right now.</div>
-      </div>
-      <input type="text" id="chat-input" placeholder="Ask me something..." />
-      <button onclick="sendToBlueBot()">Send</button>
-    </div>
+    <div class="card">Weather Card</div>
+    <div class="card">NYT Science News Card</div>
+    <div class="card">Space Fact Card</div>
+    <div class="card">Launch Tracker Card</div>
+    <div class="card">Celestial Events Card</div>
+    <div class="card">Chatbot Interface</div>
+    <div class="card">Subscription Form</div>
   </main>
 
+  <!-- Footer -->
   <footer>
-    BlueandCosmos™ 2025
+    BlueandCosmos 2025
   </footer>
 
+  <!-- Theme toggle script -->
   <script>
-    function toggleTheme() {
-      const isDark = document.body.classList.toggle('dark');
+    const toggleBtn = document.getElementById('themeToggle');
+    const body = document.body;
+
+    if (localStorage.getItem('theme') === 'dark') {
+      body.classList.add('dark-mode');
+      toggleBtn.textContent = '☀️';
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      const isDark = body.classList.toggle('dark-mode');
+      toggleBtn.textContent = isDark ? '☀️' : '🌙';
       localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      document.querySelector('.toggle-btn').innerHTML = isDark ? '☀️' : '🌙';
-    }
-
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      document.body.classList.add('dark');
-      document.querySelector('.toggle-btn').innerHTML = '☀️';
-    } else {
-      document.querySelector('.toggle-btn').innerHTML = '🌙';
-    }
-
-    function getWeather() {
-      const city = document.getElementById("city").value || "New York";
-      const key = "1557651ee4d280ab5e111aeee2e174e1";
-      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${key}&units=metric`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.cod !== 200) throw new Error("City not found");
-          document.getElementById("weather-result").innerHTML = `
-            <p><strong>${data.weather[0].main}:</strong> ${data.weather[0].description}</p>
-            <p>🌡️ ${data.main.temp}°C | 💧 ${data.main.humidity}%</p>
-            <p>📍 ${data.name}, ${data.sys.country}</p>
-          `;
-        })
-        .catch(err => {
-          document.getElementById("weather-result").innerHTML = "Unable to fetch weather.";
-        });
-    }
-
-    const now = new Date();
-    fetch(`/.netlify/functions/celestial-events?year=${now.getFullYear()}&month=${now.getMonth() + 1}&day=${now.getDate()}`)
-      .then(res => res.json())
-      .then(data => {
-        const list = document.getElementById("event-list");
-        list.innerHTML = "";
-        data.events.forEach(e => {
-          list.innerHTML += `<li>${e}</li>`;
-        });
-      })
-      .catch(() => {
-        document.getElementById("event-list").innerHTML = "<li>Unable to load celestial events.</li>";
-      });
-
-    function sendToBlueBot() {
-      const input = document.getElementById("chat-input");
-      const msg = input.value.trim();
-      if (!msg) return;
-      const chat = document.getElementById("chat-window");
-      chat.innerHTML += `<div><strong>You:</strong> ${msg}</div><div><strong>BlueBot:</strong> Sorry, I can’t answer right now.</div>`;
-      input.value = "";
-      chat.scrollTop = chat.scrollHeight;
-    }
+    });
   </script>
 </body>
 </html>
