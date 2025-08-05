@@ -139,17 +139,20 @@
     footer {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
+      align-items: flex-start;
+      padding: 2rem 2rem;
       background-color: #f1f1f1;
       color: #555;
       font-size: 0.9rem;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
     .footer-left,
     .footer-center,
     .footer-right {
       display: flex;
+      flex-direction: column;
       align-items: center;
     }
 
@@ -208,6 +211,17 @@
       nav a {
         margin: 0.5rem 0;
       }
+
+      footer {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .footer-left,
+      .footer-center,
+      .footer-right {
+        align-items: center;
+      }
     }
   </style>
 </head>
@@ -256,7 +270,9 @@
       <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Apple_Store_logo.svg" alt="Apple App Store" /></a>
     </div>
     <div class="footer-center">
-      BlueandCosmos™ 2025 | <a href="#">Privacy Policy</a> | <a href="#">Terms of Use</a> | <a href="#">Careers</a> | <a href="#">Contact Us</a> | <a href="#">Site Map</a> | <a href="#">Newsletter</a>
+      BlueandCosmos™ 2025
+      <br>
+      <a href="#">Privacy Policy</a> | <a href="#">Terms of Use</a>
     </div>
     <div class="footer-right social-icons">
       <a href="https://twitter.com" target="_blank" aria-label="Twitter"><img src="https://upload.wikimedia.org/wikipedia/commons/6/60/Twitter_Logo_2021.svg" alt="Twitter" /></a>
@@ -264,6 +280,9 @@
       <a href="https://instagram.com" target="_blank" aria-label="Instagram"><img src="https://upload.wikimedia.org/wikipedia/commons/4/43/Instagram_Logo_2022.svg" alt="Instagram" /></a>
       <a href="https://linkedin.com" target="_blank" aria-label="LinkedIn"><img src="https://upload.wikimedia.org/wikipedia/commons/0/01/LinkedIn_Logo_2022.svg" alt="LinkedIn" /></a>
       <a href="https://discord.com" target="_blank" aria-label="Discord"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Discord_logo.svg" alt="Discord" /></a>
+    </div>
+    <div class="footer-center">
+      <a href="#">Careers</a> | <a href="#">Contact Us</a> | <a href="#">Site Map</a> | <a href="#">Newsletter</a>
     </div>
   </footer>
 
@@ -284,5 +303,6 @@
   </script>
 </body>
 </html>
+
 
 
