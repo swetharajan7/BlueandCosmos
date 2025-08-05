@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BlueandCosmos</title>
   <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet"/>
@@ -30,34 +30,83 @@
       align-items: center;
       padding: 1rem 2rem;
       flex-wrap: wrap;
+      position: relative;
+      z-index: 100;
     }
 
     .brand a {
       color: white;
       text-decoration: none;
       font-weight: bold;
-      font-size: 1.1rem;
+      font-size: 1.3rem;
     }
 
     nav {
       display: flex;
-      gap: 1.5rem;
       align-items: center;
+      gap: 1.5rem;
+      position: relative;
     }
 
-    nav a {
+    nav > .dropdown {
+      position: relative;
+    }
+
+    nav a, .dropdown-btn {
       color: white;
       text-decoration: none;
       font-size: 1rem;
+      position: relative;
+      cursor: pointer;
     }
 
-    nav a:hover {
-      text-decoration: underline;
+    /* Link underline animation */
+    nav a::after, .dropdown-btn::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -3px;
+      left: 0;
+      background-color: #ff4081;
+      transition: width 0.3s;
+    }
+
+    nav a:hover::after, .dropdown-btn:hover::after {
+      width: 100%;
+    }
+
+    /* Dropdown menus */
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      background-color: #0046c0;
+      padding: 0.5rem;
+      border-radius: 4px;
+      min-width: 180px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .dropdown-content a {
+      display: block;
+      padding: 0.4rem 0.75rem;
+      color: white;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #0056d0;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
     }
 
     .toggle {
       cursor: pointer;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
     }
 
     .hero {
@@ -123,16 +172,21 @@
       margin: 0.25rem;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
       nav {
-        flex-direction: column;
+        flex-wrap: wrap;
         gap: 0.5rem;
-        margin-top: 1rem;
+        justify-content: center;
       }
 
       .hero {
         font-size: 0.9rem;
         height: 60vh;
+      }
+
+      header {
+        flex-direction: column;
+        align-items: flex-start;
       }
     }
   </style>
@@ -145,9 +199,31 @@
       <a href="index.html">BlueandCosmos – Exploring the Cosmos. Protecting the Earth.</a>
     </div>
     <nav>
-      <a href="#">About</a>
-      <a href="#">News</a>
-      <a href="#">Livestream</a>
+      <div class="dropdown">
+        <span class="dropdown-btn">About</span>
+        <div class="dropdown-content">
+          <a href="#">About BlueandCosmos</a>
+          <a href="#">Sustainability</a>
+          <a href="#">News</a>
+          <a href="#">Gallery</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <span class="dropdown-btn">News</span>
+        <div class="dropdown-content">
+          <a href="#">Science Updates</a>
+          <a href="#">Space Missions</a>
+          <a href="#">Interviews</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <span class="dropdown-btn">Livestream</span>
+        <div class="dropdown-content">
+          <a href="#">Live Sky Cams</a>
+          <a href="#">Mission Broadcasts</a>
+          <a href="#">Webinars</a>
+        </div>
+      </div>
       <a href="dashboard.html">Dashboard</a>
       <span class="toggle" id="themeToggle">🌙</span>
     </nav>
@@ -155,7 +231,7 @@
 
   <!-- Hero Section -->
   <section class="hero">
-    <!-- Background + image credit -->
+    <!-- Hero background with credit -->
   </section>
 
   <!-- Footer -->
@@ -196,7 +272,6 @@
     const toggleBtn = document.getElementById('themeToggle');
     const body = document.body;
 
-    // Set saved theme on load
     if (localStorage.getItem('theme') === 'dark') {
       body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-dark');
       body.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-light');
@@ -204,14 +279,13 @@
     }
 
     toggleBtn.addEventListener('click', () => {
-      if (body.style.backgroundColor === 'rgb(18, 18, 18)') {
-        // Switch to light
+      const isDark = body.style.backgroundColor === 'rgb(18, 18, 18)';
+      if (isDark) {
         body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-light');
         body.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-dark');
         toggleBtn.textContent = '🌙';
         localStorage.setItem('theme', 'light');
       } else {
-        // Switch to dark
         body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-dark');
         body.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-light');
         toggleBtn.textContent = '☀️';
@@ -221,6 +295,4 @@
   </script>
 </body>
 </html>
-
-
 
