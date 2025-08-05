@@ -34,7 +34,6 @@
       color: var(--text-dark);
     }
 
-    /* Hero Section Background Animation */
     .hero {
       position: relative;
       height: 100vh;
@@ -90,7 +89,6 @@
       background-color: var(--highlight);
     }
 
-    /* Dropdown Menu */
     .dropdown {
       position: relative;
       display: inline-block;
@@ -140,7 +138,6 @@
 
     footer {
       display: flex;
-      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
       padding: 1rem 2rem;
@@ -152,9 +149,21 @@
     .footer-left,
     .footer-center,
     .footer-right {
-      flex: 1 1 100%;
-      text-align: center;
-      margin: 0.5rem 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .footer-left {
+      justify-content: flex-start;
+    }
+
+    .footer-center {
+      justify-content: center;
+      flex-grow: 1;
+    }
+
+    .footer-right {
+      justify-content: flex-end;
     }
 
     .social-icons a {
