@@ -57,7 +57,7 @@
       position: relative;
     }
 
-    nav a, .dropdown-btn {
+    nav a, .dropdown-btn, .shop-icon {
       color: white;
       text-decoration: none;
       font-size: 1rem;
@@ -65,7 +65,9 @@
       cursor: pointer;
     }
 
-    nav a::after, .dropdown-btn::after {
+    nav a::after,
+    .dropdown-btn::after,
+    .shop-icon::after {
       content: '';
       position: absolute;
       width: 0;
@@ -76,7 +78,9 @@
       transition: width 0.3s;
     }
 
-    nav a:hover::after, .dropdown-btn:hover::after {
+    nav a:hover::after,
+    .dropdown-btn:hover::after,
+    .shop-icon:hover::after {
       width: 100%;
     }
 
@@ -111,11 +115,6 @@
     .toggle {
       cursor: pointer;
       font-size: 1.3rem;
-    }
-
-    .shop-icon {
-      font-size: 1.2rem;
-      margin-left: 0.75rem;
     }
 
     main {
@@ -195,7 +194,6 @@
           <a href="#">AI-Enhanced Learning</a>
         </div>
       </div>
-      <a href="#">External Links</a>
       <span class="toggle" id="themeToggle">🌙</span>
       <span class="shop-icon">👜 SHOP</span>
     </nav>
