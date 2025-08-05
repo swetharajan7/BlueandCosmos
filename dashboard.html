@@ -63,6 +63,24 @@
       color: var(--flag-blue); /* Change to Flag Blue on hover */
     }
 
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: var(--accent);
+      min-width: 160px;
+      z-index: 1;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
     .toggle-btn {
       font-size: 1.5rem;
       background: none;
@@ -140,24 +158,6 @@
       margin-bottom: 1rem;
     }
 
-    .subheadings {
-      margin: 1rem 0;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .subheadings a {
-      color: var(--accent);
-      font-weight: 500;
-      text-decoration: none;
-      transition: color 0.3s ease-in-out;
-    }
-
-    .subheadings a:hover {
-      color: var(--flag-blue); /* Change to Flag Blue on hover */
-    }
-
     @media (max-width: 500px) {
       header {
         flex-direction: column;
@@ -174,41 +174,49 @@
         <a href="https://external-link.com/productivity" target="_blank">Productivity & Workflow Tools</a>
         <a href="https://external-link.com/games" target="_blank">Games & Entertainment</a>
         <a href="https://external-link.com/education" target="_blank">Educational Content</a>
+        <!-- Dropdown for other content -->
+        <div class="dropdown">
+          <a href="#">Other Content</a>
+          <div class="dropdown-content">
+            <a href="https://apod.nasa.gov/apod/astropix.html" target="_blank">NASA APOD</a>
+            <a href="https://in-the-sky.org" target="_blank">Celestial Events</a>
+            <a href="https://www.nytimes.com/section/science" target="_blank">NYT Science News</a>
+            <a href="https://www.nasa.gov/launchschedule" target="_blank">Space Launches</a>
+            <a href="https://apod.nasa.gov/apod/astropix.html" target="_blank">Astronomy Fact of the Day</a>
+          </div>
+        </div>
       </nav>
     </div>
     <button class="toggle-btn" onclick="toggleTheme()">🌙</button>
   </header>
 
   <main>
-    <!-- Productivity & Workflow Tools -->
-    <div class="card" id="productivity">
-      <h2>🔧 Productivity & Workflow Tools</h2>
-      <div class="subheadings">
-        <a href="https://external-link.com/workflow-automations" target="_blank">Workflow Automations</a>
-        <a href="https://external-link.com/resume-helpers" target="_blank">Resume Helpers</a>
-        <a href="https://external-link.com/content-tools" target="_blank">Content Tools</a>
-        <a href="https://external-link.com/calendar-organizers" target="_blank">Calendar Organizers</a>
-      </div>
+    <!-- Weather -->
+    <div class="card" id="weather">
+      <h2>🌤️ Weather</h2>
+      <input type="text" id="city" placeholder="Enter city" />
+      <button onclick="getWeather()">Search</button>
+      <div id="weather-result">Loading weather...</div>
+      <div class="source-credit">Source: <a href="https://openweather.org" target="_blank">OpenWeather</a></div>
     </div>
 
-    <!-- Games & Entertainment -->
-    <div class="card" id="games">
-      <h2>🎮 Games & Entertainment</h2>
-      <div class="subheadings">
-        <a href="https://external-link.com/games" target="_blank">Games</a>
-        <a href="https://external-link.com/interactive-storytelling" target="_blank">Interactive Storytelling Experiences</a>
-        <a href="https://external-link.com/visual-experiences" target="_blank">Visual Experiences</a>
-      </div>
+    <!-- Celestial Events -->
+    <div class="card" id="events">
+      <h2>🌠 Celestial Events</h2>
+      <ul id="event-list"><li>Loading events...</li></ul>
+      <div class="source-credit">Source: <a href="https://in-the-sky.org" target="_blank">in-the-sky.org</a></div>
     </div>
 
-    <!-- Educational Content -->
-    <div class="card" id="education">
-      <h2>📚 Educational Content</h2>
-      <div class="subheadings">
-        <a href="https://external-link.com/interactive-tutorials" target="_blank">Interactive Tutorials</a>
-        <a href="https://external-link.com/onboarding-tools" target="_blank">Onboarding Tools</a>
-        <a href="https://external-link.com/ai-enhanced-learning" target="_blank">AI Enhanced Learning Platforms</a>
-      </div>
+    <!-- Gallery -->
+    <div class="card" id="gallery">
+      <h2>🎨 Gallery</h2>
+      <p>Gallery content coming soon...</p>
+    </div>
+
+    <!-- Game & Educational Content -->
+    <div class="card" id="game">
+      <h2>🎮 Game & Educational Content</h2>
+      <p>Explore interactive games and educational resources!</p>
     </div>
 
     <!-- Chatbot -->
@@ -238,6 +246,33 @@
       document.body.classList.add('dark');
     }
 
+    // Weather
+    function getWeather() {
+      const city = document.getElementById("city").value || "New York";
+      const key = "1557651ee4d280ab5e111aeee2e174e1";
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${key}&units=metric`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("weather-result").innerHTML = `
+            <p><strong>${data.weather[0].main}:</strong> ${data.weather[0].description}</p>
+            <p>🌡️ ${data.main.temp}°C | 💧 ${data.main.humidity}%</p>
+            <p>📍 ${data.name}, ${data.sys.country}</p>
+          `;
+        });
+    }
+
+    // Celestial Events
+    const now = new Date();
+    fetch(`/.netlify/functions/celestial-events?year=${now.getFullYear()}&month=${now.getMonth()+1}&day=${now.getDate()}`)
+      .then(res => res.json())
+      .then(data => {
+        const list = document.getElementById("event-list");
+        list.innerHTML = "";
+        data.events.forEach(e => {
+          list.innerHTML += `<li>${e}</li>`;
+        });
+      });
+
     // Chat placeholder
     function sendToBlueBot() {
       const input = document.getElementById("chat-input");
@@ -251,3 +286,4 @@
   </script>
 </body>
 </html>
+
