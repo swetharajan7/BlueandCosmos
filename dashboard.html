@@ -17,6 +17,7 @@
       --text-dark: #fff;
       --border-light: #ccc;
       --border-dark: #444;
+      --ad-bg: #e6f0ff;
     }
 
     body {
@@ -57,7 +58,7 @@
       position: relative;
     }
 
-    nav a, .dropdown-btn, .shop-icon {
+    nav a, .dropdown-btn, .shop-icon, .ads-tab {
       color: white;
       text-decoration: none;
       font-size: 1rem;
@@ -67,7 +68,8 @@
 
     nav a::after,
     .dropdown-btn::after,
-    .shop-icon::after {
+    .shop-icon::after,
+    .ads-tab::after {
       content: '';
       position: absolute;
       width: 0;
@@ -80,7 +82,8 @@
 
     nav a:hover::after,
     .dropdown-btn:hover::after,
-    .shop-icon:hover::after {
+    .shop-icon:hover::after,
+    .ads-tab:hover::after {
       width: 100%;
     }
 
@@ -130,6 +133,44 @@
       transition: background-color 0.3s, border-color 0.3s;
     }
 
+    .ad-card {
+      background-color: var(--ad-bg);
+      border: 1px solid #99bbee;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .ad-card img {
+      width: 200px;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .ad-card small {
+      color: #777;
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+    }
+
+    .ad-card button {
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 0.75rem;
+    }
+
+    .ad-card button:hover {
+      background-color: #002277;
+    }
+
     body.dark-mode {
       background-color: var(--dark-bg);
       color: var(--text-dark);
@@ -138,6 +179,12 @@
     body.dark-mode .card {
       background-color: var(--card-dark);
       border-color: var(--border-dark);
+    }
+
+    body.dark-mode .ad-card {
+      background-color: #1a2b4c;
+      border-color: #3366cc;
+      color: white;
     }
 
     footer {
@@ -157,6 +204,11 @@
       header {
         flex-direction: column;
         align-items: flex-start;
+      }
+
+      .ad-card img {
+        width: 100%;
+        max-width: 300px;
       }
     }
   </style>
@@ -196,6 +248,7 @@
       </div>
       <span class="toggle" id="themeToggle">🌙</span>
       <span class="shop-icon">👜 SHOP</span>
+      <span class="ads-tab">📢 Advertisements</span>
     </nav>
   </header>
 
@@ -208,6 +261,15 @@
     <div class="card">Celestial Events Card</div>
     <div class="card">Chatbot Interface</div>
     <div class="card">Subscription Form</div>
+
+    <!-- Ad Card -->
+    <div class="ad-card">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Moon_and_ISS.png/320px-Moon_and_ISS.png" alt="Ad Space">
+      <h3>Explore the Universe with StarScope™</h3>
+      <p>A powerful, portable telescope for stargazers and explorers. Ideal for beginners and pros alike.</p>
+      <button>Learn More</button>
+      <small>Sponsored</small>
+    </div>
   </main>
 
   <!-- Footer -->
@@ -233,5 +295,4 @@
   </script>
 </body>
 </html>
-
 
