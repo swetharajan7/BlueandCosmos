@@ -17,6 +17,7 @@
       --text-dark: #fff;
       --border-light: #ccc;
       --border-dark: #444;
+      --ad-bg: #e6f0ff;
     }
 
     body {
@@ -53,6 +54,10 @@
       gap: 1.5rem;
     }
 
+    nav > .dropdown {
+      position: relative;
+    }
+
     nav a, .dropdown-btn, .shop-icon, .ads-tab {
       color: white;
       text-decoration: none;
@@ -80,10 +85,6 @@
     .shop-icon:hover::after,
     .ads-tab:hover::after {
       width: 100%;
-    }
-
-    .dropdown {
-      position: relative;
     }
 
     .dropdown-content {
@@ -132,6 +133,44 @@
       transition: background-color 0.3s, border-color 0.3s;
     }
 
+    .ad-card {
+      background-color: var(--ad-bg);
+      border: 1px solid #99bbee;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .ad-card img {
+      width: 200px;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .ad-card small {
+      color: #777;
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+    }
+
+    .ad-card button {
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 0.75rem;
+    }
+
+    .ad-card button:hover {
+      background-color: #002277;
+    }
+
     body.dark-mode {
       background-color: var(--dark-bg);
       color: var(--text-dark);
@@ -142,30 +181,23 @@
       border-color: var(--border-dark);
     }
 
+    body.dark-mode .ad-card {
+      background-color: #1a2b4c;
+      border-color: #3366cc;
+      color: white;
+    }
+
     footer {
       background-color: var(--accent);
       color: white;
-      padding: 2rem;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.9rem;
-    }
-
-    footer div {
-      flex: 1;
       text-align: center;
+      padding: 1.5rem;
     }
 
     footer a {
       color: white;
       text-decoration: underline;
-    }
-
-    footer img {
-      height: 40px;
-      margin: 0.25rem;
+      margin: 0 0.3rem;
     }
 
     @media (max-width: 768px) {
@@ -180,13 +212,9 @@
         align-items: flex-start;
       }
 
-      footer {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      footer div {
-        margin-bottom: 1rem;
+      .ad-card img {
+        width: 100%;
+        max-width: 300px;
       }
     }
   </style>
@@ -226,11 +254,11 @@
       </div>
       <span class="toggle" id="themeToggle">🌙</span>
       <span class="shop-icon">👜 SHOP</span>
-      <a class="ads-tab" href="ads.html">📢 Advertisements</a>
+      <span class="ads-tab">📢 Advertisements</span>
     </nav>
   </header>
 
-  <!-- Main Content -->
+  <!-- Main content -->
   <main>
     <div class="card">Weather Card</div>
     <div class="card">NYT Science News Card</div>
@@ -239,27 +267,26 @@
     <div class="card">Celestial Events Card</div>
     <div class="card">Chatbot Interface</div>
     <div class="card">Subscription Form</div>
+
+    <!-- Ad Card -->
+    <div class="ad-card">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Moon_and_ISS.png/320px-Moon_and_ISS.png" alt="Ad Space">
+      <h3>Explore the Universe with StarScope™</h3>
+      <p>A powerful, portable telescope for stargazers and explorers. Ideal for beginners and pros alike.</p>
+      <button>Learn More</button>
+      <small>Sponsored</small>
+    </div>
   </main>
 
   <!-- Footer -->
   <footer>
-    <div style="text-align: left;">
-      <p style="margin: 0;">© BlueandCosmos™ 2025</p>
-      <a href="privacy.html">Privacy Policy</a><br>
-      <a href="terms.html">Terms of Use</a>
-    </div>
-
-    <div>
-      <a href="#"><img src="google-play-badge.png" alt="Google Play"></a><br>
-      <a href="#"><img src="apple-store-badge.png" alt="Apple Store"></a>
-    </div>
-
-    <div style="text-align: right;">
-      <a href="https://twitter.com" target="_blank"><img src="twitter-icon.png" alt="Twitter" width="24" /></a>
-      <a href="https://facebook.com" target="_blank"><img src="facebook-icon.png" alt="Facebook" width="24" /></a>
-      <a href="https://instagram.com" target="_blank"><img src="instagram-icon.png" alt="Instagram" width="24" /></a>
-      <a href="https://linkedin.com" target="_blank"><img src="linkedin-icon.png" alt="LinkedIn" width="24" /></a>
-    </div>
+    <p>© BlueandCosmos™ 2025</p>
+    <p>
+      <a href="privacy.html">Privacy Policy</a> |
+      <a href="terms.html">Terms of Use</a> |
+      <a href="contact.html">Contact Us</a> |
+      <a href="sitemap.html">Site Map</a>
+    </p>
   </footer>
 
   <!-- Theme toggle script -->
@@ -280,6 +307,7 @@
   </script>
 </body>
 </html>
+
 
 
 
