@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BlueandCosmos Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --accent: #2196f3;
+      --accent: #0033a0; /* Old Glory Blue */
       --highlight: #ff4081;
       --light-bg: #fff;
       --dark-bg: #121212;
@@ -43,6 +43,11 @@
       position: sticky;
       top: 0;
       z-index: 1000;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
     }
 
     nav a {
@@ -143,63 +148,45 @@
 </head>
 <body>
   <header>
-    <a href="index.html"><button class="toggle-btn">🏠</button></a>
-    <h1>Exploring the Cosmos, Protecting the Earth.</h1>
+    <h1>BlueandCosmos</h1>
     <div>
       <nav>
         <a href="#weather">Weather</a>
-        <a href="#nyt">News</a>
-        <a href="#fact">Fact</a>
-        <a href="#launches">Launches</a>
-        <a href="#events">Events</a>
-        <a href="#chatbot">Chat</a>
+        <a href="#events">Celestial Events</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#game">Game & Educational Content</a>
       </nav>
     </div>
     <button class="toggle-btn" onclick="toggleTheme()">🌙</button>
   </header>
 
   <main>
-    <!-- APOD -->
-    <div class="card" id="apod">
-      <h2>📸 Astronomy Picture of the Day</h2>
-      <p>Loading...</p>
-    </div>
-
     <!-- Weather -->
     <div class="card" id="weather">
-      <h2>🌤️ Live Weather</h2>
+      <h2>🌤️ Weather</h2>
       <input type="text" id="city" placeholder="Enter city" />
       <button onclick="getWeather()">Search</button>
       <div id="weather-result">Loading weather...</div>
       <div class="source-credit">Source: <a href="https://openweather.org" target="_blank">OpenWeather</a></div>
     </div>
 
-    <!-- NYT News -->
-    <div class="card" id="nyt">
-      <h2>📰 NYT Science</h2>
-      <div id="nyt-news">Loading articles...</div>
-      <div class="source-credit">Source: <a href="https://nytimes.com/section/science" target="_blank">NYT</a></div>
-    </div>
-
-    <!-- Fact -->
-    <div class="card" id="fact">
-      <h2>🌌 Space Fact of the Day</h2>
-      <p id="fact-content">Loading...</p>
-      <div class="source-credit">Source: NASA & ESA</div>
-    </div>
-
-    <!-- Launches -->
-    <div class="card" id="launches">
-      <h2>🚀 Upcoming Launches</h2>
-      <ul id="launch-list"><li>Loading launches...</li></ul>
-      <div class="source-credit">Source: <a href="https://thespacedevs.com" target="_blank">Launch Library 2</a></div>
-    </div>
-
-    <!-- Events -->
+    <!-- Celestial Events -->
     <div class="card" id="events">
       <h2>🌠 Celestial Events</h2>
       <ul id="event-list"><li>Loading events...</li></ul>
       <div class="source-credit">Source: <a href="https://in-the-sky.org" target="_blank">in-the-sky.org</a></div>
+    </div>
+
+    <!-- Gallery -->
+    <div class="card" id="gallery">
+      <h2>🎨 Gallery</h2>
+      <p>Gallery content coming soon...</p>
+    </div>
+
+    <!-- Game & Educational Content -->
+    <div class="card" id="game">
+      <h2>🎮 Game & Educational Content</h2>
+      <p>Explore interactive games and educational resources!</p>
     </div>
 
     <!-- Chatbot -->
@@ -212,17 +199,10 @@
       <input type="text" id="chat-input" placeholder="Ask me something..." />
       <button onclick="sendToBlueBot()">Send</button>
     </div>
-
-    <!-- Subscribe -->
-    <div class="card">
-      <h2>📬 Subscribe</h2>
-      <input type="email" placeholder="Email address" />
-      <button>Subscribe</button>
-    </div>
   </main>
 
   <footer>
-    BlueandCosmos 2025
+    BlueandCosmos™ 2025
   </footer>
 
   <script>
@@ -233,6 +213,44 @@
 
     if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark');
+    }
+
+    // Weather
+    function getWeather() {
+      const city = document.getElementById("city").value || "New York";
+      const key = "1557651ee4d280ab5e111aeee2e174e1";
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${key}&units=metric`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("weather-result").innerHTML = `
+            <p><strong>${data.weather[0].main}:</strong> ${data.weather[0].description}</p>
+            <p>🌡️ ${data.main.temp}°C | 💧 ${data.main.humidity}%</p>
+            <p>📍 ${data.name}, ${data.sys.country}</p>
+          `;
+        });
+    }
+
+    // Celestial Events
+    const now = new Date();
+    fetch(`/.netlify/functions/celestial-events?year=${now.getFullYear()}&month=${now.getMonth()+1}&day=${now.getDate()}`)
+      .then(res => res.json())
+      .then(data => {
+        const list = document.getElementById("event-list");
+        list.innerHTML = "";
+        data.events.forEach(e => {
+          list.innerHTML += `<li>${e}</li>`;
+        });
+      });
+
+    // Chat placeholder
+    function sendToBlueBot() {
+      const input = document.getElementById("chat-input");
+      const msg = input.value.trim();
+      if (!msg) return;
+      const chat = document.getElementById("chat-window");
+      chat.innerHTML += `<div><strong>You:</strong> ${msg}</div><div><strong>BlueBot:</strong> Sorry, I can’t answer right now.</div>`;
+      input.value = "";
+      chat.scrollTop = chat.scrollHeight;
     }
   </script>
 </body>
