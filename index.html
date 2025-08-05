@@ -54,7 +54,7 @@
 
     header {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
       padding: 1rem 2rem;
       background-color: var(--accent);
@@ -67,21 +67,46 @@
     header h1 {
       margin: 0;
       font-size: 1.8rem;
+      position: absolute;
+      left: 2rem;
     }
 
     nav {
       display: flex;
+      gap: 1rem;
     }
 
-    nav a {
+    nav a,
+    .dropdown-content a {
       color: white;
       text-decoration: none;
-      margin: 0 1rem;
+      padding: 10px 15px;
+      display: block;
       font-weight: 500;
     }
 
-    nav a:hover {
-      text-decoration: underline;
+    nav a:hover,
+    .dropdown-content a:hover {
+      background-color: var(--highlight);
+    }
+
+    /* Dropdown Menu */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: var(--accent);
+      min-width: 160px;
+      z-index: 1;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
     }
 
     .toggle-btn {
@@ -181,9 +206,30 @@
   <header>
     <h1>BlueandCosmos</h1>
     <nav>
-      <a href="#about">About</a>
-      <a href="#news">News</a>
-      <a href="#livestream">Livestream</a>
+      <div class="dropdown">
+        <a href="#">About</a>
+        <div class="dropdown-content">
+          <a href="#">About BlueandCosmos</a>
+          <a href="#">Sustainability</a>
+          <a href="#">News</a>
+          <a href="#">Gallery</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <a href="#">News</a>
+        <div class="dropdown-content">
+          <a href="#">Latest News</a>
+          <a href="#">Space Missions</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <a href="#">Livestream</a>
+        <div class="dropdown-content">
+          <a href="#">Live Events</a>
+          <a href="#">Watch Now</a>
+        </div>
+      </div>
+      <a href="dashboard.html">Dashboard</a>
     </nav>
     <button class="toggle-btn" onclick="toggleTheme()">🌙</button>
   </header>
@@ -225,4 +271,5 @@
   </script>
 </body>
 </html>
+
 
