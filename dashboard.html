@@ -9,8 +9,8 @@
   <style>
     :root {
       --accent: #0033a0;
-      --flag-blue: #002366;
       --highlight: #ff4081;
+      --flag-blue: #002366;
       --light-bg: #fff;
       --dark-bg: #121212;
       --card-light: #fafafa;
@@ -42,43 +42,48 @@
       z-index: 1000;
     }
 
-    .logo-area {
+    .logo-block a {
       display: flex;
       align-items: center;
-      gap: 0.8em;
-    }
-
-    .logo-area img {
-      height: 48px;
-      width: auto;
+      gap: 1em;
       background-color: var(--accent);
+      text-decoration: none;
+      color: inherit;
     }
 
-    .logo-text {
+    .logo-block img {
+      height: 50px;
+      width: auto;
+      margin: 0;
+    }
+
+    .logo-block-text {
       display: flex;
       flex-direction: column;
-      justify-content: center;
     }
 
-    .logo-text div:first-child {
+    .logo-block-text .title {
       font-size: 1.3em;
       font-weight: bold;
+      color: white;
     }
 
-    .logo-text .tagline {
-      font-size: 0.85em;
+    .logo-block-text .tagline {
+      font-size: 0.9em;
       color: #cce0ff;
-      margin-top: 0.1em;
     }
 
     nav {
       display: flex;
       align-items: center;
       gap: 1.5em;
+      position: relative;
+      z-index: 1000;
     }
 
     .dropdown {
       position: relative;
+      overflow: visible;
     }
 
     .dropbtn {
@@ -86,9 +91,7 @@
       border: none;
       color: white;
       font-size: 1em;
-      font-family: 'Work Sans', sans-serif;
       cursor: pointer;
-      position: relative;
       padding-bottom: 0.2em;
     }
 
@@ -100,7 +103,7 @@
       background-color: var(--accent);
       min-width: 220px;
       box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-      z-index: 999;
+      z-index: 9999;
       flex-direction: column;
     }
 
@@ -141,7 +144,7 @@
     .nav-icons {
       display: flex;
       align-items: center;
-      gap: 1.2em;
+      gap: 1.5em;
     }
 
     .nav-icons a {
@@ -150,10 +153,6 @@
       font-size: 0.9em;
       position: relative;
       padding-bottom: 0.2em;
-    }
-
-    .nav-icons a:hover {
-      color: var(--flag-blue);
     }
 
     .nav-icons a::after {
@@ -247,12 +246,14 @@
 </head>
 <body>
   <header>
-    <div class="logo-area">
-      <img src="assets/logo.png" alt="BlueandCosmos Logo" />
-      <div class="logo-text">
-        <div>BlueandCosmos</div>
-        <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
-      </div>
+    <div class="logo-block">
+      <a href="index.html">
+        <img src="assets/logo.png" alt="BlueandCosmos Logo">
+        <div class="logo-block-text">
+          <div class="title">BlueandCosmos</div>
+          <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
+        </div>
+      </a>
     </div>
 
     <nav>
