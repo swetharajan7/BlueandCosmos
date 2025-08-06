@@ -11,17 +11,44 @@
     :root {
       --accent: #0033a0;
       --highlight: #ff4081;
-      --bg-light: #ffffff;
+      --light-bg: #ffffff;
+      --dark-bg: #121212;
       --text-light: #000000;
+      --text-dark: #ffffff;
     }
 
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
-      height: 100%;
       font-family: 'Work Sans', sans-serif;
-      background-color: var(--bg-light);
+      background-color: var(--light-bg);
       color: var(--text-light);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.dark {
+      background-color: var(--dark-bg);
+      color: var(--text-dark);
+    }
+
+    header {
+      background-color: var(--accent);
+      color: white;
+      padding: 1em 2em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-link {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.4em;
+    }
+
+    .toggle-theme {
+      font-size: 1.5em;
+      cursor: pointer;
     }
 
     .ad-page {
@@ -29,11 +56,9 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      width: 100vw;
-      padding: 2em;
-      box-sizing: border-box;
+      min-height: 80vh;
       text-align: center;
+      padding: 2em;
     }
 
     h1 {
@@ -41,10 +66,18 @@
       margin-bottom: 0.4em;
     }
 
+    body.dark h1 {
+      color: #90c1ff;
+    }
+
     p.message {
       font-size: 1.1em;
       color: #444;
       margin-bottom: 2em;
+    }
+
+    body.dark p.message {
+      color: #ccc;
     }
 
     .ad-container {
@@ -64,16 +97,12 @@
       }
     }
 
-    noscript p {
-      color: gray;
-      font-style: italic;
-      margin-top: 1em;
-    }
-
     .nav-buttons {
       margin-top: 2em;
       display: flex;
-      gap: 1em;
+      gap: 1.5em;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .nav-buttons a {
@@ -82,18 +111,53 @@
       background-color: var(--accent);
       color: white;
       border-radius: 6px;
+      font-size: 1em;
+      position: relative;
       transition: background-color 0.3s ease;
     }
 
     .nav-buttons a:hover {
+      color: white;
+    }
+
+    .nav-buttons a::after {
+      content: "";
+      position: absolute;
+      bottom: 0.3em;
+      left: 0.6em;
+      width: 0;
+      height: 2px;
       background-color: var(--highlight);
+      transition: width 0.3s ease;
+    }
+
+    .nav-buttons a:hover::after {
+      width: calc(100% - 1.2em);
+    }
+
+    footer {
+      text-align: center;
+      padding: 1em;
+      background-color: var(--accent);
+      color: white;
+    }
+
+    noscript p {
+      color: gray;
+      font-style: italic;
+      margin-top: 1em;
     }
   </style>
 </head>
 <body>
+  <header>
+    <a href="index.html" class="logo-link">BlueandCosmos</a>
+    <div class="toggle-theme" onclick="toggleTheme()" id="themeToggle">🌙</div>
+  </header>
+
   <div class="ad-page">
     <h1>🌟 Sponsored Content</h1>
-    <p class="message">This content is supported by our sponsors.</p>
+    <p class="message">We value your time. Thank you for your support.</p>
 
     <div class="ad-container">
       <ins class="adsbygoogle"
@@ -115,5 +179,32 @@
       <a href="dashboard.html">📊 Dashboard</a>
     </div>
   </div>
+
+  <footer>
+    BlueandCosmos 2025
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      const body = document.body;
+      const toggle = document.getElementById("themeToggle");
+      body.classList.toggle("dark");
+      toggle.textContent = body.classList.contains("dark") ? "☀️" : "🌙";
+    }
+
+    // Load saved theme preference
+    window.onload = () => {
+      if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark");
+        document.getElementById("themeToggle").textContent = "☀️";
+      }
+
+      document.getElementById("themeToggle").addEventListener("click", () => {
+        const isDark = document.body.classList.toggle("dark");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+        document.getElementById("themeToggle").textContent = isDark ? "☀️" : "🌙";
+      });
+    };
+  </script>
 </body>
 </html>
