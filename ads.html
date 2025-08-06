@@ -69,6 +69,25 @@
       font-style: italic;
       margin-top: 1em;
     }
+
+    .nav-buttons {
+      margin-top: 2em;
+      display: flex;
+      gap: 1em;
+    }
+
+    .nav-buttons a {
+      text-decoration: none;
+      padding: 0.6em 1.2em;
+      background-color: var(--accent);
+      color: white;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+
+    .nav-buttons a:hover {
+      background-color: var(--highlight);
+    }
   </style>
 </head>
 <body>
@@ -89,6 +108,11 @@
       <noscript>
         <p>Please disable your ad blocker or refresh to view sponsored content 🙏</p>
       </noscript>
+    </div>
+
+    <div class="nav-buttons">
+      <a href="index.html">🏠 Home</a>
+      <a href="dashboard.html">📊 Dashboard</a>
     </div>
   </div>
 </body>
