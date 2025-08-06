@@ -8,163 +8,50 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5782357753554194"
     crossorigin="anonymous"></script>
   <style>
-    :root {
-      --accent: #0033a0;
-      --highlight: #ff4081;
-      --light-bg: #fff;
-      --dark-bg: #121212;
-      --card-light: #fafafa;
-      --card-dark: #1e1e1e;
-      --text-light: #000;
-      --text-dark: #fff;
-      --border-light: #ccc;
-      --border-dark: #444;
-    }
-    body {
-      margin: 0;
-      font-family: 'Work Sans', sans-serif;
-      background-color: var(--light-bg);
-      color: var(--text-light);
-      transition: background 0.3s, color 0.3s;
-    }
-    header {
-      background-color: var(--accent);
-      color: white;
-      padding: 1em 2em;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-    .logo {
-      font-size: 1.5em;
-      font-weight: bold;
-      text-decoration: none;
-      color: white;
-    }
-    nav {
-      display: flex;
-      align-items: center;
-      gap: 1.5em;
-    }
-    .dropdown {
-      position: relative;
-    }
-    .dropbtn {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1em;
-      font-family: 'Work Sans', sans-serif;
-      cursor: pointer;
-      position: relative;
-    }
-    .dropbtn::after {
-      content: " ▼";
-      font-size: 0.7em;
-    }
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      top: 2em;
-      left: 0;
-      background-color: #0033a0;
-      min-width: 220px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-      z-index: 999;
-      flex-direction: column;
-    }
-    .dropdown-content a {
-      color: white;
-      padding: 0.8em 1em;
-      text-decoration: none;
-      display: block;
-      transition: background-color 0.2s ease, transform 0.2s ease;
-    }
-    .dropdown-content a:hover {
-      background-color: #002366;
-      transform: translateX(4px);
-    }
-    .dropdown:hover .dropdown-content {
-      display: flex;
-    }
-    .nav-icons {
-      display: flex;
-      align-items: center;
-      gap: 1em;
-      font-size: 1.5em;
-    }
-    .nav-icons a {
-      color: white;
-      text-decoration: none;
-      font-size: 0.9em;
-    }
-    .toggle-theme {
-      cursor: pointer;
-    }
-
-    main {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1em;
-      padding: 2em;
-    }
-    .card {
-      background-color: var(--card-light);
-      color: var(--text-light);
-      border: 1px solid var(--border-light);
-      border-radius: 12px;
-      padding: 1em;
-      transition: background 0.3s, color 0.3s;
-    }
-
-    footer {
-      text-align: center;
-      padding: 1em;
-      background-color: var(--accent);
-      color: white;
-    }
-
-    /* Dark mode */
-    body.dark {
-      background-color: var(--dark-bg);
-      color: var(--text-dark);
-    }
-    body.dark .card {
-      background-color: var(--card-dark);
-      color: var(--text-dark);
-      border-color: var(--border-dark);
-    }
-    body.dark .dropdown-content a {
-      color: white;
-    }
+    :root { --accent: #0033a0; --highlight: #ff4081; --light-bg: #fff; --dark-bg: #121212; --card-light: #fafafa; --card-dark: #1e1e1e; --text-light: #000; --text-dark: #fff; --border-light: #ccc; --border-dark: #444; }
+    body { margin:0; font-family:'Work Sans', sans-serif; background:var(--light-bg); color:var(--text-light); transition:background 0.3s, color 0.3s; }
+    header { background: var(--accent); color:#fff; padding:1em 2em; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; position:sticky; top:0; z-index:1000; }
+    .logo { font-size:1.5em; font-weight:bold; text-decoration:none; color:white; }
+    nav { display:flex; align-items:center; gap:1.5em; }
+    .dropdown { position:relative; }
+    .dropbtn { background:none; border:none; color:white; font-size:1em; font-family:'Work Sans'; cursor:pointer; position:relative; }
+    .dropbtn::after { content:" ▼"; font-size:0.7em; }
+    .dropdown-content { display:none; position:absolute; top:2em; left:0; background:#0033a0; min-width:220px; box-shadow:0 8px 16px rgba(0,0,0,0.2); z-index:999; flex-direction:column;}
+    .dropdown-content a { color:white; padding:0.8em 1em; text-decoration:none; display:block; transition:background-color .2s, transform .2s; }
+    .dropdown-content a:hover { background:#002366; transform:translateX(4px); }
+    .dropdown:hover .dropdown-content { display:flex; }
+    .nav-icons { display:flex; align-items:center; gap:1em; }
+    .nav-icons a { color:white; text-decoration:none; font-size:0.9em; position:relative; }
+    .toggle-theme { cursor:pointer; font-size:1.5em; }
+    main { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:1em; padding:2em; }
+    .card { background:var(--card-light); color:var(--text-light); border:1px solid var(--border-light); border-radius:12px; padding:1em; transition:background .3s, color .3s; }
+    footer { text-align:center; padding:1em; background:var(--accent); color:white; }
+    body.dark { background:var(--dark-bg); color:var(--text-dark); }
+    body.dark .card { background:var(--card-dark); color:var(--text-dark); border-color:var(--border-dark); }
+    body.dark .dropdown-content a { color:white; }
+    .ad-widget { margin-top:1em; width:200px; text-align:center; }
+    .ad-widget .card { padding:0.5em; font-size:0.9em; }
   </style>
 </head>
 <body>
   <header>
     <a href="index.html" class="logo">BlueandCosmos</a>
     <nav>
-      <div class="dropdown">
-        <button class="dropbtn">Productivity & Workflow Tools</button>
+      <div class="dropdown"><button class="dropbtn">Productivity & Workflow Tools</button>
         <div class="dropdown-content">
           <a href="https://zapier.com/workflow-automation" target="_blank">Developer Workflow Automations</a>
           <a href="https://www.canva.com/" target="_blank">Content Tools</a>
           <a href="https://calendar.google.com" target="_blank">Calendar Organizers</a>
         </div>
       </div>
-      <div class="dropdown">
-        <button class="dropbtn">Games & Entertainment</button>
+      <div class="dropdown"><button class="dropbtn">Games & Entertainment</button>
         <div class="dropdown-content">
           <a href="https://itch.io/games" target="_blank">Games</a>
           <a href="https://www.choiceofgames.com/" target="_blank">Interactive Storytelling Experiences</a>
           <a href="https://www.exploratorium.edu/visit/exhibits" target="_blank">Visual Experiences</a>
         </div>
       </div>
-      <div class="dropdown">
-        <button class="dropbtn">Educational Apps</button>
+      <div class="dropdown"><button class="dropbtn">Educational Apps</button>
         <div class="dropdown-content">
           <a href="https://www.khanacademy.org/" target="_blank">Interactive Tutorials</a>
           <a href="https://www.learnupon.com/blog/user-onboarding/" target="_blank">Onboarding Tools</a>
@@ -175,68 +62,38 @@
     <div class="nav-icons">
       <a href="#"><span title="Shop">👜 SHOP</span></a>
       <div class="toggle-theme" onclick="toggleTheme()" id="themeToggle">🌙</div>
+      <!-- Sponsored Content Widget -->
+      <div class="ad-widget">
+        <div class="card" id="sponsored-header">
+          <h3>Sponsored Content</h3>
+          <ins class="adsbygoogle" style="display:block"
+               data-ad-client="ca‑pub‑5782357753554194"
+               data-ad-slot="1234567890"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+        </div>
+      </div>
     </div>
   </header>
 
   <main>
-    <div class="card" id="weather">
-      <h2>Live Weather</h2>
-      <p>Weather data loading...</p>
-    </div>
-    <div class="card" id="nyt">
-      <h2>NYT Science News</h2>
-      <p>Science articles loading...</p>
-    </div>
-    <div class="card" id="fact">
-      <h2>Space Fact of the Day</h2>
-      <p>Random space fact...</p>
-    </div>
-    <div class="card" id="launches">
-      <h2>Upcoming Launches</h2>
-      <p>Launch data coming soon...</p>
-    </div>
-    <div class="card" id="events">
-      <h2>Celestial Events</h2>
-      <p>Event listings will appear here...</p>
-    </div>
-    <div class="card" id="chat">
-      <h2>BlueBot Chat</h2>
-      <p>Chat interface placeholder...</p>
-    </div>
-
-    <!-- Sponsored Ad Card -->
-    <div class="card" id="sponsored">
-      <h2>🌌 Sponsored Content</h2>
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-5782357753554194"
-           data-ad-slot="1234567890"  <!-- Replace this with your real ad slot ID -->
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-      <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
-      <noscript>
-        <p>Please disable your ad blocker to support our mission 🙏</p>
-      </noscript>
-    </div>
-
-    <div class="card" id="subscribe">
-      <h2>Email Subscription</h2>
-      <p>Newsletter form placeholder...</p>
-    </div>
+    <div class="card" id="weather"><h2>Live Weather</h2><p>Weather data loading...</p></div>
+    <div class="card" id="nyt"><h2>NYT Science News</h2><p>Science articles loading...</p></div>
+    <div class="card" id="fact"><h2>Space Fact of the Day</h2><p>Random space fact...</p></div>
+    <div class="card" id="launches"><h2>Upcoming Launches</h2><p>Launch data coming soon...</p></div>
+    <div class="card" id="events"><h2>Celestial Events</h2><p>Event listings will appear here...</p></div>
+    <div class="card" id="chat"><h2>BlueBot Chat</h2><p>Chat interface placeholder...</p></div>
+    <div class="card" id="subscribe"><h2>Email Subscription</h2><p>Newsletter form placeholder...</p></div>
   </main>
 
-  <footer>
-    BlueandCosmos 2025 | <a href="sitemap.html" style="color: white;">Sitemap</a>
-  </footer>
+  <footer>BlueandCosmos 2025 | <a href="sitemap.html" style="color:white;">Sitemap</a></footer>
 
   <script>
-    function toggleTheme() {
-      const body = document.body;
-      const toggle = document.getElementById("themeToggle");
-      body.classList.toggle("dark");
-      toggle.textContent = body.classList.contains("dark") ? "☀️" : "🌙";
+    function toggleTheme(){
+      const body=document.body, toggle=document.getElementById('themeToggle');
+      body.classList.toggle('dark');
+      toggle.textContent = body.classList.contains('dark') ? '☀️' : '🌙';
     }
   </script>
 </body>
