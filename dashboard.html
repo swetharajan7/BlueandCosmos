@@ -20,7 +20,6 @@
       --border-light: #ccc;
       --border-dark: #444;
     }
-
     body {
       margin: 0;
       font-family: 'Work Sans', sans-serif;
@@ -28,7 +27,6 @@
       color: var(--text-light);
       transition: background 0.3s, color 0.3s;
     }
-
     header {
       background-color: var(--accent);
       color: white;
@@ -40,16 +38,13 @@
       position: sticky;
       top: 0;
       z-index: 1000;
-      overflow: visible;
     }
-
     .logo {
       font-size: 1.5em;
       font-weight: bold;
       text-decoration: none;
       color: white;
     }
-
     nav {
       display: flex;
       align-items: center;
@@ -57,11 +52,10 @@
       position: relative;
       z-index: 1000;
     }
-
     .dropdown {
       position: relative;
+      overflow: visible;
     }
-
     .dropbtn {
       background: none;
       border: none;
@@ -69,10 +63,9 @@
       font-size: 1em;
       font-family: 'Work Sans', sans-serif;
       cursor: pointer;
-      position: relative;
       padding-bottom: 0.2em;
+      overflow: visible;
     }
-
     .dropdown-content {
       display: none;
       position: absolute;
@@ -84,11 +77,9 @@
       z-index: 9999;
       flex-direction: column;
     }
-
     .dropdown:hover .dropdown-content {
       display: flex;
     }
-
     .dropdown-content a {
       color: #cce0ff;
       padding: 0.8em 1em;
@@ -97,13 +88,11 @@
       position: relative;
       transition: background-color 0.3s ease, transform 0.2s ease;
     }
-
     .dropdown-content a:hover {
       background-color: var(--flag-blue);
       color: #ffffff;
       transform: translateX(5px);
     }
-
     .dropdown-content a::after {
       content: "";
       position: absolute;
@@ -114,7 +103,6 @@
       background-color: var(--highlight);
       transition: width 0.3s ease;
     }
-
     .dropdown-content a:hover::after {
       width: calc(100% - 2em);
     }
@@ -124,7 +112,6 @@
       align-items: center;
       gap: 1.5em;
     }
-
     .nav-icons a {
       color: white;
       text-decoration: none;
@@ -132,7 +119,6 @@
       position: relative;
       padding-bottom: 0.2em;
     }
-
     .nav-icons a::after {
       content: "";
       position: absolute;
@@ -143,7 +129,6 @@
       background-color: var(--highlight);
       transition: width 0.3s ease-in-out;
     }
-
     .nav-icons a:hover::after {
       width: 100%;
     }
@@ -156,14 +141,12 @@
     .ad-widget-container {
       padding: 1em 2em 0 2em;
     }
-
     .ad-widget {
       max-width: 400px;
       margin: 0 auto;
       text-align: center;
       animation: fadeIn 1s ease-in-out;
     }
-
     .ad-widget .card {
       background: var(--card-light);
       border: 1px solid var(--border-light);
@@ -171,13 +154,11 @@
       padding: 1em;
       font-size: 0.9em;
     }
-
     .ad-note {
       font-size: 0.75em;
       color: #777;
       margin-top: 0.5em;
     }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -189,7 +170,6 @@
       gap: 1em;
       padding: 2em;
     }
-
     .card {
       background-color: var(--card-light);
       color: var(--text-light);
@@ -210,13 +190,11 @@
       background-color: var(--dark-bg);
       color: var(--text-dark);
     }
-
     body.dark .card {
       background-color: var(--card-dark);
       color: var(--text-dark);
       border-color: var(--border-dark);
     }
-
     body.dark .dropdown-content a {
       color: #cce0ff;
     }
@@ -238,7 +216,7 @@
         <button class="dropbtn">Games & Entertainment</button>
         <div class="dropdown-content">
           <a href="https://itch.io/games" target="_blank">Games</a>
-          <a href="https://www.choiceofgames.com/" target="_blank">Interactive Storytelling</a>
+          <a href="https://www.choiceofgames.com/" target="_blank">Interactive Storytelling Experiences</a>
           <a href="https://www.exploratorium.edu/visit/exhibits" target="_blank">Visual Experiences</a>
         </div>
       </div>
@@ -247,7 +225,7 @@
         <div class="dropdown-content">
           <a href="https://www.khanacademy.org/" target="_blank">Interactive Tutorials</a>
           <a href="https://www.learnupon.com/blog/user-onboarding/" target="_blank">Onboarding Tools</a>
-          <a href="https://www.quizlet.com/" target="_blank">AI-enhanced Learning</a>
+          <a href="https://www.quizlet.com/" target="_blank">AI-enhanced Learning Platforms</a>
         </div>
       </div>
     </nav>
@@ -257,7 +235,7 @@
     </div>
   </header>
 
-  <!-- Sponsored Content -->
+  <!-- Sponsored Content Block -->
   <div class="ad-widget-container">
     <div class="ad-widget">
       <div class="card" id="sponsored-header">
