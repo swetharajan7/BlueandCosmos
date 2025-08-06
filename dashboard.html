@@ -76,6 +76,12 @@
       box-shadow: 0 8px 16px rgba(0,0,0,0.2);
       z-index: 999;
       flex-direction: column;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .dropdown:hover .dropdown-content {
+      display: flex;
+      opacity: 1;
     }
     .dropdown-content a {
       color: white;
@@ -87,9 +93,6 @@
     .dropdown-content a:hover {
       background: #002366;
       transform: translateX(4px);
-    }
-    .dropdown:hover .dropdown-content {
-      display: flex;
     }
     .nav-icons {
       display: flex;
@@ -108,13 +111,25 @@
     }
     .ad-widget {
       margin-top: 1em;
-      width: 200px;
+      width: 220px;
       text-align: center;
+      animation: fadeIn 1s ease-in-out;
     }
     .ad-widget .card {
       padding: 0.5em;
       font-size: 0.9em;
     }
+    .ad-note {
+      font-size: 0.75em;
+      color: #ccc;
+      margin-top: 0.5em;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     main {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -181,7 +196,8 @@
     <div class="nav-icons">
       <a href="#"><span title="Shop">👜 SHOP</span></a>
       <div class="toggle-theme" onclick="toggleTheme()" id="themeToggle">🌙</div>
-      <!-- ✅ Sponsored Content Widget with real slot -->
+
+      <!-- ✅ Sponsored Ad Widget -->
       <div class="ad-widget">
         <div class="card" id="sponsored-header">
           <h3>Sponsored Content</h3>
@@ -194,9 +210,7 @@
           <script>
             (adsbygoogle = window.adsbygoogle || []).push({});
           </script>
-          <noscript>
-            <p>Please disable your ad blocker to support our mission 🙏</p>
-          </noscript>
+          <div class="ad-note">Support BlueandCosmos by exploring our partner content ✨</div>
         </div>
       </div>
     </div>
@@ -226,10 +240,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
