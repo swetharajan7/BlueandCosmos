@@ -39,30 +39,32 @@
       top: 0;
       z-index: 1000;
     }
-    .logo-title {
+    .logo-container {
       display: flex;
       align-items: center;
-      gap: 0.6em;
+      gap: 0.5em;
     }
-    .logo-title img {
-      height: 40px;
+    .logo-container img {
+      height: 50px;
       width: auto;
-      display: inline-block;
-      vertical-align: middle;
+      background-color: var(--accent);
+      margin: 0;
+      padding: 0;
     }
-    .logo-text {
+    .branding-text {
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      line-height: 1.2;
     }
-    .logo-text span:first-child {
-      font-size: 1.4em;
+    .branding-text .title {
+      font-size: 1.5em;
       font-weight: bold;
-      color: white;
+      margin: 0;
     }
-    .logo-text span:last-child {
-      font-size: 0.8em;
+    .branding-text .tagline {
+      font-size: 0.9em;
       color: #cce0ff;
+      margin: 0;
     }
 
     nav {
@@ -222,11 +224,11 @@
 </head>
 <body>
   <header>
-    <div class="logo-title">
+    <div class="logo-container">
       <img src="assets/logo.png" alt="BlueandCosmos Logo">
-      <div class="logo-text">
-        <span>BlueandCosmos</span>
-        <span>Exploring the Cosmos. Protecting the Earth.</span>
+      <div class="branding-text">
+        <div class="title">BlueandCosmos</div>
+        <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
       </div>
     </div>
     <nav>
@@ -304,3 +306,4 @@
   </script>
 </body>
 </html>
+
