@@ -5,8 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BlueandCosmos Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet"/>
+  
+  <!-- ✅ Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5782357753554194"
     crossorigin="anonymous"></script>
+
+  <!-- ✅ Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+
   <style>
     :root {
       --accent: #0033a0;
@@ -103,7 +115,6 @@
       color: white;
       text-decoration: none;
       font-size: 0.9em;
-      position: relative;
     }
     .toggle-theme {
       cursor: pointer;
@@ -206,7 +217,7 @@
     </div>
   </header>
 
-  <!-- ✅ Sponsored Content block directly below the header -->
+  <!-- ✅ Sponsored Content block below header with GA tracking -->
   <div class="ad-widget-container">
     <div class="ad-widget">
       <div class="card" id="sponsored-header">
@@ -216,8 +227,13 @@
              data-ad-client="ca-pub-5782357753554194"
              data-ad-slot="4837608647"
              data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
+             data-full-width-responsive="true"
+             onclick="gtag('event', 'sponsored_ad_click', { event_category: 'ads', event_label: 'header_ad_click' });"></ins>
         <script>
+          gtag('event', 'sponsored_ad_impression', {
+            event_category: 'ads',
+            event_label: 'header_ad_displayed'
+          });
           (adsbygoogle = window.adsbygoogle || []).push({});
         </script>
         <div class="ad-note">Support BlueandCosmos by exploring our partner content ✨</div>
@@ -249,4 +265,5 @@
   </script>
 </body>
 </html>
+
 
