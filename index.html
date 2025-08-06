@@ -10,38 +10,35 @@
       --accent: #0033a0;
       --highlight: #ff4081;
       --light-bg: #ffffff;
+      --dark-bg: #121212;
       --text-light: #000000;
+      --text-dark: #ffffff;
     }
-
     body {
       margin: 0;
       font-family: 'Work Sans', sans-serif;
       background-color: var(--light-bg);
       color: var(--text-light);
+      transition: background 0.3s, color 0.3s;
+    }
+    body.dark {
+      background-color: var(--dark-bg);
+      color: var(--text-dark);
     }
 
     header {
       background-color: var(--accent);
-      color: white;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 1em 2em;
-      flex-wrap: wrap;
-    }
-
-    .logo-container {
-      display: flex;
       align-items: center;
-      gap: 0.8em;
+      padding: 1em 2em;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      color: white;
     }
 
-    .logo-container img {
-      height: 40px;
-      width: 40px;
-    }
-
-    .logo-container .site-title {
+    .logo-title {
       font-size: 1.5em;
       font-weight: bold;
       color: white;
@@ -53,40 +50,191 @@
       gap: 1.5em;
     }
 
+    .dropdown {
+      position: relative;
+    }
+
+    .dropbtn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1em;
+      font-family: inherit;
+      cursor: pointer;
+      padding: 0.5em;
+      position: relative;
+    }
+
+    .dropbtn:hover::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      width: 100%;
+      background-color: var(--highlight);
+      transition: width 0.3s ease-in-out;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 2.5em;
+      left: 0;
+      background-color: var(--accent);
+      min-width: 200px;
+      z-index: 1000;
+      flex-direction: column;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    }
+
+    .dropdown-content a {
+      color: white;
+      text-decoration: none;
+      padding: 0.75em 1em;
+      display: block;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #002366;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: flex;
+    }
+
+    .toggle-theme {
+      cursor: pointer;
+      font-size: 1.5em;
+      margin-left: 1em;
+    }
+
+    .hero {
+      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Solar_system_alignment_NatGeo.jpg/1280px-Solar_system_alignment_NatGeo.jpg') center/cover no-repeat;
+      min-height: 80vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "Image credit: National Geographic";
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 0.75em;
+      color: rgba(255,255,255,0.8);
+    }
+
     footer {
       background-color: var(--accent);
       color: white;
+      padding: 2em;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1em;
+      font-size: 0.9em;
+    }
+
+    .footer-left,
+    .footer-center,
+    .footer-right {
+      flex: 1 1 200px;
       text-align: center;
-      padding: 1em;
+    }
+
+    .footer-left img {
+      height: 40px;
+      margin: 0.5em;
+    }
+
+    .footer-right img {
+      height: 24px;
+      margin: 0.3em;
+    }
+
+    .footer-links a {
+      display: block;
+      margin: 0.3em 0;
+      color: white;
+      text-decoration: none;
+    }
+
+    .footer-center {
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="logo-container">
-      <img src="BlueandCosmos%20logo.png" alt="BlueandCosmos Logo" />
-      <a href="index.html" class="site-title">BlueandCosmos</a>
-    </div>
+    <a href="index.html" class="logo-title">BlueandCosmos</a>
     <nav>
-      <a href="#">About</a>
-      <a href="#">News</a>
-      <a href="#">Livestream</a>
+      <div class="dropdown">
+        <button class="dropbtn">About</button>
+        <div class="dropdown-content">
+          <a href="#">About BlueandCosmos</a>
+          <a href="#">Sustainability</a>
+          <a href="#">News</a>
+          <a href="#">My Account</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <button class="dropbtn">News</button>
+        <div class="dropdown-content">
+          <a href="#">Scientific Discoveries</a>
+          <a href="#">Tech & Space</a>
+          <a href="#">Earth & Climate</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <button class="dropbtn">Livestream</button>
+        <div class="dropdown-content">
+          <a href="#">Live Stream Images</a>
+          <a href="#">Launch Missions</a>
+          <a href="#">Webinars</a>
+        </div>
+      </div>
+      <div class="toggle-theme" onclick="toggleTheme()" id="themeToggle">🌙</div>
     </nav>
   </header>
 
-  <main>
-    <section style="padding: 4em; text-align: center;">
-      <h1>Exploring the Cosmos. Protecting the Earth.</h1>
-      <p>Welcome to BlueandCosmos, your gateway to science, sustainability, and space.</p>
-    </section>
-  </main>
+  <section class="hero">
+    <!-- Image + credit -->
+  </section>
 
   <footer>
-    BlueandCosmos™ 2025
+    <div class="footer-left">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Google_Play_2022_icon.svg" alt="Google Play">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Store">
+    </div>
+    <div class="footer-center">
+      BlueandCosmos™ 2025<br>
+      <a href="privacy.html" style="color: white;">Privacy Policy</a> | 
+      <a href="terms.html" style="color: white;">Terms of Use</a>
+    </div>
+    <div class="footer-right">
+      <a href="https://twitter.com"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Logo_of_Twitter.svg" alt="Twitter"></a>
+      <a href="https://facebook.com"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook"></a>
+      <a href="https://instagram.com"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram"></a>
+      <a href="https://linkedin.com"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn"></a>
+      <a href="https://discord.com"><img src="https://upload.wikimedia.org/wikipedia/commons/9/98/Discord_logo.svg" alt="Discord"></a>
+    </div>
   </footer>
+
+  <script>
+    function toggleTheme() {
+      const body = document.body;
+      const toggle = document.getElementById("themeToggle");
+      body.classList.toggle("dark");
+      toggle.textContent = body.classList.contains("dark") ? "☀️" : "🌙";
+    }
+  </script>
 </body>
 </html>
-
 
 
 
