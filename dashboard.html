@@ -39,29 +39,32 @@
       top: 0;
       z-index: 1000;
     }
-    .logo-area {
+    .logo-title {
       display: flex;
       align-items: center;
-      gap: 1em;
+      gap: 0.6em;
     }
-    .logo-area img {
-      height: 50px;
+    .logo-title img {
+      height: 40px;
       width: auto;
-      border-radius: 50%;
+      display: inline-block;
+      vertical-align: middle;
     }
     .logo-text {
       display: flex;
       flex-direction: column;
+      justify-content: center;
     }
-    .logo-text .title {
-      font-size: 1.5em;
+    .logo-text span:first-child {
+      font-size: 1.4em;
       font-weight: bold;
       color: white;
     }
-    .logo-text .tagline {
-      font-size: 0.9em;
+    .logo-text span:last-child {
+      font-size: 0.8em;
       color: #cce0ff;
     }
+
     nav {
       display: flex;
       align-items: center;
@@ -123,6 +126,7 @@
     .dropdown-content a:hover::after {
       width: calc(100% - 2em);
     }
+
     .nav-icons {
       display: flex;
       align-items: center;
@@ -148,6 +152,7 @@
     .nav-icons a:hover::after {
       width: 100%;
     }
+
     .toggle-theme {
       cursor: pointer;
       font-size: 1.5em;
@@ -217,14 +222,13 @@
 </head>
 <body>
   <header>
-    <div class="logo-area">
+    <div class="logo-title">
       <img src="assets/logo.png" alt="BlueandCosmos Logo">
       <div class="logo-text">
-        <div class="title">BlueandCosmos</div>
-        <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
+        <span>BlueandCosmos</span>
+        <span>Exploring the Cosmos. Protecting the Earth.</span>
       </div>
     </div>
-
     <nav>
       <div class="dropdown">
         <button class="dropbtn">Productivity & Workflow Tools</button>
