@@ -22,6 +22,7 @@
       padding: 1rem 2rem;
       flex-wrap: wrap;
       position: relative;
+      z-index: 1000;
     }
 
     .brand {
@@ -40,9 +41,11 @@
       gap: 1.5rem;
       flex-wrap: wrap;
       align-items: center;
+      position: relative;
     }
 
-    nav a, .dropdown-btn {
+    nav a,
+    .dropdown-btn {
       color: white;
       text-decoration: none;
       font-weight: 500;
@@ -79,8 +82,9 @@
       background-color: #0046c0;
       border-radius: 4px;
       padding: 0.5rem 0;
-      z-index: 999;
+      z-index: 9999;
       min-width: 200px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
     .dropdown-content a {
@@ -105,19 +109,21 @@
     }
 
     main {
-      padding: 4rem 2rem;
       text-align: center;
-      background-image: url('https://education.nationalgeographic.org/media/solar-system-graphic/');
-      background-size: cover;
-      background-position: center;
-      color: white;
-      min-height: 60vh;
+      padding: 2rem;
     }
 
-    main h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      text-shadow: 1px 1px 4px #000;
+    .hero-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .credit {
+      font-size: 0.8rem;
+      color: #555;
+      margin-top: 0.5rem;
     }
 
     footer {
@@ -198,8 +204,8 @@
   </header>
 
   <main>
-    <h1>Welcome to BlueandCosmos</h1>
-    <p>Explore the universe. Discover celestial events. Stay informed with space science and weather updates.</p>
+    <img class="hero-image" src="https://media.nationalgeographic.org/assets/photos/000/304/30473.jpg" alt="Solar System Graphic" />
+    <p class="credit">Image Credit: National Geographic</p>
   </main>
 
   <footer>
