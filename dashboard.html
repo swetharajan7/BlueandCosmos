@@ -20,6 +20,7 @@
       --border-light: #ccc;
       --border-dark: #444;
     }
+
     body {
       margin: 0;
       font-family: 'Work Sans', sans-serif;
@@ -27,6 +28,7 @@
       color: var(--text-light);
       transition: background 0.3s, color 0.3s;
     }
+
     header {
       background-color: var(--accent);
       color: white;
@@ -39,29 +41,40 @@
       top: 0;
       z-index: 1000;
     }
+
     .logo-area {
       display: flex;
       align-items: center;
-      gap: 0.8em;
       text-decoration: none;
       color: white;
+      gap: 0.5em;
     }
-    .logo-area img {
-      height: 48px;
-      width: 48px;
-      background-color: var(--accent);
-      border-radius: 0;
-      margin: 0;
+
+    .logo-box {
+      background-color: #0033a0;
+      padding: 0.3em;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
     }
+
+    .logo-box img {
+      height: 40px;
+      width: auto;
+      display: block;
+    }
+
     .logo-text {
       display: flex;
       flex-direction: column;
       line-height: 1.2;
     }
-    .logo-text .name {
+
+    .logo-text .brand {
       font-size: 1.3em;
       font-weight: bold;
     }
+
     .logo-text .tagline {
       font-size: 0.8em;
       color: #cce0ff;
@@ -71,11 +84,12 @@
       display: flex;
       align-items: center;
       gap: 1.5em;
+      position: relative;
+      z-index: 1000;
     }
 
     .dropdown {
       position: relative;
-      display: inline-block;
     }
 
     .dropbtn {
@@ -83,19 +97,20 @@
       border: none;
       color: white;
       font-size: 1em;
-      cursor: pointer;
       font-family: 'Work Sans', sans-serif;
-      padding-bottom: 0.3em;
-      position: relative;
+      cursor: pointer;
+      padding-bottom: 0.2em;
     }
 
     .dropdown-content {
       display: none;
       position: absolute;
+      top: 2.5em;
+      left: 0;
       background-color: var(--accent);
       min-width: 220px;
       box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-      z-index: 1001;
+      z-index: 9999;
       flex-direction: column;
     }
 
@@ -109,27 +124,28 @@
       text-decoration: none;
       display: block;
       position: relative;
-      transition: all 0.3s ease;
+      transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
     .dropdown-content a:hover {
       background-color: var(--flag-blue);
-      color: white;
+      color: #ffffff;
+      transform: translateX(5px);
     }
 
     .dropdown-content a::after {
       content: "";
       position: absolute;
-      bottom: 4px;
-      left: 10px;
+      bottom: 0.2em;
+      left: 1em;
       width: 0;
       height: 2px;
-      background: var(--highlight);
+      background-color: var(--highlight);
       transition: width 0.3s ease;
     }
 
     .dropdown-content a:hover::after {
-      width: calc(100% - 20px);
+      width: calc(100% - 2em);
     }
 
     .nav-icons {
@@ -144,10 +160,6 @@
       font-size: 0.9em;
       position: relative;
       padding-bottom: 0.2em;
-    }
-
-    .nav-icons a:hover {
-      color: var(--flag-blue);
     }
 
     .nav-icons a::after {
@@ -242,12 +254,15 @@
 <body>
   <header>
     <a href="index.html" class="logo-area">
-      <img src="assets/logo.png" alt="BlueandCosmos Logo">
+      <div class="logo-box">
+        <img src="assets/logo.png" alt="BlueandCosmos Logo" />
+      </div>
       <div class="logo-text">
-        <div class="name">BlueandCosmos</div>
+        <div class="brand">BlueandCosmos</div>
         <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
       </div>
     </a>
+
     <nav>
       <div class="dropdown">
         <button class="dropbtn">Productivity & Workflow Tools</button>
@@ -261,7 +276,7 @@
         <button class="dropbtn">Games & Entertainment</button>
         <div class="dropdown-content">
           <a href="https://itch.io/games" target="_blank">Games</a>
-          <a href="https://www.choiceofgames.com/" target="_blank">Interactive Storytelling</a>
+          <a href="https://www.choiceofgames.com/" target="_blank">Interactive Storytelling Experiences</a>
           <a href="https://www.exploratorium.edu/visit/exhibits" target="_blank">Visual Experiences</a>
         </div>
       </div>
@@ -270,16 +285,18 @@
         <div class="dropdown-content">
           <a href="https://www.khanacademy.org/" target="_blank">Interactive Tutorials</a>
           <a href="https://www.learnupon.com/blog/user-onboarding/" target="_blank">Onboarding Tools</a>
-          <a href="https://www.quizlet.com/" target="_blank">AI-enhanced Learning</a>
+          <a href="https://www.quizlet.com/" target="_blank">AI-enhanced Learning Platforms</a>
         </div>
       </div>
     </nav>
+
     <div class="nav-icons">
       <a href="#" title="Shop">👜 SHOP</a>
       <div class="toggle-theme" onclick="toggleTheme()" id="themeToggle">🌙</div>
     </div>
   </header>
 
+  <!-- Sponsored Content Block -->
   <div class="ad-widget-container">
     <div class="ad-widget">
       <div class="card" id="sponsored-header">
@@ -322,4 +339,5 @@
   </script>
 </body>
 </html>
+
 
