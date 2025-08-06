@@ -36,6 +36,18 @@
       top: 0;
       z-index: 999;
       color: white;
+      flex-wrap: wrap;
+    }
+
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-img {
+      height: 40px;
+      width: 40px;
     }
 
     .logo-title {
@@ -171,7 +183,10 @@
 </head>
 <body>
   <header>
-    <a href="index.html" class="logo-title">BlueandCosmos</a>
+    <div class="logo-group">
+      <img src="BlueandCosmos-logo.jpeg" alt="BlueandCosmos Logo" class="logo-img">
+      <a href="index.html" class="logo-title">BlueandCosmos</a>
+    </div>
     <nav>
       <div class="dropdown">
         <button class="dropbtn">About</button>
@@ -203,7 +218,7 @@
   </header>
 
   <section class="hero">
-    <!-- Image + credit -->
+    <!-- Hero Background Image with Credit -->
   </section>
 
   <footer>
@@ -235,6 +250,7 @@
   </script>
 </body>
 </html>
+
 
 
 
