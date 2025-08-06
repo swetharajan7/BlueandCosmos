@@ -8,58 +8,49 @@
   <style>
     :root {
       --accent: #0033a0;
+      --flag-blue: #002366;
       --highlight: #ff4081;
-      --light-bg: #ffffff;
-      --dark-bg: #121212;
-      --text-light: #000000;
-      --text-dark: #ffffff;
+      --text-white: #ffffff;
     }
+
     body {
       margin: 0;
       font-family: 'Work Sans', sans-serif;
-      background-color: var(--light-bg);
-      color: var(--text-light);
-      transition: background 0.3s, color 0.3s;
-    }
-    body.dark {
-      background-color: var(--dark-bg);
-      color: var(--text-dark);
+      background: #fff;
+      color: #000;
     }
 
     header {
-      background-color: var(--accent);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      background: var(--accent);
+      color: var(--text-white);
       padding: 1em 2em;
-      position: sticky;
-      top: 0;
-      z-index: 999;
-      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       flex-wrap: wrap;
     }
 
-    .logo-group {
+    .logo-area {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 1em;
     }
 
-    .logo-img {
-      height: 40px;
-      width: 40px;
+    .logo-area img {
+      height: 50px;
+      width: auto;
+      border-radius: 50%;
     }
 
-    .logo-title {
-      font-size: 1.5em;
-      font-weight: bold;
-      color: white;
-      text-decoration: none;
+    .tagline {
+      font-size: 0.9em;
+      color: #cce0ff;
     }
 
     nav {
       display: flex;
-      gap: 1.5em;
+      align-items: center;
+      gap: 2em;
     }
 
     .dropdown {
@@ -69,23 +60,19 @@
     .dropbtn {
       background: none;
       border: none;
-      color: white;
       font-size: 1em;
-      font-family: inherit;
+      color: white;
       cursor: pointer;
-      padding: 0.5em;
       position: relative;
+      padding: 0.4em 0;
     }
 
-    .dropbtn:hover::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      height: 2px;
-      width: 100%;
-      background-color: var(--highlight);
-      transition: width 0.3s ease-in-out;
+    .dropbtn:hover {
+      color: var(--flag-blue);
+    }
+
+    .dropbtn::after {
+      display: none;
     }
 
     .dropdown-content {
@@ -93,100 +80,101 @@
       position: absolute;
       top: 2.5em;
       left: 0;
-      background-color: var(--accent);
-      min-width: 200px;
-      z-index: 1000;
+      background: var(--accent);
+      min-width: 180px;
       flex-direction: column;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      z-index: 1000;
     }
 
     .dropdown-content a {
-      color: white;
+      color: #cce0ff;
       text-decoration: none;
-      padding: 0.75em 1em;
-      display: block;
+      padding: 0.8em 1em;
+      transition: all 0.2s ease;
+      position: relative;
     }
 
     .dropdown-content a:hover {
-      background-color: #002366;
+      background-color: var(--flag-blue);
+      color: white;
+    }
+
+    .dropdown-content a::after {
+      content: "";
+      position: absolute;
+      bottom: 4px;
+      left: 10px;
+      width: 0;
+      height: 2px;
+      background: var(--highlight);
+      transition: width 0.3s ease;
+    }
+
+    .dropdown-content a:hover::after {
+      width: calc(100% - 20px);
     }
 
     .dropdown:hover .dropdown-content {
       display: flex;
     }
 
+    .nav-icons {
+      display: flex;
+      align-items: center;
+      gap: 1.5em;
+    }
+
+    .nav-icons a {
+      color: white;
+      text-decoration: none;
+      font-size: 1em;
+      position: relative;
+      padding-bottom: 0.2em;
+    }
+
+    .nav-icons a:hover {
+      color: var(--flag-blue);
+    }
+
+    .nav-icons a::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--highlight);
+      transition: width 0.3s ease-in-out;
+    }
+
+    .nav-icons a:hover::after {
+      width: 100%;
+    }
+
     .toggle-theme {
       cursor: pointer;
       font-size: 1.5em;
-      margin-left: 1em;
-    }
-
-    .hero {
-      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Solar_system_alignment_NatGeo.jpg/1280px-Solar_system_alignment_NatGeo.jpg') center/cover no-repeat;
-      min-height: 80vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      color: white;
-      position: relative;
-    }
-
-    .hero::after {
-      content: "Image credit: National Geographic";
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      font-size: 0.75em;
-      color: rgba(255,255,255,0.8);
     }
 
     footer {
-      background-color: var(--accent);
+      background: var(--accent);
       color: white;
-      padding: 2em;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1em;
-      font-size: 0.9em;
-    }
-
-    .footer-left,
-    .footer-center,
-    .footer-right {
-      flex: 1 1 200px;
+      padding: 1em;
       text-align: center;
-    }
-
-    .footer-left img {
-      height: 40px;
-      margin: 0.5em;
-    }
-
-    .footer-right img {
-      height: 24px;
-      margin: 0.3em;
-    }
-
-    .footer-links a {
-      display: block;
-      margin: 0.3em 0;
-      color: white;
-      text-decoration: none;
-    }
-
-    .footer-center {
-      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="logo-group">
-      <img src="BlueandCosmos-logo.jpeg" alt="BlueandCosmos Logo" class="logo-img">
-      <a href="index.html" class="logo-title">BlueandCosmos</a>
+    <div class="logo-area">
+      <img src="BlueandCosmos logo.jpeg" alt="BlueandCosmos Logo">
+      <div>
+        <div style="font-size: 1.3em; font-weight: bold;">BlueandCosmos</div>
+        <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
+      </div>
     </div>
+
     <nav>
       <div class="dropdown">
         <button class="dropbtn">About</button>
@@ -200,9 +188,8 @@
       <div class="dropdown">
         <button class="dropbtn">News</button>
         <div class="dropdown-content">
-          <a href="#">Scientific Discoveries</a>
-          <a href="#">Tech & Space</a>
-          <a href="#">Earth & Climate</a>
+          <a href="#">Science Updates</a>
+          <a href="#">Blog</a>
         </div>
       </div>
       <div class="dropdown">
@@ -213,31 +200,20 @@
           <a href="#">Webinars</a>
         </div>
       </div>
-      <div class="toggle-theme" onclick="toggleTheme()" id="themeToggle">🌙</div>
     </nav>
+
+    <div class="nav-icons">
+      <a href="dashboard.html">Dashboard</a>
+      <div class="toggle-theme" onclick="toggleTheme()" id="themeToggle">🌙</div>
+    </div>
   </header>
 
-  <section class="hero">
-    <!-- Hero Background Image with Credit -->
-  </section>
+  <main>
+    <!-- Main content goes here -->
+  </main>
 
   <footer>
-    <div class="footer-left">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Google_Play_2022_icon.svg" alt="Google Play">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Store">
-    </div>
-    <div class="footer-center">
-      BlueandCosmos™ 2025<br>
-      <a href="privacy.html" style="color: white;">Privacy Policy</a> | 
-      <a href="terms.html" style="color: white;">Terms of Use</a>
-    </div>
-    <div class="footer-right">
-      <a href="https://twitter.com"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Logo_of_Twitter.svg" alt="Twitter"></a>
-      <a href="https://facebook.com"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook"></a>
-      <a href="https://instagram.com"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram"></a>
-      <a href="https://linkedin.com"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn"></a>
-      <a href="https://discord.com"><img src="https://upload.wikimedia.org/wikipedia/commons/9/98/Discord_logo.svg" alt="Discord"></a>
-    </div>
+    BlueandCosmos™ 2025 | <a href="sitemap.html" style="color: white;">Sitemap</a>
   </footer>
 
   <script>
@@ -250,6 +226,7 @@
   </script>
 </body>
 </html>
+
 
 
 
