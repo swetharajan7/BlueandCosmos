@@ -20,6 +20,7 @@
       --border-light: #ccc;
       --border-dark: #444;
     }
+
     body {
       margin: 0;
       font-family: 'Work Sans', sans-serif;
@@ -41,43 +42,43 @@
       z-index: 1000;
     }
 
-    .logo-group {
+    .logo-area {
       display: flex;
       align-items: center;
       gap: 0.8em;
-      text-decoration: none;
-      color: white;
     }
 
-    .logo-box {
+    .logo-area img {
+      height: 50px;
+      width: 50px;
+      border-radius: 8px;
       background-color: var(--accent);
-      padding: 0.3em;
-      border-radius: 0.3em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
-    .logo-box img {
-      height: 45px;
-      width: auto;
-      display: block;
-    }
-
-    .site-title {
+    .logo-text {
       display: flex;
       flex-direction: column;
       line-height: 1.2;
     }
 
-    .site-title span:first-child {
-      font-size: 1.3em;
+    .logo-text .title {
+      font-size: 1.4em;
       font-weight: bold;
+      color: white;
+      margin: 0;
     }
 
-    .site-title span:last-child {
+    .logo-text .tagline {
       font-size: 0.85em;
       color: #cce0ff;
+      margin: 0;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
     }
 
     nav {
@@ -90,6 +91,7 @@
 
     .dropdown {
       position: relative;
+      display: inline-block;
     }
 
     .dropbtn {
@@ -100,6 +102,7 @@
       font-family: 'Work Sans', sans-serif;
       cursor: pointer;
       padding-bottom: 0.2em;
+      position: relative;
     }
 
     .dropdown-content {
@@ -110,11 +113,12 @@
       background-color: var(--accent);
       min-width: 220px;
       box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-      z-index: 1001;
+      z-index: 9999;
       flex-direction: column;
     }
 
-    .dropdown:hover .dropdown-content {
+    .dropdown:hover .dropdown-content,
+    .dropdown-content:hover {
       display: flex;
     }
 
@@ -257,13 +261,13 @@
 </head>
 <body>
   <header>
-    <a href="index.html" class="logo-group">
-      <div class="logo-box">
-        <img src="assets/logo.png" alt="BlueandCosmos Logo" />
-      </div>
-      <div class="site-title">
-        <span>BlueandCosmos</span>
-        <span>Exploring the Cosmos. Protecting the Earth.</span>
+    <a href="index.html" class="logo-link">
+      <div class="logo-area">
+        <img src="assets/logo.png" alt="BlueandCosmos Logo">
+        <div class="logo-text">
+          <div class="title">BlueandCosmos</div>
+          <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
+        </div>
       </div>
     </a>
 
@@ -300,10 +304,10 @@
     </div>
   </header>
 
-  <!-- Sponsored Content -->
+  <!-- Sponsored Content Block -->
   <div class="ad-widget-container">
     <div class="ad-widget">
-      <div class="card">
+      <div class="card" id="sponsored-header">
         <h3>🌌 Sponsored Content</h3>
         <ins class="adsbygoogle"
              style="display:block"
