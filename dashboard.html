@@ -54,7 +54,6 @@
       display: flex;
       align-items: center;
       gap: 1.5em;
-      overflow: visible;
       position: relative;
       z-index: 1000;
     }
@@ -68,14 +67,10 @@
       border: none;
       color: white;
       font-size: 1em;
-      cursor: pointer;
       font-family: 'Work Sans', sans-serif;
+      cursor: pointer;
+      position: relative;
       padding-bottom: 0.2em;
-    }
-
-    .dropbtn::after {
-      content: " ▼";
-      font-size: 0.7em;
     }
 
     .dropdown-content {
@@ -105,7 +100,7 @@
 
     .dropdown-content a:hover {
       background-color: var(--flag-blue);
-      color: white;
+      color: #ffffff;
       transform: translateX(5px);
     }
 
@@ -243,7 +238,7 @@
         <button class="dropbtn">Games & Entertainment</button>
         <div class="dropdown-content">
           <a href="https://itch.io/games" target="_blank">Games</a>
-          <a href="https://www.choiceofgames.com/" target="_blank">Interactive Storytelling Experiences</a>
+          <a href="https://www.choiceofgames.com/" target="_blank">Interactive Storytelling</a>
           <a href="https://www.exploratorium.edu/visit/exhibits" target="_blank">Visual Experiences</a>
         </div>
       </div>
@@ -252,7 +247,7 @@
         <div class="dropdown-content">
           <a href="https://www.khanacademy.org/" target="_blank">Interactive Tutorials</a>
           <a href="https://www.learnupon.com/blog/user-onboarding/" target="_blank">Onboarding Tools</a>
-          <a href="https://www.quizlet.com/" target="_blank">AI-enhanced Learning Platforms</a>
+          <a href="https://www.quizlet.com/" target="_blank">AI-enhanced Learning</a>
         </div>
       </div>
     </nav>
@@ -262,7 +257,7 @@
     </div>
   </header>
 
-  <!-- Sponsored Content Block -->
+  <!-- Sponsored Content -->
   <div class="ad-widget-container">
     <div class="ad-widget">
       <div class="card" id="sponsored-header">
