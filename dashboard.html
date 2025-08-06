@@ -109,19 +109,26 @@
       cursor: pointer;
       font-size: 1.5em;
     }
+
+    .ad-widget-container {
+      padding: 1em 2em 0 2em;
+    }
     .ad-widget {
-      margin-top: 1em;
-      width: 220px;
+      max-width: 400px;
+      margin: 0 auto;
       text-align: center;
       animation: fadeIn 1s ease-in-out;
     }
     .ad-widget .card {
-      padding: 0.5em;
+      background: var(--card-light);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 1em;
       font-size: 0.9em;
     }
     .ad-note {
       font-size: 0.75em;
-      color: #ccc;
+      color: #777;
       margin-top: 0.5em;
     }
 
@@ -196,25 +203,27 @@
     <div class="nav-icons">
       <a href="#"><span title="Shop">👜 SHOP</span></a>
       <div class="toggle-theme" onclick="toggleTheme()" id="themeToggle">🌙</div>
-
-      <!-- ✅ Sponsored Ad Widget -->
-      <div class="ad-widget">
-        <div class="card" id="sponsored-header">
-          <h3>Sponsored Content</h3>
-          <ins class="adsbygoogle"
-               style="display:block"
-               data-ad-client="ca-pub-5782357753554194"
-               data-ad-slot="4837608647"
-               data-ad-format="auto"
-               data-full-width-responsive="true"></ins>
-          <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-          </script>
-          <div class="ad-note">Support BlueandCosmos by exploring our partner content ✨</div>
-        </div>
-      </div>
     </div>
   </header>
+
+  <!-- ✅ Sponsored Content block directly below the header -->
+  <div class="ad-widget-container">
+    <div class="ad-widget">
+      <div class="card" id="sponsored-header">
+        <h3>🌌 Sponsored Content</h3>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-5782357753554194"
+             data-ad-slot="4837608647"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+        <div class="ad-note">Support BlueandCosmos by exploring our partner content ✨</div>
+      </div>
+    </div>
+  </div>
 
   <main>
     <div class="card" id="weather"><h2>Live Weather</h2><p>Weather data loading...</p></div>
@@ -240,3 +249,4 @@
   </script>
 </body>
 </html>
+
