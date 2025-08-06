@@ -10,6 +10,7 @@
     :root {
       --accent: #0033a0;
       --highlight: #ff4081;
+      --flag-blue: #002366;
       --light-bg: #fff;
       --dark-bg: #121212;
       --card-light: #fafafa;
@@ -60,6 +61,7 @@
       font-family: 'Work Sans', sans-serif;
       cursor: pointer;
       position: relative;
+      padding-bottom: 0.2em;
     }
     .dropbtn::after {
       content: " ▼";
@@ -70,7 +72,7 @@
       position: absolute;
       top: 2.5em;
       left: 0;
-      background-color: #0033a0;
+      background-color: var(--accent);
       min-width: 220px;
       box-shadow: 0 8px 16px rgba(0,0,0,0.2);
       z-index: 999;
@@ -80,7 +82,7 @@
       display: flex;
     }
     .dropdown-content a {
-      color: #cce0ff; /* lighter blue */
+      color: #cce0ff;
       padding: 0.8em 1em;
       text-decoration: none;
       display: block;
@@ -88,7 +90,8 @@
       transition: background-color 0.3s ease, transform 0.2s ease;
     }
     .dropdown-content a:hover {
-      background-color: #002366;
+      background-color: var(--flag-blue);
+      color: #ffffff;
       transform: translateX(5px);
     }
     .dropdown-content a::after {
@@ -98,7 +101,7 @@
       left: 1em;
       width: 0;
       height: 2px;
-      background-color: var(--highlight); /* hot pink */
+      background-color: var(--highlight);
       transition: width 0.3s ease;
     }
     .dropdown-content a:hover::after {
@@ -108,13 +111,29 @@
     .nav-icons {
       display: flex;
       align-items: center;
-      gap: 1em;
+      gap: 1.5em;
     }
     .nav-icons a {
       color: white;
       text-decoration: none;
       font-size: 0.9em;
+      position: relative;
+      padding-bottom: 0.2em;
     }
+    .nav-icons a::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background-color: var(--highlight);
+      transition: width 0.3s ease-in-out;
+    }
+    .nav-icons a:hover::after {
+      width: 100%;
+    }
+
     .toggle-theme {
       cursor: pointer;
       font-size: 1.5em;
@@ -160,12 +179,14 @@
       padding: 1em;
       transition: background 0.3s, color 0.3s;
     }
+
     footer {
       text-align: center;
       padding: 1em;
       background-color: var(--accent);
       color: white;
     }
+
     body.dark {
       background-color: var(--dark-bg);
       color: var(--text-dark);
@@ -210,7 +231,7 @@
       </div>
     </nav>
     <div class="nav-icons">
-      <a href="#"><span title="Shop">👜 SHOP</span></a>
+      <a href="#" title="Shop">👜 SHOP</a>
       <div class="toggle-theme" onclick="toggleTheme()" id="themeToggle">🌙</div>
     </div>
   </header>
