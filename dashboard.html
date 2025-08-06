@@ -9,8 +9,8 @@
   <style>
     :root {
       --accent: #0033a0;
-      --highlight: #ff4081;
       --flag-blue: #002366;
+      --highlight: #ff4081;
       --light-bg: #fff;
       --dark-bg: #121212;
       --card-light: #fafafa;
@@ -20,6 +20,7 @@
       --border-light: #ccc;
       --border-dark: #444;
     }
+
     body {
       margin: 0;
       font-family: 'Work Sans', sans-serif;
@@ -27,6 +28,7 @@
       color: var(--text-light);
       transition: background 0.3s, color 0.3s;
     }
+
     header {
       background-color: var(--accent);
       color: white;
@@ -39,45 +41,46 @@
       top: 0;
       z-index: 1000;
     }
-    .logo-container {
+
+    .logo-area {
       display: flex;
       align-items: center;
-      gap: 0.5em;
+      gap: 0.8em;
     }
-    .logo-container img {
-      height: 50px;
+
+    .logo-area img {
+      height: 48px;
       width: auto;
       background-color: var(--accent);
-      margin: 0;
-      padding: 0;
     }
-    .branding-text {
+
+    .logo-text {
       display: flex;
       flex-direction: column;
-      line-height: 1.2;
+      justify-content: center;
     }
-    .branding-text .title {
-      font-size: 1.5em;
+
+    .logo-text div:first-child {
+      font-size: 1.3em;
       font-weight: bold;
-      margin: 0;
     }
-    .branding-text .tagline {
-      font-size: 0.9em;
+
+    .logo-text .tagline {
+      font-size: 0.85em;
       color: #cce0ff;
-      margin: 0;
+      margin-top: 0.1em;
     }
 
     nav {
       display: flex;
       align-items: center;
       gap: 1.5em;
-      position: relative;
-      z-index: 1000;
     }
+
     .dropdown {
       position: relative;
-      overflow: visible;
     }
+
     .dropbtn {
       background: none;
       border: none;
@@ -85,9 +88,10 @@
       font-size: 1em;
       font-family: 'Work Sans', sans-serif;
       cursor: pointer;
+      position: relative;
       padding-bottom: 0.2em;
-      overflow: visible;
     }
+
     .dropdown-content {
       display: none;
       position: absolute;
@@ -96,12 +100,14 @@
       background-color: var(--accent);
       min-width: 220px;
       box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-      z-index: 9999;
+      z-index: 999;
       flex-direction: column;
     }
+
     .dropdown:hover .dropdown-content {
       display: flex;
     }
+
     .dropdown-content a {
       color: #cce0ff;
       padding: 0.8em 1em;
@@ -110,11 +116,13 @@
       position: relative;
       transition: background-color 0.3s ease, transform 0.2s ease;
     }
+
     .dropdown-content a:hover {
       background-color: var(--flag-blue);
       color: #ffffff;
       transform: translateX(5px);
     }
+
     .dropdown-content a::after {
       content: "";
       position: absolute;
@@ -125,6 +133,7 @@
       background-color: var(--highlight);
       transition: width 0.3s ease;
     }
+
     .dropdown-content a:hover::after {
       width: calc(100% - 2em);
     }
@@ -132,8 +141,9 @@
     .nav-icons {
       display: flex;
       align-items: center;
-      gap: 1.5em;
+      gap: 1.2em;
     }
+
     .nav-icons a {
       color: white;
       text-decoration: none;
@@ -141,6 +151,11 @@
       position: relative;
       padding-bottom: 0.2em;
     }
+
+    .nav-icons a:hover {
+      color: var(--flag-blue);
+    }
+
     .nav-icons a::after {
       content: "";
       position: absolute;
@@ -151,6 +166,7 @@
       background-color: var(--highlight);
       transition: width 0.3s ease-in-out;
     }
+
     .nav-icons a:hover::after {
       width: 100%;
     }
@@ -163,12 +179,14 @@
     .ad-widget-container {
       padding: 1em 2em 0 2em;
     }
+
     .ad-widget {
       max-width: 400px;
       margin: 0 auto;
       text-align: center;
       animation: fadeIn 1s ease-in-out;
     }
+
     .ad-widget .card {
       background: var(--card-light);
       border: 1px solid var(--border-light);
@@ -176,11 +194,13 @@
       padding: 1em;
       font-size: 0.9em;
     }
+
     .ad-note {
       font-size: 0.75em;
       color: #777;
       margin-top: 0.5em;
     }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -192,6 +212,7 @@
       gap: 1em;
       padding: 2em;
     }
+
     .card {
       background-color: var(--card-light);
       color: var(--text-light);
@@ -212,11 +233,13 @@
       background-color: var(--dark-bg);
       color: var(--text-dark);
     }
+
     body.dark .card {
       background-color: var(--card-dark);
       color: var(--text-dark);
       border-color: var(--border-dark);
     }
+
     body.dark .dropdown-content a {
       color: #cce0ff;
     }
@@ -224,13 +247,14 @@
 </head>
 <body>
   <header>
-    <div class="logo-container">
-      <img src="assets/logo.png" alt="BlueandCosmos Logo">
-      <div class="branding-text">
-        <div class="title">BlueandCosmos</div>
+    <div class="logo-area">
+      <img src="assets/logo.png" alt="BlueandCosmos Logo" />
+      <div class="logo-text">
+        <div>BlueandCosmos</div>
         <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
       </div>
     </div>
+
     <nav>
       <div class="dropdown">
         <button class="dropbtn">Productivity & Workflow Tools</button>
@@ -257,6 +281,7 @@
         </div>
       </div>
     </nav>
+
     <div class="nav-icons">
       <a href="#" title="Shop">👜 SHOP</a>
       <div class="toggle-theme" onclick="toggleTheme()" id="themeToggle">🌙</div>
@@ -306,4 +331,5 @@
   </script>
 </body>
 </html>
+
 
