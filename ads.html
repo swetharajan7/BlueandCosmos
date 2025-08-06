@@ -11,8 +11,8 @@
     :root {
       --accent: #0033a0;
       --highlight: #ff4081;
-      --light-bg: #ffffff;
-      --dark-bg: #121212;
+      --bg-light: #ffffff;
+      --bg-dark: #121212;
       --text-light: #000000;
       --text-dark: #ffffff;
     }
@@ -20,145 +20,129 @@
     body {
       margin: 0;
       font-family: 'Work Sans', sans-serif;
-      background-color: var(--light-bg);
+      background-color: var(--bg-light);
       color: var(--text-light);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
       transition: background-color 0.3s, color 0.3s;
-    }
-
-    body.dark {
-      background-color: var(--dark-bg);
-      color: var(--text-dark);
     }
 
     header {
       background-color: var(--accent);
       color: white;
-      padding: 1em 2em;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 1em 2em;
     }
 
-    .logo-link {
+    .nav-buttons a {
       color: white;
       text-decoration: none;
-      font-weight: bold;
-      font-size: 1.4em;
+      margin-right: 1.5em;
+      position: relative;
+      font-size: 1em;
+    }
+
+    .nav-buttons a:hover {
+      color: var(--highlight);
+    }
+
+    .nav-buttons a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--highlight);
+      transition: width 0.3s ease;
+    }
+
+    .nav-buttons a:hover::after {
+      width: 100%;
     }
 
     .toggle-theme {
       font-size: 1.5em;
       cursor: pointer;
-      transition: transform 0.3s ease;
     }
 
-    .ad-page {
+    main {
+      flex-grow: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 80vh;
-      text-align: center;
       padding: 2em;
     }
 
     h1 {
       color: var(--accent);
-      margin-bottom: 0.4em;
+      margin-bottom: 0.2em;
+      font-size: 2em;
     }
 
-    body.dark h1 {
-      color: #90c1ff;
-    }
-
-    p.message {
+    p.description {
       font-size: 1.1em;
       color: #444;
       margin-bottom: 2em;
     }
 
-    body.dark p.message {
-      color: #ccc;
-    }
-
     .ad-container {
       animation: fadeInUp 1.2s ease-out;
       width: 100%;
-      max-width: 800px;
+      max-width: 900px;
+      text-align: center;
     }
 
     @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(40px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .nav-buttons {
-      margin-top: 2em;
-      display: flex;
-      gap: 1.5em;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .nav-buttons a {
-      text-decoration: none;
-      padding: 0.6em 1.2em;
-      background-color: var(--accent);
-      color: white;
-      border-radius: 6px;
-      font-size: 1em;
-      position: relative;
-      transition: background-color 0.3s ease;
-    }
-
-    .nav-buttons a:hover {
-      color: white;
-    }
-
-    .nav-buttons a::after {
-      content: "";
-      position: absolute;
-      bottom: 0.3em;
-      left: 0.6em;
-      width: 0;
-      height: 2px;
-      background-color: var(--highlight);
-      transition: width 0.3s ease;
-    }
-
-    .nav-buttons a:hover::after {
-      width: calc(100% - 1.2em);
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     footer {
+      background-color: var(--accent);
+      color: white;
       text-align: center;
       padding: 1em;
-      background-color: var(--accent);
+    }
+
+    .dark {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    .dark .nav-buttons a {
       color: white;
     }
 
-    noscript p {
-      color: gray;
-      font-style: italic;
-      margin-top: 1em;
+    .dark .nav-buttons a:hover {
+      color: var(--highlight);
+    }
+
+    .dark .description {
+      color: #ccc;
+    }
+
+    .dark footer {
+      background-color: var(--accent);
     }
   </style>
 </head>
 <body>
   <header>
-    <a href="index.html" class="logo-link">BlueandCosmos</a>
-    <div class="toggle-theme" id="themeToggle" onclick="toggleTheme()">🌙</div>
+    <div class="nav-buttons">
+      <a href="index.html" class="nav-link">🏠 Home</a>
+      <a href="dashboard.html" class="nav-link">← Back</a>
+    </div>
+    <div class="toggle-theme" onclick="toggleTheme()" id="themeToggle">🌙</div>
   </header>
 
-  <div class="ad-page">
+  <main>
     <h1>🌟 Sponsored Content</h1>
-    <p class="message">We value your time. Thank you for your support.</p>
+    <p class="description">Bringing you relevant and useful partner content.</p>
 
     <div class="ad-container">
       <ins class="adsbygoogle"
@@ -171,18 +155,13 @@
         (adsbygoogle = window.adsbygoogle || []).push({});
       </script>
       <noscript>
-        <p>Please disable your ad blocker or refresh to view sponsored content 🙏</p>
+        <p style="color: gray;">Please disable your ad blocker or refresh to support our mission 🙏</p>
       </noscript>
     </div>
-
-    <div class="nav-buttons">
-      <a href="index.html">🏠 Home</a>
-      <a href="dashboard.html">📊 Dashboard</a>
-    </div>
-  </div>
+  </main>
 
   <footer>
-    BlueandCosmos 2025
+    BlueandCosmos™ 2025 | All rights reserved.
   </footer>
 
   <script>
@@ -190,24 +169,9 @@
       const body = document.body;
       const toggle = document.getElementById("themeToggle");
       body.classList.toggle("dark");
-
-      const isDark = body.classList.contains("dark");
-      toggle.textContent = isDark ? "☀️" : "🌙";
-      localStorage.setItem("theme", isDark ? "dark" : "light");
+      toggle.textContent = body.classList.contains("dark") ? "☀️" : "🌙";
     }
-
-    // On load, set theme from saved preference
-    window.onload = () => {
-      const theme = localStorage.getItem("theme");
-      const toggle = document.getElementById("themeToggle");
-
-      if (theme === "dark") {
-        document.body.classList.add("dark");
-        toggle.textContent = "☀️";
-      } else {
-        toggle.textContent = "🌙";
-      }
-    };
   </script>
 </body>
 </html>
+
