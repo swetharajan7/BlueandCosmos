@@ -6,268 +6,84 @@
   <title>BlueandCosmos</title>
   <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
+    :root {
+      --accent: #0033a0;
+      --highlight: #ff4081;
+      --light-bg: #ffffff;
+      --text-light: #000000;
+    }
+
     body {
       margin: 0;
       font-family: 'Work Sans', sans-serif;
-      background-color: #fff;
-      color: #000;
+      background-color: var(--light-bg);
+      color: var(--text-light);
     }
+
     header {
-      background-color: #0033a0;
+      background-color: var(--accent);
       color: white;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       padding: 1em 2em;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
       flex-wrap: wrap;
     }
-    .logo-section {
+
+    .logo-container {
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      gap: 0.8em;
     }
-    .logo {
+
+    .logo-container img {
+      height: 40px;
+      width: 40px;
+    }
+
+    .logo-container .site-title {
       font-size: 1.5em;
       font-weight: bold;
+      color: white;
+      text-decoration: none;
     }
-    .tagline {
-      font-size: 0.8em;
-      font-weight: normal;
-      color: #ddd;
-      margin-top: 0.2em;
-    }
+
     nav {
       display: flex;
       gap: 1.5em;
-      align-items: center;
-    }
-    .nav-item {
-      position: relative;
-    }
-    .nav-item > button,
-    .nav-link {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1em;
-      cursor: pointer;
-      font-family: 'Work Sans', sans-serif;
-      position: relative;
-      z-index: 10;
-      text-decoration: none;
-    }
-    .nav-item > button::after,
-    .nav-link::after {
-      content: "";
-      display: block;
-      height: 2px;
-      background: #ff4081;
-      transform: scaleX(0);
-      transition: transform 0.3s ease;
-      transform-origin: left;
-    }
-    .nav-item > button:hover::after,
-    .nav-link:hover::after {
-      transform: scaleX(1);
     }
 
-    .dropdown {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background-color: #0033a0;
-      flex-direction: column;
-      min-width: 180px;
-      z-index: 999;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    .dropdown a {
+    footer {
+      background-color: var(--accent);
       color: white;
-      text-decoration: none;
-      padding: 0.5em 1em;
-    }
-    .dropdown a:hover {
-      background-color: #002070;
-    }
-    .nav-item:hover .dropdown {
-      display: flex;
-    }
-    .toggle-theme {
-      cursor: pointer;
-      font-size: 1.5em;
-    }
-
-    /* HERO */
-    #hero {
-      width: 100%;
-      height: auto;
-      overflow: hidden;
-    }
-    #hero img {
-      width: 100%;
-      height: auto;
-      display: block;
-      object-fit: cover;
-      max-height: 600px;
-    }
-    #credit {
       text-align: center;
-      font-size: 0.9em;
-      color: #555;
-      margin: 1em;
-    }
-
-    /* FOOTER */
-    .footer {
-      background-color: #0033a0;
-      color: white;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      padding: 2em;
-      font-size: 0.9em;
-    }
-    .footer-column {
-      flex: 1 1 200px;
-      margin: 1em;
-    }
-    .footer-column img {
-      max-width: 120px;
-      margin: 0.5em 0;
-      display: block;
-    }
-    .footer-column ul {
-      list-style: none;
-      padding: 0;
-    }
-    .footer-column ul li {
-      margin-bottom: 0.5em;
-    }
-    .footer-column ul li a {
-      color: white;
-      text-decoration: none;
-    }
-    .social-icons img {
-      width: 30px;
-      height: 30px;
-      margin-right: 0.5em;
-    }
-    .footer-center {
-      text-align: center;
-      flex: 1 1 100%;
-      margin-top: 1em;
-    }
-
-    @media (max-width: 768px) {
-      nav {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5em;
-        margin-top: 1em;
-      }
-      .footer {
-        flex-direction: column;
-        align-items: center;
-      }
-      .footer-column {
-        text-align: center;
-      }
-      .social-icons {
-        justify-content: center;
-      }
+      padding: 1em;
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="logo-section">
-      <div class="logo">BlueandCosmos</div>
-      <div class="tagline">Exploring the Cosmos, Protecting the Earth</div>
+    <div class="logo-container">
+      <img src="BlueandCosmos%20logo.png" alt="BlueandCosmos Logo" />
+      <a href="index.html" class="site-title">BlueandCosmos</a>
     </div>
     <nav>
-      <div class="nav-item">
-        <button>About</button>
-        <div class="dropdown">
-          <a href="#">About BlueandCosmos</a>
-          <a href="#">Sustainability</a>
-          <a href="#">News</a>
-          <a href="#">My Account</a>
-        </div>
-      </div>
-      <div class="nav-item">
-        <button>News</button>
-        <div class="dropdown">
-          <a href="#">Headlines</a>
-          <a href="#">Science</a>
-          <a href="#">Space Missions</a>
-        </div>
-      </div>
-      <div class="nav-item">
-        <button>Livestream</button>
-        <div class="dropdown">
-          <a href="#">Live Stream Images</a>
-          <a href="#">Launch Missions</a>
-          <a href="#">Webinars</a>
-        </div>
-      </div>
-      <a class="nav-link" href="dashboard.html">Dashboard</a>
-      <div class="toggle-theme" onclick="toggleTheme()" id="themeToggle">🌙</div>
+      <a href="#">About</a>
+      <a href="#">News</a>
+      <a href="#">Livestream</a>
     </nav>
   </header>
 
-  <!-- HERO SECTION -->
-  <section id="hero">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Solar_sys.jpg" alt="Solar System" loading="eager" />
-  </section>
-  <div id="credit">Image credit: National Geographic / NASA</div>
+  <main>
+    <section style="padding: 4em; text-align: center;">
+      <h1>Exploring the Cosmos. Protecting the Earth.</h1>
+      <p>Welcome to BlueandCosmos, your gateway to science, sustainability, and space.</p>
+    </section>
+  </main>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-column">
-      <strong>BlueandCosmos™ 2025</strong><br/>
-      <a href="privacy.html">Privacy Policy</a><br/>
-      <a href="terms.html">Terms of Use</a>
-    </div>
-    <div class="footer-column">
-      <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play"></a>
-      <a href="#"><img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Store"></a>
-    </div>
-    <div class="footer-column social-icons">
-      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733635.png" alt="Twitter" /></a>
-      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" /></a>
-      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Instagram" /></a>
-      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" /></a>
-      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png" alt="Discord" /></a>
-    </div>
-    <div class="footer-column">
-      <ul>
-        <li><a href="careers.html">Careers</a></li>
-        <li><a href="contact.html">Contact Us</a></li>
-        <li><a href="sitemap.html">Site Map</a></li>
-        <li><a href="#">Newsletter</a></li>
-      </ul>
-    </div>
-    <div class="footer-center">BlueandCosmos™ 2025</div>
+  <footer>
+    BlueandCosmos™ 2025
   </footer>
-
-  <script>
-    function toggleTheme() {
-      const body = document.body;
-      const toggle = document.getElementById("themeToggle");
-      if (body.style.backgroundColor === "black") {
-        body.style.backgroundColor = "#fff";
-        body.style.color = "#000";
-        toggle.textContent = "🌙";
-      } else {
-        body.style.backgroundColor = "black";
-        body.style.color = "white";
-        toggle.textContent = "☀️";
-      }
-    }
-  </script>
 </body>
 </html>
 
