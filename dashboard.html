@@ -20,7 +20,6 @@
       --border-light: #ccc;
       --border-dark: #444;
     }
-
     body {
       margin: 0;
       font-family: 'Work Sans', sans-serif;
@@ -28,7 +27,6 @@
       color: var(--text-light);
       transition: background 0.3s, color 0.3s;
     }
-
     header {
       background-color: var(--accent);
       color: white;
@@ -41,32 +39,31 @@
       top: 0;
       z-index: 1000;
     }
-
-    .logo-group {
+    .logo-area {
       display: flex;
       align-items: center;
+      gap: 0.8em;
       text-decoration: none;
       color: white;
     }
-
-    .logo-group img {
-      height: 50px;
-      margin-right: 0.5em;
+    .logo-area img {
+      height: 48px;
+      width: 48px;
       background-color: var(--accent);
+      border-radius: 0;
+      margin: 0;
     }
-
     .logo-text {
       display: flex;
       flex-direction: column;
+      line-height: 1.2;
     }
-
-    .logo-text span:first-child {
+    .logo-text .name {
       font-size: 1.3em;
       font-weight: bold;
     }
-
-    .logo-text span:last-child {
-      font-size: 0.9em;
+    .logo-text .tagline {
+      font-size: 0.8em;
       color: #cce0ff;
     }
 
@@ -74,22 +71,20 @@
       display: flex;
       align-items: center;
       gap: 1.5em;
-      position: relative;
-      z-index: 1000;
     }
 
     .dropdown {
       position: relative;
     }
-
     .dropbtn {
       background: none;
       border: none;
       color: white;
       font-size: 1em;
-      font-family: 'Work Sans', sans-serif;
       cursor: pointer;
-      padding-bottom: 0.2em;
+      padding-bottom: 0.3em;
+      font-family: 'Work Sans', sans-serif;
+      position: relative;
     }
 
     .dropdown-content {
@@ -100,7 +95,7 @@
       background-color: var(--accent);
       min-width: 220px;
       box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-      z-index: 999;
+      z-index: 1001;
       flex-direction: column;
     }
 
@@ -125,11 +120,11 @@
     .dropdown-content a::after {
       content: "";
       position: absolute;
-      bottom: 6px;
+      bottom: 4px;
       left: 10px;
       width: 0;
       height: 2px;
-      background-color: var(--highlight);
+      background: var(--highlight);
       transition: width 0.3s ease;
     }
 
@@ -246,14 +241,13 @@
 </head>
 <body>
   <header>
-    <a href="index.html" class="logo-group">
-      <img src="assets/logo.png" alt="Logo">
+    <a href="index.html" class="logo-area">
+      <img src="assets/logo.png" alt="BlueandCosmos Logo">
       <div class="logo-text">
-        <span>BlueandCosmos</span>
-        <span>Exploring the Cosmos. Protecting the Earth.</span>
+        <div class="name">BlueandCosmos</div>
+        <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
       </div>
     </a>
-
     <nav>
       <div class="dropdown">
         <button class="dropbtn">Productivity & Workflow Tools</button>
@@ -267,7 +261,7 @@
         <button class="dropbtn">Games & Entertainment</button>
         <div class="dropdown-content">
           <a href="https://itch.io/games" target="_blank">Games</a>
-          <a href="https://www.choiceofgames.com/" target="_blank">Interactive Storytelling Experiences</a>
+          <a href="https://www.choiceofgames.com/" target="_blank">Interactive Storytelling</a>
           <a href="https://www.exploratorium.edu/visit/exhibits" target="_blank">Visual Experiences</a>
         </div>
       </div>
@@ -276,18 +270,17 @@
         <div class="dropdown-content">
           <a href="https://www.khanacademy.org/" target="_blank">Interactive Tutorials</a>
           <a href="https://www.learnupon.com/blog/user-onboarding/" target="_blank">Onboarding Tools</a>
-          <a href="https://www.quizlet.com/" target="_blank">AI-enhanced Learning Platforms</a>
+          <a href="https://www.quizlet.com/" target="_blank">AI-enhanced Learning</a>
         </div>
       </div>
     </nav>
-
     <div class="nav-icons">
       <a href="#" title="Shop">👜 SHOP</a>
       <div class="toggle-theme" onclick="toggleTheme()" id="themeToggle">🌙</div>
     </div>
   </header>
 
-  <!-- Sponsored Content Block -->
+  <!-- Sponsored Content -->
   <div class="ad-widget-container">
     <div class="ad-widget">
       <div class="card" id="sponsored-header">
@@ -330,4 +323,5 @@
   </script>
 </body>
 </html>
+
 
