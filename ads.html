@@ -14,33 +14,45 @@
       --bg-light: #ffffff;
       --text-light: #000000;
     }
-    body {
+
+    html, body {
       margin: 0;
+      padding: 0;
+      height: 100%;
       font-family: 'Work Sans', sans-serif;
       background-color: var(--bg-light);
       color: var(--text-light);
+    }
+
+    .ad-page {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
+      width: 100vw;
       padding: 2em;
+      box-sizing: border-box;
+      text-align: center;
     }
+
     h1 {
       color: var(--accent);
-      margin-bottom: 0.2em;
+      margin-bottom: 0.4em;
     }
-    p {
+
+    p.message {
       font-size: 1.1em;
       color: #444;
       margin-bottom: 2em;
     }
+
     .ad-container {
       animation: fadeInUp 1.2s ease-out;
       width: 100%;
       max-width: 800px;
-      text-align: center;
     }
+
     @keyframes fadeInUp {
       from {
         opacity: 0;
@@ -51,26 +63,33 @@
         transform: translateY(0);
       }
     }
+
+    noscript p {
+      color: gray;
+      font-style: italic;
+      margin-top: 1em;
+    }
   </style>
 </head>
 <body>
-  <h1>🌟 Sponsored Content</h1>
-  <p>Support BlueandCosmos: Powered by Curiosity and Your Kindness</p>
+  <div class="ad-page">
+    <h1>🌟 Sponsored Content</h1>
+    <p class="message">This content is supported by our sponsors.</p>
 
-<div class="ad-container">
-  <ins class="adsbygoogle"
-       style="display:block"
-       data-ad-client="ca-pub-5782357753554194"
-       data-ad-slot="4837608647"
-       data-ad-format="auto"
-       data-full-width-responsive="true"></ins>
-  <script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
-
-  <noscript>
-    <p style="color: gray;">Please disable your ad blocker or refresh to support our mission 🙏</p>
-  </noscript>
-</div>
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-5782357753554194"
+           data-ad-slot="4837608647"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+      <noscript>
+        <p>Please disable your ad blocker or refresh to view sponsored content 🙏</p>
+      </noscript>
+    </div>
+  </div>
 </body>
 </html>
