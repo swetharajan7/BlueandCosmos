@@ -43,33 +43,65 @@
       font-size: 1.5em;
       font-weight: bold;
     }
-    .nav-links {
+    nav {
       display: flex;
-      gap: 1em;
       align-items: center;
+      gap: 1.5em;
     }
-    .nav-links a {
-      color: white;
-      text-decoration: none;
+    .dropdown {
       position: relative;
     }
-    .nav-links a::after {
-      content: "";
-      display: block;
-      height: 2px;
-      background: var(--highlight);
-      transform: scaleX(0);
-      transition: transform 0.3s ease;
-      transform-origin: left;
+    .dropbtn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1em;
+      font-family: 'Work Sans', sans-serif;
+      cursor: pointer;
+      position: relative;
     }
-    .nav-links a:hover::after {
-      transform: scaleX(1);
+    .dropbtn::after {
+      content: " ▼";
+      font-size: 0.7em;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 2em;
+      left: 0;
+      background-color: #0033a0;
+      min-width: 220px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      z-index: 999;
+      flex-direction: column;
+    }
+    .dropdown-content a {
+      color: white;
+      padding: 0.8em 1em;
+      text-decoration: none;
+      display: block;
+    }
+    .dropdown-content a:hover {
+      background-color: #002366;
+    }
+    .dropdown:hover .dropdown-content {
+      display: flex;
+    }
+    .nav-icons {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      font-size: 1.5em;
+    }
+    .nav-icons a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.3em;
     }
     .toggle-theme {
-      font-size: 1.5em;
       cursor: pointer;
-      margin-left: 1em;
     }
+
     main {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -84,6 +116,7 @@
       padding: 1em;
       transition: background 0.3s, color 0.3s;
     }
+
     footer {
       text-align: center;
       padding: 1em;
@@ -101,36 +134,42 @@
       color: var(--text-dark);
       border-color: var(--border-dark);
     }
-    body.dark .nav-links a::after {
-      background: var(--highlight);
-    }
-
-    /* Ad Section */
-    .ad-section {
-      margin: 2em auto;
-      max-width: 1000px;
-      text-align: center;
-    }
-    .ad-section h2 {
-      color: var(--accent);
-      margin-bottom: 1em;
+    body.dark .dropdown-content a {
+      color: white;
     }
   </style>
 </head>
 <body>
   <header>
     <div class="logo">BlueandCosmos</div>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="#weather">Weather</a>
-      <a href="#nyt">NYT Science</a>
-      <a href="#fact">Space Fact</a>
-      <a href="#launches">Launch Tracker</a>
-      <a href="#events">Celestial Events</a>
-      <a href="#chat">Chatbot</a>
-      <a href="#subscribe">Subscribe</a>
-      <a href="#shop">SHOP 👜</a>
-      <a href="#ads">Advertisements</a>
+    <nav>
+      <div class="dropdown">
+        <button class="dropbtn">Productivity & Workflow Tools</button>
+        <div class="dropdown-content">
+          <a href="#">Developer Workflow Automations</a>
+          <a href="#">Content Tools</a>
+          <a href="#">Calendar Organizers</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <button class="dropbtn">Games & Entertainment</button>
+        <div class="dropdown-content">
+          <a href="#">Games</a>
+          <a href="#">Interactive Storytelling Experiences</a>
+          <a href="#">Visual Experiences</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <button class="dropbtn">Educational Apps</button>
+        <div class="dropdown-content">
+          <a href="#">Interactive Tutorials</a>
+          <a href="#">Onboarding Tools</a>
+          <a href="#">AI-enhanced Learning Platforms</a>
+        </div>
+      </div>
+    </nav>
+    <div class="nav-icons">
+      <a href="#"><span title="Shop">👜 SHOP</span></a>
       <div class="toggle-theme" onclick="toggleTheme()" id="themeToggle">🌙</div>
     </div>
   </header>
@@ -138,7 +177,7 @@
   <main>
     <div class="card" id="weather">
       <h2>Live Weather</h2>
-      <p>Weather data will be fetched here...</p>
+      <p>Weather data loading...</p>
     </div>
     <div class="card" id="nyt">
       <h2>NYT Science News</h2>
@@ -146,44 +185,25 @@
     </div>
     <div class="card" id="fact">
       <h2>Space Fact of the Day</h2>
-      <p>Did you know?...</p>
+      <p>Random space fact...</p>
     </div>
     <div class="card" id="launches">
       <h2>Upcoming Launches</h2>
-      <p>Launch data here...</p>
+      <p>Launch data coming soon...</p>
     </div>
     <div class="card" id="events">
       <h2>Celestial Events</h2>
-      <p>Events data here...</p>
+      <p>Event listings will appear here...</p>
     </div>
     <div class="card" id="chat">
       <h2>BlueBot Chat</h2>
-      <p>Chatbot placeholder...</p>
+      <p>Chat interface placeholder...</p>
     </div>
     <div class="card" id="subscribe">
       <h2>Email Subscription</h2>
-      <p>Subscription form placeholder...</p>
+      <p>Newsletter form placeholder...</p>
     </div>
   </main>
-
-  <!-- 🟨 GOOGLE ADSENSE BLOCK -->
-  <div class="ad-section" id="ads">
-    <h2>Sponsored Content</h2>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-5782357753554194"
-         data-ad-slot="1234567890"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-    <noscript>
-      <div style="padding: 1em; background: #f4f4f4; color: #444;">
-        Ads not available — please disable ad blocker to support us!
-      </div>
-    </noscript>
-  </div>
 
   <footer>
     BlueandCosmos 2025 | <a href="sitemap.html" style="color: white;">Sitemap</a>
@@ -192,14 +212,13 @@
   <script>
     function toggleTheme() {
       const body = document.body;
-      const toggle = document.getElementById('themeToggle');
-      body.classList.toggle('dark');
-      toggle.textContent = body.classList.contains('dark') ? '☀️' : '🌙';
+      const toggle = document.getElementById("themeToggle");
+      body.classList.toggle("dark");
+      toggle.textContent = body.classList.contains("dark") ? "☀️" : "🌙";
     }
   </script>
 </body>
 </html>
-
 
 
 
