@@ -20,7 +20,6 @@
       --border-light: #ccc;
       --border-dark: #444;
     }
-
     body {
       margin: 0;
       font-family: 'Work Sans', sans-serif;
@@ -42,41 +41,42 @@
       z-index: 1000;
     }
 
-    .logo-area {
+    .logo-group {
       display: flex;
       align-items: center;
+      gap: 0.8em;
       text-decoration: none;
       color: white;
-      gap: 0.5em;
     }
 
     .logo-box {
-      background-color: #0033a0;
+      background-color: var(--accent);
       padding: 0.3em;
-      border-radius: 8px;
+      border-radius: 0.3em;
       display: flex;
       align-items: center;
+      justify-content: center;
     }
 
     .logo-box img {
-      height: 40px;
+      height: 45px;
       width: auto;
       display: block;
     }
 
-    .logo-text {
+    .site-title {
       display: flex;
       flex-direction: column;
       line-height: 1.2;
     }
 
-    .logo-text .brand {
+    .site-title span:first-child {
       font-size: 1.3em;
       font-weight: bold;
     }
 
-    .logo-text .tagline {
-      font-size: 0.8em;
+    .site-title span:last-child {
+      font-size: 0.85em;
       color: #cce0ff;
     }
 
@@ -110,7 +110,7 @@
       background-color: var(--accent);
       min-width: 220px;
       box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-      z-index: 9999;
+      z-index: 1001;
       flex-direction: column;
     }
 
@@ -160,6 +160,10 @@
       font-size: 0.9em;
       position: relative;
       padding-bottom: 0.2em;
+    }
+
+    .nav-icons a:hover {
+      color: var(--flag-blue);
     }
 
     .nav-icons a::after {
@@ -253,13 +257,13 @@
 </head>
 <body>
   <header>
-    <a href="index.html" class="logo-area">
+    <a href="index.html" class="logo-group">
       <div class="logo-box">
         <img src="assets/logo.png" alt="BlueandCosmos Logo" />
       </div>
-      <div class="logo-text">
-        <div class="brand">BlueandCosmos</div>
-        <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
+      <div class="site-title">
+        <span>BlueandCosmos</span>
+        <span>Exploring the Cosmos. Protecting the Earth.</span>
       </div>
     </a>
 
@@ -296,10 +300,10 @@
     </div>
   </header>
 
-  <!-- Sponsored Content Block -->
+  <!-- Sponsored Content -->
   <div class="ad-widget-container">
     <div class="ad-widget">
-      <div class="card" id="sponsored-header">
+      <div class="card">
         <h3>🌌 Sponsored Content</h3>
         <ins class="adsbygoogle"
              style="display:block"
@@ -339,5 +343,3 @@
   </script>
 </body>
 </html>
-
-
