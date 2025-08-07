@@ -91,7 +91,6 @@
 
     .dropdown {
       position: relative;
-      display: inline-block;
     }
 
     .dropbtn {
@@ -137,8 +136,7 @@
       flex-direction: column;
     }
 
-    .dropdown:hover .dropdown-content,
-    .dropdown-content:hover {
+    .dropdown:hover .dropdown-content {
       display: flex;
     }
 
@@ -370,7 +368,7 @@
       toggle.textContent = body.classList.contains("dark") ? "☀️" : "🌙";
     }
 
-    // Add 'clicked' class on dropdown item click for visual effect
+    // Add 'clicked' class on dropdown item click for style feedback
     document.querySelectorAll('.dropdown-content a').forEach(link => {
       link.addEventListener('click', function () {
         document.querySelectorAll('.dropdown-content a').forEach(el => el.classList.remove('clicked'));
