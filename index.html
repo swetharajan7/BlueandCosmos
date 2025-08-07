@@ -20,7 +20,34 @@
       background: #fff;
       color: #000;
     }
+    .hero {
+    background-image: url('https://photojournal.jpl.nasa.gov/jpeg/PIA10231.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    position: relative;
+  }
 
+  .hero-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 2em;
+    text-align: center;
+    border-radius: 10px;
+  }
+
+  .hero-overlay h1 {
+    font-size: 2.5em;
+    margin: 0 0 0.5em;
+  }
+
+  .hero-overlay p {
+    font-size: 1.2em;
+    margin: 0;
+  }
     header {
       background: var(--accent);
       color: var(--text-white);
@@ -240,6 +267,11 @@
     </div>
   </section>
 </main>
+
+  <p style="text-align: center; font-size: 0.8em; color: #ccc; margin-top: 2em;">
+  Image Credit: NASA/JPL-Caltech
+</p>
+
   
  <footer style="background-color: var(--accent); color: white; padding: 2em 1em; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; text-align: center; gap: 1em;">
   <!-- Left: App Store Logos -->
