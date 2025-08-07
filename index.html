@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BlueandCosmos</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -20,24 +20,17 @@
       background: #fff;
       color: #000;
     }
-   <style>
-  .hero {
-    background-image: url('https://photojournal.jpl.nasa.gov/jpeg/PIA10231.jpg'); /* Solar System */
-    background-size: cover;
-    background-position: center;
-    height: 90vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    position: relative;
-  }
 
-  .hero.earth {
-    background-image: url('https://www.nasa.gov/sites/default/files/thumbnails/image/iss070e003952_lrg.jpg'); /* Earth & Moon (NASA/ISS) */
-  }
-</style>
+    .hero {
+      background-image: url('https://photojournal.jpl.nasa.gov/jpeg/PIA10231.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 90vh;
+    }
 
+    .hero.earth {
+      background-image: url('https://www.nasa.gov/sites/default/files/thumbnails/image/iss070e003952_lrg.jpg');
+    }
 
     header {
       background: var(--accent);
@@ -107,7 +100,6 @@
       font-size: 1em;
       color: white;
       cursor: pointer;
-      position: relative;
       padding: 0.4em 0;
     }
 
@@ -196,16 +188,10 @@
       cursor: pointer;
       font-size: 1.5em;
     }
-
-    footer {
-      background: var(--accent);
-      color: white;
-      padding: 1em;
-      text-align: center;
-    }
   </style>
 </head>
 <body>
+  <!-- Header -->
   <header>
     <a href="index.html" class="logo-link">
       <div class="logo-area">
@@ -250,48 +236,50 @@
     </div>
   </header>
 
-<main style="padding-top: 2em;">
-  <section class="hero"></section> <!-- Hero 1: Solar System -->
-  <section class="hero earth"></section> <!-- Hero 2: Earth and Moon -->
-</main>
+  <!-- Hero Section -->
+  <main>
+    <section class="hero"></section>         <!-- Solar System -->
+    <section class="hero earth"></section>   <!-- Earth + Moon -->
+  </main>
 
-<p style="text-align: center; font-size: 0.8em; color: #ccc; margin-top: 1em;">
-  Image Credits: NASA/JPL-Caltech and NASA/ISS
-</p>
+  <!-- Image Credits -->
+  <p style="text-align: center; font-size: 0.8em; color: #ccc; margin-top: 1em;">
+    Image Credits: NASA/JPL-Caltech and NASA/ISS
+  </p>
 
-
-  
- <footer style="background-color: var(--accent); color: white; padding: 2em 1em; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; text-align: center; gap: 1em;">
-  <!-- Left: App Store Logos -->
-  <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0.5em;">
-    <a href="#" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play Store" style="height: 40px;"></a>
-    <a href="#" target="_blank"><img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Store" style="height: 40px;"></a>
-  </div>
-
-  <!-- Center: Legal Links and Trademark -->
-  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.5em;">
-    <div style="font-weight: bold;">BlueandCosmos™ 2025</div>
-    <div style="display: flex; flex-wrap: wrap; gap: 1em; justify-content: center; font-size: 0.9em;">
-      <a href="privacy.html" style="color: white; text-decoration: none;">Privacy Policy</a>
-      <a href="terms.html" style="color: white; text-decoration: none;">Terms of Use</a>
-      <a href="sitemap.html" style="color: white; text-decoration: none;">Sitemap</a>
-      <a href="contact.html" style="color: white; text-decoration: none;">Contact Us</a>
+  <!-- Footer -->
+  <footer style="background-color: var(--accent); color: white; padding: 2em 1em; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; text-align: center; gap: 1em;">
+    <!-- Left: App Store Logos -->
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0.5em;">
+      <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play Store" style="height: 40px;"></a>
+      <a href="#"><img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Store" style="height: 40px;"></a>
     </div>
-  </div>
 
-  <!-- Right: Social Media and "Let's Connect!" -->
-  <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-end; gap: 0.5em;">
-    <div style="font-weight: bold;">Let's Connect!</div>
-    <div style="display: flex; gap: 0.5em;">
-      <a href="https://twitter.com/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitter.svg" alt="Twitter" style="height: 24px; filter: invert(1);"></a>
-      <a href="https://facebook.com/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook" style="height: 24px; filter: invert(1);"></a>
-      <a href="https://instagram.com/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" style="height: 24px; filter: invert(1);"></a>
-      <a href="https://linkedin.com/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn" style="height: 24px; filter: invert(1);"></a>
-      <a href="https://discord.com/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/discord.svg" alt="Discord" style="height: 24px; filter: invert(1);"></a>
+    <!-- Center: Legal -->
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.5em;">
+      <div style="font-weight: bold;">BlueandCosmos™ 2025</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 1em; justify-content: center; font-size: 0.9em;">
+        <a href="privacy.html" style="color: white; text-decoration: none;">Privacy Policy</a>
+        <a href="terms.html" style="color: white; text-decoration: none;">Terms of Use</a>
+        <a href="sitemap.html" style="color: white; text-decoration: none;">Sitemap</a>
+        <a href="contact.html" style="color: white; text-decoration: none;">Contact Us</a>
+      </div>
     </div>
-  </div>
-</footer>
 
+    <!-- Right: Social -->
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-end; gap: 0.5em;">
+      <div style="font-weight: bold;">Let's Connect!</div>
+      <div style="display: flex; gap: 0.5em;">
+        <a href="https://twitter.com/"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitter.svg" alt="Twitter" style="height: 24px; filter: invert(1);"></a>
+        <a href="https://facebook.com/"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook" style="height: 24px; filter: invert(1);"></a>
+        <a href="https://instagram.com/"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" style="height: 24px; filter: invert(1);"></a>
+        <a href="https://linkedin.com/"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn" style="height: 24px; filter: invert(1);"></a>
+        <a href="https://discord.com/"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/discord.svg" alt="Discord" style="height: 24px; filter: invert(1);"></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Theme Toggle Script -->
   <script>
     function toggleTheme() {
       const body = document.body;
