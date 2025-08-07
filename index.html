@@ -20,8 +20,9 @@
       background: #fff;
       color: #000;
     }
-    .hero {
-    background-image: url('https://photojournal.jpl.nasa.gov/jpeg/PIA10231.jpg');
+   <style>
+  .hero {
+    background-image: url('https://photojournal.jpl.nasa.gov/jpeg/PIA10231.jpg'); /* Solar System */
     background-size: cover;
     background-position: center;
     height: 90vh;
@@ -31,12 +32,12 @@
     color: white;
     position: relative;
   }
-    .hero-earth {
-  background-image: url('https://www.nasa.gov/sites/default/files/thumbnails/image/iss049e001319.jpg');
-  background-size: cover;
-  background-position: center;
-  height: 90vh;
-}
+
+  .hero.earth {
+    background-image: url('https://www.nasa.gov/sites/default/files/thumbnails/image/iss070e003952_lrg.jpg'); /* Earth & Moon (NASA/ISS) */
+  }
+</style>
+
 
     header {
       background: var(--accent);
@@ -250,14 +251,14 @@
   </header>
 
 <main style="padding-top: 2em;">
-  <section class="hero"></section> <!-- Hero 1 -->
-  <section class="hero earth"></section> <!-- Hero 2 -->
+  <section class="hero"></section> <!-- Hero 1: Solar System -->
+  <section class="hero earth"></section> <!-- Hero 2: Earth and Moon -->
 </main>
 
-<!-- Image credit goes here, right after </main> -->
 <p style="text-align: center; font-size: 0.8em; color: #ccc; margin-top: 1em;">
   Image Credits: NASA/JPL-Caltech and NASA/ISS
 </p>
+
 
   
  <footer style="background-color: var(--accent); color: white; padding: 2em 1em; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; text-align: center; gap: 1em;">
