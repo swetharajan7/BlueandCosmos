@@ -152,12 +152,18 @@
     }
 
     .dropdown-content a:hover,
-    .dropdown-content a:focus,
-    .dropdown-content a.clicked {
-      background-color: var(--flag-blue);
-      color: white;
-      transform: translateX(5px);
-    }
+.dropdown-content a:focus,
+.dropdown-content a.clicked {
+  background-color: var(--flag-blue);
+  color: var(--highlight); /* or use white: #fff */
+  transform: translateX(5px);
+}
+
+body.dark .dropdown-content a:hover,
+body.dark .dropdown-content a:focus,
+body.dark .dropdown-content a.clicked {
+  color: #fff; /* Ensures contrast in dark mode */
+}
 
     .dropdown-content a::after {
       content: "";
