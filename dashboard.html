@@ -42,11 +42,15 @@
       z-index: 1000;
     }
 
-    .logo-area {
-      display: flex;
-      align-items: center;
-      gap: 0.8em;
-    }
+    .logo-area img {
+  height: 50px;
+  width: 50px;
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  border-radius: 0; /* no rounding */
+}
+
 
     .logo-area img {
       height: 50px;
@@ -54,12 +58,18 @@
       border-radius: 8px;
       background-color: var(--accent);
     }
-
+    .logo-area {
+  display: flex;
+  align-items: center;
+  gap: 0.4em; /* previously 0.8em – reduce it */
+}
     .logo-text {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.2;
-    }
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  margin-left: -4px; /* Fine-tune spacing between logo and text */
+}
+
 
     .logo-text .title {
       font-size: 1.4em;
