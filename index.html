@@ -162,9 +162,20 @@
       width: calc(100% - 20px);
     }
 
-    .dropdown:hover .dropdown-content {
-      display: flex;
-    }
+   .dropdown:hover .dropdown-content,
+.dropdown:focus-within .dropdown-content {
+  display: flex;
+}
+
+.dropbtn:focus {
+  color: var(--highlight); /* hot pink */
+}
+
+.dropdown-content a:focus {
+  background-color: var(--flag-blue);
+  color: white;
+}
+
 
     .nav-icons {
       display: flex;
@@ -257,13 +268,14 @@
       <div class="nav-icons">
         <div class="dropdown">
           <button class="dropbtn">About</button>
-          <div class="dropdown-content">
-            <a href="#">About BlueandCosmos</a>
-            <a href="#">Sustainability</a>
-            <a href="#">News</a>
-            <a href="#">My Account</a>
-          </div>
-        </div>
+         <div class="dropdown">
+  <button class="dropbtn" tabindex="0">About</button>
+  <div class="dropdown-content">
+    <a href="#">About BlueandCosmos</a>
+    <a href="#">Sustainability</a>
+    <a href="#">My Account</a>
+  </div>
+</div>
         <div class="dropdown">
           <button class="dropbtn">Livestream</button>
           <div class="dropdown-content">
