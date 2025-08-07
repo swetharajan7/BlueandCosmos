@@ -361,21 +361,45 @@
     BlueandCosmos 2025 | <a href="sitemap.html" style="color: white;">Sitemap</a>
   </footer>
 
-  <script>
-    function toggleTheme() {
-      const body = document.body;
-      const toggle = document.getElementById("themeToggle");
-      body.classList.toggle("dark");
-      toggle.textContent = body.classList.contains("dark") ? "☀️" : "🌙";
+<script>
+  function toggleTheme() {
+    const body = document.body;
+    const toggle = document.getElementById("themeToggle");
+    body.classList.toggle("dark");
+    toggle.textContent = body.classList.contains("dark") ? "☀️" : "🌙";
+    localStorage.setItem("theme", body.classList.contains("dark") ? "dark" : "light");
+  }
+
+  // On page load, restore theme from localStorage
+  document.addEventListener("DOMContentLoaded", () => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      document.body.classList.add("dark");
+      document.getElementById("themeToggle").textContent = "☀️";
     }
 
-    // Add 'clicked' class on dropdown item click for style feedback
-    document.querySelectorAll('.dropdown-content a').forEach(link => {
-      link.addEventListener('click', function () {
-        document.querySelectorAll('.dropdown-content a').forEach(el => el.classList.remove('clicked'));
-        this.classList.add('clicked');
-      });
+    // Restore clicked dropdown item from localStorage
+    const savedLink = localStorage.getItem("lastClickedLink");
+    if (savedLink) {
+      const link = document.querySelector(`.dropdown-content a[href="${savedLink}"]`);
+      if (link) link.classList.add("clicked");
+    }
+  });
+
+  // Handle dropdown item clicks and store them
+  document.querySelectorAll('.dropdown-content a').forEach(link => {
+    link.addEventListener('click', function () {
+      // Remove previous
+      document.querySelectorAll('.dropdown-content a').forEach(el => el.classList.remove('clicked'));
+
+      // Highlight this one
+      this.classList.add('clicked');
+
+      // Save to localStorage
+      localStorage.setItem("lastClickedLink", this.getAttribute("href"));
     });
-  </script>
+  });
+</script>
+
 </body>
 </html>
