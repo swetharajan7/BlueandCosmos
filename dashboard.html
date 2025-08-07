@@ -1,12 +1,12 @@
-<!-- Updated logo and header integration version of dashboard.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BlueandCosmos Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5782357753554194" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="styles.css" />
   <style>
     :root {
       --accent: #0033a0;
@@ -84,6 +84,142 @@
       text-decoration: none;
       color: inherit;
     }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5em;
+      position: relative;
+    }
+
+    .dropdown {
+      position: relative;
+    }
+
+    .dropbtn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1em;
+      font-family: 'Work Sans', sans-serif;
+      cursor: pointer;
+      padding-bottom: 0.2em;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+
+    .dropbtn:hover {
+      color: var(--highlight);
+    }
+
+    .dropbtn::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background-color: var(--highlight);
+      transition: width 0.3s ease-in-out;
+    }
+
+    .dropbtn:hover::after {
+      width: 100%;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 2.5em;
+      left: 0;
+      background-color: var(--accent);
+      min-width: 220px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      z-index: 9999;
+      flex-direction: column;
+    }
+
+    .dropdown:hover .dropdown-content,
+    .dropdown:focus-within .dropdown-content {
+      display: flex;
+    }
+
+    .dropdown-content a {
+      color: #cce0ff;
+      padding: 0.8em 1em;
+      text-decoration: none;
+      display: block;
+      transition: background-color 0.3s, transform 0.2s, color 0.3s;
+    }
+
+    .dropdown-content a.clicked,
+    .dropdown-content a:hover,
+    .dropdown-content a:focus {
+      background-color: var(--flag-blue);
+      color: #fff !important;
+      transform: translateX(5px);
+    }
+
+    .dropdown-content a::after {
+      content: "";
+      position: absolute;
+      bottom: 0.2em;
+      left: 1em;
+      width: 0;
+      height: 2px;
+      background-color: var(--highlight);
+      transition: width 0.3s ease;
+    }
+
+    .dropdown-content a:hover::after,
+    .dropdown-content a:focus::after,
+    .dropdown-content a.clicked::after {
+      width: calc(100% - 2em);
+    }
+
+    .toggle-theme {
+      cursor: pointer;
+      font-size: 1.5em;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1em;
+      padding: 2em;
+    }
+
+    .card {
+      background-color: var(--card-light);
+      color: var(--text-light);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 1em;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2em 1em;
+      background-color: var(--accent);
+      color: white;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1em;
+    }
+
+    body.dark {
+      background-color: var(--dark-bg);
+      color: var(--text-dark);
+    }
+
+    body.dark .card {
+      background-color: var(--card-dark);
+      color: var(--text-dark);
+      border-color: var(--border-dark);
+    }
   </style>
 </head>
 <body>
@@ -97,10 +233,15 @@
         </div>
       </div>
     </a>
-    <!-- Navigation content continues below this -->
-  </header>
-
-
+    <nav>
+      <div class="dropdown">
+        <button class="dropbtn">Productivity & Workflow Tools</button>
+        <div class="dropdown-content">
+          <a href="https://zapier.com/workflow-automation" target="_blank">Developer Workflow Automations</a>
+          <a href="https://www.canva.com/" target="_blank">Content Tools</a>
+          <a href="https://calendar.google.com" target="_blank">Calendar Organizers</a>
+        </div>
+      </div>
       <div class="dropdown">
         <button class="dropbtn">Games & Entertainment</button>
         <div class="dropdown-content">
@@ -117,108 +258,79 @@
           <a href="https://www.quizlet.com/" target="_blank">AI-enhanced Learning Platforms</a>
         </div>
       </div>
-    </nav>
-
-    <div class="nav-icons">
-      <a href="ads.html" target="_blank" title="Sponsored Content">📺 Sponsored</a>
       <div class="dropdown">
-  <button class="dropbtn">👤 My Account</button>
-  <div class="dropdown-content">
-    <a href="my-events.html">My Events</a>
-    <a href="register.html">Register</a>
-    <a href="signin.html">Sign In</a>
-    <a href="paid-services.html">Paid Services</a>
-  </div>
-</div>
+        <button class="dropbtn">👤 My Account</button>
+        <div class="dropdown-content">
+          <a href="my-events.html">My Events</a>
+          <a href="register.html">Register</a>
+          <a href="signin.html">Sign In</a>
+          <a href="paid-services.html">Paid Services</a>
+        </div>
+      </div>
       <div class="toggle-theme" onclick="toggleTheme()" id="themeToggle">🌙</div>
-    </div>
+    </nav>
   </header>
-<main>
-  <!-- Existing Core Sections -->
-  <div class="card" id="weather"><h2>☁️ Live Weather</h2><p>Weather data loading...</p></div>
-  <div class="card" id="nyt"><h2>📰 Science News</h2><p>Science articles loading...</p></div>
-  <div class="card" id="launches"><h2>🚀 Upcoming Launches</h2><p>Launch data coming soon...</p></div>
-  <div class="card" id="events"><h2>🌠 Celestial Events</h2><p>Event listings will appear here...</p></div>
 
-  <!-- New Version 34 Tabs with Icons -->
-  <div class="card" id="moon-cycle"><h2>🌕 Moon Cycle</h2><p>Data on lunar phases will appear here...</p></div>
-  <div class="card" id="seasons"><h2>🌍 Seasons</h2><p>Seasonal information loading...</p></div>
-  <div class="card" id="climatic-events"><h2>🌪️ Climatic Events</h2><p>Upcoming climate phenomena...</p></div>
-  <div class="card" id="auroras"><h2>🌌 Northern & Southern Lights</h2><p>Aurora forecast will be added here...</p></div>
-  <div class="card" id="stargazing"><h2>🔭 Star Gazing</h2><p>Best nights to observe stars...</p></div>
-  <div class="card" id="falling-objects"><h2>☄️ Falling Objects</h2><p>Data on meteors, debris, etc...</p></div>
-  <div class="card" id="asteroid"><h2>🪐 Asteroids</h2><p>Asteroid tracking information...</p></div>
-  <div class="card" id="ozone"><h2>🧪 Ozone Layer</h2><p>Ozone monitoring data...</p></div>
-  <div class="card" id="arctic"><h2>❄️ Arctic</h2><p>Updates on the Arctic region...</p></div>
-  <div class="card" id="antarctica"><h2>🧊 Antarctica</h2><p>Research and climate info...</p></div>
-  <div class="card" id="equator"><h2>🌐 Equator</h2><p>Equatorial climate and stats...</p></div>
-  <div class="card" id="co2-ch4"><h2>🌱 CO₂ & CH₄ Calculator</h2><p>Carbon and methane tracking tool...</p></div>
-</main>
-<footer style="background-color: var(--accent); color: white; padding: 2em 1em; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; text-align: center; gap: 1em;">
-  <!-- Left: App Store Logos -->
-  <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0.5em;">
-    <a href="#" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play Store" style="height: 40px;"></a>
-    <a href="#" target="_blank"><img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Store" style="height: 40px;"></a>
-  </div>
+  <main>
+    <!-- Main Content (e.g. Weather, News, etc.) goes here -->
+  </main>
 
-  <!-- Center: Legal Links and Trademark -->
-  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.5em;">
-    <div style="font-weight: bold;">BlueandCosmos™ 2025</div>
-    <div style="display: flex; flex-wrap: wrap; gap: 1em; justify-content: center; font-size: 0.9em;">
-      <a href="privacy.html" style="color: white; text-decoration: none;">Privacy Policy</a>
-      <a href="terms.html" style="color: white; text-decoration: none;">Terms of Use</a>
-      <a href="sitemap.html" style="color: white; text-decoration: none;">Sitemap</a>
-      <a href="contact.html" style="color: white; text-decoration: none;">Contact Us</a>
+  <footer>
+    <!-- Left: App Store Logos -->
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0.5em;">
+      <a href="#" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play Store" style="height: 40px;"></a>
+      <a href="#" target="_blank"><img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Store" style="height: 40px;"></a>
     </div>
-  </div>
 
-  <!-- Right: Social Media and "Let's Connect!" -->
-  <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-end; gap: 0.5em;">
-    <div style="font-weight: bold;">Let's Connect!</div>
-    <div style="display: flex; gap: 0.5em;">
-      <a href="https://twitter.com/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitter.svg" alt="Twitter" style="height: 24px; filter: invert(1);"></a>
-      <a href="https://facebook.com/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook" style="height: 24px; filter: invert(1);"></a>
-      <a href="https://instagram.com/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" style="height: 24px; filter: invert(1);"></a>
-      <a href="https://linkedin.com/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn" style="height: 24px; filter: invert(1);"></a>
-      <a href="https://discord.com/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/discord.svg" alt="Discord" style="height: 24px; filter: invert(1);"></a>
+    <!-- Center: Legal -->
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.5em;">
+      <div style="font-weight: bold;">BlueandCosmos™ 2025</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 1em; justify-content: center; font-size: 0.9em;">
+        <a href="privacy.html" style="color: white; text-decoration: none;">Privacy Policy</a>
+        <a href="terms.html" style="color: white; text-decoration: none;">Terms of Use</a>
+        <a href="sitemap.html" style="color: white; text-decoration: none;">Sitemap</a>
+        <a href="contact.html" style="color: white; text-decoration: none;">Contact Us</a>
+      </div>
     </div>
-  </div>
-</footer>
-  
-<script>
-  function toggleTheme() {
-    const body = document.body;
-    const toggle = document.getElementById("themeToggle");
-    body.classList.toggle("dark");
-    toggle.textContent = body.classList.contains("dark") ? "☀️" : "🌙";
-    localStorage.setItem("theme", body.classList.contains("dark") ? "dark" : "light");
-  }
 
-  // On page load, restore theme from localStorage
-  document.addEventListener("DOMContentLoaded", () => {
-      // 🔄 Clear previous highlight on load
-  localStorage.removeItem("lastClickedLink");
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      document.body.classList.add("dark");
-      document.getElementById("themeToggle").textContent = "☀️";
+    <!-- Right: Social Media -->
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-end; gap: 0.5em;">
+      <div style="font-weight: bold;">Let's Connect!</div>
+      <div style="display: flex; gap: 0.5em;">
+        <a href="https://twitter.com/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitter.svg" alt="Twitter" style="height: 24px; filter: invert(1);"></a>
+        <a href="https://facebook.com/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook" style="height: 24px; filter: invert(1);"></a>
+        <a href="https://instagram.com/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" style="height: 24px; filter: invert(1);"></a>
+        <a href="https://linkedin.com/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn" style="height: 24px; filter: invert(1);"></a>
+        <a href="https://discord.com/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/discord.svg" alt="Discord" style="height: 24px; filter: invert(1);"></a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      const body = document.body;
+      const toggle = document.getElementById("themeToggle");
+      body.classList.toggle("dark");
+      toggle.textContent = body.classList.contains("dark") ? "☀️" : "🌙";
+      localStorage.setItem("theme", body.classList.contains("dark") ? "dark" : "light");
     }
-  });
 
-  // Handle dropdown item clicks and store them
-  document.querySelectorAll('.dropdown-content a').forEach(link => {
-    link.addEventListener('click', function () {
-      // Remove previous
-      document.querySelectorAll('.dropdown-content a').forEach(el => el.classList.remove('clicked'));
-
-      // Highlight this one
-      this.classList.add('clicked');
-
-      // Save to localStorage
-      localStorage.setItem("lastClickedLink", this.getAttribute("href"));
+    document.addEventListener("DOMContentLoaded", () => {
+      localStorage.removeItem("lastClickedLink");
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "dark") {
+        document.body.classList.add("dark");
+        document.getElementById("themeToggle").textContent = "☀️";
+      }
     });
-  });
-</script>
 
+    document.querySelectorAll('.dropdown-content a').forEach(link => {
+      link.addEventListener('click', function () {
+        document.querySelectorAll('.dropdown-content a').forEach(el => el.classList.remove('clicked'));
+        this.classList.add('clicked');
+        localStorage.setItem("lastClickedLink", this.getAttribute("href"));
+      });
+    });
+  </script>
 </body>
 </html>
