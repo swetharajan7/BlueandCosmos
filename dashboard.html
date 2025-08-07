@@ -391,17 +391,12 @@
 
   // On page load, restore theme from localStorage
   document.addEventListener("DOMContentLoaded", () => {
+      // 🔄 Clear previous highlight on load
+  localStorage.removeItem("lastClickedLink");
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") {
       document.body.classList.add("dark");
       document.getElementById("themeToggle").textContent = "☀️";
-    }
-
-    // Restore clicked dropdown item from localStorage
-    const savedLink = localStorage.getItem("lastClickedLink");
-    if (savedLink) {
-      const link = document.querySelector(`.dropdown-content a[href="${savedLink}"]`);
-      if (link) link.classList.add("clicked");
     }
   });
 
