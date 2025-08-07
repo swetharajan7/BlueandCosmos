@@ -292,6 +292,47 @@
   <div class="card" id="equator"><h2>🌐 Equator</h2><p>Equatorial climate and stats...</p></div>
   <div class="card" id="co2-ch4"><h2>🌱 CO₂ & CH₄ Calculator</h2><p>Carbon and methane tracking tool...</p></div>
 </main>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // WEATHER
+    fetch("https://api.openweathermap.org/data/2.5/weather?q=New York&appid=1557651ee4d280ab5e111aeee2e174e1&units=metric")
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("weather").innerHTML += `
+          <p>🌡️ ${data.main.temp}°C, ${data.weather[0].description}</p>
+          <p>💨 Wind: ${data.wind.speed} m/s</p>
+          <p>📍 ${data.name}</p>`;
+      });
+
+    // SCIENCE NEWS
+    fetch("https://api.nytimes.com/svc/topstories/v2/science.json?api-key=eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD")
+      .then(res => res.json())
+      .then(data => {
+        const articles = data.results.slice(0, 3).map(article => `<p><a href="${article.url}" target="_blank">🔗 ${article.title}</a></p>`).join("");
+        document.getElementById("nyt").innerHTML += articles;
+      });
+
+    // LAUNCHES
+    fetch("https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=3")
+      .then(res => res.json())
+      .then(data => {
+        const launches = data.results.map(launch => `<p>🚀 <strong>${launch.name}</strong> – ${launch.net}</p>`).join("");
+        document.getElementById("launches").innerHTML += launches;
+      });
+
+    // CELESTIAL EVENTS
+    const today = new Date().toISOString().split("T")[0];
+    fetch(`/.netlify/functions/celestial?date=${today}`)
+      .then(res => res.json())
+      .then(data => {
+        const events = data.events.map(e => `<p>✨ ${e}</p>`).join("");
+        document.getElementById("events").innerHTML += events;
+      })
+      .catch(err => {
+        document.getElementById("events").innerHTML += `<p style="color: red;">Error loading celestial events.</p>`;
+      });
+  });
+</script>
 
 
   <footer>
