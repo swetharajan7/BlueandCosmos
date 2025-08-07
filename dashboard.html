@@ -151,7 +151,9 @@
       transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
     }
 
-    .dropdown-content a:hover {
+    .dropdown-content a:hover,
+    .dropdown-content a:focus,
+    .dropdown-content a.clicked {
       background-color: var(--flag-blue);
       color: white;
       transform: translateX(5px);
@@ -168,7 +170,9 @@
       transition: width 0.3s ease;
     }
 
-    .dropdown-content a:hover::after {
+    .dropdown-content a:hover::after,
+    .dropdown-content a:focus::after,
+    .dropdown-content a.clicked::after {
       width: calc(100% - 2em);
     }
 
@@ -365,6 +369,14 @@
       body.classList.toggle("dark");
       toggle.textContent = body.classList.contains("dark") ? "☀️" : "🌙";
     }
+
+    // Add 'clicked' class on dropdown item click for visual effect
+    document.querySelectorAll('.dropdown-content a').forEach(link => {
+      link.addEventListener('click', function () {
+        document.querySelectorAll('.dropdown-content a').forEach(el => el.classList.remove('clicked'));
+        this.classList.add('clicked');
+      });
+    });
   </script>
 </body>
 </html>
