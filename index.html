@@ -30,20 +30,46 @@
       flex-wrap: wrap;
     }
 
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+    }
+
     .logo-area {
       display: flex;
       align-items: center;
-      gap: 1em;
+      gap: 0.4em;
     }
 
     .logo-area img {
       height: 50px;
-      width: auto;
+      width: 50px;
+      margin: 0;
+      padding: 0;
+      background-color: transparent;
+      border-radius: 0;
     }
 
-    .tagline {
-      font-size: 0.9em;
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+      margin-left: -4px;
+    }
+
+    .logo-text .title {
+      font-size: 1.4em;
+      font-weight: bold;
+      color: white;
+      margin: 0;
+    }
+
+    .logo-text .tagline {
+      font-size: 0.85em;
       color: #cce0ff;
+      margin: 0;
     }
 
     nav {
@@ -161,53 +187,52 @@
   </style>
 </head>
 <body>
- <header>
-  <a href="index.html" class="logo-link" style="text-decoration: none; color: inherit;">
-    <div class="logo-area" style="display: flex; align-items: center; gap: 0.4em;">
-      <img src="https://cdn.jsdelivr.net/gh/swetharajan7/blueandcosmos/assets/logo-transparent.png" alt="BlueandCosmos Logo" style="height: 50px; width: 50px; margin: 0; padding: 0; background-color: transparent; border-radius: 0;">
-      <div class="logo-text" style="display: flex; flex-direction: column; line-height: 1.2; margin-left: -4px;">
-        <div class="title" style="font-size: 1.4em; font-weight: bold; color: white; margin: 0;">BlueandCosmos</div>
-        <div class="tagline" style="font-size: 0.85em; color: #cce0ff; margin: 0;">Exploring the Cosmos. Protecting the Earth.</div>
+  <header>
+    <a href="index.html" class="logo-link">
+      <div class="logo-area">
+        <img src="https://cdn.jsdelivr.net/gh/swetharajan7/blueandcosmos/assets/logo-transparent.png" alt="BlueandCosmos Logo">
+        <div class="logo-text">
+          <div class="title">BlueandCosmos</div>
+          <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
+        </div>
       </div>
-    </div>
-  </a>
+    </a>
 
-  <nav>
-    <div class="dropdown">
-      <button class="dropbtn">About</button>
-      <div class="dropdown-content">
-        <a href="#">About BlueandCosmos</a>
-        <a href="#">Sustainability</a>
-        <a href="#">News</a>
-        <a href="#">My Account</a>
+    <nav>
+      <div class="dropdown">
+        <button class="dropbtn">About</button>
+        <div class="dropdown-content">
+          <a href="#">About BlueandCosmos</a>
+          <a href="#">Sustainability</a>
+          <a href="#">News</a>
+          <a href="#">My Account</a>
+        </div>
       </div>
-    </div>
-    <div class="dropdown">
-      <button class="dropbtn">News</button>
-      <div class="dropdown-content">
-        <a href="#">Science Updates</a>
-        <a href="#">Blog</a>
+      <div class="dropdown">
+        <button class="dropbtn">News</button>
+        <div class="dropdown-content">
+          <a href="#">Science Updates</a>
+          <a href="#">Blog</a>
+        </div>
       </div>
-    </div>
-    <div class="dropdown">
-      <button class="dropbtn">Livestream</button>
-      <div class="dropdown-content">
-        <a href="#">Live Stream Images</a>
-        <a href="#">Launch Missions</a>
-        <a href="#">Webinars</a>
+      <div class="dropdown">
+        <button class="dropbtn">Livestream</button>
+        <div class="dropdown-content">
+          <a href="#">Live Stream Images</a>
+          <a href="#">Launch Missions</a>
+          <a href="#">Webinars</a>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
 
-  <div class="nav-icons">
-    <a href="dashboard.html">Dashboard</a>
-    <div class="toggle-theme" onclick="toggleTheme()" id="themeToggle">🌙</div>
-  </div>
-</header>
-
+    <div class="nav-icons">
+      <a href="dashboard.html">Dashboard</a>
+      <div class="toggle-theme" onclick="toggleTheme()" id="themeToggle">🌙</div>
+    </div>
+  </header>
 
   <main>
-    <!-- Main content placeholder -->
+    <!-- Hero section or main content goes here -->
   </main>
 
   <footer>
@@ -224,5 +249,3 @@
   </script>
 </body>
 </html>
-
-
