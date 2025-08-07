@@ -151,11 +151,11 @@
       transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
     }
 
-    .dropdown-content a:hover,
-.dropdown-content a:focus,
-.dropdown-content a.clicked {
+.dropdown-content a.clicked,
+.dropdown-content a:hover,
+.dropdown-content a:focus {
   background-color: var(--flag-blue);
-  color: var(--highlight); /* or use white: #fff */
+  color: #fff !important;
   transform: translateX(5px);
 }
 
