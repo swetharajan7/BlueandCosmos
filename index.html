@@ -65,7 +65,6 @@
       margin: 0;
       padding: 0;
       background-color: transparent;
-      border-radius: 0;
     }
 
     .logo-text {
@@ -94,6 +93,12 @@
       gap: 2em;
     }
 
+    .nav-icons {
+      display: flex;
+      align-items: center;
+      gap: 1.5em;
+    }
+
     .dropdown {
       position: relative;
     }
@@ -108,11 +113,13 @@
       position: relative;
     }
 
-    .dropbtn:hover {
+    .dropbtn:hover,
+    .dropbtn:focus {
       color: var(--highlight);
     }
 
-    .dropbtn:hover::after {
+    .dropbtn:hover::after,
+    .dropbtn:focus::after {
       content: "";
       position: absolute;
       bottom: 0;
@@ -142,7 +149,8 @@
       position: relative;
     }
 
-    .dropdown-content a:hover {
+    .dropdown-content a:hover,
+    .dropdown-content a:focus {
       background-color: var(--flag-blue);
       color: white;
     }
@@ -158,29 +166,15 @@
       transition: width 0.3s ease;
     }
 
-    .dropdown-content a:hover::after {
+    .dropdown-content a:hover::after,
+    .dropdown-content a:focus::after {
       width: calc(100% - 20px);
     }
 
-   .dropdown:hover .dropdown-content,
-.dropdown:focus-within .dropdown-content {
-  display: flex;
-}
-
-.dropbtn:focus {
-  color: var(--highlight); /* hot pink */
-}
-
-.dropdown-content a:focus {
-  background-color: var(--flag-blue);
-  color: white;
-}
-
-
-    .nav-icons {
+    .dropdown:hover .dropdown-content,
+    .dropdown:focus-within .dropdown-content {
       display: flex;
-      align-items: center;
-      gap: 1.5em;
+      flex-direction: column;
     }
 
     .nav-icons a {
@@ -267,23 +261,22 @@
     <nav>
       <div class="nav-icons">
         <div class="dropdown">
-          <button class="dropbtn">About</button>
-         <div class="dropdown">
-  <button class="dropbtn" tabindex="0">About</button>
-  <div class="dropdown-content">
-    <a href="#">About BlueandCosmos</a>
-    <a href="#">Sustainability</a>
-    <a href="#">My Account</a>
-  </div>
-</div>
+          <button class="dropbtn" tabindex="0">About</button>
+          <div class="dropdown-content">
+            <a href="#">About BlueandCosmos</a>
+            <a href="#">Sustainability</a>
+            <a href="#">My Account</a>
+          </div>
+        </div>
+
         <div class="dropdown">
-  <button class="dropbtn" tabindex="0">Livestream</button>
-  <div class="dropdown-content">
-    <a href="#">Live Stream Images</a>
-    <a href="#">Launch Missions</a>
-    <a href="#">Webinars</a>
-  </div>
-</div>
+          <button class="dropbtn" tabindex="0">Livestream</button>
+          <div class="dropdown-content">
+            <a href="#">Live Stream Images</a>
+            <a href="#">Launch Missions</a>
+            <a href="#">Webinars</a>
+          </div>
+        </div>
 
         <a href="dashboard.html">Dashboard</a>
         <div class="toggle-theme" onclick="toggleTheme()" id="themeToggle">🌙</div>
@@ -301,11 +294,13 @@
 
   <!-- Footer -->
   <footer>
+    <!-- Left -->
     <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0.5em;">
       <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play Store" style="height: 40px;"></a>
       <a href="#"><img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Store" style="height: 40px;"></a>
     </div>
 
+    <!-- Center -->
     <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.5em;">
       <div style="font-weight: bold;">BlueandCosmos™ 2025</div>
       <div style="display: flex; flex-wrap: wrap; gap: 1em; justify-content: center; font-size: 0.9em;">
@@ -316,6 +311,7 @@
       </div>
     </div>
 
+    <!-- Right -->
     <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-end; gap: 0.5em;">
       <div style="font-weight: bold;">Let's Connect!</div>
       <div style="display: flex; gap: 0.5em;">
