@@ -103,6 +103,26 @@
       cursor: pointer;
       padding-bottom: 0.2em;
       position: relative;
+      transition: color 0.3s ease;
+    }
+
+    .dropbtn:hover {
+      color: var(--flag-blue);
+    }
+
+    .dropbtn::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background-color: var(--highlight);
+      transition: width 0.3s ease-in-out;
+    }
+
+    .dropbtn:hover::after {
+      width: 100%;
     }
 
     .dropdown-content {
@@ -128,12 +148,12 @@
       text-decoration: none;
       display: block;
       position: relative;
-      transition: background-color 0.3s ease, transform 0.2s ease;
+      transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
     }
 
     .dropdown-content a:hover {
       background-color: var(--flag-blue);
-      color: #ffffff;
+      color: white;
       transform: translateX(5px);
     }
 
@@ -164,6 +184,7 @@
       font-size: 0.9em;
       position: relative;
       padding-bottom: 0.2em;
+      transition: color 0.3s ease;
     }
 
     .nav-icons a:hover {
@@ -299,13 +320,12 @@
     </nav>
 
     <div class="nav-icons">
-  <a href="ads.html" target="_blank" title="Sponsored Content">📺 Sponsored</a>
-  <a href="#" title="Shop">👜 SHOP</a>
-  <div class="toggle-theme" onclick="toggleTheme()" id="themeToggle">🌙</div>
-</div>
+      <a href="ads.html" target="_blank" title="Sponsored Content">📺 Sponsored</a>
+      <a href="#" title="Shop">👜 SHOP</a>
+      <div class="toggle-theme" onclick="toggleTheme()" id="themeToggle">🌙</div>
+    </div>
   </header>
 
-  <!-- Sponsored Content Block -->
   <div class="ad-widget-container">
     <div class="ad-widget">
       <div class="card" id="sponsored-header">
@@ -348,4 +368,3 @@
   </script>
 </body>
 </html>
-
