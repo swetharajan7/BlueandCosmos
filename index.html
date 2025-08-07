@@ -200,16 +200,6 @@
       height: 90vh;
     }
 
-    .earth-hero {
-      background-image: url('https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg');
-      background-size: cover;
-      background-position: center;
-  height: 70vh;             /* Shorten the section slightly */
-  background-position: center 30%;  /* Show desired part of image */
-}
-
-    }
-
     footer {
       background-color: var(--accent);
       color: white;
@@ -287,22 +277,21 @@
 
   <!-- Hero Section -->
   <main>
-    <section class="hero"></section>         <!-- Solar System -->
-    <section class="earth-hero"></section>   <!-- Earth & Moon -->
+    <section class="hero"></section>
   </main>
 
   <!-- Image Credit -->
-  <p class="credit">Image Credits: NASA/JPL-Caltech and NASA/ISS</p>
+  <p class="credit">Image Credit: NASA/JPL-Caltech</p>
 
   <!-- Footer -->
   <footer>
-    <!-- Left: App Store -->
+    <!-- Left -->
     <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0.5em;">
       <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play Store" style="height: 40px;"></a>
       <a href="#"><img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Store" style="height: 40px;"></a>
     </div>
 
-    <!-- Center: Legal -->
+    <!-- Center -->
     <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.5em;">
       <div style="font-weight: bold;">BlueandCosmos™ 2025</div>
       <div style="display: flex; flex-wrap: wrap; gap: 1em; justify-content: center; font-size: 0.9em;">
@@ -313,7 +302,7 @@
       </div>
     </div>
 
-    <!-- Right: Social -->
+    <!-- Right -->
     <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-end; gap: 0.5em;">
       <div style="font-weight: bold;">Let's Connect!</div>
       <div style="display: flex; gap: 0.5em;">
@@ -326,7 +315,7 @@
     </div>
   </footer>
 
-  <!-- Theme Toggle Script -->
+  <!-- Theme Toggle -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const savedTheme = localStorage.getItem("theme");
