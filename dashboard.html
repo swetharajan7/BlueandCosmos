@@ -42,54 +42,47 @@
       z-index: 1000;
     }
 
-    .logo-area img {
+   .logo-area {
+  display: flex;
+  align-items: center;
+  gap: 0.4em; /* reduced space between logo and text */
+}
+
+.logo-area img {
   height: 50px;
   width: 50px;
   margin: 0;
   padding: 0;
-  background-color: transparent;
-  border-radius: 0; /* no rounding */
+  background-color: transparent; /* removes background */
+  border-radius: 0; /* removes rounding */
 }
 
-
-    .logo-area img {
-      height: 50px;
-      width: 50px;
-      border-radius: 8px;
-      background-color: var(--accent);
-    }
-    .logo-area {
-  display: flex;
-  align-items: center;
-  gap: 0.4em; /* previously 0.8em – reduce it */
-}
-    .logo-text {
+.logo-text {
   display: flex;
   flex-direction: column;
   line-height: 1.2;
-  margin-left: -4px; /* Fine-tune spacing between logo and text */
+  margin-left: -4px; /* tighter alignment with logo */
 }
 
+.logo-text .title {
+  font-size: 1.4em;
+  font-weight: bold;
+  color: white;
+  margin: 0;
+}
 
-    .logo-text .title {
-      font-size: 1.4em;
-      font-weight: bold;
-      color: white;
-      margin: 0;
-    }
+.logo-text .tagline {
+  font-size: 0.85em;
+  color: #cce0ff;
+  margin: 0;
+}
 
-    .logo-text .tagline {
-      font-size: 0.85em;
-      color: #cce0ff;
-      margin: 0;
-    }
-
-    .logo-link {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      color: inherit;
-    }
+.logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
 
     nav {
       display: flex;
