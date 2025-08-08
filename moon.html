@@ -37,32 +37,226 @@
 
     /* Header */
     .header {
-      background: rgba(0, 51, 160, 0.9);
-      backdrop-filter: blur(10px);
+      background: var(--accent);
+      color: var(--text-white);
       padding: 1em 2em;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 1em;
       position: sticky;
       top: 0;
       z-index: 1000;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    .header-content {
+    /* Left brand block */
+    .logo-link {
       display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
+    }
+
+    .logo-area img {
+      height: 50px;
+      width: 50px;
+      margin: 0;
+      padding: 0;
+      background-color: transparent;
+      border-radius: 0;
+      display: block;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+      margin-left: -4px;
+    }
+
+    .logo-text .title {
+      font-size: 1.4em;
+      font-weight: bold;
+      color: #fff;
+      margin: 0;
+    }
+
+    .logo-text .tagline {
+      font-size: 0.85em;
+      color: var(--text-light);
+      margin: 0;
+    }
+
+    /* Page indicator */
+    .page-indicator {
+      justify-self: center;
+      color: var(--text-light);
+      font-size: 1.1em;
+      font-weight: 500;
+    }
+
+    /* Right-side nav wrapper */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 1.5em;
+    }
+
+    /* Navigation styles */
+    nav {
+      display: contents;
+    }
+
+    .dropdown {
+      position: relative;
+    }
+
+    .dropbtn {
+      background: none;
+      border: none;
+      font-size: 1em;
+      color: #fff;
+      cursor: pointer;
+      padding: 0.4em 0;
+      position: relative;
+    }
+
+    .dropbtn:hover,
+    .dropbtn:focus {
+      color: var(--highlight);
+    }
+
+    .dropbtn::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 0;
+      height: 2px;
+      background: var(--highlight);
+      transition: width 0.25s ease-in-out;
+    }
+
+    .dropdown:hover > .dropbtn::after,
+    .dropbtn:focus::after,
+    .dropdown.open > .dropbtn::after {
+      width: 100%;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: calc(100% + 0.6em);
+      left: 0;
+      background: var(--accent);
+      min-width: 200px;
+      flex-direction: column;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      z-index: 1001;
+      padding: 0.3em 0;
+      border-radius: 6px;
+    }
+
+    .dropdown:hover .dropdown-content,
+    .dropdown:focus-within .dropdown-content,
+    .dropdown.open .dropdown-content {
+      display: flex;
+    }
+
+    .dropdown-content a {
+      color: var(--text-light);
+      text-decoration: none;
+      padding: 0.8em 1em;
+      position: relative;
+      transition: color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
+    }
+
+    .dropdown-content a:hover,
+    .dropdown-content a:focus,
+    .dropdown-content a.clicked {
+      background-color: var(--flag-blue);
+      color: #fff !important;
+      transform: translateX(5px);
+    }
+
+    .dropdown-content a::after {
+      content: "";
+      position: absolute;
+      left: 1em;
+      bottom: 6px;
+      width: 0;
+      height: 2px;
+      background: var(--highlight);
+      transition: width 0.25s ease;
+    }
+
+    .dropdown-content a:hover::after,
+    .dropdown-content a:focus::after,
+    .dropdown-content a.clicked::after {
+      width: calc(100% - 2em);
+    }
+
+    .nav-link {
+      color: #fff;
+      text-decoration: none;
+      position: relative;
+      padding-bottom: 2px;
+    }
+
+    .nav-link:hover {
+      color: var(--highlight);
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 0;
+      height: 2px;
+      background: var(--highlight);
+      transition: width 0.25s ease-in-out;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .toggle-theme {
+      cursor: pointer;
+      font-size: 1.5em;
+      line-height: 1;
+      user-select: none;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--accent);
+      color: #fff;
+      padding: 2em 1em;
+      display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
+      text-align: center;
+      gap: 1em;
+      margin-top: 3em;
     }
 
-    .logo-link {
-      color: white;
+    footer a {
+      color: #fff;
       text-decoration: none;
-      font-size: 1.2em;
-      font-weight: bold;
     }
 
-    .logo-link:hover {
-      color: var(--highlight);
+    footer a:hover {
+      text-decoration: underline;
     }
 
     /* Hero Section */
@@ -314,10 +508,57 @@
 <body>
   <!-- Header -->
   <header class="header">
-    <div class="header-content">
-      <a href="index.html" class="logo-link">← Back to BlueandCosmos</a>
-      <div>🌙 Lunar Intelligence Center</div>
-    </div>
+    <!-- Left: Brand -->
+    <a href="index.html" class="logo-link" aria-label="BlueandCosmos Home">
+      <div class="logo-area">
+        <img src="https://cdn.jsdelivr.net/gh/swetharajan7/blueandcosmos/assets/logo-transparent.png"
+          alt="BlueandCosmos Logo" />
+        <div class="logo-text">
+          <div class="title">BlueandCosmos</div>
+          <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
+        </div>
+      </div>
+    </a>
+
+    <!-- Middle: Current Page Indicator -->
+    <div class="page-indicator">🌙 Lunar Intelligence Center</div>
+
+    <!-- Right: Nav + Dashboard + Theme Toggle -->
+    <nav>
+      <div class="nav-right">
+        <!-- About -->
+        <div class="dropdown" data-menu="about">
+          <button class="dropbtn" tabindex="0" aria-haspopup="true" aria-expanded="false">
+            About
+          </button>
+          <div class="dropdown-content" role="menu" aria-label="About submenu">
+            <a href="#" role="menuitem">About BlueandCosmos</a>
+            <a href="#" role="menuitem">Sustainability</a>
+            <a href="#" role="menuitem">My Account</a>
+          </div>
+        </div>
+
+        <!-- Livestream -->
+        <div class="dropdown" data-menu="livestream">
+          <button class="dropbtn" tabindex="0" aria-haspopup="true" aria-expanded="false">
+            Livestream
+          </button>
+          <div class="dropdown-content" role="menu" aria-label="Livestream submenu">
+            <a href="#" role="menuitem">Live Stream Images</a>
+            <a href="#" role="menuitem">Launch Missions</a>
+            <a href="#" role="menuitem">Webinars</a>
+          </div>
+        </div>
+
+        <!-- Dashboard link -->
+        <a class="nav-link" href="dashboard.html">Dashboard</a>
+
+        <!-- Theme Toggle -->
+        <div class="toggle-theme" id="themeToggle" role="button" aria-label="Toggle theme">
+          🌙
+        </div>
+      </div>
+    </nav>
   </header>
 
   <!-- Hero Section -->
@@ -570,6 +811,59 @@
     </div>
   </main>
 
+  <!-- Footer -->
+  <footer>
+    <!-- Left: App Store Logos -->
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0.5em;">
+      <a href="#">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+          alt="Google Play Store" style="height: 40px;" />
+      </a>
+      <a href="#">
+        <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Store"
+          style="height: 40px;" />
+      </a>
+    </div>
+
+    <!-- Center: Legal Links and Trademark -->
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.5em;">
+      <div style="font-weight: bold;">BlueandCosmos™ 2025</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 1em; justify-content: center; font-size: 0.9em;">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Use</a>
+        <a href="sitemap.html">Sitemap</a>
+        <a href="contact.html">Contact Us</a>
+      </div>
+    </div>
+
+    <!-- Right: Social Media and "Let's Connect!" -->
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-end; gap: 0.5em;">
+      <div style="font-weight: bold;">Let's Connect!</div>
+      <div style="display: flex; gap: 0.5em;">
+        <a href="https://twitter.com/">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitter.svg" alt="Twitter"
+            style="height: 24px; filter: invert(1);" />
+        </a>
+        <a href="https://facebook.com/">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook"
+            style="height: 24px; filter: invert(1);" />
+        </a>
+        <a href="https://instagram.com/">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram"
+            style="height: 24px; filter: invert(1);" />
+        </a>
+        <a href="https://linkedin.com/">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn"
+            style="height: 24px; filter: invert(1);" />
+        </a>
+        <a href="https://discord.com/">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/discord.svg" alt="Discord"
+            style="height: 24px; filter: invert(1);" />
+        </a>
+      </div>
+    </div>
+  </footer>
+
   <script>
     let currentCity = "New York City, NY";
     let currentYear = 2025;
@@ -611,12 +905,102 @@
 
     // Update data based on location
     function updateLocationData() {
-      // This would normally call APIs to get location-specific data
-      // For now, we'll simulate the updates
       console.log(`Updating data for ${currentCity}`);
       
-      // Update rise/set times based on location
-      // In production, this would use astronomical calculation APIs
+      // Generate location-specific data based on city
+      const locationData = generateLocationData(currentCity);
+      
+      // Update rise/set times
+      document.getElementById('moonrise').textContent = locationData.moonrise;
+      document.getElementById('moonset').textContent = locationData.moonset;
+      document.getElementById('transit').textContent = locationData.transit;
+      
+      // Update distance data
+      document.getElementById('distance').textContent = locationData.distance;
+      document.getElementById('angularSize').textContent = locationData.angularSize;
+      
+      // Update tidal data if near coast
+      if (locationData.hasCoast) {
+        updateTidalData(locationData.tides);
+      }
+    }
+
+    function generateLocationData(city) {
+      // Simulate different data based on city
+      const cityLower = city.toLowerCase();
+      let baseHour = 21; // Default moonrise hour
+      let baseMinute = 42;
+      
+      // Adjust times based on city (simplified timezone/latitude simulation)
+      if (cityLower.includes('london') || cityLower.includes('uk')) {
+        baseHour = 20;
+        baseMinute = 15;
+      } else if (cityLower.includes('tokyo') || cityLower.includes('japan')) {
+        baseHour = 22;
+        baseMinute = 30;
+      } else if (cityLower.includes('los angeles') || cityLower.includes('california')) {
+        baseHour = 21;
+        baseMinute = 55;
+      } else if (cityLower.includes('sydney') || cityLower.includes('australia')) {
+        baseHour = 19;
+        baseMinute = 20;
+      }
+      
+      const moonriseTime = `${baseHour % 12 || 12}:${baseMinute.toString().padStart(2, '0')} ${baseHour >= 12 ? 'PM' : 'AM'}`;
+      const moonsetHour = (baseHour + 14) % 24;
+      const moonsetTime = `${moonsetHour % 12 || 12}:${(baseMinute + 33) % 60} ${moonsetHour >= 12 ? 'PM' : 'AM'}`;
+      const transitHour = (baseHour + 7) % 24;
+      const transitTime = `${transitHour % 12 || 12}:${(baseMinute + 46) % 60} ${transitHour >= 12 ? 'PM' : 'AM'}`;
+      
+      // Vary distance slightly
+      const baseDistance = 384400;
+      const variation = Math.floor(Math.random() * 20000) - 10000;
+      const distance = `${(baseDistance + variation).toLocaleString()} km`;
+      
+      const hasCoast = cityLower.includes('new york') || cityLower.includes('london') || 
+                      cityLower.includes('sydney') || cityLower.includes('miami') ||
+                      cityLower.includes('san francisco') || cityLower.includes('boston');
+      
+      return {
+        moonrise: moonriseTime,
+        moonset: moonsetTime,
+        transit: transitTime,
+        distance: distance,
+        angularSize: `${(29.5 + Math.random() * 2 - 1).toFixed(1)} arcmin`,
+        hasCoast: hasCoast,
+        tides: hasCoast ? generateTidalData() : null
+      };
+    }
+
+    function generateTidalData() {
+      const now = new Date();
+      const tides = [];
+      
+      for (let i = 0; i < 4; i++) {
+        const time = new Date(now.getTime() + (i * 6 + Math.random() * 2 - 1) * 60 * 60 * 1000);
+        const height = (Math.random() * 3 + 1).toFixed(1);
+        const type = i % 2 === 0 ? 'High' : 'Low';
+        
+        tides.push({
+          time: time.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }),
+          height: height,
+          type: type
+        });
+      }
+      
+      return tides;
+    }
+
+    function updateTidalData(tides) {
+      if (!tides) return;
+      
+      const tidesContainer = document.getElementById('todayTides');
+      tidesContainer.innerHTML = tides.map(tide => 
+        `<div class="data-row">
+          <span>${tide.type} Tide</span>
+          <span class="data-value">${tide.time} (${tide.height} ft)</span>
+        </div>`
+      ).join('');
     }
 
     // Calendar functionality
@@ -657,26 +1041,156 @@
     }
 
     function generateLunarEvents(year, month) {
-      // This is a simplified version - in production, you'd use astronomical calculation libraries
       const events = [];
       
-      // Add some sample events for demonstration
-      if (month === 0) { // January
-        events.push({ date: '6', name: 'New Moon', type: 'new-moon' });
-        events.push({ date: '13', name: 'First Quarter', type: 'quarter' });
-        events.push({ date: '21', name: 'Full Moon', type: 'full-moon' });
-        events.push({ date: '28', name: 'Last Quarter', type: 'quarter' });
+      // Calculate approximate lunar cycle (29.53 days)
+      // This is a simplified calculation - real implementation would use precise astronomical algorithms
+      const baseNewMoon = new Date(2024, 0, 11); // Known new moon date
+      const lunarCycle = 29.53;
+      
+      // Calculate days since base new moon
+      const targetMonth = new Date(year, month, 1);
+      const daysSinceBase = (targetMonth - baseNewMoon) / (1000 * 60 * 60 * 24);
+      const cyclesSinceBase = daysSinceBase / lunarCycle;
+      const daysIntoCurrentCycle = (cyclesSinceBase - Math.floor(cyclesSinceBase)) * lunarCycle;
+      
+      // Calculate moon phases for this month
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      let currentDay = 1 - daysIntoCurrentCycle;
+      
+      while (currentDay <= daysInMonth + lunarCycle) {
+        if (currentDay >= 1 && currentDay <= daysInMonth) {
+          const day = Math.round(currentDay);
+          events.push({ date: day.toString(), name: 'New Moon', type: 'new-moon' });
+        }
+        
+        const firstQuarter = currentDay + 7.38;
+        if (firstQuarter >= 1 && firstQuarter <= daysInMonth) {
+          const day = Math.round(firstQuarter);
+          events.push({ date: day.toString(), name: 'First Quarter', type: 'quarter' });
+        }
+        
+        const fullMoon = currentDay + 14.77;
+        if (fullMoon >= 1 && fullMoon <= daysInMonth) {
+          const day = Math.round(fullMoon);
+          events.push({ date: day.toString(), name: 'Full Moon', type: 'full-moon' });
+        }
+        
+        const lastQuarter = currentDay + 22.15;
+        if (lastQuarter >= 1 && lastQuarter <= daysInMonth) {
+          const day = Math.round(lastQuarter);
+          events.push({ date: day.toString(), name: 'Last Quarter', type: 'quarter' });
+        }
+        
+        currentDay += lunarCycle;
       }
       
-      // Add more events for other months...
-      // This would be populated with real astronomical data
+      // Add special events
+      addSpecialEvents(events, year, month);
+      
+      // Sort events by date
+      events.sort((a, b) => parseInt(a.date) - parseInt(b.date));
       
       return events;
+    }
+
+    function addSpecialEvents(events, year, month) {
+      // Add eclipses (simplified - real dates would come from astronomical databases)
+      const eclipses = [
+        { year: 2025, month: 2, day: 14, name: 'Total Lunar Eclipse', type: 'eclipse' },
+        { year: 2025, month: 8, day: 7, name: 'Partial Lunar Eclipse', type: 'eclipse' },
+        { year: 2026, month: 2, day: 3, name: 'Total Lunar Eclipse', type: 'eclipse' }
+      ];
+      
+      eclipses.forEach(eclipse => {
+        if (eclipse.year === year && eclipse.month === month) {
+          events.push({ date: eclipse.day.toString(), name: eclipse.name, type: eclipse.type });
+        }
+      });
+      
+      // Add supermoons (when full moon coincides with perigee)
+      const supermoons = [
+        { year: 2024, month: 9, day: 17, name: 'Supermoon', type: 'supermoon' },
+        { year: 2024, month: 10, day: 15, name: 'Supermoon', type: 'supermoon' },
+        { year: 2025, month: 9, day: 7, name: 'Supermoon', type: 'supermoon' }
+      ];
+      
+      supermoons.forEach(supermoon => {
+        if (supermoon.year === year && supermoon.month === month) {
+          events.push({ date: supermoon.day.toString(), name: supermoon.name, type: supermoon.type });
+        }
+      });
+    }
+
+    // Theme toggle functionality
+    function toggleTheme() {
+      const body = document.body;
+      const toggle = document.getElementById("themeToggle");
+      body.classList.toggle("dark");
+      toggle.textContent = body.classList.contains("dark") ? "☀️" : "🌙";
+      localStorage.setItem("theme", body.classList.contains("dark") ? "dark" : "light");
+    }
+
+    // Dropdown functionality
+    function initDropdowns() {
+      const OPEN_CLASS = "open";
+      const HOVER_DELAY_MS = 160;
+
+      document.querySelectorAll(".dropdown").forEach((dd) => {
+        let closeTimer = null;
+        const btn = dd.querySelector(".dropbtn");
+        const menu = dd.querySelector(".dropdown-content");
+
+        function open() {
+          dd.classList.add(OPEN_CLASS);
+          if (btn) btn.setAttribute("aria-expanded", "true");
+          if (closeTimer) {
+            clearTimeout(closeTimer);
+            closeTimer = null;
+          }
+        }
+        function scheduleClose() {
+          if (closeTimer) clearTimeout(closeTimer);
+          closeTimer = setTimeout(() => {
+            dd.classList.remove(OPEN_CLASS);
+            if (btn) btn.setAttribute("aria-expanded", "false");
+          }, HOVER_DELAY_MS);
+        }
+
+        dd.addEventListener("pointerenter", open);
+        dd.addEventListener("pointerleave", scheduleClose);
+
+        btn?.addEventListener("focus", open);
+        menu?.addEventListener("focusout", (e) => {
+          if (!dd.contains(e.relatedTarget)) scheduleClose();
+        });
+
+        menu?.querySelectorAll("a").forEach((a) => {
+          a.addEventListener("click", () => {
+            menu.querySelectorAll("a").forEach((el) => el.classList.remove("clicked"));
+            a.classList.add("clicked");
+            dd.classList.remove(OPEN_CLASS);
+            if (btn) btn.setAttribute("aria-expanded", "false");
+          });
+        });
+      });
     }
 
     // Initialize the page
     document.addEventListener('DOMContentLoaded', function() {
       generateCalendar(currentYear);
+      initDropdowns();
+      
+      // Initialize theme
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "dark") {
+        document.body.classList.add("dark");
+        const toggle = document.getElementById("themeToggle");
+        if (toggle) toggle.textContent = "☀️";
+      }
+      
+      // Theme toggle event
+      document.getElementById("themeToggle")?.addEventListener("click", toggleTheme);
       
       // Allow Enter key in city input
       document.getElementById('cityInput').addEventListener('keypress', function(e) {
@@ -684,6 +1198,9 @@
           setLocation();
         }
       });
+      
+      // Initialize with default location data
+      updateLocationData();
     });
   </script>
 </body>
