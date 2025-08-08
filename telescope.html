@@ -26,10 +26,11 @@
 
     body {
       font-family: 'Work Sans', sans-serif;
-      background: radial-gradient(ellipse at center, #0a0a23 0%, #000000 100%);
-      color: white;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: #333;
       min-height: 100vh;
       overflow-x: hidden;
+      transition: all 0.3s ease;
     }
 
     /* Animated starfield background */
@@ -130,6 +131,22 @@
       color: white;
     }
 
+    .toggle-theme {
+      cursor: pointer;
+      font-size: 1.5em;
+      line-height: 1;
+      user-select: none;
+      padding: 0.3em;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      color: white;
+    }
+
+    .toggle-theme:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: scale(1.1);
+    }
+
     /* Main Observatory Interface */
     .observatory {
       display: grid;
@@ -142,12 +159,14 @@
 
     /* Left Control Panel */
     .control-panel {
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
       border-radius: 15px;
       padding: 1.5em;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(0, 0, 0, 0.1);
       overflow-y: auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      color: #333;
     }
 
     .control-section {
@@ -170,16 +189,16 @@
       display: block;
       margin-bottom: 0.3em;
       font-size: 0.9em;
-      color: var(--text-light);
+      color: #666;
     }
 
     .control-item input, .control-item select {
       width: 100%;
       padding: 0.5em;
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(0, 0, 0, 0.2);
       border-radius: 5px;
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
+      background: rgba(255, 255, 255, 0.8);
+      color: #333;
       font-size: 0.9em;
     }
 
@@ -292,12 +311,14 @@
 
     /* Right Information Panel */
     .info-panel {
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
       border-radius: 15px;
       padding: 1.5em;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(0, 0, 0, 0.1);
       overflow-y: auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      color: #333;
     }
 
     .object-info {
@@ -305,7 +326,7 @@
     }
 
     .object-info h3 {
-      color: #ffd700;
+      color: var(--accent);
       margin-bottom: 1em;
       font-size: 1.2em;
     }
@@ -314,7 +335,8 @@
       display: flex;
       justify-content: space-between;
       padding: 0.5em 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      color: #555;
     }
 
     .info-value {
@@ -328,7 +350,7 @@
     }
 
     .feed-item {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(0, 0, 0, 0.05);
       border-radius: 8px;
       padding: 1em;
       margin-bottom: 1em;
@@ -337,28 +359,29 @@
 
     .feed-title {
       font-weight: bold;
-      color: #ffd700;
+      color: var(--accent);
       margin-bottom: 0.5em;
     }
 
     .feed-status {
       font-size: 0.9em;
-      color: var(--text-light);
+      color: #666;
     }
 
     /* Observation Log */
     .observation-log {
       max-height: 200px;
       overflow-y: auto;
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(0, 0, 0, 0.05);
       border-radius: 8px;
       padding: 1em;
     }
 
     .log-entry {
       padding: 0.5em 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       font-size: 0.9em;
+      color: #555;
     }
 
     .log-time {
@@ -437,6 +460,82 @@
       margin-bottom: 0.5em;
     }
 
+    /* Dark Theme Styles */
+    body.dark {
+      background: radial-gradient(ellipse at center, #0a0a23 0%, #000000 100%) !important;
+      color: white !important;
+    }
+
+    body.dark .control-panel,
+    body.dark .info-panel {
+      background: rgba(0, 0, 0, 0.8) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      color: white !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    body.dark .control-section h3 {
+      color: var(--highlight) !important;
+    }
+
+    body.dark .control-item label {
+      color: var(--text-light) !important;
+    }
+
+    body.dark .control-item input,
+    body.dark .control-item select {
+      background: rgba(255, 255, 255, 0.1) !important;
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      color: white !important;
+    }
+
+    body.dark .object-info h3 {
+      color: #ffd700 !important;
+    }
+
+    body.dark .info-item {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+      color: white !important;
+    }
+
+    body.dark .feed-item {
+      background: rgba(255, 255, 255, 0.05) !important;
+    }
+
+    body.dark .feed-title {
+      color: #ffd700 !important;
+    }
+
+    body.dark .feed-status {
+      color: var(--text-light) !important;
+    }
+
+    body.dark .observation-log {
+      background: rgba(255, 255, 255, 0.05) !important;
+    }
+
+    body.dark .log-entry {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+      color: white !important;
+    }
+
+    body.dark .log-time {
+      color: var(--highlight) !important;
+    }
+
+    body.dark .header {
+      background: rgba(0, 51, 160, 0.9) !important;
+    }
+
+    /* Hide starfield in light mode, show in dark mode */
+    body:not(.dark) .starfield {
+      opacity: 0;
+    }
+
+    body.dark .starfield {
+      opacity: 1;
+    }
+
     /* Additional animations and effects */
     @keyframes satelliteMove {
       0% { transform: translateX(-50px) translateY(-50px); }
@@ -492,7 +591,10 @@
 
     <div class="telescope-title">🔭 Virtual Observatory Command Center</div>
 
-    <a href="dashboard.html" class="nav-back">← Dashboard</a>
+    <div style="display: flex; align-items: center; gap: 1em;">
+      <div class="toggle-theme" id="themeToggle" role="button" aria-label="Toggle theme">🌙</div>
+      <a href="dashboard.html" class="nav-back">← Dashboard</a>
+    </div>
   </header>
 
   <!-- Learning Objectives -->
@@ -715,8 +817,28 @@
     let zoomLevel = 1;
     let selectedObject = null;
 
+    // Theme toggle functionality
+    function toggleTheme() {
+      const body = document.body;
+      const toggle = document.getElementById("themeToggle");
+      body.classList.toggle("dark");
+      toggle.textContent = body.classList.contains("dark") ? "☀️" : "🌙";
+      localStorage.setItem("theme", body.classList.contains("dark") ? "dark" : "light");
+    }
+
     // Initialize the telescope
     document.addEventListener('DOMContentLoaded', function() {
+      // Initialize theme
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "dark") {
+        document.body.classList.add("dark");
+        const toggle = document.getElementById("themeToggle");
+        if (toggle) toggle.textContent = "☀️";
+      }
+      
+      // Add theme toggle event listener
+      document.getElementById("themeToggle")?.addEventListener("click", toggleTheme);
+
       // Set current date/time
       const now = new Date();
       const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
