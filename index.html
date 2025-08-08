@@ -152,7 +152,7 @@
       gap: 0.6em;
       justify-self: center;
       /* centers in header grid */
-      min-width: 180px;
+      min-width: 220px;
       /* keeps layout from jumping */
       user-select: none;
     }
@@ -164,15 +164,31 @@
       align-items: center;
       justify-content: center;
       font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .moon-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1em;
     }
 
     .moon-label {
       color: var(--text-light);
       font-size: 0.95em;
       white-space: nowrap;
+      font-weight: 500;
     }
 
-    body.dark .moon-label {
+    .moon-context {
+      color: var(--text-light);
+      font-size: 0.75em;
+      opacity: 0.8;
+      white-space: nowrap;
+    }
+
+    body.dark .moon-label,
+    body.dark .moon-context {
       color: #e0ecff;
     }
 
@@ -403,7 +419,10 @@
     <a href="https://moon.nasa.gov/moon-in-motion/phases/" target="_blank" class="moon-widget"
       title="View detailed moon phase information">
       <div class="moon-icon" id="moon-display">🌙</div>
-      <span class="moon-label">Loading moon phase…</span>
+      <div class="moon-info">
+        <span class="moon-label">Loading moon phase…</span>
+        <span class="moon-context" id="moon-context">New York City, NY</span>
+      </div>
     </a>
 
 
@@ -588,7 +607,7 @@
         const month = now.getMonth() + 1; // 1-12
         const day = now.getDate();
         const year = now.getFullYear();
-        
+
         // August 2025 moon phases (approximate)
         if (year === 2025 && month === 8) {
           if (day >= 1 && day <= 3) return 7; // Waning Crescent
@@ -601,7 +620,7 @@
           if (day >= 25 && day <= 27) return 6; // Last Quarter
           if (day >= 28 && day <= 31) return 7; // Waning Crescent
         }
-        
+
         // Fallback to basic calculation for other dates
         const knownNewMoon = new Date(2024, 7, 4);
         const daysSince = (now - knownNewMoon) / (1000 * 60 * 60 * 24);
@@ -627,12 +646,22 @@
       function updateMoonDisplay() {
         const phase = getMoonPhase();
         const phaseInfo = getPhaseInfo(phase);
-
+        const now = new Date();
+        
         const moonIcon = document.getElementById("moon-display");
         const moonLabel = document.querySelector(".moon-label");
+        const moonContext = document.getElementById("moon-context");
 
         if (moonIcon) moonIcon.textContent = phaseInfo.emoji;
         if (moonLabel) moonLabel.textContent = phaseInfo.name;
+        if (moonContext) {
+          const dateStr = now.toLocaleDateString('en-US', { 
+            month: 'short', 
+            day: 'numeric',
+            year: 'numeric'
+          });
+          moonContext.textContent = `${dateStr} • New York City, NY`;
+        }
       }
 
       // Update immediately
