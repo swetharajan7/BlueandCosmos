@@ -647,7 +647,7 @@
         const phase = getMoonPhase();
         const phaseInfo = getPhaseInfo(phase);
         const now = new Date();
-        
+
         const moonIcon = document.getElementById("moon-display");
         const moonLabel = document.querySelector(".moon-label");
         const moonContext = document.getElementById("moon-context");
@@ -655,8 +655,8 @@
         if (moonIcon) moonIcon.textContent = phaseInfo.emoji;
         if (moonLabel) moonLabel.textContent = phaseInfo.name;
         if (moonContext) {
-          const dateStr = now.toLocaleDateString('en-US', { 
-            month: 'short', 
+          const dateStr = now.toLocaleDateString('en-US', {
+            month: 'short',
             day: 'numeric',
             year: 'numeric'
           });
