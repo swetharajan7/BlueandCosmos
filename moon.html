@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- =========================================================
+       META / TITLE / ICONS / FONTS
+       ========================================================= -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lunar Intelligence Center - BlueandCosmos</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet" />
   
+  <!-- =========================================================
+       ROOT TOKENS + BASE RESETS (UNCHANGED)
+       ========================================================= -->
   <style>
     :root {
       --accent: #0033a0;
@@ -34,8 +40,13 @@
       color: white;
       min-height: 100vh;
     }
+  </style>
 
-    /* Header */
+  <!-- =========================================================
+       HEADER STYLES (ORIGINAL + NEW DROPDOWN STYLES)
+       ========================================================= -->
+  <style>
+    /* ========== Original header grid (unchanged) ========== */
     .header {
       background: var(--accent);
       color: var(--text-white);
@@ -49,7 +60,7 @@
       z-index: 1000;
     }
 
-    /* Left brand block */
+    /* Left brand block (unchanged) */
     .logo-link {
       display: flex;
       align-items: center;
@@ -93,7 +104,8 @@
       margin: 0;
     }
 
-    /* Lunar Center Link */
+    /* ========== OLD Right: .lunar-center-link (removed per request) ========== */
+    /* Keeping the style here commented for reference; not used anymore.
     .lunar-center-link {
       justify-self: end;
       color: var(--text-light);
@@ -105,13 +117,11 @@
       transition: all 0.3s ease;
       position: relative;
     }
-
     .lunar-center-link:hover {
       color: white;
       background: rgba(255, 255, 255, 0.1);
       transform: translateY(-2px);
     }
-
     .lunar-center-link::after {
       content: "";
       position: absolute;
@@ -122,11 +132,126 @@
       background: var(--highlight);
       transition: width 0.25s ease-in-out;
     }
+    .lunar-center-link:hover::after { width: 100%; }
+    */
 
-    .lunar-center-link:hover::after {
+    /* ========== NEW Right: nav with dropdown ========== */
+    nav {
+      /* lives in header third grid column */
+      display: block;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 1.2em;
+    }
+
+    .nav-right > * {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    /* Dropdown shell */
+    .dropdown {
+      position: relative;
+    }
+
+    /* Button */
+    .dropbtn {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1em;
+      cursor: pointer;
+      padding: 0.4em 0;
+      position: relative;
+    }
+
+    /* Hot pink underline hover */
+    .dropbtn:hover,
+    .dropbtn:focus {
+      color: var(--highlight);
+    }
+
+    .dropbtn::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 0;
+      height: 2px;
+      background: var(--highlight);
+      transition: width 0.25s ease-in-out;
+    }
+
+    .dropdown:hover > .dropbtn::after,
+    .dropdown.open > .dropbtn::after,
+    .dropbtn:focus::after {
       width: 100%;
     }
 
+    /* Submenu */
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: calc(100% + 0.6em);
+      right: 0; /* Open aligned to right edge to match top-right placement */
+      background: var(--accent);
+      min-width: 230px;
+      flex-direction: column;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      z-index: 1001;
+      padding: 0.3em 0;
+      border-radius: 6px;
+    }
+
+    .dropdown:hover .dropdown-content,
+    .dropdown:focus-within .dropdown-content,
+    .dropdown.open .dropdown-content {
+      display: flex;
+    }
+
+    .dropdown-content a {
+      color: var(--text-light);
+      text-decoration: none;
+      padding: 0.8em 1em;
+      position: relative;
+      transition: color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .dropdown-content a:hover,
+    .dropdown-content a:focus,
+    .dropdown-content a.clicked {
+      background-color: var(--flag-blue);
+      color: #fff !important;
+      transform: translateX(5px);
+    }
+
+    .dropdown-content a::after {
+      content: "";
+      position: absolute;
+      left: 1em;
+      bottom: 6px;
+      width: 0;
+      height: 2px;
+      background: var(--highlight);
+      transition: width 0.25s ease;
+    }
+
+    .dropdown-content a:hover::after,
+    .dropdown-content a:focus::after,
+    .dropdown-content a.clicked::after {
+      width: calc(100% - 2em);
+    }
+  </style>
+
+  <!-- =========================================================
+       FOOTER + PAGE-SECTION STYLES (UNCHANGED)
+       ========================================================= -->
+  <style>
     /* Footer */
     footer {
       background-color: var(--accent);
@@ -268,7 +393,7 @@
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      to   { opacity: 1; transform: translateY(0);     }
     }
 
     /* Cards */
@@ -376,9 +501,9 @@
       border-radius: 3px;
     }
 
-    .new-moon { background: rgba(0, 0, 0, 0.3); }
+    .new-moon  { background: rgba(0, 0, 0, 0.3); }
     .full-moon { background: rgba(255, 215, 0, 0.2); }
-    .eclipse { background: rgba(255, 64, 129, 0.2); }
+    .eclipse   { background: rgba(255, 64, 129, 0.2); }
     .supermoon { background: rgba(0, 255, 136, 0.2); }
 
     /* Current Location Display */
@@ -397,13 +522,17 @@
 </head>
 
 <body>
-  <!-- Header -->
+  <!-- =========================================================
+       HEADER (KEEPING LEFT BRAND — REPLACING RIGHT LINK WITH DROPDOWN)
+       ========================================================= -->
   <header class="header">
-    <!-- Left: Brand -->
+    <!-- Left: Brand (unchanged) -->
     <a href="index.html" class="logo-link" aria-label="BlueandCosmos Home">
       <div class="logo-area">
-        <img src="https://cdn.jsdelivr.net/gh/swetharajan7/blueandcosmos/assets/logo-transparent.png"
-          alt="BlueandCosmos Logo" />
+        <img
+          src="https://cdn.jsdelivr.net/gh/swetharajan7/blueandcosmos/assets/logo-transparent.png"
+          alt="BlueandCosmos Logo"
+        />
         <div class="logo-text">
           <div class="title">BlueandCosmos</div>
           <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
@@ -411,21 +540,59 @@
       </div>
     </a>
 
-    <!-- Right: Lunar Intelligence Center Link -->
-    <a href="moon.html" class="lunar-center-link" title="Refresh Lunar Intelligence Center">
-      🌕 Lunar Intelligence Center
-    </a>
+    <!-- Middle grid column intentionally left empty to preserve spacing -->
+
+    <!-- Right: NEW Educational Apps dropdown (replaces Lunar Intelligence Center pill) -->
+    <nav aria-label="Moon header navigation">
+      <div class="nav-right">
+        <div class="dropdown" data-menu="eduapps">
+          <button class="dropbtn" tabindex="0" aria-haspopup="true" aria-expanded="false">
+            Educational Apps
+          </button>
+          <div class="dropdown-content" role="menu" aria-label="Educational Apps submenu">
+            <a href="moon.html"        role="menuitem">🌙 Moon</a>
+            <a href="discussion.html"  role="menuitem">💬 Community</a>
+            <a href="telescope.html"   role="menuitem">🔭 Telescope</a>
+            <a href="dashboard.html"   role="menuitem">📊 Dashboard</a>
+          </div>
+        </div>
+      </div>
+    </nav>
   </header>
 
-  <!-- Hero Section -->
+  <!-- =========================================================
+       HERO SECTION (UNCHANGED)
+       ========================================================= -->
   <section class="hero">
     <h1>🌙 Lunar Intelligence Center</h1>
-    <p>Your comprehensive guide to lunar phenomena, personalized for your location with 15 years of historical and future data</p>
+    <p>
+      Your comprehensive guide to lunar phenomena, personalized for your location with 15 years of historical and future data
+    </p>
     
-    <!-- Learning Objectives -->
-    <div style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 15px; padding: 1.5em; margin: 2em auto; max-width: 800px; border: 1px solid rgba(255, 255, 255, 0.2);">
-      <h3 style="color: #ffd700; margin-bottom: 1em; text-align: center;">📚 Learning Objectives</h3>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1em; text-align: left;">
+    <!-- Learning Objectives (unchanged) -->
+    <div
+      style="
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 1.5em;
+        margin: 2em auto;
+        max-width: 800px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      "
+    >
+      <h3 style="color: #ffd700; margin-bottom: 1em; text-align: center;">
+        📚 Learning Objectives
+      </h3>
+
+      <div
+        style="
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 1em;
+          text-align: left;
+        "
+      >
         <div>✨ <strong>Master lunar cycles</strong> and understand moon phase progression</div>
         <div>🌊 <strong>Learn tidal effects</strong> and their relationship to lunar position</div>
         <div>📅 <strong>Navigate astronomical timing</strong> across 15 years of data</div>
@@ -436,23 +603,34 @@
     </div>
   </section>
 
-  <!-- City Selector -->
+  <!-- =========================================================
+       CITY SELECTOR (UNCHANGED)
+       ========================================================= -->
   <section class="city-selector">
     <h2>📍 Set Your Location</h2>
     <p>Get personalized moonrise, moonset, and lunar event times for your city</p>
+
     <div class="city-input">
-      <input type="text" id="cityInput" placeholder="Enter your city (e.g., New York, London, Tokyo)" />
+      <input
+        type="text"
+        id="cityInput"
+        placeholder="Enter your city (e.g., New York, London, Tokyo)"
+      />
       <button onclick="setLocation()">Update Location</button>
     </div>
+
     <div class="current-location" id="currentLocation">
-      <span class="location-icon">📍</span>Currently showing data for: <strong>New York City, NY</strong>
+      <span class="location-icon">📍</span>
+      Currently showing data for: <strong>New York City, NY</strong>
     </div>
   </section>
 
-  <!-- Main Content -->
+  <!-- =========================================================
+       MAIN CONTENT (UNCHANGED)
+       ========================================================= -->
   <main class="main-content">
-    <!-- Tab Navigation -->
-    <nav class="tab-nav">
+    <!-- Tabs -->
+    <nav class="tab-nav" aria-label="Moon tabs">
       <button class="tab-btn active" onclick="showTab('current')">🌒 Current Phase</button>
       <button class="tab-btn" onclick="showTab('calendar')">📅 Lunar Calendar</button>
       <button class="tab-btn" onclick="showTab('eclipses')">🌘 Eclipses</button>
@@ -523,11 +701,13 @@
     <div id="calendar" class="tab-content">
       <div class="calendar-container">
         <h2>📅 15-Year Lunar Calendar (2015-2030)</h2>
+
         <div class="year-selector">
           <button class="year-btn" onclick="changeYear(-1)">← Previous</button>
           <div class="year-display" id="currentYear">2025</div>
           <button class="year-btn" onclick="changeYear(1)">Next →</button>
         </div>
+
         <div class="calendar-grid" id="calendarGrid">
           <!-- Calendar will be populated by JavaScript -->
         </div>
@@ -680,24 +860,41 @@
     </div>
   </main>
 
-  <!-- Footer -->
+  <!-- =========================================================
+       FOOTER (UNCHANGED)
+       ========================================================= -->
   <footer>
     <!-- Left: App Store Logos -->
     <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0.5em;">
       <a href="#">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
-          alt="Google Play Store" style="height: 40px;" />
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+          alt="Google Play Store"
+          style="height: 40px;"
+        />
       </a>
       <a href="#">
-        <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Store"
-          style="height: 40px;" />
+        <img
+          src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+          alt="Apple Store"
+          style="height: 40px;"
+        />
       </a>
     </div>
 
     <!-- Center: Legal Links and Trademark -->
     <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.5em;">
       <div style="font-weight: bold;">BlueandCosmos™ 2025</div>
-      <div style="display: flex; flex-wrap: wrap; gap: 1em; justify-content: center; font-size: 0.9em;">
+
+      <div
+        style="
+          display: flex;
+          flex-wrap: wrap;
+          gap: 1em;
+          justify-content: center;
+          font-size: 0.9em;
+        "
+      >
         <a href="privacy.html">Privacy Policy</a>
         <a href="terms.html">Terms of Use</a>
         <a href="sitemap.html">Sitemap</a>
@@ -708,30 +905,50 @@
     <!-- Right: Social Media and "Let's Connect!" -->
     <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-end; gap: 0.5em;">
       <div style="font-weight: bold;">Let's Connect!</div>
+
       <div style="display: flex; gap: 0.5em;">
         <a href="https://twitter.com/blueandcosmos" target="_blank">
-          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X (Twitter)"
-            style="height: 24px; filter: invert(1);" />
+          <img
+            src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg"
+            alt="X (Twitter)"
+            style="height: 24px; filter: invert(1);"
+          />
         </a>
+
         <a href="https://instagram.com/blueandcosmos" target="_blank">
-          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram"
-            style="height: 24px; filter: invert(1);" />
+          <img
+            src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg"
+            alt="Instagram"
+            style="height: 24px; filter: invert(1);"
+          />
         </a>
+
         <a href="https://tiktok.com/@blueandcosmos" target="_blank">
-          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok"
-            style="height: 24px; filter: invert(1);" />
+          <img
+            src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg"
+            alt="TikTok"
+            style="height: 24px; filter: invert(1);"
+          />
         </a>
+
         <a href="https://youtube.com/@blueandcosmos" target="_blank">
-          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube"
-            style="height: 24px; filter: invert(1);" />
+          <img
+            src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg"
+            alt="YouTube"
+            style="height: 24px; filter: invert(1);"
+          />
         </a>
       </div>
     </div>
   </footer>
 
-  <!-- MAXIMUS AI Assistant -->
+  <!-- =========================================================
+       SCRIPTS (MAXIMUS + YOUR ORIGINAL JS + NEW DROPDOWN JS)
+       ========================================================= -->
+  <!-- MAXIMUS AI Assistant (unchanged) -->
   <script src="maximus.js"></script>
 
+  <!-- Your original JS (unchanged except for being kept intact) -->
   <script>
     let currentCity = "New York City, NY";
     let currentYear = 2025;
@@ -966,31 +1183,37 @@
       // Add eclipses (simplified - real dates would come from astronomical databases)
       const eclipses = [
         { year: 2025, month: 2, day: 14, name: 'Total Lunar Eclipse', type: 'eclipse' },
-        { year: 2025, month: 8, day: 7, name: 'Partial Lunar Eclipse', type: 'eclipse' },
-        { year: 2026, month: 2, day: 3, name: 'Total Lunar Eclipse', type: 'eclipse' }
+        { year: 2025, month: 8, day: 7,  name: 'Partial Lunar Eclipse', type: 'eclipse' },
+        { year: 2026, month: 2, day: 3,  name: 'Total Lunar Eclipse', type: 'eclipse' }
       ];
       
       eclipses.forEach(eclipse => {
         if (eclipse.year === year && eclipse.month === month) {
-          events.push({ date: eclipse.day.toString(), name: eclipse.name, type: eclipse.type });
+          events.push({
+            date: eclipse.day.toString(),
+            name: eclipse.name,
+            type: eclipse.type
+          });
         }
       });
       
       // Add supermoons (when full moon coincides with perigee)
       const supermoons = [
-        { year: 2024, month: 9, day: 17, name: 'Supermoon', type: 'supermoon' },
+        { year: 2024, month: 9,  day: 17, name: 'Supermoon', type: 'supermoon' },
         { year: 2024, month: 10, day: 15, name: 'Supermoon', type: 'supermoon' },
-        { year: 2025, month: 9, day: 7, name: 'Supermoon', type: 'supermoon' }
+        { year: 2025, month: 9,  day: 7,  name: 'Supermoon', type: 'supermoon' }
       ];
       
       supermoons.forEach(supermoon => {
         if (supermoon.year === year && supermoon.month === month) {
-          events.push({ date: supermoon.day.toString(), name: supermoon.name, type: supermoon.type });
+          events.push({
+            date: supermoon.day.toString(),
+            name: supermoon.name,
+            type: supermoon.type
+          });
         }
       });
     }
-
-
 
     // Initialize the page
     document.addEventListener('DOMContentLoaded', function() {
@@ -1006,6 +1229,56 @@
       // Initialize with default location data
       updateLocationData();
     });
+  </script>
+
+  <!-- =========================================================
+       NEW: STICKY DROPDOWN LOGIC (MATCHES DASHBOARD BEHAVIOR)
+       ========================================================= -->
+  <script>
+    (function () {
+      const OPEN_CLASS = "open";
+      const HOVER_DELAY_MS = 160;
+
+      document.querySelectorAll(".dropdown").forEach((dd) => {
+        let closeTimer = null;
+        const btn  = dd.querySelector(".dropbtn");
+        const menu = dd.querySelector(".dropdown-content");
+
+        function open() {
+          dd.classList.add(OPEN_CLASS);
+          if (btn) btn.setAttribute("aria-expanded", "true");
+          if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+        }
+
+        function scheduleClose() {
+          if (closeTimer) clearTimeout(closeTimer);
+          closeTimer = setTimeout(() => {
+            dd.classList.remove(OPEN_CLASS);
+            if (btn) btn.setAttribute("aria-expanded", "false");
+          }, HOVER_DELAY_MS);
+        }
+
+        // Hover
+        dd.addEventListener("pointerenter", open);
+        dd.addEventListener("pointerleave", scheduleClose);
+
+        // Keyboard focus helps accessibility
+        btn?.addEventListener("focus", open);
+        menu?.addEventListener("focusout", (e) => {
+          if (!dd.contains(e.relatedTarget)) scheduleClose();
+        });
+
+        // Click feedback on submenu items
+        menu?.querySelectorAll("a").forEach((a) => {
+          a.addEventListener("click", () => {
+            menu.querySelectorAll("a").forEach((el) => el.classList.remove("clicked"));
+            a.classList.add("clicked");
+            dd.classList.remove(OPEN_CLASS);
+            if (btn) btn.setAttribute("aria-expanded", "false");
+          });
+        });
+      });
+    })();
   </script>
 </body>
 </html>
