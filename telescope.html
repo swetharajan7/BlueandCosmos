@@ -436,6 +436,41 @@
       font-weight: bold;
       margin-bottom: 0.5em;
     }
+
+    /* Additional animations and effects */
+    @keyframes satelliteMove {
+      0% { transform: translateX(-50px) translateY(-50px); }
+      100% { transform: translateX(50px) translateY(50px); }
+    }
+
+    .target-object {
+      animation: targetPulse 2s infinite;
+    }
+
+    @keyframes targetPulse {
+      0%, 100% { 
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% { 
+        transform: scale(1.3);
+        opacity: 0.7;
+      }
+    }
+
+    .constellation-line {
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .satellite-track {
+      z-index: 5;
+    }
+
+    .control-btn.active {
+      background: linear-gradient(45deg, var(--highlight), #e91e63);
+      box-shadow: 0 0 15px rgba(255, 64, 129, 0.5);
+    }
   </style>
 </head>
 
@@ -518,10 +553,12 @@
       </div>
 
       <div class="telescope-controls">
-        <button class="zoom-btn" onclick="zoomIn()">+</button>
-        <button class="zoom-btn" onclick="zoomOut()">-</button>
-        <button class="zoom-btn" onclick="centerView()">⌖</button>
-        <button class="zoom-btn" onclick="fullscreen()">⛶</button>
+        <button class="zoom-btn" onclick="zoomIn()" title="Zoom In">+</button>
+        <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out">-</button>
+        <button class="zoom-btn" onclick="centerView()" title="Center View">⌖</button>
+        <button class="zoom-btn" onclick="rotateView()" title="Rotate View">↻</button>
+        <button class="zoom-btn" onclick="toggleFullscreen()" title="Toggle Fullscreen" id="fullscreenBtn">⛶</button>
+        <button class="zoom-btn" onclick="resetView()" title="Reset View">⌂</button>
       </div>
     </section>
 
@@ -577,6 +614,55 @@
       </div>
     </aside>
   </main>
+
+  <!-- Footer -->
+  <footer style="background-color: var(--accent); color: #fff; padding: 2em 1em; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; text-align: center; gap: 1em; margin-top: 2em;">
+    <!-- Left: App Store Logos -->
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0.5em;">
+      <a href="#">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+          alt="Google Play Store" style="height: 40px;" />
+      </a>
+      <a href="#">
+        <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Store"
+          style="height: 40px;" />
+      </a>
+    </div>
+
+    <!-- Center: Legal Links and Trademark -->
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.5em;">
+      <div style="font-weight: bold;">BlueandCosmos™ 2025</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 1em; justify-content: center; font-size: 0.9em;">
+        <a href="privacy.html" style="color: #fff; text-decoration: none;">Privacy Policy</a>
+        <a href="terms.html" style="color: #fff; text-decoration: none;">Terms of Use</a>
+        <a href="sitemap.html" style="color: #fff; text-decoration: none;">Sitemap</a>
+        <a href="contact.html" style="color: #fff; text-decoration: none;">Contact Us</a>
+      </div>
+    </div>
+
+    <!-- Right: Social Media and "Let's Connect!" -->
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-end; gap: 0.5em;">
+      <div style="font-weight: bold;">Let's Connect!</div>
+      <div style="display: flex; gap: 0.5em;">
+        <a href="https://twitter.com/blueandcosmos" target="_blank">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X (Twitter)"
+            style="height: 24px; filter: invert(1);" />
+        </a>
+        <a href="https://instagram.com/blueandcosmos" target="_blank">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram"
+            style="height: 24px; filter: invert(1);" />
+        </a>
+        <a href="https://tiktok.com/@blueandcosmos" target="_blank">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok"
+            style="height: 24px; filter: invert(1);" />
+        </a>
+        <a href="https://youtube.com/@blueandcosmos" target="_blank">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube"
+            style="height: 24px; filter: invert(1);" />
+        </a>
+      </div>
+    </div>
+  </footer>
 
   <!-- Achievement Notification -->
   <div class="achievement" id="achievement">
@@ -685,81 +771,262 @@
     function setMode(mode) {
       currentMode = mode;
       
-      // Update button states
-      document.querySelectorAll('.control-btn').forEach(btn => {
-        btn.classList.remove('active');
-      });
+      // Update button states - only for telescope mode buttons
+      const modeButtons = document.querySelectorAll('.control-section:nth-child(2) .control-btn');
+      modeButtons.forEach(btn => btn.classList.remove('active'));
       event.target.classList.add('active');
       
       // Update sky view based on mode
       const skyCanvas = document.getElementById('skyCanvas');
       
       switch(mode) {
-        case 'hubble':
-          skyCanvas.style.background = 'url("https://hubblesite.org/files/live/sites/hubble/files/home/hubble-30th-anniversary/images/hubble_30th_anniversary_image.jpg") center/cover';
-          break;
-        case 'webb':
-          skyCanvas.style.background = 'url("https://webbtelescope.org/files/live/sites/webb/files/home/_images/webb-first-deep-field.jpg") center/cover';
-          break;
-        case 'ground':
-          skyCanvas.style.filter = 'sepia(0.3) contrast(1.2)';
-          break;
-        default:
+        case 'live':
           skyCanvas.style.background = '';
           skyCanvas.style.filter = '';
+          skyCanvas.style.backgroundImage = '';
+          addToLog('Switched to Live Sky View');
+          break;
+          
+        case 'hubble':
+          skyCanvas.style.backgroundImage = 'url("https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80")';
+          skyCanvas.style.backgroundSize = 'cover';
+          skyCanvas.style.backgroundPosition = 'center';
+          skyCanvas.style.filter = 'hue-rotate(240deg) saturate(1.5)';
+          addToLog('Switched to Hubble Space Telescope feed');
+          break;
+          
+        case 'webb':
+          skyCanvas.style.backgroundImage = 'url("https://images.unsplash.com/photo-1502134249126-9f3755a50d78?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80")';
+          skyCanvas.style.backgroundSize = 'cover';
+          skyCanvas.style.backgroundPosition = 'center';
+          skyCanvas.style.filter = 'hue-rotate(300deg) saturate(2) brightness(1.2)';
+          addToLog('Switched to James Webb Space Telescope feed');
+          break;
+          
+        case 'ground':
+          skyCanvas.style.backgroundImage = '';
+          skyCanvas.style.filter = 'sepia(0.3) contrast(1.2) brightness(0.8)';
+          addToLog('Switched to Ground Observatory view');
+          break;
       }
-      
-      addToLog(`Switched to ${mode} mode`);
     }
 
     function gotoTarget(target) {
       const targets = {
-        'moon': { name: '🌙 Moon', info: 'Earth\'s natural satellite' },
-        'jupiter': { name: '🪐 Jupiter', info: 'Largest planet in our solar system' },
-        'saturn': { name: '🪐 Saturn', info: 'The ringed planet' },
-        'iss': { name: '🛰️ International Space Station', info: 'Currently orbiting Earth' },
-        'andromeda': { name: '🌌 Andromeda Galaxy', info: 'Our nearest galactic neighbor' }
+        'moon': { 
+          name: '🌙 Moon', 
+          info: 'Earth\'s natural satellite',
+          position: { top: 30, left: 70 },
+          zoom: 3,
+          data: {
+            'Type': 'Natural Satellite',
+            'Distance': '384,400 km',
+            'Diameter': '3,474 km',
+            'Phase': 'Waxing Crescent',
+            'Visibility': 'Excellent'
+          }
+        },
+        'jupiter': { 
+          name: '🪐 Jupiter', 
+          info: 'Largest planet in our solar system',
+          position: { top: 50, left: 40 },
+          zoom: 4,
+          data: {
+            'Type': 'Gas Giant',
+            'Distance': '588 million km',
+            'Diameter': '142,984 km',
+            'Moons': '95 confirmed',
+            'Great Red Spot': 'Visible'
+          }
+        },
+        'saturn': { 
+          name: '🪐 Saturn', 
+          info: 'The ringed planet',
+          position: { top: 60, left: 80 },
+          zoom: 4,
+          data: {
+            'Type': 'Gas Giant',
+            'Distance': '1.4 billion km',
+            'Diameter': '120,536 km',
+            'Rings': 'Spectacular',
+            'Moons': '146 confirmed'
+          }
+        },
+        'iss': { 
+          name: '🛰️ International Space Station', 
+          info: 'Currently orbiting Earth',
+          position: { top: 20, left: 60 },
+          zoom: 6,
+          data: {
+            'Type': 'Space Station',
+            'Altitude': '408 km',
+            'Speed': '27,600 km/h',
+            'Orbit Period': '93 minutes',
+            'Crew': '7 astronauts'
+          }
+        },
+        'andromeda': { 
+          name: '🌌 Andromeda Galaxy', 
+          info: 'Our nearest galactic neighbor',
+          position: { top: 25, left: 25 },
+          zoom: 2,
+          data: {
+            'Type': 'Spiral Galaxy',
+            'Distance': '2.5 million light years',
+            'Diameter': '220,000 light years',
+            'Stars': '1 trillion',
+            'Collision': 'With Milky Way in 4.5 billion years'
+          }
+        }
       };
       
       const targetInfo = targets[target];
       if (targetInfo) {
-        selectObject(targetInfo.name);
-        addToLog(`Targeted ${targetInfo.name}`);
+        // Create or move target object
+        addTargetToSky(target, targetInfo);
         
-        // Simulate telescope movement
+        // Zoom and focus on target
+        zoomLevel = targetInfo.zoom;
+        currentRotation = 0;
+        
+        // Animate telescope movement
         const skyCanvas = document.getElementById('skyCanvas');
-        skyCanvas.style.transform = `scale(${zoomLevel * 1.5}) rotate(${Math.random() * 10 - 5}deg)`;
+        skyCanvas.style.transition = 'all 2s ease-in-out';
+        skyCanvas.style.transform = `scale(${zoomLevel}) rotate(${currentRotation}deg)`;
+        skyCanvas.style.transformOrigin = `${targetInfo.position.left}% ${targetInfo.position.top}%`;
         
+        // Select the object
         setTimeout(() => {
-          skyCanvas.style.transform = `scale(${zoomLevel})`;
-        }, 1000);
+          selectObjectWithData(targetInfo.name, targetInfo.data);
+          skyCanvas.style.transition = '';
+          addToLog(`Successfully targeted ${targetInfo.name}`);
+          
+          // Show achievement for first target
+          if (target === 'jupiter' || target === 'saturn') {
+            showAchievement('Planet Hunter!', `Successfully observed ${targetInfo.name}`);
+          }
+        }, 2000);
+        
+        addToLog(`Slewing telescope to ${targetInfo.name}...`);
       }
     }
 
+    function addTargetToSky(targetId, targetInfo) {
+      const skyCanvas = document.getElementById('skyCanvas');
+      
+      // Remove existing target if it exists
+      const existingTarget = document.getElementById(`target-${targetId}`);
+      if (existingTarget) existingTarget.remove();
+      
+      // Create new target object
+      const targetElement = document.createElement('div');
+      targetElement.id = `target-${targetId}`;
+      targetElement.className = 'celestial-object target-object';
+      targetElement.style.top = targetInfo.position.top + '%';
+      targetElement.style.left = targetInfo.position.left + '%';
+      targetElement.style.width = '15px';
+      targetElement.style.height = '15px';
+      targetElement.style.background = '#ffd700';
+      targetElement.style.border = '2px solid #ff4081';
+      targetElement.style.boxShadow = '0 0 20px #ffd700';
+      targetElement.style.zIndex = '10';
+      targetElement.onclick = () => selectObjectWithData(targetInfo.name, targetInfo.data);
+      
+      skyCanvas.appendChild(targetElement);
+    }
+
+    function selectObjectWithData(objectName, objectData) {
+      selectedObject = objectName;
+      document.getElementById('objectName').textContent = objectName;
+      
+      const detailsDiv = document.getElementById('objectDetails');
+      detailsDiv.innerHTML = Object.entries(objectData).map(([key, value]) => 
+        `<div class="info-item">
+          <span>${key}</span>
+          <span class="info-value">${value}</span>
+        </div>`
+      ).join('');
+
+      addToLog(`Detailed observation of ${objectName}`);
+    }
+
+    let currentRotation = 0;
+    let isFullscreen = false;
+
     function zoomIn() {
       zoomLevel = Math.min(zoomLevel * 1.5, 10);
-      document.getElementById('skyCanvas').style.transform = `scale(${zoomLevel})`;
+      updateSkyTransform();
       addToLog(`Zoomed in (${zoomLevel.toFixed(1)}x)`);
     }
 
     function zoomOut() {
       zoomLevel = Math.max(zoomLevel / 1.5, 0.5);
-      document.getElementById('skyCanvas').style.transform = `scale(${zoomLevel})`;
+      updateSkyTransform();
       addToLog(`Zoomed out (${zoomLevel.toFixed(1)}x)`);
     }
 
     function centerView() {
-      document.getElementById('skyCanvas').style.transform = `scale(${zoomLevel})`;
+      const skyCanvas = document.getElementById('skyCanvas');
+      skyCanvas.style.transformOrigin = 'center center';
+      updateSkyTransform();
       addToLog('Centered view');
     }
 
-    function fullscreen() {
-      const telescopeView = document.querySelector('.telescope-view');
-      if (telescopeView.requestFullscreen) {
-        telescopeView.requestFullscreen();
-      }
-      addToLog('Entered fullscreen mode');
+    function rotateView() {
+      currentRotation += 15;
+      if (currentRotation >= 360) currentRotation = 0;
+      updateSkyTransform();
+      addToLog(`Rotated view (${currentRotation}°)`);
     }
+
+    function updateSkyTransform() {
+      const skyCanvas = document.getElementById('skyCanvas');
+      skyCanvas.style.transform = `scale(${zoomLevel}) rotate(${currentRotation}deg)`;
+    }
+
+    function toggleFullscreen() {
+      const telescopeView = document.querySelector('.telescope-view');
+      const fullscreenBtn = document.getElementById('fullscreenBtn');
+      
+      if (!isFullscreen) {
+        if (telescopeView.requestFullscreen) {
+          telescopeView.requestFullscreen();
+          fullscreenBtn.textContent = '⛶';
+          fullscreenBtn.title = 'Exit Fullscreen';
+          isFullscreen = true;
+          addToLog('Entered fullscreen mode');
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+          fullscreenBtn.textContent = '⛶';
+          fullscreenBtn.title = 'Enter Fullscreen';
+          isFullscreen = false;
+          addToLog('Exited fullscreen mode');
+        }
+      }
+    }
+
+    function resetView() {
+      zoomLevel = 1;
+      currentRotation = 0;
+      updateSkyTransform();
+      addToLog('Reset view to default');
+    }
+
+    // Listen for fullscreen changes
+    document.addEventListener('fullscreenchange', function() {
+      const fullscreenBtn = document.getElementById('fullscreenBtn');
+      if (document.fullscreenElement) {
+        isFullscreen = true;
+        fullscreenBtn.textContent = '⛶';
+        fullscreenBtn.title = 'Exit Fullscreen (ESC)';
+      } else {
+        isFullscreen = false;
+        fullscreenBtn.textContent = '⛶';
+        fullscreenBtn.title = 'Enter Fullscreen';
+      }
+    });
 
     function updateSky() {
       const location = document.getElementById('location').value;
@@ -767,40 +1034,244 @@
       
       addToLog(`Updated sky for ${location} at ${datetime}`);
       
-      // Simulate sky update with new star positions
-      const stars = document.querySelectorAll('.celestial-object.star');
-      stars.forEach(star => {
-        star.style.top = Math.random() * 100 + '%';
-        star.style.left = Math.random() * 100 + '%';
+      // Generate location-specific sky based on city
+      const locationData = generateSkyForLocation(location, datetime);
+      updateSkyDisplay(locationData);
+    }
+
+    function generateSkyForLocation(location, datetime) {
+      const cityLower = location.toLowerCase();
+      let skyData = {
+        stars: [],
+        planets: [],
+        specialObjects: [],
+        skyRotation: 0
+      };
+
+      // Different sky configurations based on location
+      if (cityLower.includes('london') || cityLower.includes('uk')) {
+        skyData.skyRotation = 15;
+        skyData.stars = generateStarsForLatitude(51.5); // London latitude
+        skyData.specialObjects.push({ name: 'Polaris', type: 'star', top: 15, left: 50 });
+      } else if (cityLower.includes('tokyo') || cityLower.includes('japan')) {
+        skyData.skyRotation = -10;
+        skyData.stars = generateStarsForLatitude(35.7); // Tokyo latitude
+        skyData.specialObjects.push({ name: 'Vega', type: 'star', top: 25, left: 70 });
+      } else if (cityLower.includes('sydney') || cityLower.includes('australia')) {
+        skyData.skyRotation = 180; // Southern hemisphere
+        skyData.stars = generateStarsForLatitude(-33.9); // Sydney latitude
+        skyData.specialObjects.push({ name: 'Southern Cross', type: 'constellation', top: 60, left: 40 });
+      } else if (cityLower.includes('los angeles') || cityLower.includes('california')) {
+        skyData.skyRotation = 5;
+        skyData.stars = generateStarsForLatitude(34.1); // LA latitude
+        skyData.specialObjects.push({ name: 'Hollywood Sign', type: 'landmark', top: 80, left: 30 });
+      } else {
+        // Default NYC
+        skyData.skyRotation = 0;
+        skyData.stars = generateStarsForLatitude(40.7); // NYC latitude
+        skyData.specialObjects.push({ name: 'Empire State Building', type: 'landmark', top: 85, left: 50 });
+      }
+
+      // Add time-based adjustments
+      const date = new Date(datetime);
+      const hour = date.getHours();
+      skyData.timeRotation = (hour - 12) * 15; // 15 degrees per hour
+
+      return skyData;
+    }
+
+    function generateStarsForLatitude(latitude) {
+      const stars = [];
+      const numStars = Math.abs(latitude) > 60 ? 30 : 50; // Fewer stars at extreme latitudes
+      
+      for (let i = 0; i < numStars; i++) {
+        stars.push({
+          top: Math.random() * 100,
+          left: Math.random() * 100,
+          brightness: Math.random() * 3 + 1,
+          name: `Star ${i + 1}`
+        });
+      }
+      return stars;
+    }
+
+    function updateSkyDisplay(skyData) {
+      const skyCanvas = document.getElementById('skyCanvas');
+      
+      // Clear existing stars
+      const existingStars = skyCanvas.querySelectorAll('.celestial-object.star');
+      existingStars.forEach(star => star.remove());
+      
+      // Apply sky rotation based on location and time
+      const totalRotation = skyData.skyRotation + skyData.timeRotation;
+      skyCanvas.style.transform = `scale(${zoomLevel}) rotate(${totalRotation}deg)`;
+      
+      // Add new stars for this location
+      skyData.stars.forEach((star, index) => {
+        const starElement = document.createElement('div');
+        starElement.className = 'celestial-object star';
+        starElement.style.top = star.top + '%';
+        starElement.style.left = star.left + '%';
+        starElement.style.width = star.brightness + 'px';
+        starElement.style.height = star.brightness + 'px';
+        starElement.onclick = () => selectObject(star.name);
+        skyCanvas.appendChild(starElement);
+      });
+      
+      // Add special objects for this location
+      skyData.specialObjects.forEach(obj => {
+        const objElement = document.createElement('div');
+        objElement.className = `celestial-object ${obj.type}`;
+        objElement.style.top = obj.top + '%';
+        objElement.style.left = obj.left + '%';
+        objElement.onclick = () => selectObject(obj.name);
+        skyCanvas.appendChild(objElement);
       });
     }
 
+    let constellationsVisible = false;
+    let satellitesVisible = false;
+    let pollutionFilterActive = false;
+
     function toggleConstellations() {
-      // Add constellation lines (simplified)
-      addToLog('Toggled constellation lines');
-    }
-
-    function toggleSatellites() {
-      // Show/hide satellite tracks
-      addToLog('Toggled satellite visibility');
-    }
-
-    function togglePollution() {
+      constellationsVisible = !constellationsVisible;
       const skyCanvas = document.getElementById('skyCanvas');
-      if (skyCanvas.style.filter.includes('brightness')) {
-        skyCanvas.style.filter = '';
-        addToLog('Light pollution filter removed');
+      
+      if (constellationsVisible) {
+        addConstellationLines();
+        addToLog('Constellation lines enabled');
+        event.target.classList.add('active');
       } else {
-        skyCanvas.style.filter = 'brightness(1.5) contrast(1.3)';
-        addToLog('Light pollution filter applied');
+        removeConstellationLines();
+        addToLog('Constellation lines disabled');
+        event.target.classList.remove('active');
       }
     }
 
+    function addConstellationLines() {
+      const skyCanvas = document.getElementById('skyCanvas');
+      
+      // Add some constellation lines (simplified)
+      for (let i = 0; i < 5; i++) {
+        const line = document.createElement('div');
+        line.className = 'constellation-line';
+        line.style.position = 'absolute';
+        line.style.width = Math.random() * 100 + 50 + 'px';
+        line.style.height = '1px';
+        line.style.background = 'rgba(255, 255, 255, 0.3)';
+        line.style.top = Math.random() * 80 + 10 + '%';
+        line.style.left = Math.random() * 80 + 10 + '%';
+        line.style.transform = `rotate(${Math.random() * 360}deg)`;
+        skyCanvas.appendChild(line);
+      }
+    }
+
+    function removeConstellationLines() {
+      const lines = document.querySelectorAll('.constellation-line');
+      lines.forEach(line => line.remove());
+    }
+
+    function toggleSatellites() {
+      satellitesVisible = !satellitesVisible;
+      const skyCanvas = document.getElementById('skyCanvas');
+      
+      if (satellitesVisible) {
+        addSatelliteTracks();
+        addToLog('Satellite tracks enabled');
+        event.target.classList.add('active');
+      } else {
+        removeSatelliteTracks();
+        addToLog('Satellite tracks disabled');
+        event.target.classList.remove('active');
+      }
+    }
+
+    function addSatelliteTracks() {
+      const skyCanvas = document.getElementById('skyCanvas');
+      
+      // Add satellite tracks
+      for (let i = 0; i < 3; i++) {
+        const satellite = document.createElement('div');
+        satellite.className = 'satellite-track';
+        satellite.style.position = 'absolute';
+        satellite.style.width = '4px';
+        satellite.style.height = '4px';
+        satellite.style.background = '#00ff88';
+        satellite.style.borderRadius = '50%';
+        satellite.style.top = Math.random() * 100 + '%';
+        satellite.style.left = Math.random() * 100 + '%';
+        satellite.style.boxShadow = '0 0 10px #00ff88';
+        satellite.style.animation = `satelliteMove ${5 + Math.random() * 10}s linear infinite`;
+        satellite.onclick = () => selectObject(`Satellite ${i + 1}`);
+        skyCanvas.appendChild(satellite);
+      }
+    }
+
+    function removeSatelliteTracks() {
+      const satellites = document.querySelectorAll('.satellite-track');
+      satellites.forEach(sat => sat.remove());
+    }
+
+    function togglePollution() {
+      pollutionFilterActive = !pollutionFilterActive;
+      const skyCanvas = document.getElementById('skyCanvas');
+      
+      if (pollutionFilterActive) {
+        skyCanvas.style.filter = (skyCanvas.style.filter || '') + ' brightness(1.5) contrast(1.3)';
+        addToLog('Light pollution filter applied - revealing hidden stars');
+        event.target.classList.add('active');
+        
+        // Add more faint stars
+        addFaintStars();
+      } else {
+        skyCanvas.style.filter = skyCanvas.style.filter.replace('brightness(1.5) contrast(1.3)', '');
+        addToLog('Light pollution filter removed');
+        event.target.classList.remove('active');
+        
+        // Remove faint stars
+        removeFaintStars();
+      }
+    }
+
+    function addFaintStars() {
+      const skyCanvas = document.getElementById('skyCanvas');
+      
+      for (let i = 0; i < 20; i++) {
+        const star = document.createElement('div');
+        star.className = 'celestial-object star faint-star';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.width = '1px';
+        star.style.height = '1px';
+        star.style.opacity = '0.6';
+        star.onclick = () => selectObject(`Faint Star ${i + 1}`);
+        skyCanvas.appendChild(star);
+      }
+    }
+
+    function removeFaintStars() {
+      const faintStars = document.querySelectorAll('.faint-star');
+      faintStars.forEach(star => star.remove());
+    }
+
     function timeTravel() {
-      const randomDate = new Date(2020 + Math.random() * 10, Math.random() * 12, Math.random() * 28);
-      document.getElementById('datetime').value = randomDate.toISOString().slice(0, 16);
+      const currentDate = new Date();
+      const randomYears = Math.random() * 10 - 5; // +/- 5 years
+      const newDate = new Date(currentDate.getTime() + (randomYears * 365 * 24 * 60 * 60 * 1000));
+      
+      document.getElementById('datetime').value = newDate.toISOString().slice(0, 16);
       updateSky();
-      addToLog(`Time traveled to ${randomDate.toDateString()}`);
+      addToLog(`Time traveled to ${newDate.toDateString()}`);
+      
+      // Visual effect for time travel
+      const skyCanvas = document.getElementById('skyCanvas');
+      skyCanvas.style.transition = 'all 1s ease';
+      skyCanvas.style.filter = 'blur(5px) hue-rotate(180deg)';
+      
+      setTimeout(() => {
+        skyCanvas.style.filter = '';
+        skyCanvas.style.transition = '';
+      }, 1000);
     }
 
     function addToLog(message) {
