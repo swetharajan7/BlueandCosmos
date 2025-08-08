@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Virtual Observatory Command Center - BlueandCosmos</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet" />
+  
+  <style>
+    :root {
+      --accent: #0033a0;
+      --flag-blue: #002366;
+      --highlight: #ff4081;
+      --text-white: #ffffff;
+      --text-light: #cce0ff;
+      --dark-bg: #121212;
+      --dark-accent: #001f5b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Work Sans', sans-serif;
+      background: radial-gradient(ellipse at center, #0a0a23 0%, #000000 100%);
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animated starfield background */
+    .starfield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: 
+        radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+        radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(2px 2px at 160px 30px, #ddd, transparent);
+      background-repeat: repeat;
+      background-size: 200px 100px;
+      animation: twinkle 20s linear infinite;
+    }
+
+    @keyframes twinkle {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-100px); }
+    }
+
+    /* Header */
+    .header {
+      background: rgba(0, 51, 160, 0.9);
+      backdrop-filter: blur(15px);
+      color: var(--text-white);
+      padding: 1em 2em;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 1em;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
+    }
+
+    .logo-area img {
+      height: 50px;
+      width: 50px;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+      margin-left: -4px;
+    }
+
+    .logo-text .title {
+      font-size: 1.4em;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .logo-text .tagline {
+      font-size: 0.85em;
+      color: var(--text-light);
+    }
+
+    .telescope-title {
+      justify-self: center;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #ffd700;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+
+    .nav-back {
+      justify-self: end;
+      color: var(--text-light);
+      text-decoration: none;
+      padding: 0.5em 1em;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-back:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    /* Main Observatory Interface */
+    .observatory {
+      display: grid;
+      grid-template-columns: 300px 1fr 300px;
+      grid-template-rows: 1fr;
+      height: calc(100vh - 100px);
+      gap: 1em;
+      padding: 1em;
+    }
+
+    /* Left Control Panel */
+    .control-panel {
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 1.5em;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      overflow-y: auto;
+    }
+
+    .control-section {
+      margin-bottom: 2em;
+    }
+
+    .control-section h3 {
+      color: var(--highlight);
+      margin-bottom: 1em;
+      font-size: 1.1em;
+      border-bottom: 1px solid rgba(255, 64, 129, 0.3);
+      padding-bottom: 0.5em;
+    }
+
+    .control-item {
+      margin-bottom: 1em;
+    }
+
+    .control-item label {
+      display: block;
+      margin-bottom: 0.3em;
+      font-size: 0.9em;
+      color: var(--text-light);
+    }
+
+    .control-item input, .control-item select {
+      width: 100%;
+      padding: 0.5em;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 0.9em;
+    }
+
+    .control-btn {
+      width: 100%;
+      padding: 0.8em;
+      background: linear-gradient(45deg, var(--accent), #0066cc);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-bottom: 0.5em;
+      transition: all 0.3s ease;
+    }
+
+    .control-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 102, 204, 0.4);
+    }
+
+    .control-btn.active {
+      background: linear-gradient(45deg, var(--highlight), #e91e63);
+    }
+
+    /* Main Telescope View */
+    .telescope-view {
+      background: radial-gradient(circle at center, #001122 0%, #000000 100%);
+      border-radius: 15px;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid rgba(255, 215, 0, 0.3);
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+    }
+
+    .sky-canvas {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      cursor: crosshair;
+      background: 
+        radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.8) 1px, transparent 1px),
+        radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+        radial-gradient(circle at 20% 70%, rgba(255, 255, 255, 0.9) 1px, transparent 1px),
+        radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.7) 1px, transparent 1px),
+        radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.8) 2px, transparent 2px);
+      animation: skyRotate 300s linear infinite;
+    }
+
+    @keyframes skyRotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .celestial-object {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      animation: pulse 2s infinite;
+    }
+
+    .celestial-object:hover {
+      transform: scale(1.5);
+      box-shadow: 0 0 20px currentColor;
+    }
+
+    .star { background: #ffffff; }
+    .planet { background: #ffd700; }
+    .galaxy { background: #ff6b9d; }
+    .nebula { background: #00ffff; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
+    }
+
+    /* Telescope Controls Overlay */
+    .telescope-controls {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 1em;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 1em;
+      border-radius: 25px;
+      backdrop-filter: blur(10px);
+    }
+
+    .zoom-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-size: 1.2em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .zoom-btn:hover {
+      background: var(--highlight);
+      transform: scale(1.1);
+    }
+
+    /* Right Information Panel */
+    .info-panel {
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 1.5em;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      overflow-y: auto;
+    }
+
+    .object-info {
+      margin-bottom: 2em;
+    }
+
+    .object-info h3 {
+      color: #ffd700;
+      margin-bottom: 1em;
+      font-size: 1.2em;
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5em 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .info-value {
+      color: var(--highlight);
+      font-weight: bold;
+    }
+
+    /* Live Telescope Feeds */
+    .telescope-feeds {
+      margin-top: 2em;
+    }
+
+    .feed-item {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 1em;
+      margin-bottom: 1em;
+      border-left: 3px solid var(--highlight);
+    }
+
+    .feed-title {
+      font-weight: bold;
+      color: #ffd700;
+      margin-bottom: 0.5em;
+    }
+
+    .feed-status {
+      font-size: 0.9em;
+      color: var(--text-light);
+    }
+
+    /* Observation Log */
+    .observation-log {
+      max-height: 200px;
+      overflow-y: auto;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 1em;
+    }
+
+    .log-entry {
+      padding: 0.5em 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.9em;
+    }
+
+    .log-time {
+      color: var(--highlight);
+      font-weight: bold;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .observatory {
+        grid-template-columns: 250px 1fr 250px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .observatory {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+        height: auto;
+      }
+      
+      .control-panel, .info-panel {
+        height: auto;
+        max-height: 300px;
+      }
+    }
+
+    /* Special Effects */
+    .shooting-star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: shootingStar 3s linear infinite;
+    }
+
+    @keyframes shootingStar {
+      0% {
+        transform: translateX(-100px) translateY(-100px);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(100px) translateY(100px);
+        opacity: 0;
+      }
+    }
+
+    /* Achievement Notifications */
+    .achievement {
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      background: linear-gradient(45deg, #ffd700, #ffed4e);
+      color: #000;
+      padding: 1em;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(255, 215, 0, 0.5);
+      transform: translateX(400px);
+      transition: transform 0.5s ease;
+      z-index: 2000;
+    }
+
+    .achievement.show {
+      transform: translateX(0);
+    }
+
+    .achievement-title {
+      font-weight: bold;
+      margin-bottom: 0.5em;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="starfield"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <a href="index.html" class="logo-link" aria-label="BlueandCosmos Home">
+      <div class="logo-area">
+        <img src="https://cdn.jsdelivr.net/gh/swetharajan7/blueandcosmos/assets/logo-transparent.png"
+          alt="BlueandCosmos Logo" />
+        <div class="logo-text">
+          <div class="title">BlueandCosmos</div>
+          <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
+        </div>
+      </div>
+    </a>
+
+    <div class="telescope-title">🔭 Virtual Observatory Command Center</div>
+
+    <a href="dashboard.html" class="nav-back">← Dashboard</a>
+  </header>
+
+  <!-- Main Observatory Interface -->
+  <main class="observatory">
+    <!-- Left Control Panel -->
+    <aside class="control-panel">
+      <div class="control-section">
+        <h3>🎯 Observation Target</h3>
+        <div class="control-item">
+          <label>Location</label>
+          <input type="text" id="location" placeholder="New York City, NY" value="New York City, NY">
+        </div>
+        <div class="control-item">
+          <label>Date & Time</label>
+          <input type="datetime-local" id="datetime" value="">
+        </div>
+        <button class="control-btn" onclick="updateSky()">Update Sky View</button>
+      </div>
+
+      <div class="control-section">
+        <h3>🔭 Telescope Mode</h3>
+        <button class="control-btn active" onclick="setMode('live')">Live Sky View</button>
+        <button class="control-btn" onclick="setMode('hubble')">Hubble Feed</button>
+        <button class="control-btn" onclick="setMode('webb')">James Webb</button>
+        <button class="control-btn" onclick="setMode('ground')">Ground Observatories</button>
+      </div>
+
+      <div class="control-section">
+        <h3>🎨 View Options</h3>
+        <button class="control-btn" onclick="toggleConstellations()">Toggle Constellations</button>
+        <button class="control-btn" onclick="toggleSatellites()">Show Satellites</button>
+        <button class="control-btn" onclick="togglePollution()">Remove Light Pollution</button>
+        <button class="control-btn" onclick="timeTravel()">Time Travel Mode</button>
+      </div>
+
+      <div class="control-section">
+        <h3>🎯 Quick Targets</h3>
+        <button class="control-btn" onclick="gotoTarget('moon')">🌙 Moon</button>
+        <button class="control-btn" onclick="gotoTarget('jupiter')">🪐 Jupiter</button>
+        <button class="control-btn" onclick="gotoTarget('saturn')">🪐 Saturn</button>
+        <button class="control-btn" onclick="gotoTarget('iss')">🛰️ ISS</button>
+        <button class="control-btn" onclick="gotoTarget('andromeda')">🌌 Andromeda</button>
+      </div>
+    </aside>
+
+    <!-- Main Telescope View -->
+    <section class="telescope-view">
+      <div class="sky-canvas" id="skyCanvas">
+        <!-- Celestial objects will be dynamically added here -->
+        <div class="celestial-object star" style="top: 20%; left: 30%;" onclick="selectObject('Sirius')"></div>
+        <div class="celestial-object planet" style="top: 40%; left: 60%;" onclick="selectObject('Jupiter')"></div>
+        <div class="celestial-object galaxy" style="top: 70%; left: 20%;" onclick="selectObject('Andromeda')"></div>
+        <div class="celestial-object nebula" style="top: 30%; left: 80%;" onclick="selectObject('Orion Nebula')"></div>
+        
+        <!-- Shooting stars -->
+        <div class="shooting-star" style="top: 10%; left: 10%; animation-delay: 0s;"></div>
+        <div class="shooting-star" style="top: 60%; left: 70%; animation-delay: 5s;"></div>
+      </div>
+
+      <div class="telescope-controls">
+        <button class="zoom-btn" onclick="zoomIn()">+</button>
+        <button class="zoom-btn" onclick="zoomOut()">-</button>
+        <button class="zoom-btn" onclick="centerView()">⌖</button>
+        <button class="zoom-btn" onclick="fullscreen()">⛶</button>
+      </div>
+    </section>
+
+    <!-- Right Information Panel -->
+    <aside class="info-panel">
+      <div class="object-info">
+        <h3 id="objectName">Select an object to observe</h3>
+        <div id="objectDetails">
+          <div class="info-item">
+            <span>Click on any celestial object in the sky view to get detailed information</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="telescope-feeds">
+        <h3 style="color: var(--highlight); margin-bottom: 1em;">🛰️ Live Telescope Feeds</h3>
+        
+        <div class="feed-item">
+          <div class="feed-title">Hubble Space Telescope</div>
+          <div class="feed-status">🟢 Currently observing: NGC 4414 Galaxy</div>
+        </div>
+
+        <div class="feed-item">
+          <div class="feed-title">James Webb Space Telescope</div>
+          <div class="feed-status">🟢 Deep field observation in progress</div>
+        </div>
+
+        <div class="feed-item">
+          <div class="feed-title">Keck Observatory</div>
+          <div class="feed-status">🟡 Maintenance mode</div>
+        </div>
+
+        <div class="feed-item">
+          <div class="feed-title">ALMA Array</div>
+          <div class="feed-status">🟢 Studying star formation</div>
+        </div>
+      </div>
+
+      <div class="observation-log">
+        <h4 style="color: #ffd700; margin-bottom: 0.5em;">📝 Observation Log</h4>
+        <div class="log-entry">
+          <span class="log-time">20:45</span> - Observed Jupiter's Great Red Spot
+        </div>
+        <div class="log-entry">
+          <span class="log-time">20:32</span> - ISS pass recorded
+        </div>
+        <div class="log-entry">
+          <span class="log-time">20:18</span> - Saturn's rings visible
+        </div>
+        <div class="log-entry">
+          <span class="log-time">20:05</span> - Started observation session
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Achievement Notification -->
+  <div class="achievement" id="achievement">
+    <div class="achievement-title">🏆 Achievement Unlocked!</div>
+    <div class="achievement-text">First Deep Sky Object Observed!</div>
+  </div>
+
+  <script>
+    let currentMode = 'live';
+    let zoomLevel = 1;
+    let selectedObject = null;
+
+    // Initialize the telescope
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set current date/time
+      const now = new Date();
+      const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+      document.getElementById('datetime').value = localDateTime;
+
+      // Add more celestial objects dynamically
+      addRandomStars();
+      
+      // Start real-time updates
+      setInterval(updateRealTimeData, 30000); // Update every 30 seconds
+    });
+
+    function addRandomStars() {
+      const skyCanvas = document.getElementById('skyCanvas');
+      
+      // Add random stars
+      for (let i = 0; i < 50; i++) {
+        const star = document.createElement('div');
+        star.className = 'celestial-object star';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.width = (Math.random() * 3 + 1) + 'px';
+        star.style.height = star.style.width;
+        star.onclick = () => selectObject(`Star ${i + 1}`);
+        skyCanvas.appendChild(star);
+      }
+    }
+
+    function selectObject(objectName) {
+      selectedObject = objectName;
+      document.getElementById('objectName').textContent = objectName;
+      
+      const objectData = getObjectData(objectName);
+      const detailsDiv = document.getElementById('objectDetails');
+      
+      detailsDiv.innerHTML = Object.entries(objectData).map(([key, value]) => 
+        `<div class="info-item">
+          <span>${key}</span>
+          <span class="info-value">${value}</span>
+        </div>`
+      ).join('');
+
+      // Add to observation log
+      addToLog(`Observed ${objectName}`);
+      
+      // Show achievement for first deep sky object
+      if (objectName.includes('Galaxy') || objectName.includes('Nebula')) {
+        showAchievement('Deep Sky Explorer!', `Observed ${objectName}`);
+      }
+    }
+
+    function getObjectData(objectName) {
+      const data = {
+        'Sirius': {
+          'Type': 'Binary Star System',
+          'Distance': '8.6 light years',
+          'Magnitude': '-1.46',
+          'Constellation': 'Canis Major',
+          'Best Viewing': 'Winter months'
+        },
+        'Jupiter': {
+          'Type': 'Gas Giant Planet',
+          'Distance': '588 million km',
+          'Magnitude': '-2.8',
+          'Moons': '95 confirmed',
+          'Great Red Spot': 'Visible'
+        },
+        'Andromeda': {
+          'Type': 'Spiral Galaxy',
+          'Distance': '2.5 million light years',
+          'Magnitude': '3.44',
+          'Stars': '1 trillion',
+          'Collision': 'With Milky Way in 4.5 billion years'
+        },
+        'Orion Nebula': {
+          'Type': 'Emission Nebula',
+          'Distance': '1,344 light years',
+          'Magnitude': '4.0',
+          'Size': '24 light years across',
+          'Star Formation': 'Active'
+        }
+      };
+      
+      return data[objectName] || {
+        'Type': 'Celestial Object',
+        'Status': 'Under observation',
+        'Coordinates': 'RA/Dec available',
+        'Visibility': 'Good'
+      };
+    }
+
+    function setMode(mode) {
+      currentMode = mode;
+      
+      // Update button states
+      document.querySelectorAll('.control-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      // Update sky view based on mode
+      const skyCanvas = document.getElementById('skyCanvas');
+      
+      switch(mode) {
+        case 'hubble':
+          skyCanvas.style.background = 'url("https://hubblesite.org/files/live/sites/hubble/files/home/hubble-30th-anniversary/images/hubble_30th_anniversary_image.jpg") center/cover';
+          break;
+        case 'webb':
+          skyCanvas.style.background = 'url("https://webbtelescope.org/files/live/sites/webb/files/home/_images/webb-first-deep-field.jpg") center/cover';
+          break;
+        case 'ground':
+          skyCanvas.style.filter = 'sepia(0.3) contrast(1.2)';
+          break;
+        default:
+          skyCanvas.style.background = '';
+          skyCanvas.style.filter = '';
+      }
+      
+      addToLog(`Switched to ${mode} mode`);
+    }
+
+    function gotoTarget(target) {
+      const targets = {
+        'moon': { name: '🌙 Moon', info: 'Earth\'s natural satellite' },
+        'jupiter': { name: '🪐 Jupiter', info: 'Largest planet in our solar system' },
+        'saturn': { name: '🪐 Saturn', info: 'The ringed planet' },
+        'iss': { name: '🛰️ International Space Station', info: 'Currently orbiting Earth' },
+        'andromeda': { name: '🌌 Andromeda Galaxy', info: 'Our nearest galactic neighbor' }
+      };
+      
+      const targetInfo = targets[target];
+      if (targetInfo) {
+        selectObject(targetInfo.name);
+        addToLog(`Targeted ${targetInfo.name}`);
+        
+        // Simulate telescope movement
+        const skyCanvas = document.getElementById('skyCanvas');
+        skyCanvas.style.transform = `scale(${zoomLevel * 1.5}) rotate(${Math.random() * 10 - 5}deg)`;
+        
+        setTimeout(() => {
+          skyCanvas.style.transform = `scale(${zoomLevel})`;
+        }, 1000);
+      }
+    }
+
+    function zoomIn() {
+      zoomLevel = Math.min(zoomLevel * 1.5, 10);
+      document.getElementById('skyCanvas').style.transform = `scale(${zoomLevel})`;
+      addToLog(`Zoomed in (${zoomLevel.toFixed(1)}x)`);
+    }
+
+    function zoomOut() {
+      zoomLevel = Math.max(zoomLevel / 1.5, 0.5);
+      document.getElementById('skyCanvas').style.transform = `scale(${zoomLevel})`;
+      addToLog(`Zoomed out (${zoomLevel.toFixed(1)}x)`);
+    }
+
+    function centerView() {
+      document.getElementById('skyCanvas').style.transform = `scale(${zoomLevel})`;
+      addToLog('Centered view');
+    }
+
+    function fullscreen() {
+      const telescopeView = document.querySelector('.telescope-view');
+      if (telescopeView.requestFullscreen) {
+        telescopeView.requestFullscreen();
+      }
+      addToLog('Entered fullscreen mode');
+    }
+
+    function updateSky() {
+      const location = document.getElementById('location').value;
+      const datetime = document.getElementById('datetime').value;
+      
+      addToLog(`Updated sky for ${location} at ${datetime}`);
+      
+      // Simulate sky update with new star positions
+      const stars = document.querySelectorAll('.celestial-object.star');
+      stars.forEach(star => {
+        star.style.top = Math.random() * 100 + '%';
+        star.style.left = Math.random() * 100 + '%';
+      });
+    }
+
+    function toggleConstellations() {
+      // Add constellation lines (simplified)
+      addToLog('Toggled constellation lines');
+    }
+
+    function toggleSatellites() {
+      // Show/hide satellite tracks
+      addToLog('Toggled satellite visibility');
+    }
+
+    function togglePollution() {
+      const skyCanvas = document.getElementById('skyCanvas');
+      if (skyCanvas.style.filter.includes('brightness')) {
+        skyCanvas.style.filter = '';
+        addToLog('Light pollution filter removed');
+      } else {
+        skyCanvas.style.filter = 'brightness(1.5) contrast(1.3)';
+        addToLog('Light pollution filter applied');
+      }
+    }
+
+    function timeTravel() {
+      const randomDate = new Date(2020 + Math.random() * 10, Math.random() * 12, Math.random() * 28);
+      document.getElementById('datetime').value = randomDate.toISOString().slice(0, 16);
+      updateSky();
+      addToLog(`Time traveled to ${randomDate.toDateString()}`);
+    }
+
+    function addToLog(message) {
+      const logContainer = document.querySelector('.observation-log');
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      
+      const logEntry = document.createElement('div');
+      logEntry.className = 'log-entry';
+      logEntry.innerHTML = `<span class="log-time">${timeStr}</span> - ${message}`;
+      
+      logContainer.insertBefore(logEntry, logContainer.children[1]);
+      
+      // Keep only last 10 entries
+      while (logContainer.children.length > 11) {
+        logContainer.removeChild(logContainer.lastChild);
+      }
+    }
+
+    function showAchievement(title, description) {
+      const achievement = document.getElementById('achievement');
+      achievement.querySelector('.achievement-title').textContent = '🏆 ' + title;
+      achievement.querySelector('.achievement-text').textContent = description;
+      
+      achievement.classList.add('show');
+      
+      setTimeout(() => {
+        achievement.classList.remove('show');
+      }, 4000);
+    }
+
+    function updateRealTimeData() {
+      // Update telescope feeds status
+      const feeds = document.querySelectorAll('.feed-status');
+      feeds.forEach(feed => {
+        if (Math.random() > 0.8) {
+          const statuses = ['🟢 Active observation', '🟡 Calibrating', '🔴 Offline', '🟢 Data collection'];
+          feed.textContent = statuses[Math.floor(Math.random() * statuses.length)];
+        }
+      });
+    }
+
+    // Add some random shooting stars
+    setInterval(() => {
+      if (Math.random() > 0.7) {
+        const shootingStar = document.createElement('div');
+        shootingStar.className = 'shooting-star';
+        shootingStar.style.top = Math.random() * 100 + '%';
+        shootingStar.style.left = Math.random() * 100 + '%';
+        document.getElementById('skyCanvas').appendChild(shootingStar);
+        
+        setTimeout(() => {
+          shootingStar.remove();
+        }, 3000);
+        
+        addToLog('Meteor observed!');
+      }
+    }, 10000);
+  </script>
+</body>
+</html>
