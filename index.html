@@ -396,26 +396,14 @@
     </a>
 
     <!-- Middle: Live Moon Phase Widget -->
-    <div id="moon-widget" class="moon-widget" aria-live="polite">
-      <!-- Inline SVG moon icon; shadow is updated by JS below -->
-      <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true">
-        <defs>
-          <clipPath id="moon-clip">
-            <circle cx="12" cy="12" r="10"></circle>
-          </clipPath>
-        </defs>
-        <!-- Full moon disk -->
-        <circle cx="12" cy="12" r="10" fill="white"></circle>
-        <!-- Shadow path (morphed in JS) -->
-        <path
-          id="moon-shadow"
-          fill="#0b1b3f"
-          d="M12,2 a10,10 0 1,0 0,20 a6,10 0 1,1 0,-20"
-          clip-path="url(#moon-clip)"
-        ></path>
-      </svg>
-      <span class="moon-label">Loading moon phase…</span>
-    </div>
+   <a href="https://moon.nasa.gov/moon-in-motion/phases/" target="_blank" class="moon-widget" title="View detailed moon phase information">
+  <svg viewBox="0 0 24 24" width="40" height="40">
+    <circle cx="12" cy="12" r="10" fill="#fff" />
+    <path id="moon-shadow" fill="#0033a0" />
+  </svg>
+  <span class="moon-label">Loading moon phase…</span>
+</a>
+
 
     <!-- Right: Nav + Dashboard + Theme Toggle -->
     <nav>
@@ -610,94 +598,88 @@
       });
     })();
 
-    <script>
-  (function initMoonPhase() {
-    function todayYYYYMMDD() {
-      const d = new Date();
-      const m = String(d.getMonth() + 1).padStart(2, "0");
-      const day = String(d.getDate()).padStart(2, "0");
-      return `${d.getFullYear()}-${m}-${day}`;
-    }
+   <script>
+(function initMoonPhase() {
+  function todayYYYYMMDD() {
+    const d = new Date();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${d.getFullYear()}-${m}-${day}`;
+  }
 
-    function phaseNameFromAngle(angle) {
-      const a = ((angle % 360) + 360) % 360;
-      if (a < 11.25 || a >= 348.75) return "New Moon";
-      if (a < 33.75)  return "Waxing Crescent";
-      if (a < 56.25)  return "Waxing Crescent";
-      if (a < 78.75)  return "Waxing Crescent";
-      if (a < 101.25) return "First Quarter";
-      if (a < 146.25) return "Waxing Gibbous";
-      if (a < 191.25) return "Full Moon";
-      if (a < 213.75) return "Waning Gibbous";
-      if (a < 258.75) return "Last Quarter";
-      if (a < 326.25) return "Waning Crescent";
-      return "Waning Crescent";
-    }
+  function phaseNameFromAngle(angle) {
+    const a = ((angle % 360) + 360) % 360;
+    if (a < 11.25 || a >= 348.75) return "New Moon";
+    if (a < 78.75)  return "Waxing Crescent";
+    if (a < 101.25) return "First Quarter";
+    if (a < 146.25) return "Waxing Gibbous";
+    if (a < 191.25) return "Full Moon";
+    if (a < 213.75) return "Waning Gibbous";
+    if (a < 258.75) return "Last Quarter";
+    return "Waning Crescent";
+  }
 
-    function updateMoonSVG(angle) {
-      const shadow = document.getElementById("moon-shadow");
-      if (!shadow) return;
-      const rad = (angle % 360) * Math.PI / 180;
-      const illum = -Math.cos(rad); // -1=new .. 1=full
-      const rx = 10, ry = 10;
-      const bulge = 10 * Math.abs(illum);
-      const dir = illum >= 0 ? 1 : -1;
-      const d = [
-        `M ${12 - rx},12`,
-        `A ${rx},${ry} 0 1 0 ${12 + rx},12`,
-        `A ${rx},${ry} 0 1 0 ${12 - rx},12`,
-        `M ${12 - rx},12`,
-        `A ${bulge},${ry} 0 1 0 ${12 + rx * dir},12`,
-        `A ${bulge},${ry} 0 1 0 ${12 - rx},12`,
-        `Z`
-      ].join(" ");
-      shadow.setAttribute("d", d);
-    }
+  function updateMoonSVG(angle) {
+    const shadow = document.getElementById("moon-shadow");
+    if (!shadow) return;
+    const rad = (angle % 360) * Math.PI / 180;
+    const illum = -Math.cos(rad);
+    const rx = 10, ry = 10;
+    const bulge = 10 * Math.abs(illum);
+    const dir = illum >= 0 ? 1 : -1;
+    const d = [
+      `M ${12 - rx},12`,
+      `A ${rx},${ry} 0 1 0 ${12 + rx},12`,
+      `A ${rx},${ry} 0 1 0 ${12 - rx},12`,
+      `M ${12 - rx},12`,
+      `A ${bulge},${ry} 0 1 0 ${12 + rx * dir},12`,
+      `A ${bulge},${ry} 0 1 0 ${12 - rx},12`,
+      `Z`
+    ].join(" ");
+    shadow.setAttribute("d", d);
+  }
 
-    async function fetchMoonPhase(lat, lon) {
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "auto";
-      const day = todayYYYYMMDD();
-      const url = `https://api.open-meteo.com/v1/astronomy?latitude=${lat}&longitude=${lon}&daily=moon_phase&timezone=${encodeURIComponent(tz)}&start_date=${day}&end_date=${day}`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(`Moon API error ${res.status}`);
-      const data = await res.json();
-      // Be tolerant of different value ranges:
-      let v = data?.daily?.moon_phase?.[0];
-      if (typeof v !== "number") throw new Error("No moon_phase value");
-      // normalize to angle in degrees
-      if (v <= 1) v = v * 360;           // 0..1 -> degrees
-      else if (v <= 100) v = v * 3.6;    // 0..100 -> degrees
-      // else assume 0..360 already
-      return v;
-    }
+  async function fetchMoonPhase(lat, lon) {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "auto";
+    const day = todayYYYYMMDD();
+    const url = `https://api.open-meteo.com/v1/astronomy?latitude=${lat}&longitude=${lon}&daily=moon_phase&timezone=${encodeURIComponent(tz)}&start_date=${day}&end_date=${day}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Moon API error ${res.status}`);
+    const data = await res.json();
+    let v = data?.daily?.moon_phase?.[0];
+    if (typeof v !== "number") throw new Error("No moon_phase value");
+    if (v <= 1) v *= 360;
+    else if (v <= 100) v *= 3.6;
+    return v;
+  }
 
-    function setLabel(text) {
-      const el = document.querySelector(".moon-label");
-      if (el) el.textContent = text;
-    }
+  function setLabel(text) {
+    const el = document.querySelector(".moon-label");
+    if (el) el.textContent = text;
+  }
 
-    function go(lat, lon) {
-      fetchMoonPhase(lat, lon)
-        .then((angle) => {
-          setLabel(phaseNameFromAngle(angle));
-          updateMoonSVG(angle);
-        })
-        .catch((e) => {
-          console.error(e);
-          setLabel("Moon phase unavailable");
-        });
-    }
+  function go(lat, lon) {
+    fetchMoonPhase(lat, lon)
+      .then((angle) => {
+        setLabel(phaseNameFromAngle(angle));
+        updateMoonSVG(angle);
+      })
+      .catch((e) => {
+        console.error(e);
+        setLabel("Moon phase unavailable");
+      });
+  }
 
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => go(pos.coords.latitude, pos.coords.longitude),
-        () => go(40.7128, -74.0060),
-        { timeout: 6000 }
-      );
-    } else {
-      go(40.7128, -74.0060);
-    }
-  })();
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => go(pos.coords.latitude, pos.coords.longitude),
+      () => go(40.7128, -74.0060),
+      { timeout: 6000 }
+    );
+  } else {
+    go(40.7128, -74.0060);
+  }
+})();
 </script>
 
 </body>
