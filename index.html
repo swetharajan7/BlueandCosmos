@@ -158,7 +158,10 @@
     .moon-icon {
       width: 28px;
       height: 28px;
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
     }
 
     .moon-label {
@@ -397,10 +400,7 @@
 
     <!-- Middle: Live Moon Phase Widget -->
    <a href="https://moon.nasa.gov/moon-in-motion/phases/" target="_blank" class="moon-widget" title="View detailed moon phase information">
-  <svg viewBox="0 0 24 24" width="40" height="40">
-    <circle cx="12" cy="12" r="10" fill="#fff" />
-    <path id="moon-shadow" fill="#0033a0" />
-  </svg>
+  <div class="moon-icon" id="moon-display">🌙</div>
   <span class="moon-label">Loading moon phase…</span>
 </a>
 
@@ -600,86 +600,51 @@
 
     // ---- Moon Phase Widget ----
     (function initMoonPhase() {
-  function todayYYYYMMDD() {
-    const d = new Date();
-    const m = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${d.getFullYear()}-${m}-${day}`;
-  }
-
-  function phaseNameFromAngle(angle) {
-    const a = ((angle % 360) + 360) % 360;
-    if (a < 11.25 || a >= 348.75) return "New Moon";
-    if (a < 78.75)  return "Waxing Crescent";
-    if (a < 101.25) return "First Quarter";
-    if (a < 146.25) return "Waxing Gibbous";
-    if (a < 191.25) return "Full Moon";
-    if (a < 213.75) return "Waning Gibbous";
-    if (a < 258.75) return "Last Quarter";
-    return "Waning Crescent";
-  }
-
-  function updateMoonSVG(angle) {
-    const shadow = document.getElementById("moon-shadow");
-    if (!shadow) return;
-    const rad = (angle % 360) * Math.PI / 180;
-    const illum = -Math.cos(rad);
-    const rx = 10, ry = 10;
-    const bulge = 10 * Math.abs(illum);
-    const dir = illum >= 0 ? 1 : -1;
-    const d = [
-      `M ${12 - rx},12`,
-      `A ${rx},${ry} 0 1 0 ${12 + rx},12`,
-      `A ${rx},${ry} 0 1 0 ${12 - rx},12`,
-      `M ${12 - rx},12`,
-      `A ${bulge},${ry} 0 1 0 ${12 + rx * dir},12`,
-      `A ${bulge},${ry} 0 1 0 ${12 - rx},12`,
-      `Z`
-    ].join(" ");
-    shadow.setAttribute("d", d);
-  }
-
-  async function fetchMoonPhase(lat, lon) {
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "auto";
-    const day = todayYYYYMMDD();
-    const url = `https://api.open-meteo.com/v1/astronomy?latitude=${lat}&longitude=${lon}&daily=moon_phase&timezone=${encodeURIComponent(tz)}&start_date=${day}&end_date=${day}`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`Moon API error ${res.status}`);
-    const data = await res.json();
-    let v = data?.daily?.moon_phase?.[0];
-    if (typeof v !== "number") throw new Error("No moon_phase value");
-    if (v <= 1) v *= 360;
-    else if (v <= 100) v *= 3.6;
-    return v;
-  }
-
-  function setLabel(text) {
-    const el = document.querySelector(".moon-label");
-    if (el) el.textContent = text;
-  }
-
-  function go(lat, lon) {
-    fetchMoonPhase(lat, lon)
-      .then((angle) => {
-        setLabel(phaseNameFromAngle(angle));
-        updateMoonSVG(angle);
-      })
-      .catch((e) => {
-        console.error(e);
-        setLabel("Moon phase unavailable");
-      });
-  }
-
-  if ("geolocation" in navigator) {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => go(pos.coords.latitude, pos.coords.longitude),
-      () => go(40.7128, -74.0060),
-      { timeout: 6000 }
-    );
-  } else {
-    go(40.7128, -74.0060);
-  }
-})();
+      function getMoonPhase() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth();
+        const day = now.getDate();
+        
+        // Calculate days since known new moon (Jan 6, 2000)
+        const knownNewMoon = new Date(2000, 0, 6);
+        const daysSince = (now - knownNewMoon) / (1000 * 60 * 60 * 24);
+        
+        // Moon cycle is approximately 29.53 days
+        const cycle = daysSince / 29.53059;
+        const phase = (cycle - Math.floor(cycle)) * 8;
+        
+        return Math.round(phase) % 8;
+      }
+      
+      function getPhaseInfo(phase) {
+        const phases = [
+          { name: "New Moon", emoji: "🌑" },
+          { name: "Waxing Crescent", emoji: "🌒" },
+          { name: "First Quarter", emoji: "🌓" },
+          { name: "Waxing Gibbous", emoji: "🌔" },
+          { name: "Full Moon", emoji: "🌕" },
+          { name: "Waning Gibbous", emoji: "🌖" },
+          { name: "Last Quarter", emoji: "🌗" },
+          { name: "Waning Crescent", emoji: "🌘" }
+        ];
+        return phases[phase];
+      }
+      
+      function updateMoonDisplay() {
+        const phase = getMoonPhase();
+        const phaseInfo = getPhaseInfo(phase);
+        
+        const moonIcon = document.getElementById("moon-display");
+        const moonLabel = document.querySelector(".moon-label");
+        
+        if (moonIcon) moonIcon.textContent = phaseInfo.emoji;
+        if (moonLabel) moonLabel.textContent = phaseInfo.name;
+      }
+      
+      // Update immediately
+      updateMoonDisplay();
+    })();
   </script>
 
 </body>
