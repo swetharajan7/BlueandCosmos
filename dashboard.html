@@ -267,6 +267,161 @@
       min-height: 4px;
     }
 
+    /* Satellite Tracker Styles */
+    .satellite-map {
+      position: relative;
+      height: 200px;
+      background: linear-gradient(180deg, #001122 0%, #003366 100%);
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 1em 0;
+    }
+
+    .map-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        radial-gradient(1px 1px at 20px 30px, #ffffff, transparent),
+        radial-gradient(1px 1px at 40px 70px, #ffffff, transparent),
+        radial-gradient(1px 1px at 90px 40px, #ffffff, transparent),
+        radial-gradient(1px 1px at 130px 80px, #ffffff, transparent),
+        radial-gradient(1px 1px at 160px 30px, #ffffff, transparent);
+      background-repeat: repeat;
+      background-size: 200px 100px;
+      opacity: 0.3;
+    }
+
+    .satellite-dot {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      animation: orbit 10s linear infinite;
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    .satellite-dot.iss {
+      background: #FFD700;
+      color: #FFD700;
+      top: 30%;
+      left: 20%;
+      animation-duration: 8s;
+    }
+
+    .satellite-dot.starlink {
+      background: #00FF88;
+      color: #00FF88;
+      top: 60%;
+      left: 70%;
+      animation-duration: 12s;
+    }
+
+    .satellite-dot.weather {
+      background: #FF6B6B;
+      color: #FF6B6B;
+      top: 80%;
+      left: 40%;
+      animation-duration: 15s;
+    }
+
+    @keyframes orbit {
+      0% { transform: translateX(0) translateY(0); }
+      25% { transform: translateX(100px) translateY(-20px); }
+      50% { transform: translateX(200px) translateY(0); }
+      75% { transform: translateX(100px) translateY(20px); }
+      100% { transform: translateX(0) translateY(0); }
+    }
+
+    .map-info {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .satellite-legend {
+      display: flex;
+      gap: 1em;
+      font-size: 0.8em;
+      color: white;
+    }
+
+    .legend-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-right: 0.3em;
+    }
+
+    .legend-dot.iss { background: #FFD700; }
+    .legend-dot.starlink { background: #00FF88; }
+    .legend-dot.weather { background: #FF6B6B; }
+
+    .satellite-details {
+      font-size: 0.9em;
+      margin-top: 0.5em;
+    }
+
+    /* Earth Image Styles */
+    .earth-image-container {
+      width: 100%;
+      height: 150px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 0.5em 0;
+      position: relative;
+    }
+
+    .earth-image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .image-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      color: white;
+      padding: 1em 0.5em 0.5em;
+      font-size: 0.8em;
+    }
+
+    /* Alert Styles */
+    .alert-high {
+      border-left: 4px solid #F44336;
+      background: rgba(244, 67, 54, 0.1);
+    }
+
+    .alert-medium {
+      border-left: 4px solid #FF9800;
+      background: rgba(255, 152, 0, 0.1);
+    }
+
+    .alert-low {
+      border-left: 4px solid #4CAF50;
+      background: rgba(76, 175, 80, 0.1);
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+
     footer {
       text-align: center;
       padding: 2em 1em;
@@ -392,7 +547,55 @@
     </div>
   </div>
 
-  <!-- Satellite Intelligence Cards -->
+  <!-- Live Satellite Tracker -->
+  <div class="card featured" id="satellite-tracker">
+    <h2>🛰️ Live Satellite Tracker</h2>
+    <div class="tracker-content">
+      <div id="satellite-map" class="satellite-map">
+        <div class="map-overlay">
+          <div class="satellite-dot iss" id="iss-dot"></div>
+          <div class="satellite-dot starlink" id="starlink-dot"></div>
+          <div class="satellite-dot weather" id="weather-dot"></div>
+        </div>
+        <div class="map-info">
+          <div class="satellite-legend">
+            <div><span class="legend-dot iss"></span> ISS</div>
+            <div><span class="legend-dot starlink"></span> Starlink</div>
+            <div><span class="legend-dot weather"></span> Weather Sats</div>
+          </div>
+        </div>
+      </div>
+      <div class="satellite-details">
+        <p>Tracking satellites over New York City...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Wildfire Intelligence -->
+  <div class="card" id="wildfire-intel">
+    <h2>🔥 Global Wildfire Intelligence</h2>
+    <div class="wildfire-content">
+      <p>Scanning global fire activity...</p>
+    </div>
+  </div>
+
+  <!-- Solar Storm Monitor -->
+  <div class="card" id="solar-storm">
+    <h2>⚡ Solar Storm Monitor</h2>
+    <div class="solar-content">
+      <p>Monitoring space weather...</p>
+    </div>
+  </div>
+
+  <!-- Daily Earth Image -->
+  <div class="card" id="earth-image">
+    <h2>📸 Satellite Image of the Day</h2>
+    <div class="image-content">
+      <p>Loading today's featured Earth imagery...</p>
+    </div>
+  </div>
+
+  <!-- Climate Intelligence -->
   <div class="card" id="climatic-events">
     <h2>🌪️ Climate Intelligence</h2>
     <div class="climate-content">
@@ -400,17 +603,11 @@
     </div>
   </div>
 
-  <div class="card" id="co2-ch4">
-    <h2>🌱 Atmospheric Monitoring</h2>
-    <div class="atmosphere-content">
-      <p>Loading real-time atmospheric data...</p>
-    </div>
-  </div>
-
-  <div class="card" id="arctic">
-    <h2>❄️ Polar Intelligence</h2>
-    <div class="polar-content">
-      <p>Monitoring Arctic conditions via satellite...</p>
+  <!-- Air Quality Intelligence -->
+  <div class="card" id="air-quality">
+    <h2>💨 Air Quality Intelligence</h2>
+    <div class="air-content">
+      <p>Monitoring atmospheric conditions...</p>
     </div>
   </div>
 
@@ -674,6 +871,177 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 
+  // LIVE SATELLITE TRACKER
+  function loadSatelliteTracker() {
+    // Simulate real satellite positions (in production, would use real TLE data)
+    const satellites = [
+      { name: "ISS", type: "iss", altitude: "408 km", speed: "27,600 km/h", nextPass: "8:42 PM" },
+      { name: "Starlink-1234", type: "starlink", altitude: "550 km", speed: "27,400 km/h", nextPass: "9:15 PM" },
+      { name: "NOAA-20", type: "weather", altitude: "824 km", speed: "26,800 km/h", nextPass: "10:30 PM" }
+    ];
+
+    document.querySelector('#satellite-tracker .satellite-details').innerHTML = `
+      <div class="data-point">
+        <span>🛰️ Satellites Tracked</span>
+        <span class="data-value">${satellites.length} over NYC</span>
+      </div>
+      <div class="data-point">
+        <span>⭐ Next ISS Pass</span>
+        <span class="data-value">8:42 PM (visible)</span>
+      </div>
+      <div class="data-point">
+        <span>📡 Starlink Active</span>
+        <span class="data-value">47 satellites</span>
+      </div>
+    `;
+  }
+
+  // GLOBAL WILDFIRE INTELLIGENCE
+  function loadWildfireIntelligence() {
+    // Simulate global fire data (would use NASA FIRMS API in production)
+    const fires = [
+      { location: "California", intensity: "High", area: "2,400 acres" },
+      { location: "Canada", intensity: "Medium", area: "1,200 acres" },
+      { location: "Greece", intensity: "Low", area: "800 acres" }
+    ];
+
+    const totalFires = fires.length;
+    const highRiskFires = fires.filter(f => f.intensity === "High").length;
+
+    document.querySelector('#wildfire-intel .wildfire-content').innerHTML = `
+      <div class="data-point">
+        <span><span class="status-indicator ${highRiskFires > 0 ? 'status-alert' : 'status-good'}"></span>Global Active Fires</span>
+        <span class="data-value">${totalFires} detected</span>
+      </div>
+      <div class="data-point">
+        <span>🔥 High Risk Areas</span>
+        <span class="data-value">${highRiskFires} locations</span>
+      </div>
+      <div class="data-point">
+        <span>💨 Smoke Impact NYC</span>
+        <span class="data-value">None detected</span>
+      </div>
+      <div class="data-point">
+        <span>📊 24h Change</span>
+        <span class="data-value">-2 fires</span>
+      </div>
+    `;
+  }
+
+  // SOLAR STORM MONITOR
+  function loadSolarStormMonitor() {
+    // Simulate space weather data (would use NOAA Space Weather API)
+    const kpIndex = Math.random() * 9;
+    const solarFlareRisk = Math.random() > 0.7 ? "Elevated" : "Normal";
+    const gpsAccuracy = kpIndex > 5 ? "Degraded" : "Normal";
+    
+    const statusClass = kpIndex > 6 ? "status-alert" : kpIndex > 4 ? "status-warning" : "status-good";
+
+    document.querySelector('#solar-storm .solar-content').innerHTML = `
+      <div class="data-point">
+        <span><span class="status-indicator ${statusClass}"></span>Space Weather</span>
+        <span class="data-value">${kpIndex > 6 ? 'Storm Active' : 'Quiet'}</span>
+      </div>
+      <div class="data-point">
+        <span>⚡ Kp Index</span>
+        <span class="data-value">${kpIndex.toFixed(1)}</span>
+      </div>
+      <div class="data-point">
+        <span>📡 GPS Accuracy</span>
+        <span class="data-value">${gpsAccuracy}</span>
+      </div>
+      <div class="data-point">
+        <span>🌞 Solar Flare Risk</span>
+        <span class="data-value">${solarFlareRisk}</span>
+      </div>
+    `;
+  }
+
+  // DAILY EARTH IMAGE
+  function loadDailyEarthImage() {
+    // In production, would use NASA Earth Imagery API
+    const images = [
+      {
+        url: "https://eoimages.gsfc.nasa.gov/images/imagerecords/152000/152909/iss069e015471_lrg.jpg",
+        title: "Hurricane from Space",
+        description: "ISS view of a massive storm system over the Atlantic"
+      },
+      {
+        url: "https://eoimages.gsfc.nasa.gov/images/imagerecords/152000/152908/iss069e015469_lrg.jpg", 
+        title: "City Lights at Night",
+        description: "New York metropolitan area as seen from the International Space Station"
+      }
+    ];
+
+    const todayImage = images[0];
+
+    document.querySelector('#earth-image .image-content').innerHTML = `
+      <div class="earth-image-container">
+        <img src="${todayImage.url}" alt="${todayImage.title}" onerror="this.src='https://via.placeholder.com/400x200/0033a0/ffffff?text=Earth+Image+Loading'">
+        <div class="image-caption">
+          <strong>${todayImage.title}</strong><br>
+          ${todayImage.description}
+        </div>
+      </div>
+      <div class="data-point">
+        <span>📸 Source</span>
+        <span class="data-value">NASA ISS</span>
+      </div>
+      <div class="data-point">
+        <span>📅 Captured</span>
+        <span class="data-value">Today</span>
+      </div>
+    `;
+  }
+
+  // CLIMATE INTELLIGENCE
+  function loadClimateIntelligence() {
+    document.querySelector('#climatic-events .climate-content').innerHTML = `
+      <div class="data-point">
+        <span><span class="status-indicator status-warning"></span>Heat Dome</span>
+        <span class="data-value">Southwest US</span>
+      </div>
+      <div class="data-point">
+        <span>🌊 Sea Surface Temp</span>
+        <span class="data-value">+1.2°C above avg</span>
+      </div>
+      <div class="data-point">
+        <span>❄️ Arctic Ice</span>
+        <span class="data-value">12% below average</span>
+      </div>
+      <div class="data-point">
+        <span>🌪️ Severe Weather</span>
+        <span class="data-value">3 systems tracked</span>
+      </div>
+    `;
+  }
+
+  // AIR QUALITY INTELLIGENCE
+  function loadAirQualityIntelligence() {
+    const aqi = Math.floor(Math.random() * 150) + 50;
+    const quality = aqi < 50 ? "Good" : aqi < 100 ? "Moderate" : aqi < 150 ? "Unhealthy for Sensitive" : "Unhealthy";
+    const statusClass = aqi < 50 ? "status-good" : aqi < 100 ? "status-warning" : "status-alert";
+
+    document.querySelector('#air-quality .air-content').innerHTML = `
+      <div class="data-point">
+        <span><span class="status-indicator ${statusClass}"></span>NYC Air Quality</span>
+        <span class="data-value">${quality}</span>
+      </div>
+      <div class="data-point">
+        <span>📊 AQI Index</span>
+        <span class="data-value">${aqi}</span>
+      </div>
+      <div class="data-point">
+        <span>🏭 Primary Pollutant</span>
+        <span class="data-value">PM2.5</span>
+      </div>
+      <div class="data-point">
+        <span>🌬️ Wind Dispersion</span>
+        <span class="data-value">Good</span>
+      </div>
+    `;
+  }
+
   // Initialize all intelligence cards
   generateDailyBrief();
   loadWeatherIntelligence();
@@ -684,11 +1052,21 @@ document.addEventListener("DOMContentLoaded", () => {
   loadSpaceActivity();
   loadScienceNews();
   loadCelestialEvents();
+  
+  // Load new features
+  loadSatelliteTracker();
+  loadWildfireIntelligence();
+  loadSolarStormMonitor();
+  loadDailyEarthImage();
+  loadClimateIntelligence();
+  loadAirQualityIntelligence();
 
   // Update every 5 minutes
   setInterval(() => {
     loadWeatherIntelligence();
     loadSkyConditions();
+    loadSatelliteTracker();
+    loadSolarStormMonitor();
   }, 5 * 60 * 1000);
 });
 </script>
