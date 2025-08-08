@@ -13,12 +13,9 @@
        ========================================= -->
   <style>
     :root {
-      --accent: #0033a0;
-      /* header/footer background */
-      --flag-blue: #002366;
-      /* submenu hover bg */
-      --highlight: #ff4081;
-      /* hot pink underline + hover */
+      --accent: #0033a0;       /* header/footer background */
+      --flag-blue: #002366;    /* submenu hover bg */
+      --highlight: #ff4081;    /* hot pink underline + hover */
       --text-white: #ffffff;
       --text-light: #cce0ff;
       --dark-bg: #121212;
@@ -30,11 +27,7 @@
        BASE / LAYOUT / TYPOGRAPHY
        ========================================= -->
   <style>
-    html,
-    body {
-      height: 100%;
-    }
-
+    html, body { height: 100%; }
     body {
       margin: 0;
       font-family: 'Work Sans', sans-serif;
@@ -44,18 +37,10 @@
       flex-direction: column;
       min-height: 100vh;
     }
-
     /* Dark theme body + containers */
-    body.dark {
-      background-color: var(--dark-bg);
-      color: var(--text-white);
-    }
-
+    body.dark { background-color: var(--dark-bg); color: var(--text-white); }
     /* Main layout pushes footer to bottom */
-    main {
-      flex: 1 0 auto;
-    }
-
+    main { flex: 1 0 auto; }
     /* Image credit below hero */
     .credit {
       text-align: center;
@@ -63,12 +48,8 @@
       color: #ccc;
       margin: 1em 0 0;
     }
-
     /* A11y outline for keyboard users (subtle) */
-    :focus-visible {
-      outline: 2px dashed var(--highlight);
-      outline-offset: 2px;
-    }
+    :focus-visible { outline: 2px dashed var(--highlight); outline-offset: 2px; }
   </style>
 
   <!-- =========================================
@@ -87,7 +68,6 @@
       top: 0;
       z-index: 1000;
     }
-
     /* Left brand block */
     .logo-link {
       display: flex;
@@ -95,13 +75,11 @@
       text-decoration: none;
       color: inherit;
     }
-
     .logo-area {
       display: flex;
       align-items: center;
       gap: 0.4em;
     }
-
     .logo-area img {
       height: 50px;
       width: 50px;
@@ -111,35 +89,32 @@
       border-radius: 0;
       display: block;
     }
-
     .logo-text {
       display: flex;
       flex-direction: column;
       line-height: 1.2;
-      margin-left: -4px;
-      /* tuck text a hair closer */
+      margin-left: -4px; /* tuck text a hair closer */
     }
-
     .logo-text .title {
       font-size: 1.4em;
       font-weight: bold;
       color: #fff;
       margin: 0;
     }
-
     .logo-text .tagline {
       font-size: 0.85em;
       color: var(--text-light);
       margin: 0;
     }
-
     /* Right-side nav wrapper */
     .nav-right {
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      gap: 1.5em;
+      gap: 1.2em;
     }
+    /* Keep consistent vertical rhythm */
+    .nav-right > * { display: inline-flex; align-items: center; }
   </style>
 
   <!-- =========================================
@@ -150,212 +125,116 @@
       display: flex;
       align-items: center;
       gap: 0.6em;
-      justify-self: center;
-      /* centers in header grid */
-      min-width: 220px;
-      /* keeps layout from jumping */
+      justify-self: center;     /* centers in header grid */
+      min-width: 220px;         /* keeps layout from jumping */
       user-select: none;
+      text-decoration: none;
+      color: inherit;
     }
-
     .moon-icon {
-      width: 28px;
-      height: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      flex-shrink: 0;
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0;
     }
-
-    .moon-info {
-      display: flex;
-      flex-direction: column;
-      gap: 0.1em;
-    }
-
+    .moon-info { display: flex; flex-direction: column; gap: 0.1em; }
     .moon-label {
       color: var(--text-light);
       font-size: 0.95em;
       white-space: nowrap;
       font-weight: 500;
     }
-
     .moon-context {
       color: var(--text-light);
       font-size: 0.75em;
       opacity: 0.8;
       white-space: nowrap;
     }
-
-    body.dark .moon-label,
-    body.dark .moon-context {
-      color: #e0ecff;
-    }
-
+    body.dark .moon-label, body.dark .moon-context { color: #e0ecff; }
     /* Hide moon widget if space gets tight */
-    @media (max-width: 900px) {
-      .moon-widget {
-        display: none;
-      }
-    }
+    @media (max-width: 900px) { .moon-widget { display: none; } }
   </style>
 
   <!-- =========================================
        NAVIGATION (DROPDOWNS + INTERACTIONS)
        ========================================= -->
   <style>
-    /* Container holding dropdown groups and dashboard link + theme toggle */
-    nav {
-      display: contents;
-      /* let grid handle columns; dropdowns go in .nav-right */
-    }
+    nav { display: contents; } /* grid handles columns; items live in .nav-right */
 
     /* Dropdown shell */
-    .dropdown {
-      position: relative;
-    }
+    .dropdown { position: relative; }
 
     /* Headline button (About, Livestream) */
     .dropbtn {
-      background: none;
-      border: none;
-      font-size: 1em;
-      color: #fff;
-      cursor: pointer;
-      padding: 0.4em 0;
+      background: none; border: none;
+      font-size: 1em; color: #fff;
+      cursor: pointer; padding: 0.4em 0;
       position: relative;
     }
-
     /* Hot pink headline on hover/focus with underline animation */
-    .dropbtn:hover,
-    .dropbtn:focus {
-      color: var(--highlight);
-    }
-
+    .dropbtn:hover, .dropbtn:focus { color: var(--highlight); }
     .dropbtn::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -2px;
-      width: 0;
-      height: 2px;
-      background: var(--highlight);
+      content: ""; position: absolute; left: 0; bottom: -2px;
+      width: 0; height: 2px; background: var(--highlight);
       transition: width 0.25s ease-in-out;
     }
-
-    .dropdown:hover>.dropbtn::after,
+    .dropdown:hover > .dropbtn::after,
     .dropbtn:focus::after,
-    .dropdown.open>.dropbtn::after {
-      width: 100%;
-    }
+    .dropdown.open > .dropbtn::after { width: 100%; }
 
     /* Submenu container */
     .dropdown-content {
-      display: none;
-      position: absolute;
-      top: calc(100% + 0.6em);
-      left: 0;
-      background: var(--accent);
-      min-width: 200px;
-      flex-direction: column;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-      z-index: 1001;
-      padding: 0.3em 0;
-      border-radius: 6px;
+      display: none; position: absolute; top: calc(100% + 0.6em); left: 0;
+      background: var(--accent); min-width: 220px;
+      flex-direction: column; box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      z-index: 1001; padding: 0.3em 0; border-radius: 6px;
     }
-
     /* Keep submenu visible on hover/focus and when JS adds .open */
     .dropdown:hover .dropdown-content,
     .dropdown:focus-within .dropdown-content,
-    .dropdown.open .dropdown-content {
-      display: flex;
-    }
+    .dropdown.open .dropdown-content { display: flex; }
 
     /* Submenu links */
     .dropdown-content a {
-      color: var(--text-light);
-      text-decoration: none;
-      padding: 0.8em 1em;
-      position: relative;
+      color: var(--text-light); text-decoration: none;
+      padding: 0.8em 1em; position: relative;
       transition: color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
     }
-
     /* Submenu hover/focus/clicked: flag-blue bg, white text, hot-pink underline that animates */
     .dropdown-content a:hover,
     .dropdown-content a:focus,
     .dropdown-content a.clicked {
-      background-color: var(--flag-blue);
-      color: #fff !important;
-      transform: translateX(5px);
+      background-color: var(--flag-blue); color: #fff !important; transform: translateX(5px);
     }
-
     .dropdown-content a::after {
-      content: "";
-      position: absolute;
-      left: 1em;
-      bottom: 6px;
-      width: 0;
-      height: 2px;
-      background: var(--highlight);
+      content: ""; position: absolute; left: 1em; bottom: 6px;
+      width: 0; height: 2px; background: var(--highlight);
       transition: width 0.25s ease;
     }
-
     .dropdown-content a:hover::after,
     .dropdown-content a:focus::after,
-    .dropdown-content a.clicked::after {
-      width: calc(100% - 2em);
-    }
+    .dropdown-content a.clicked::after { width: calc(100% - 2em); }
 
     /* Dark theme submenu baseline color */
-    body.dark .dropdown-content a {
-      color: #d9e6ff;
-    }
+    body.dark .dropdown-content a { color: #d9e6ff; }
 
-    /* Dashboard link (same hover underline vibe) */
+    /* Regular links (Telescope / Community / Dashboard) */
     .nav-link {
-      color: #fff;
-      text-decoration: none;
-      position: relative;
-      padding-bottom: 2px;
+      color: #fff; text-decoration: none; position: relative; padding-bottom: 2px;
     }
-
-    .nav-link:hover {
-      color: var(--highlight);
-    }
-
+    .nav-link:hover { color: var(--highlight); }
     .nav-link::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -2px;
-      width: 0;
-      height: 2px;
-      background: var(--highlight);
+      content: ""; position: absolute; left: 0; bottom: -2px;
+      width: 0; height: 2px; background: var(--highlight);
       transition: width 0.25s ease-in-out;
     }
-
-    .nav-link:hover::after {
-      width: 100%;
-    }
+    .nav-link:hover::after { width: 100%; }
 
     /* Theme toggle icon */
-    .toggle-theme {
-      cursor: pointer;
-      font-size: 1.5em;
-      line-height: 1;
-      user-select: none;
-    }
+    .toggle-theme { cursor: pointer; font-size: 1.5em; line-height: 1; user-select: none; }
 
     /* Dark header/footer skins */
-    body.dark header,
-    body.dark footer {
-      background-color: var(--dark-accent);
-    }
-
-    body.dark .dropbtn,
-    body.dark .nav-link {
-      color: #e6f0ff;
-    }
+    body.dark header, body.dark footer { background-color: var(--dark-accent); }
+    body.dark .dropbtn, body.dark .nav-link { color: #e6f0ff; }
   </style>
 
   <!-- =========================================
@@ -386,15 +265,8 @@
       text-align: center;
       gap: 1em;
     }
-
-    footer a {
-      color: #fff;
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
+    footer a { color: #fff; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
   </style>
 </head>
 
@@ -406,8 +278,7 @@
     <!-- Left: Brand -->
     <a href="index.html" class="logo-link" aria-label="BlueandCosmos Home">
       <div class="logo-area">
-        <img src="https://cdn.jsdelivr.net/gh/swetharajan7/blueandcosmos/assets/logo-transparent.png"
-          alt="BlueandCosmos Logo" />
+        <img src="https://cdn.jsdelivr.net/gh/swetharajan7/blueandcosmos/assets/logo-transparent.png" alt="BlueandCosmos Logo" />
         <div class="logo-text">
           <div class="title">BlueandCosmos</div>
           <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
@@ -424,69 +295,38 @@
       </div>
     </a>
 
-
-    <!-- Right: Nav + Dashboard + Theme Toggle -->
+    <!-- Right: Nav + Dashboard + Theme Toggle (NEATLY ALIGNED) -->
     <nav>
-      <!-- About -->
-<div class="dropdown" data-menu="about">
-  <button class="dropbtn" tabindex="0" aria-haspopup="true" aria-expanded="false">
-    About
-  </button>
-  <div class="dropdown-content" role="menu" aria-label="About submenu">
-    <a href="https://www.example.com/about" role="menuitem" target="_blank">About BlueandCosmos</a>
-    <a href="https://www.example.com/myaccount" role="menuitem" target="_blank">My Account</a>
-  </div>
-</div>
-
-<!-- Livestream -->
-<div class="dropdown" data-menu="livestream">
-  <button class="dropbtn" tabindex="0" aria-haspopup="true" aria-expanded="false">
-    Livestream
-  </button>
-  <div class="dropdown-content" role="menu" aria-label="Livestream submenu">
-    <a href="https://www.example.com/livestream-images" role="menuitem" target="_blank">Live Stream Images</a>
-    <a href="https://www.example.com/launch-missions" role="menuitem" target="_blank">Launch Missions</a>
-  </div>
-</div>
-
       <div class="nav-right">
-        <!-- About -->
+        <!-- About (kept: external links in submenu) -->
         <div class="dropdown" data-menu="about">
-          <button class="dropbtn" tabindex="0" aria-haspopup="true" aria-expanded="false">
-            About
-          </button>
+          <button class="dropbtn" tabindex="0" aria-haspopup="true" aria-expanded="false">About</button>
           <div class="dropdown-content" role="menu" aria-label="About submenu">
-            <a href="#" role="menuitem">About BlueandCosmos</a>
-            <a href="#" role="menuitem">Sustainability</a>
-            <a href="#" role="menuitem">My Account</a>
+            <a href="https://www.example.com/about" role="menuitem" target="_blank" rel="noopener">About BlueandCosmos</a>
+            <a href="https://www.example.com/myaccount" role="menuitem" target="_blank" rel="noopener">My Account</a>
           </div>
         </div>
 
-        <!-- Livestream -->
+        <!-- Livestream (kept: external links in submenu) -->
         <div class="dropdown" data-menu="livestream">
-          <button class="dropbtn" tabindex="0" aria-haspopup="true" aria-expanded="false">
-            Livestream
-          </button>
+          <button class="dropbtn" tabindex="0" aria-haspopup="true" aria-expanded="false">Livestream</button>
           <div class="dropdown-content" role="menu" aria-label="Livestream submenu">
-            <a href="#" role="menuitem">Live Stream Images</a>
-            <a href="#" role="menuitem">Launch Missions</a>
-            <a href="#" role="menuitem">Webinars</a>
+            <a href="https://www.example.com/livestream-images" role="menuitem" target="_blank" rel="noopener">Live Stream Images</a>
+            <a href="https://www.example.com/launch-missions" role="menuitem" target="_blank" rel="noopener">Launch Missions</a>
           </div>
         </div>
 
         <!-- Telescope link -->
-        <a class="nav-link" href="telescope.html">🔭 Telescope</a>
+        <a class="nav-link" href="telescope.html" aria-label="Telescope">🔭 Telescope</a>
 
         <!-- Community link -->
-        <a class="nav-link" href="discussion.html">💬 Community</a>
+        <a class="nav-link" href="discussion.html" aria-label="Community">💬 Community</a>
 
         <!-- Dashboard link -->
-        <a class="nav-link" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" href="dashboard.html" aria-label="Dashboard">Dashboard</a>
 
         <!-- Theme Toggle -->
-        <div class="toggle-theme" id="themeToggle" role="button" aria-label="Toggle theme">
-          🌙
-        </div>
+        <div class="toggle-theme" id="themeToggle" role="button" aria-label="Toggle theme" title="Toggle light/dark theme">🌙</div>
       </div>
     </nav>
   </header>
@@ -508,12 +348,10 @@
     <!-- Left: App Store Logos -->
     <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0.5em;">
       <a href="#">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
-          alt="Google Play Store" style="height: 40px;" />
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play Store" style="height: 40px;" />
       </a>
       <a href="#">
-        <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Store"
-          style="height: 40px;" />
+        <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Store" style="height: 40px;" />
       </a>
     </div>
 
@@ -532,21 +370,17 @@
     <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-end; gap: 0.5em;">
       <div style="font-weight: bold;">Let's Connect!</div>
       <div style="display: flex; gap: 0.5em;">
-        <a href="https://twitter.com/blueandcosmos" target="_blank">
-          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X (Twitter)"
-            style="height: 24px; filter: invert(1);" />
+        <a href="https://twitter.com/blueandcosmos" target="_blank" rel="noopener">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X (Twitter)" style="height: 24px; filter: invert(1);" />
         </a>
-        <a href="https://instagram.com/blueandcosmos" target="_blank">
-          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram"
-            style="height: 24px; filter: invert(1);" />
+        <a href="https://instagram.com/blueandcosmos" target="_blank" rel="noopener">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" style="height: 24px; filter: invert(1);" />
         </a>
-        <a href="https://tiktok.com/@blueandcosmos" target="_blank">
-          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok"
-            style="height: 24px; filter: invert(1);" />
+        <a href="https://tiktok.com/@blueandcosmos" target="_blank" rel="noopener">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok" style="height: 24px; filter: invert(1);" />
         </a>
-        <a href="https://youtube.com/@blueandcosmos" target="_blank">
-          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube"
-            style="height: 24px; filter: invert(1);" />
+        <a href="https://youtube.com/@blueandcosmos" target="_blank" rel="noopener">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube" style="height: 24px; filter: invert(1);" />
         </a>
       </div>
     </div>
@@ -588,10 +422,7 @@
         function open() {
           dd.classList.add(OPEN_CLASS);
           if (btn) btn.setAttribute("aria-expanded", "true");
-          if (closeTimer) {
-            clearTimeout(closeTimer);
-            closeTimer = null;
-          }
+          if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
         }
         function scheduleClose() {
           if (closeTimer) clearTimeout(closeTimer);
@@ -627,18 +458,16 @@
     // ---- Moon Phase Widget ----
     (function initMoonPhase() {
       function getMoonPhase() {
-        // For August 8, 2025 - let's hardcode the correct phases for accuracy
-        // This is more reliable than complex astronomical calculations
+        // Approx mapping for August 2025
         const now = new Date();
         const month = now.getMonth() + 1; // 1-12
         const day = now.getDate();
         const year = now.getFullYear();
 
-        // August 2025 moon phases (approximate)
         if (year === 2025 && month === 8) {
           if (day >= 1 && day <= 3) return 7; // Waning Crescent
           if (day >= 4 && day <= 6) return 0; // New Moon
-          if (day >= 7 && day <= 10) return 1; // Waxing Crescent  
+          if (day >= 7 && day <= 10) return 1; // Waxing Crescent
           if (day >= 11 && day <= 13) return 2; // First Quarter
           if (day >= 14 && day <= 17) return 3; // Waxing Gibbous
           if (day >= 18 && day <= 20) return 4; // Full Moon
@@ -696,5 +525,5 @@
   </script>
 
 </body>
-
 </html>
+
