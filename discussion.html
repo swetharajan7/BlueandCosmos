@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cosmic Community Hub - BlueandCosmos</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet" />
+  
+  <style>
+    :root {
+      --accent: #0033a0;
+      --flag-blue: #002366;
+      --highlight: #ff4081;
+      --text-white: #ffffff;
+      --text-light: #cce0ff;
+      --dark-bg: #121212;
+      --dark-accent: #001f5b;
+      --success: #4CAF50;
+      --warning: #FF9800;
+      --info: #2196F3;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Work Sans', sans-serif;
+      background: linear-gradient(135deg, #0a0a23 0%, #1a1a3a 100%);
+      color: white;
+      min-height: 100vh;
+    }
+
+    /* Animated background */
+    .cosmic-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: 
+        radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.3), transparent),
+        radial-gradient(1px 1px at 40px 70px, rgba(255,255,255,0.2), transparent),
+        radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.4), transparent),
+        radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,0.2), transparent);
+      background-repeat: repeat;
+      background-size: 200px 100px;
+      animation: twinkle 15s linear infinite;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.8; }
+      50% { opacity: 1; }
+      100% { opacity: 0.8; }
+    }
+
+    /* Header */
+    .header {
+      background: rgba(0, 51, 160, 0.9);
+      backdrop-filter: blur(15px);
+      color: var(--text-white);
+      padding: 1em 2em;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 1em;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
+    }
+
+    .logo-area img {
+      height: 50px;
+      width: 50px;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+      margin-left: -4px;
+    }
+
+    .logo-text .title {
+      font-size: 1.4em;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .logo-text .tagline {
+      font-size: 0.85em;
+      color: var(--text-light);
+    }
+
+    .community-title {
+      justify-self: center;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #ffd700;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+
+    .nav-back {
+      justify-self: end;
+      color: var(--text-light);
+      text-decoration: none;
+      padding: 0.5em 1em;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-back:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2em;
+      display: grid;
+      grid-template-columns: 300px 1fr 250px;
+      gap: 2em;
+    }
+
+    /* Left Sidebar - Categories */
+    .categories-sidebar {
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 1.5em;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      height: fit-content;
+      position: sticky;
+      top: 120px;
+    }
+
+    .categories-title {
+      color: var(--highlight);
+      margin-bottom: 1.5em;
+      font-size: 1.2em;
+      text-align: center;
+      border-bottom: 2px solid var(--highlight);
+      padding-bottom: 0.5em;
+    }
+
+    .category-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8em;
+      padding: 1em;
+      margin-bottom: 0.5em;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+    }
+
+    .category-item:hover {
+      background: rgba(255, 64, 129, 0.1);
+      border-color: var(--highlight);
+      transform: translateX(5px);
+    }
+
+    .category-item.active {
+      background: linear-gradient(45deg, var(--highlight), #e91e63);
+      color: white;
+    }
+
+    .category-icon {
+      font-size: 1.5em;
+      width: 30px;
+      text-align: center;
+    }
+
+    .category-info {
+      flex: 1;
+    }
+
+    .category-name {
+      font-weight: bold;
+      margin-bottom: 0.2em;
+    }
+
+    .category-count {
+      font-size: 0.8em;
+      opacity: 0.8;
+    }
+
+    /* Main Forum Area */
+    .forum-main {
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      overflow: hidden;
+    }
+
+    .forum-header {
+      background: linear-gradient(45deg, var(--accent), #0066cc);
+      padding: 1.5em;
+      color: white;
+    }
+
+    .forum-title {
+      font-size: 1.5em;
+      margin-bottom: 0.5em;
+    }
+
+    .forum-description {
+      opacity: 0.9;
+      font-size: 0.95em;
+    }
+
+    .forum-stats {
+      display: flex;
+      gap: 2em;
+      margin-top: 1em;
+      font-size: 0.9em;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+
+    /* Thread List */
+    .thread-list {
+      padding: 0;
+    }
+
+    .thread-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto auto;
+      gap: 1em;
+      padding: 1.5em;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .thread-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .thread-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, var(--highlight), #e91e63);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+    }
+
+    .thread-content {
+      min-width: 0;
+    }
+
+    .thread-title {
+      font-weight: bold;
+      margin-bottom: 0.5em;
+      color: #ffd700;
+      font-size: 1.1em;
+    }
+
+    .thread-meta {
+      display: flex;
+      gap: 1em;
+      font-size: 0.85em;
+      color: var(--text-light);
+      margin-bottom: 0.5em;
+    }
+
+    .thread-preview {
+      font-size: 0.9em;
+      opacity: 0.8;
+      line-height: 1.4;
+    }
+
+    .thread-stats {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5em;
+      font-size: 0.85em;
+      color: var(--text-light);
+    }
+
+    .thread-replies {
+      background: var(--info);
+      color: white;
+      padding: 0.3em 0.8em;
+      border-radius: 15px;
+      font-weight: bold;
+    }
+
+    .thread-activity {
+      text-align: center;
+      font-size: 0.8em;
+      color: var(--text-light);
+    }
+
+    .last-post-time {
+      font-weight: bold;
+      color: var(--highlight);
+    }
+
+    /* Right Sidebar - Online Users & Quick Actions */
+    .activity-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5em;
+    }
+
+    .sidebar-card {
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 1.5em;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .sidebar-title {
+      color: var(--highlight);
+      margin-bottom: 1em;
+      font-size: 1.1em;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 64, 129, 0.3);
+      padding-bottom: 0.5em;
+    }
+
+    .online-user {
+      display: flex;
+      align-items: center;
+      gap: 0.8em;
+      padding: 0.8em 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .online-user:last-child {
+      border-bottom: none;
+    }
+
+    .user-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, var(--success), #45a049);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8em;
+      font-weight: bold;
+      color: white;
+    }
+
+    .user-info {
+      flex: 1;
+    }
+
+    .user-name {
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+
+    .user-status {
+      font-size: 0.75em;
+      color: var(--success);
+    }
+
+    .quick-action-btn {
+      width: 100%;
+      padding: 1em;
+      background: linear-gradient(45deg, var(--highlight), #e91e63);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 0.5em;
+      transition: all 0.3s ease;
+    }
+
+    .quick-action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 64, 129, 0.4);
+    }
+
+    /* Featured Discussions */
+    .featured-thread {
+      background: linear-gradient(45deg, rgba(255, 215, 0, 0.1), rgba(255, 64, 129, 0.1));
+      border-left: 4px solid #ffd700;
+    }
+
+    .featured-badge {
+      background: #ffd700;
+      color: #000;
+      padding: 0.2em 0.6em;
+      border-radius: 12px;
+      font-size: 0.7em;
+      font-weight: bold;
+      margin-left: 0.5em;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .container {
+        grid-template-columns: 250px 1fr 200px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        grid-template-columns: 1fr;
+        gap: 1em;
+      }
+      
+      .categories-sidebar,
+      .activity-sidebar {
+        position: static;
+      }
+    }
+
+    /* New Thread Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 2000;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.9);
+      border-radius: 15px;
+      padding: 2em;
+      width: 90%;
+      max-width: 600px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5em;
+    }
+
+    .modal-title {
+      color: var(--highlight);
+      font-size: 1.3em;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+
+    .form-group {
+      margin-bottom: 1.5em;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5em;
+      color: var(--text-light);
+      font-weight: bold;
+    }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: 0.8em;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-family: inherit;
+    }
+
+    .form-textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      background: linear-gradient(45deg, var(--success), #45a049);
+      color: white;
+      border: none;
+      padding: 1em 2em;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="cosmic-bg"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <a href="index.html" class="logo-link" aria-label="BlueandCosmos Home">
+      <div class="logo-area">
+        <img src="https://cdn.jsdelivr.net/gh/swetharajan7/blueandcosmos/assets/logo-transparent.png"
+          alt="BlueandCosmos Logo" />
+        <div class="logo-text">
+          <div class="title">BlueandCosmos</div>
+          <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
+        </div>
+      </div>
+    </a>
+
+    <div class="community-title">💬 Cosmic Community Hub</div>
+
+    <a href="dashboard.html" class="nav-back">← Dashboard</a>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Left Sidebar - Categories -->
+    <aside class="categories-sidebar">
+      <h3 class="categories-title">🌟 Discussion Categories</h3>
+      
+      <div class="category-item active" onclick="selectCategory('study-groups')">
+        <div class="category-icon">📚</div>
+        <div class="category-info">
+          <div class="category-name">Study Groups</div>
+          <div class="category-count">24 active discussions</div>
+        </div>
+      </div>
+
+      <div class="category-item" onclick="selectCategory('research')">
+        <div class="category-icon">🔬</div>
+        <div class="category-info">
+          <div class="category-name">Research Collaboration</div>
+          <div class="category-count">18 projects</div>
+        </div>
+      </div>
+
+      <div class="category-item" onclick="selectCategory('homework')">
+        <div class="category-icon">🎓</div>
+        <div class="category-info">
+          <div class="category-name">Homework Help</div>
+          <div class="category-count">42 questions</div>
+        </div>
+      </div>
+
+      <div class="category-item" onclick="selectCategory('observations')">
+        <div class="category-icon">🔭</div>
+        <div class="category-info">
+          <div class="category-name">Observations & Discoveries</div>
+          <div class="category-count">31 posts</div>
+        </div>
+      </div>
+
+      <div class="category-item" onclick="selectCategory('career')">
+        <div class="category-icon">🚀</div>
+        <div class="category-info">
+          <div class="category-name">Career Guidance</div>
+          <div class="category-count">15 mentors online</div>
+        </div>
+      </div>
+
+      <div class="category-item" onclick="selectCategory('global')">
+        <div class="category-icon">🌍</div>
+        <div class="category-info">
+          <div class="category-name">Global Perspectives</div>
+          <div class="category-count">28 countries</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Forum Area -->
+    <main class="forum-main">
+      <div class="forum-header">
+        <h2 class="forum-title">📚 Study Groups & Learning Circles</h2>
+        <p class="forum-description">Connect with fellow students and researchers to learn astronomy together. Share knowledge, ask questions, and collaborate on exciting discoveries!</p>
+        <div class="forum-stats">
+          <div class="stat-item">
+            <span>👥</span>
+            <span>1,247 members</span>
+          </div>
+          <div class="stat-item">
+            <span>💬</span>
+            <span>3,891 discussions</span>
+          </div>
+          <div class="stat-item">
+            <span>🌟</span>
+            <span>156 online now</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="thread-list">
+        <!-- Featured Thread -->
+        <div class="thread-item featured-thread" onclick="openThread('featured-1')">
+          <div class="thread-avatar">AS</div>
+          <div class="thread-content">
+            <div class="thread-title">
+              🌙 Moon Phase Study Group - Week 3: Tidal Effects
+              <span class="featured-badge">FEATURED</span>
+            </div>
+            <div class="thread-meta">
+              <span>Started by AstroStudent_Maya</span>
+              <span>•</span>
+              <span>2 hours ago</span>
+              <span>•</span>
+              <span>📍 Global</span>
+            </div>
+            <div class="thread-preview">
+              Join our weekly study session! This week we're exploring how lunar position affects Earth's tides. Bring your questions about the moon.html data and let's learn together! We'll be using the BlueandCosmos lunar calendar to track patterns...
+            </div>
+          </div>
+          <div class="thread-stats">
+            <div class="thread-replies">23</div>
+            <div>replies</div>
+          </div>
+          <div class="thread-activity">
+            <div class="last-post-time">12 min ago</div>
+            <div>by CosmicExplorer</div>
+          </div>
+        </div>
+
+        <!-- Regular Threads -->
+        <div class="thread-item" onclick="openThread('thread-1')">
+          <div class="thread-avatar">JW</div>
+          <div class="thread-content">
+            <div class="thread-title">🔭 Help with Telescope Coordinates - Jupiter Observation</div>
+            <div class="thread-meta">
+              <span>Started by JupiterWatcher_Alex</span>
+              <span>•</span>
+              <span>4 hours ago</span>
+              <span>•</span>
+              <span>📍 New York</span>
+            </div>
+            <div class="thread-preview">
+              I'm trying to find Jupiter using the Virtual Observatory but struggling with the coordinate system. Can someone explain RA/Dec in simple terms? The telescope.html shows 14h 39m but I'm confused about converting to my local time...
+            </div>
+          </div>
+          <div class="thread-stats">
+            <div class="thread-replies">8</div>
+            <div>replies</div>
+          </div>
+          <div class="thread-activity">
+            <div class="last-post-time">1 hour ago</div>
+            <div>by TelescopeMentor</div>
+          </div>
+        </div>
+
+        <div class="thread-item" onclick="openThread('thread-2')">
+          <div class="thread-avatar">SD</div>
+          <div class="thread-content">
+            <div class="thread-title">🌍 Satellite Data Analysis Challenge - Week 5</div>
+            <div class="thread-meta">
+              <span>Started by SatelliteDetective</span>
+              <span>•</span>
+              <span>1 day ago</span>
+              <span>•</span>
+              <span>📍 Global Challenge</span>
+            </div>
+            <div class="thread-preview">
+              This week's challenge: Use the dashboard wildfire intelligence to predict smoke patterns! I've uploaded satellite data from three different regions. Who can create the most accurate prediction model? Prize: BlueandCosmos premium features!
+            </div>
+          </div>
+          <div class="thread-stats">
+            <div class="thread-replies">15</div>
+            <div>replies</div>
+          </div>
+          <div class="thread-activity">
+            <div class="last-post-time">3 hours ago</div>
+            <div>by DataAnalyst_Sam</div>
+          </div>
+        </div>
+
+        <div class="thread-item" onclick="openThread('thread-3')">
+          <div class="thread-avatar">LG</div>
+          <div class="thread-content">
+            <div class="thread-title">🎓 University Astronomy Programs - Application Tips</div>
+            <div class="thread-meta">
+              <span>Started by LunarGeologist_Dr</span>
+              <span>•</span>
+              <span>2 days ago</span>
+              <span>•</span>
+              <span>📍 Career Guidance</span>
+            </div>
+            <div class="thread-preview">
+              As someone who's been in the field for 15 years, I want to help students navigate university applications. What questions do you have about astronomy/astrophysics programs? I'll share insights about research opportunities, coursework, and career paths...
+            </div>
+          </div>
+          <div class="thread-stats">
+            <div class="thread-replies">31</div>
+            <div>replies</div>
+          </div>
+          <div class="thread-activity">
+            <div class="last-post-time">45 min ago</div>
+            <div>by FutureAstronomer</div>
+          </div>
+        </div>
+
+        <div class="thread-item" onclick="openThread('thread-4')">
+          <div class="thread-avatar">IS</div>
+          <div class="thread-content">
+            <div class="thread-title">🛰️ ISS Pass Tonight - Coordinated Global Observation</div>
+            <div class="thread-meta">
+              <span>Started by ISSSpotter_Global</span>
+              <span>•</span>
+              <span>6 hours ago</span>
+              <span>•</span>
+              <span>📍 Worldwide Event</span>
+            </div>
+            <div class="thread-preview">
+              The ISS will be visible across multiple time zones tonight! Let's coordinate observations and share photos. I'll be tracking from London at 21:42 GMT. Who else is joining? Use the satellite tracker to get exact times for your location...
+            </div>
+          </div>
+          <div class="thread-stats">
+            <div class="thread-replies">19</div>
+            <div>replies</div>
+          </div>
+          <div class="thread-activity">
+            <div class="last-post-time">22 min ago</div>
+            <div>by SpacePhotographer</div>
+          </div>
+        </div>
+
+        <div class="thread-item" onclick="openThread('thread-5')">
+          <div class="thread-avatar">ME</div>
+          <div class="thread-content">
+            <div class="thread-title">🌟 Beginner's Guide to Reading Star Charts</div>
+            <div class="thread-meta">
+              <span>Started by MentorExpert_Lisa</span>
+              <span>•</span>
+              <span>3 days ago</span>
+              <span>•</span>
+              <span>📍 Educational Resource</span>
+            </div>
+            <div class="thread-preview">
+              New to astronomy? Star charts can be overwhelming! I've created a step-by-step guide using the BlueandCosmos telescope interface. We'll start with finding the Big Dipper and work our way to more complex constellations. Perfect for beginners!
+            </div>
+          </div>
+          <div class="thread-stats">
+            <div class="thread-replies">27</div>
+            <div>replies</div>
+          </div>
+          <div class="thread-activity">
+            <div class="last-post-time">2 hours ago</div>
+            <div>by NewStargazer</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Right Sidebar - Activity -->
+    <aside class="activity-sidebar">
+      <!-- Online Users -->
+      <div class="sidebar-card">
+        <h4 class="sidebar-title">🌟 Online Now</h4>
+        
+        <div class="online-user">
+          <div class="user-avatar">AM</div>
+          <div class="user-info">
+            <div class="user-name">AstroMentor_Dr</div>
+            <div class="user-status">Helping students</div>
+          </div>
+        </div>
+
+        <div class="online-user">
+          <div class="user-avatar">SE</div>
+          <div class="user-info">
+            <div class="user-name">SpaceExplorer_22</div>
+            <div class="user-status">Observing Jupiter</div>
+          </div>
+        </div>
+
+        <div class="online-user">
+          <div class="user-avatar">LR</div>
+          <div class="user-info">
+            <div class="user-name">LunarResearcher</div>
+            <div class="user-status">Analyzing data</div>
+          </div>
+        </div>
+
+        <div class="online-user">
+          <div class="user-avatar">CS</div>
+          <div class="user-info">
+            <div class="user-name">CosmicStudent</div>
+            <div class="user-status">Asking questions</div>
+          </div>
+        </div>
+
+        <div class="online-user">
+          <div class="user-avatar">NG</div>
+          <div class="user-info">
+            <div class="user-name">NewbieGazer</div>
+            <div class="user-status">Learning basics</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="sidebar-card">
+        <h4 class="sidebar-title">🚀 Quick Actions</h4>
+        <button class="quick-action-btn" onclick="openNewThreadModal()">
+          ✨ Start New Discussion
+        </button>
+        <button class="quick-action-btn" onclick="joinStudyGroup()">
+          📚 Join Study Group
+        </button>
+        <button class="quick-action-btn" onclick="findMentor()">
+          🎓 Find a Mentor
+        </button>
+        <button class="quick-action-btn" onclick="shareObservation()">
+          🔭 Share Observation
+        </button>
+      </div>
+
+      <!-- Today's Events -->
+      <div class="sidebar-card">
+        <h4 class="sidebar-title">📅 Today's Events</h4>
+        <div style="font-size: 0.9em; line-height: 1.6;">
+          <div style="margin-bottom: 1em; padding: 0.8em; background: rgba(255, 64, 129, 0.1); border-radius: 8px;">
+            <strong>🌙 Moon Study Group</strong><br>
+            <span style="color: var(--text-light);">7:00 PM EST</span>
+          </div>
+          <div style="margin-bottom: 1em; padding: 0.8em; background: rgba(33, 150, 243, 0.1); border-radius: 8px;">
+            <strong>🛰️ ISS Pass Watch Party</strong><br>
+            <span style="color: var(--text-light);">9:42 PM GMT</span>
+          </div>
+          <div style="padding: 0.8em; background: rgba(76, 175, 80, 0.1); border-radius: 8px;">
+            <strong>🔬 Data Analysis Workshop</strong><br>
+            <span style="color: var(--text-light);">10:00 PM PST</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- New Thread Modal -->
+  <div class="modal" id="newThreadModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">✨ Start New Discussion</h3>
+        <button class="close-btn" onclick="closeNewThreadModal()">&times;</button>
+      </div>
+      
+      <form onsubmit="submitNewThread(event)">
+        <div class="form-group">
+          <label class="form-label">Discussion Title</label>
+          <input type="text" class="form-input" placeholder="What would you like to discuss?" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select class="form-input" required>
+            <option value="">Select a category...</option>
+            <option value="study-groups">📚 Study Groups</option>
+            <option value="research">🔬 Research Collaboration</option>
+            <option value="homework">🎓 Homework Help</option>
+            <option value="observations">🔭 Observations & Discoveries</option>
+            <option value="career">🚀 Career Guidance</option>
+            <option value="global">🌍 Global Perspectives</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Your Message</label>
+          <textarea class="form-textarea" placeholder="Share your thoughts, questions, or discoveries..." required></textarea>
+        </div>
+        
+        <button type="submit" class="submit-btn">🚀 Post Discussion</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer style="background-color: var(--accent); color: #fff; padding: 2em 1em; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; text-align: center; gap: 1em; margin-top: 3em;">
+    <!-- Left: App Store Logos -->
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0.5em;">
+      <a href="#">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+          alt="Google Play Store" style="height: 40px;" />
+      </a>
+      <a href="#">
+        <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Store"
+          style="height: 40px;" />
+      </a>
+    </div>
+
+    <!-- Center: Legal Links and Trademark -->
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.5em;">
+      <div style="font-weight: bold;">BlueandCosmos™ 2025</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 1em; justify-content: center; font-size: 0.9em;">
+        <a href="privacy.html" style="color: #fff; text-decoration: none;">Privacy Policy</a>
+        <a href="terms.html" style="color: #fff; text-decoration: none;">Terms of Use</a>
+        <a href="sitemap.html" style="color: #fff; text-decoration: none;">Sitemap</a>
+        <a href="contact.html" style="color: #fff; text-decoration: none;">Contact Us</a>
+      </div>
+    </div>
+
+    <!-- Right: Social Media and "Let's Connect!" -->
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-end; gap: 0.5em;">
+      <div style="font-weight: bold;">Let's Connect!</div>
+      <div style="display: flex; gap: 0.5em;">
+        <a href="https://twitter.com/blueandcosmos" target="_blank">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X (Twitter)"
+            style="height: 24px; filter: invert(1);" />
+        </a>
+        <a href="https://instagram.com/blueandcosmos" target="_blank">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram"
+            style="height: 24px; filter: invert(1);" />
+        </a>
+        <a href="https://tiktok.com/@blueandcosmos" target="_blank">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok"
+            style="height: 24px; filter: invert(1);" />
+        </a>
+        <a href="https://youtube.com/@blueandcosmos" target="_blank">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube"
+            style="height: 24px; filter: invert(1);" />
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let currentCategory = 'study-groups';
+
+    function selectCategory(category) {
+      currentCategory = category;
+      
+      // Update active category
+      document.querySelectorAll('.category-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      event.currentTarget.classList.add('active');
+      
+      // Update forum content based on category
+      updateForumContent(category);
+    }
+
+    function updateForumContent(category) {
+      const titles = {
+        'study-groups': '📚 Study Groups & Learning Circles',
+        'research': '🔬 Research Collaboration Hub',
+        'homework': '🎓 Homework Help Center',
+        'observations': '🔭 Observations & Discoveries',
+        'career': '🚀 Career Guidance & Mentorship',
+        'global': '🌍 Global Perspectives & Cultural Astronomy'
+      };
+
+      const descriptions = {
+        'study-groups': 'Connect with fellow students and researchers to learn astronomy together. Share knowledge, ask questions, and collaborate on exciting discoveries!',
+        'research': 'Collaborate on real research projects, share data analysis techniques, and contribute to citizen science initiatives.',
+        'homework': 'Get help with astronomy assignments, understand complex concepts, and help others learn.',
+        'observations': 'Share your telescope observations, satellite tracking discoveries, and celestial photography.',
+        'career': 'Get guidance from professionals, learn about career paths, and find mentorship opportunities.',
+        'global': 'Explore how different cultures view the cosmos and connect with astronomers worldwide.'
+      };
+
+      document.querySelector('.forum-title').textContent = titles[category];
+      document.querySelector('.forum-description').textContent = descriptions[category];
+      
+      // In a real app, this would load different threads
+      console.log(`Loading ${category} discussions...`);
+    }
+
+    function openThread(threadId) {
+      // In a real app, this would navigate to the thread detail page
+      alert(`Opening thread: ${threadId}\n\nIn a full implementation, this would show the complete discussion with replies, voting, and real-time updates!`);
+    }
+
+    function openNewThreadModal() {
+      document.getElementById('newThreadModal').style.display = 'block';
+    }
+
+    function closeNewThreadModal() {
+      document.getElementById('newThreadModal').style.display = 'none';
+    }
+
+    function submitNewThread(event) {
+      event.preventDefault();
+      alert('🚀 Discussion posted successfully!\n\nIn a full implementation, this would create a new thread and notify relevant community members.');
+      closeNewThreadModal();
+    }
+
+    function joinStudyGroup() {
+      alert('📚 Study Group Finder\n\nIn a full implementation, this would show available study groups based on your interests and schedule, with options to join or create new groups!');
+    }
+
+    function findMentor() {
+      alert('🎓 Mentor Matching\n\nIn a full implementation, this would connect you with experienced astronomers and researchers based on your interests and career goals!');
+    }
+
+    function shareObservation() {
+      alert('🔭 Share Your Discovery\n\nIn a full implementation, this would let you upload photos, share coordinates, and describe your observations with the community!');
+    }
+
+    // Simulate real-time activity
+    function updateOnlineStatus() {
+      const statuses = [
+        'Observing Mars', 'Analyzing data', 'Helping students', 'Reading research',
+        'Planning observations', 'Studying lunar cycles', 'Tracking satellites',
+        'Learning basics', 'Asking questions', 'Sharing discoveries'
+      ];
+      
+      document.querySelectorAll('.user-status').forEach(status => {
+        if (Math.random() > 0.8) {
+          status.textContent = statuses[Math.floor(Math.random() * statuses.length)];
+        }
+      });
+    }
+
+    // Update online status every 30 seconds
+    setInterval(updateOnlineStatus, 30000);
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('newThreadModal');
+      if (event.target === modal) {
+        closeNewThreadModal();
+      }
+    }
+  </script>
+</body>
+</html>
