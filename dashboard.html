@@ -639,20 +639,7 @@
     </div>
   </div>
 
-  <!-- News & Events -->
-  <div class="card" id="nyt">
-    <h2>📰 Space & Earth Science</h2>
-    <div class="news-content">
-      <p>Science articles loading...</p>
-    </div>
-  </div>
 
-  <div class="card" id="events">
-    <h2>🌠 Celestial Events</h2>
-    <div class="events-content">
-      <p>Event listings will appear here...</p>
-    </div>
-  </div>
 </main>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -878,43 +865,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 
-  // SCIENCE NEWS
-  function loadScienceNews() {
-    fetch("https://api.nytimes.com/svc/topstories/v2/science.json?api-key=eVi9VuQWekeDTkk1s6LMTMg2BDStvHLD")
-      .then(res => res.json())
-      .then(data => {
-        const articles = data.results.slice(0, 3).map(article => 
-          `<div class="data-point">
-            <span><a href="${article.url}" target="_blank" style="color: inherit; text-decoration: none;">📰 ${article.title.substring(0, 40)}...</a></span>
-          </div>`
-        ).join("");
-        document.querySelector('#nyt .news-content').innerHTML = articles + 
-          '<div class="data-source">News: <a href="https://developer.nytimes.com/" target="_blank">New York Times API</a></div>';
-      })
-      .catch(() => {
-        document.querySelector('#nyt .news-content').innerHTML = '<p>News temporarily unavailable</p>';
-      });
-  }
 
-  // CELESTIAL EVENTS
-  function loadCelestialEvents() {
-    const today = new Date().toISOString().split("T")[0];
-    fetch(`/.netlify/functions/celestial?date=${today}`)
-      .then(res => res.json())
-      .then(data => {
-        const events = data.events.slice(0, 4).map(e => 
-          `<div class="data-point"><span>✨ ${e}</span></div>`
-        ).join("");
-        document.querySelector('#events .events-content').innerHTML = events;
-      })
-      .catch(() => {
-        document.querySelector('#events .events-content').innerHTML = `
-          <div class="data-point"><span>✨ Moon at apogee</span></div>
-          <div class="data-point"><span>🌟 Jupiter opposition</span></div>
-          <div class="data-point"><span>☄️ Perseid meteor shower</span></div>
-        `;
-      });
-  }
 
   // LIVE SATELLITE TRACKER
   function loadSatelliteTracker() {
@@ -1113,8 +1064,6 @@ document.addEventListener("DOMContentLoaded", () => {
   loadSkyConditions();
   loadMeteorTracking();
   loadSpaceActivity();
-  loadScienceNews();
-  loadCelestialEvents();
   
   // Load new features
   loadSatelliteTracker();
