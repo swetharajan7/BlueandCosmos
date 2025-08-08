@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lunar Intelligence Center - BlueandCosmos</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet" />
+  
+  <style>
+    :root {
+      --accent: #0033a0;
+      --flag-blue: #002366;
+      --highlight: #ff4081;
+      --text-white: #ffffff;
+      --text-light: #cce0ff;
+      --dark-bg: #121212;
+      --dark-accent: #001f5b;
+      --card-light: #fafafa;
+      --card-dark: #1e1e1e;
+      --border-light: #ddd;
+      --border-dark: #444;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Work Sans', sans-serif;
+      background: linear-gradient(135deg, #000428 0%, #004e92 100%);
+      color: white;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      background: rgba(0, 51, 160, 0.9);
+      backdrop-filter: blur(10px);
+      padding: 1em 2em;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .logo-link {
+      color: white;
+      text-decoration: none;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    .logo-link:hover {
+      color: var(--highlight);
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 3em 2em;
+      background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
+                  url('https://images.unsplash.com/photo-1446776877081-d282a0f896e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .hero h1 {
+      font-size: 3em;
+      margin-bottom: 0.5em;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .hero p {
+      font-size: 1.2em;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* City Selector */
+    .city-selector {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 2em;
+      margin: 2em auto;
+      max-width: 800px;
+      border-radius: 15px;
+      text-align: center;
+    }
+
+    .city-input {
+      display: flex;
+      gap: 1em;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .city-input input {
+      padding: 0.8em 1.2em;
+      border: none;
+      border-radius: 25px;
+      font-size: 1em;
+      min-width: 250px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+    }
+
+    .city-input button {
+      padding: 0.8em 2em;
+      background: var(--highlight);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .city-input button:hover {
+      background: #e91e63;
+      transform: translateY(-2px);
+    }
+
+    /* Main Content */
+    .main-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2em;
+    }
+
+    /* Tab Navigation */
+    .tab-nav {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2em;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 0.5em;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 0.8em 1.5em;
+      background: transparent;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 0.2em;
+    }
+
+    .tab-btn.active {
+      background: var(--highlight);
+      color: white;
+    }
+
+    .tab-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Tab Content */
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5em;
+      margin-bottom: 2em;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 1.5em;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h3 {
+      color: var(--highlight);
+      margin-bottom: 1em;
+      font-size: 1.3em;
+    }
+
+    .data-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5em 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .data-row:last-child {
+      border-bottom: none;
+    }
+
+    .data-value {
+      font-weight: bold;
+      color: #ffd700;
+    }
+
+    /* Calendar */
+    .calendar-container {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 2em;
+      margin: 2em 0;
+    }
+
+    .year-selector {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1em;
+      margin-bottom: 2em;
+    }
+
+    .year-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.5em 1em;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .year-display {
+      font-size: 1.5em;
+      font-weight: bold;
+      min-width: 100px;
+      text-align: center;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1em;
+    }
+
+    .month-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 1em;
+      text-align: center;
+    }
+
+    .month-title {
+      font-weight: bold;
+      margin-bottom: 0.5em;
+      color: var(--highlight);
+    }
+
+    .moon-events {
+      font-size: 0.9em;
+      line-height: 1.4;
+    }
+
+    .event-item {
+      margin: 0.3em 0;
+      padding: 0.2em;
+      border-radius: 3px;
+    }
+
+    .new-moon { background: rgba(0, 0, 0, 0.3); }
+    .full-moon { background: rgba(255, 215, 0, 0.2); }
+    .eclipse { background: rgba(255, 64, 129, 0.2); }
+    .supermoon { background: rgba(0, 255, 136, 0.2); }
+
+    /* Current Location Display */
+    .current-location {
+      text-align: center;
+      margin: 1em 0;
+      font-size: 1.1em;
+      color: var(--text-light);
+    }
+
+    .location-icon {
+      color: var(--highlight);
+      margin-right: 0.5em;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo-link">← Back to BlueandCosmos</a>
+      <div>🌙 Lunar Intelligence Center</div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>🌙 Lunar Intelligence Center</h1>
+    <p>Your comprehensive guide to lunar phenomena, personalized for your location with 15 years of historical and future data</p>
+  </section>
+
+  <!-- City Selector -->
+  <section class="city-selector">
+    <h2>📍 Set Your Location</h2>
+    <p>Get personalized moonrise, moonset, and lunar event times for your city</p>
+    <div class="city-input">
+      <input type="text" id="cityInput" placeholder="Enter your city (e.g., New York, London, Tokyo)" />
+      <button onclick="setLocation()">Update Location</button>
+    </div>
+    <div class="current-location" id="currentLocation">
+      <span class="location-icon">📍</span>Currently showing data for: <strong>New York City, NY</strong>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Tab Navigation -->
+    <nav class="tab-nav">
+      <button class="tab-btn active" onclick="showTab('current')">🌒 Current Phase</button>
+      <button class="tab-btn" onclick="showTab('calendar')">📅 Lunar Calendar</button>
+      <button class="tab-btn" onclick="showTab('eclipses')">🌘 Eclipses</button>
+      <button class="tab-btn" onclick="showTab('special')">✨ Special Events</button>
+      <button class="tab-btn" onclick="showTab('tides')">🌊 Tidal Data</button>
+    </nav>
+
+    <!-- Current Phase Tab -->
+    <div id="current" class="tab-content active">
+      <div class="card-grid">
+        <div class="card">
+          <h3>🌒 Current Moon Phase</h3>
+          <div id="currentPhaseData">
+            <div class="data-row">
+              <span>Phase</span>
+              <span class="data-value" id="currentPhase">Waxing Crescent</span>
+            </div>
+            <div class="data-row">
+              <span>Illumination</span>
+              <span class="data-value" id="illumination">23%</span>
+            </div>
+            <div class="data-row">
+              <span>Age</span>
+              <span class="data-value" id="moonAge">3.2 days</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>🌅 Rise & Set Times</h3>
+          <div id="riseSetData">
+            <div class="data-row">
+              <span>Moonrise</span>
+              <span class="data-value" id="moonrise">9:42 PM</span>
+            </div>
+            <div class="data-row">
+              <span>Moonset</span>
+              <span class="data-value" id="moonset">11:15 AM</span>
+            </div>
+            <div class="data-row">
+              <span>Transit (Highest)</span>
+              <span class="data-value" id="transit">6:28 AM</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>📏 Lunar Distance</h3>
+          <div id="distanceData">
+            <div class="data-row">
+              <span>Distance from Earth</span>
+              <span class="data-value" id="distance">384,400 km</span>
+            </div>
+            <div class="data-row">
+              <span>Angular Size</span>
+              <span class="data-value" id="angularSize">29.5 arcmin</span>
+            </div>
+            <div class="data-row">
+              <span>Next Apogee</span>
+              <span class="data-value" id="nextApogee">Aug 15</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Calendar Tab -->
+    <div id="calendar" class="tab-content">
+      <div class="calendar-container">
+        <h2>📅 15-Year Lunar Calendar (2015-2030)</h2>
+        <div class="year-selector">
+          <button class="year-btn" onclick="changeYear(-1)">← Previous</button>
+          <div class="year-display" id="currentYear">2025</div>
+          <button class="year-btn" onclick="changeYear(1)">Next →</button>
+        </div>
+        <div class="calendar-grid" id="calendarGrid">
+          <!-- Calendar will be populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Eclipses Tab -->
+    <div id="eclipses" class="tab-content">
+      <div class="card-grid">
+        <div class="card">
+          <h3>🌘 Upcoming Lunar Eclipses</h3>
+          <div id="lunarEclipses">
+            <div class="data-row">
+              <span>March 14, 2025</span>
+              <span class="data-value">Total Lunar Eclipse</span>
+            </div>
+            <div class="data-row">
+              <span>September 7, 2025</span>
+              <span class="data-value">Partial Lunar Eclipse</span>
+            </div>
+            <div class="data-row">
+              <span>March 3, 2026</span>
+              <span class="data-value">Total Lunar Eclipse</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>🌑 Upcoming Solar Eclipses</h3>
+          <div id="solarEclipses">
+            <div class="data-row">
+              <span>March 29, 2025</span>
+              <span class="data-value">Partial Solar Eclipse</span>
+            </div>
+            <div class="data-row">
+              <span>September 21, 2025</span>
+              <span class="data-value">Partial Solar Eclipse</span>
+            </div>
+            <div class="data-row">
+              <span>February 17, 2026</span>
+              <span class="data-value">Annular Solar Eclipse</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Special Events Tab -->
+    <div id="special" class="tab-content">
+      <div class="card-grid">
+        <div class="card">
+          <h3>🌕 Supermoons</h3>
+          <div id="supermoons">
+            <div class="data-row">
+              <span>October 17, 2024</span>
+              <span class="data-value">Hunter's Supermoon</span>
+            </div>
+            <div class="data-row">
+              <span>November 15, 2024</span>
+              <span class="data-value">Beaver Supermoon</span>
+            </div>
+            <div class="data-row">
+              <span>October 7, 2025</span>
+              <span class="data-value">Harvest Supermoon</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>🔵 Blue Moons</h3>
+          <div id="bluemoons">
+            <div class="data-row">
+              <span>May 31, 2026</span>
+              <span class="data-value">Seasonal Blue Moon</span>
+            </div>
+            <div class="data-row">
+              <span>December 31, 2028</span>
+              <span class="data-value">Monthly Blue Moon</span>
+            </div>
+            <div class="data-row">
+              <span>January 30, 2029</span>
+              <span class="data-value">Monthly Blue Moon</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>🩸 Blood Moons</h3>
+          <div id="bloodmoons">
+            <div class="data-row">
+              <span>March 14, 2025</span>
+              <span class="data-value">Total Lunar Eclipse</span>
+            </div>
+            <div class="data-row">
+              <span>March 3, 2026</span>
+              <span class="data-value">Total Lunar Eclipse</span>
+            </div>
+            <div class="data-row">
+              <span>December 31, 2028</span>
+              <span class="data-value">Total Lunar Eclipse</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tides Tab -->
+    <div id="tides" class="tab-content">
+      <div class="card-grid">
+        <div class="card">
+          <h3>🌊 Today's Tides</h3>
+          <div id="todayTides">
+            <div class="data-row">
+              <span>High Tide</span>
+              <span class="data-value">6:42 AM (4.2 ft)</span>
+            </div>
+            <div class="data-row">
+              <span>Low Tide</span>
+              <span class="data-value">12:15 PM (0.8 ft)</span>
+            </div>
+            <div class="data-row">
+              <span>High Tide</span>
+              <span class="data-value">7:28 PM (4.1 ft)</span>
+            </div>
+            <div class="data-row">
+              <span>Low Tide</span>
+              <span class="data-value">1:05 AM (0.9 ft)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>📊 Tidal Influence</h3>
+          <div id="tidalInfluence">
+            <div class="data-row">
+              <span>Current Moon Phase Effect</span>
+              <span class="data-value">Moderate</span>
+            </div>
+            <div class="data-row">
+              <span>Next Spring Tide</span>
+              <span class="data-value">Aug 12 (Full Moon)</span>
+            </div>
+            <div class="data-row">
+              <span>Next Neap Tide</span>
+              <span class="data-value">Aug 19 (Last Quarter)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let currentCity = "New York City, NY";
+    let currentYear = 2025;
+
+    // Tab functionality
+    function showTab(tabName) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Remove active class from all buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Show selected tab
+      document.getElementById(tabName).classList.add('active');
+      
+      // Add active class to clicked button
+      event.target.classList.add('active');
+    }
+
+    // Location functionality
+    function setLocation() {
+      const cityInput = document.getElementById('cityInput');
+      const newCity = cityInput.value.trim();
+      
+      if (newCity) {
+        currentCity = newCity;
+        document.getElementById('currentLocation').innerHTML = 
+          `<span class="location-icon">📍</span>Currently showing data for: <strong>${currentCity}</strong>`;
+        
+        // Update all location-specific data
+        updateLocationData();
+        cityInput.value = '';
+      }
+    }
+
+    // Update data based on location
+    function updateLocationData() {
+      // This would normally call APIs to get location-specific data
+      // For now, we'll simulate the updates
+      console.log(`Updating data for ${currentCity}`);
+      
+      // Update rise/set times based on location
+      // In production, this would use astronomical calculation APIs
+    }
+
+    // Calendar functionality
+    function changeYear(direction) {
+      const newYear = currentYear + direction;
+      if (newYear >= 2015 && newYear <= 2030) {
+        currentYear = newYear;
+        document.getElementById('currentYear').textContent = currentYear;
+        generateCalendar(currentYear);
+      }
+    }
+
+    function generateCalendar(year) {
+      const calendarGrid = document.getElementById('calendarGrid');
+      const months = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ];
+
+      calendarGrid.innerHTML = '';
+
+      months.forEach((month, index) => {
+        const monthCard = document.createElement('div');
+        monthCard.className = 'month-card';
+        
+        // Generate sample lunar events for each month
+        const events = generateLunarEvents(year, index);
+        
+        monthCard.innerHTML = `
+          <div class="month-title">${month} ${year}</div>
+          <div class="moon-events">
+            ${events.map(event => `<div class="event-item ${event.type}">${event.date}: ${event.name}</div>`).join('')}
+          </div>
+        `;
+        
+        calendarGrid.appendChild(monthCard);
+      });
+    }
+
+    function generateLunarEvents(year, month) {
+      // This is a simplified version - in production, you'd use astronomical calculation libraries
+      const events = [];
+      
+      // Add some sample events for demonstration
+      if (month === 0) { // January
+        events.push({ date: '6', name: 'New Moon', type: 'new-moon' });
+        events.push({ date: '13', name: 'First Quarter', type: 'quarter' });
+        events.push({ date: '21', name: 'Full Moon', type: 'full-moon' });
+        events.push({ date: '28', name: 'Last Quarter', type: 'quarter' });
+      }
+      
+      // Add more events for other months...
+      // This would be populated with real astronomical data
+      
+      return events;
+    }
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      generateCalendar(currentYear);
+      
+      // Allow Enter key in city input
+      document.getElementById('cityInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          setLocation();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
