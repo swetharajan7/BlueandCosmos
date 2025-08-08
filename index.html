@@ -1,26 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BlueandCosmos</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet" />
 
   <!-- =========================================
        ROOT THEME TOKENS
        ========================================= -->
   <style>
     :root {
-      --accent: #0033a0;      /* header/footer background */
-      --flag-blue: #002366;   /* submenu hover bg */
-      --highlight: #ff4081;   /* hot pink underline + hover */
+      --accent: #0033a0;
+      /* header/footer background */
+      --flag-blue: #002366;
+      /* submenu hover bg */
+      --highlight: #ff4081;
+      /* hot pink underline + hover */
       --text-white: #ffffff;
       --text-light: #cce0ff;
       --dark-bg: #121212;
@@ -32,7 +30,8 @@
        BASE / LAYOUT / TYPOGRAPHY
        ========================================= -->
   <style>
-    html, body {
+    html,
+    body {
       height: 100%;
     }
 
@@ -117,7 +116,8 @@
       display: flex;
       flex-direction: column;
       line-height: 1.2;
-      margin-left: -4px; /* tuck text a hair closer */
+      margin-left: -4px;
+      /* tuck text a hair closer */
     }
 
     .logo-text .title {
@@ -150,8 +150,10 @@
       display: flex;
       align-items: center;
       gap: 0.6em;
-      justify-self: center;     /* centers in header grid */
-      min-width: 180px;         /* keeps layout from jumping */
+      justify-self: center;
+      /* centers in header grid */
+      min-width: 180px;
+      /* keeps layout from jumping */
       user-select: none;
     }
 
@@ -188,7 +190,8 @@
   <style>
     /* Container holding dropdown groups and dashboard link + theme toggle */
     nav {
-      display: contents; /* let grid handle columns; dropdowns go in .nav-right */
+      display: contents;
+      /* let grid handle columns; dropdowns go in .nav-right */
     }
 
     /* Dropdown shell */
@@ -224,9 +227,9 @@
       transition: width 0.25s ease-in-out;
     }
 
-    .dropdown:hover > .dropbtn::after,
+    .dropdown:hover>.dropbtn::after,
     .dropbtn:focus::after,
-    .dropdown.open > .dropbtn::after {
+    .dropdown.open>.dropbtn::after {
       width: 100%;
     }
 
@@ -239,7 +242,7 @@
       background: var(--accent);
       min-width: 200px;
       flex-direction: column;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
       z-index: 1001;
       padding: 0.3em 0;
       border-radius: 6px;
@@ -387,10 +390,8 @@
     <!-- Left: Brand -->
     <a href="index.html" class="logo-link" aria-label="BlueandCosmos Home">
       <div class="logo-area">
-        <img
-          src="https://cdn.jsdelivr.net/gh/swetharajan7/blueandcosmos/assets/logo-transparent.png"
-          alt="BlueandCosmos Logo"
-        />
+        <img src="https://cdn.jsdelivr.net/gh/swetharajan7/blueandcosmos/assets/logo-transparent.png"
+          alt="BlueandCosmos Logo" />
         <div class="logo-text">
           <div class="title">BlueandCosmos</div>
           <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
@@ -399,10 +400,11 @@
     </a>
 
     <!-- Middle: Live Moon Phase Widget -->
-   <a href="https://moon.nasa.gov/moon-in-motion/phases/" target="_blank" class="moon-widget" title="View detailed moon phase information">
-  <div class="moon-icon" id="moon-display">🌙</div>
-  <span class="moon-label">Loading moon phase…</span>
-</a>
+    <a href="https://moon.nasa.gov/moon-in-motion/phases/" target="_blank" class="moon-widget"
+      title="View detailed moon phase information">
+      <div class="moon-icon" id="moon-display">🌙</div>
+      <span class="moon-label">Loading moon phase…</span>
+    </a>
 
 
     <!-- Right: Nav + Dashboard + Theme Toggle -->
@@ -460,18 +462,12 @@
     <!-- Left: App Store Logos -->
     <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0.5em;">
       <a href="#">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
-          alt="Google Play Store"
-          style="height: 40px;"
-        />
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+          alt="Google Play Store" style="height: 40px;" />
       </a>
       <a href="#">
-        <img
-          src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
-          alt="Apple Store"
-          style="height: 40px;"
-        />
+        <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Store"
+          style="height: 40px;" />
       </a>
     </div>
 
@@ -491,39 +487,24 @@
       <div style="font-weight: bold;">Let's Connect!</div>
       <div style="display: flex; gap: 0.5em;">
         <a href="https://twitter.com/">
-          <img
-            src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitter.svg"
-            alt="Twitter"
-            style="height: 24px; filter: invert(1);"
-          />
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitter.svg" alt="Twitter"
+            style="height: 24px; filter: invert(1);" />
         </a>
         <a href="https://facebook.com/">
-          <img
-            src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg"
-            alt="Facebook"
-            style="height: 24px; filter: invert(1);"
-          />
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook"
+            style="height: 24px; filter: invert(1);" />
         </a>
         <a href="https://instagram.com/">
-          <img
-            src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg"
-            alt="Instagram"
-            style="height: 24px; filter: invert(1);"
-          />
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram"
+            style="height: 24px; filter: invert(1);" />
         </a>
         <a href="https://linkedin.com/">
-          <img
-            src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg"
-            alt="LinkedIn"
-            style="height: 24px; filter: invert(1);"
-          />
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn"
+            style="height: 24px; filter: invert(1);" />
         </a>
         <a href="https://discord.com/">
-          <img
-            src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/discord.svg"
-            alt="Discord"
-            style="height: 24px; filter: invert(1);"
-          />
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/discord.svg" alt="Discord"
+            style="height: 24px; filter: invert(1);" />
         </a>
       </div>
     </div>
@@ -602,21 +583,18 @@
     (function initMoonPhase() {
       function getMoonPhase() {
         const now = new Date();
-        const year = now.getFullYear();
-        const month = now.getMonth();
-        const day = now.getDate();
         
-        // Calculate days since known new moon (Jan 6, 2000)
-        const knownNewMoon = new Date(2000, 0, 6);
+        // Use a recent known new moon: July 5, 2024 at 22:57 UTC
+        const knownNewMoon = new Date(2024, 6, 5, 22, 57);
         const daysSince = (now - knownNewMoon) / (1000 * 60 * 60 * 24);
-        
-        // Moon cycle is approximately 29.53 days
-        const cycle = daysSince / 29.53059;
+
+        // Moon cycle is 29.530588853 days
+        const cycle = daysSince / 29.530588853;
         const phase = (cycle - Math.floor(cycle)) * 8;
-        
+
         return Math.round(phase) % 8;
       }
-      
+
       function getPhaseInfo(phase) {
         const phases = [
           { name: "New Moon", emoji: "🌑" },
@@ -630,23 +608,23 @@
         ];
         return phases[phase];
       }
-      
+
       function updateMoonDisplay() {
         const phase = getMoonPhase();
         const phaseInfo = getPhaseInfo(phase);
-        
+
         const moonIcon = document.getElementById("moon-display");
         const moonLabel = document.querySelector(".moon-label");
-        
+
         if (moonIcon) moonIcon.textContent = phaseInfo.emoji;
         if (moonLabel) moonLabel.textContent = phaseInfo.name;
       }
-      
+
       // Update immediately
       updateMoonDisplay();
     })();
   </script>
 
 </body>
-</html>
 
+</html>
