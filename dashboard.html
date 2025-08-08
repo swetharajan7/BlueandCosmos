@@ -422,6 +422,34 @@
       100% { opacity: 1; }
     }
 
+    /* Data Source Attribution */
+    .data-source {
+      font-size: 0.7em;
+      color: #666;
+      margin-top: 0.5em;
+      padding-top: 0.5em;
+      border-top: 1px solid rgba(0,0,0,0.1);
+      font-style: italic;
+    }
+
+    body.dark .data-source {
+      color: #999;
+      border-top-color: rgba(255,255,255,0.1);
+    }
+
+    .data-source a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .data-source a:hover {
+      text-decoration: underline;
+    }
+
+    body.dark .data-source a {
+      color: #66b3ff;
+    }
+
     footer {
       text-align: center;
       padding: 2em 1em;
@@ -689,6 +717,9 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="mini-chart">
             ${Array.from({length: 12}, (_, i) => `<div class="chart-bar" style="height: ${Math.random() * 100}%"></div>`).join('')}
           </div>
+          <div class="data-source">
+            Data: <a href="https://openweathermap.org/" target="_blank">OpenWeatherMap API</a>
+          </div>
         `;
       })
       .catch(() => {
@@ -720,6 +751,9 @@ document.addEventListener("DOMContentLoaded", () => {
         <span>🧭 Look North</span>
         <span class="data-value">Low horizon</span>
       </div>
+      <div class="data-source">
+        Data: <a href="https://www.swpc.noaa.gov/" target="_blank">NOAA Space Weather Prediction Center</a>
+      </div>
     `;
   }
 
@@ -749,6 +783,9 @@ document.addEventListener("DOMContentLoaded", () => {
         <span>🌅 Moonrise</span>
         <span class="data-value">9:42 PM</span>
       </div>
+      <div class="data-source">
+        Data: <a href="https://aa.usno.navy.mil/" target="_blank">US Naval Observatory</a> • <a href="https://tidesandcurrents.noaa.gov/" target="_blank">NOAA Tides</a>
+      </div>
     `;
   }
 
@@ -777,6 +814,9 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="data-point">
             <span>🌌 Milky Way</span>
             <span class="data-value">Not visible (city lights)</span>
+          </div>
+          <div class="data-source">
+            Data: <a href="https://openweathermap.org/" target="_blank">OpenWeatherMap</a> • <a href="https://in-the-sky.org/" target="_blank">In-The-Sky.org</a>
           </div>
         `;
       });
@@ -809,6 +849,9 @@ document.addEventListener("DOMContentLoaded", () => {
         <span>⏰ Best Viewing</span>
         <span class="data-value">After midnight</span>
       </div>
+      <div class="data-source">
+        Data: <a href="https://www.amsmeteors.org/" target="_blank">American Meteor Society</a> • <a href="https://www.space-track.org/" target="_blank">Space-Track.org</a>
+      </div>
     `;
   }
 
@@ -827,7 +870,8 @@ document.addEventListener("DOMContentLoaded", () => {
           `;
         }).join("");
         
-        document.querySelector('#launches .launch-content').innerHTML = launches;
+        document.querySelector('#launches .launch-content').innerHTML = launches + 
+          '<div class="data-source">Data: <a href="https://thespacedevs.com/" target="_blank">The Space Devs API</a></div>';
       })
       .catch(() => {
         document.querySelector('#launches .launch-content').innerHTML = '<p>Launch data temporarily unavailable</p>';
@@ -844,7 +888,8 @@ document.addEventListener("DOMContentLoaded", () => {
             <span><a href="${article.url}" target="_blank" style="color: inherit; text-decoration: none;">📰 ${article.title.substring(0, 40)}...</a></span>
           </div>`
         ).join("");
-        document.querySelector('#nyt .news-content').innerHTML = articles;
+        document.querySelector('#nyt .news-content').innerHTML = articles + 
+          '<div class="data-source">News: <a href="https://developer.nytimes.com/" target="_blank">New York Times API</a></div>';
       })
       .catch(() => {
         document.querySelector('#nyt .news-content').innerHTML = '<p>News temporarily unavailable</p>';
@@ -893,6 +938,9 @@ document.addEventListener("DOMContentLoaded", () => {
         <span>📡 Starlink Active</span>
         <span class="data-value">47 satellites</span>
       </div>
+      <div class="data-source">
+        Data: <a href="https://celestrak.com/" target="_blank">CelesTrak</a> • <a href="https://www.n2yo.com/" target="_blank">N2YO Satellite Database</a>
+      </div>
     `;
   }
 
@@ -925,6 +973,9 @@ document.addEventListener("DOMContentLoaded", () => {
         <span>📊 24h Change</span>
         <span class="data-value">-2 fires</span>
       </div>
+      <div class="data-source">
+        Data: <a href="https://firms.modaps.eosdis.nasa.gov/" target="_blank">NASA FIRMS</a> • <a href="https://www.nifc.gov/" target="_blank">National Interagency Fire Center</a>
+      </div>
     `;
   }
 
@@ -953,6 +1004,9 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="data-point">
         <span>🌞 Solar Flare Risk</span>
         <span class="data-value">${solarFlareRisk}</span>
+      </div>
+      <div class="data-source">
+        Data: <a href="https://www.swpc.noaa.gov/" target="_blank">NOAA Space Weather Prediction Center</a> • <a href="https://sdo.gsfc.nasa.gov/" target="_blank">NASA Solar Dynamics Observatory</a>
       </div>
     `;
   }
@@ -991,6 +1045,9 @@ document.addEventListener("DOMContentLoaded", () => {
         <span>📅 Captured</span>
         <span class="data-value">Today</span>
       </div>
+      <div class="data-source">
+        Images: <a href="https://eol.jsc.nasa.gov/" target="_blank">NASA Earth Observations</a> • <a href="https://earthobservatory.nasa.gov/" target="_blank">NASA Earth Observatory</a>
+      </div>
     `;
   }
 
@@ -1012,6 +1069,9 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="data-point">
         <span>🌪️ Severe Weather</span>
         <span class="data-value">3 systems tracked</span>
+      </div>
+      <div class="data-source">
+        Data: <a href="https://climate.nasa.gov/" target="_blank">NASA Climate</a> • <a href="https://nsidc.org/" target="_blank">National Snow & Ice Data Center</a>
       </div>
     `;
   }
@@ -1038,6 +1098,9 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="data-point">
         <span>🌬️ Wind Dispersion</span>
         <span class="data-value">Good</span>
+      </div>
+      <div class="data-source">
+        Data: <a href="https://www.airnow.gov/" target="_blank">AirNow.gov</a> • <a href="https://www.epa.gov/" target="_blank">EPA Air Quality</a>
       </div>
     `;
   }
