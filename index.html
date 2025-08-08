@@ -610,94 +610,96 @@
       });
     })();
 
-    // ---- Live Moon Phase (Open-Meteo Astronomy) ----
-    (function initMoonPhase() {
-      // Convert angle (0..360 where 0=new, 180=full) to a label
-      function phaseNameFromAngle(angle) {
-        const a = ((angle % 360) + 360) % 360;
-        if (a < 11.25 || a >= 348.75) return "New Moon";
-        if (a < 33.75) return "Waxing Crescent";
-        if (a < 56.25) return "Waxing Crescent";
-        if (a < 78.75) return "Waxing Crescent";
-        if (a < 101.25) return "First Quarter";
-        if (a < 146.25) return "Waxing Gibbous";
-        if (a < 191.25) return "Full Moon";
-        if (a < 213.75) return "Waning Gibbous";
-        if (a < 258.75) return "Last Quarter";
-        if (a < 326.25) return "Waning Crescent";
-        return "Waning Crescent";
-      }
+    <script>
+  (function initMoonPhase() {
+    function todayYYYYMMDD() {
+      const d = new Date();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${d.getFullYear()}-${m}-${day}`;
+    }
 
-      // Morph the shadow path to approximate the phase
-      function updateMoonSVG(angle) {
-        const shadow = document.getElementById("moon-shadow");
-        if (!shadow) return;
+    function phaseNameFromAngle(angle) {
+      const a = ((angle % 360) + 360) % 360;
+      if (a < 11.25 || a >= 348.75) return "New Moon";
+      if (a < 33.75)  return "Waxing Crescent";
+      if (a < 56.25)  return "Waxing Crescent";
+      if (a < 78.75)  return "Waxing Crescent";
+      if (a < 101.25) return "First Quarter";
+      if (a < 146.25) return "Waxing Gibbous";
+      if (a < 191.25) return "Full Moon";
+      if (a < 213.75) return "Waning Gibbous";
+      if (a < 258.75) return "Last Quarter";
+      if (a < 326.25) return "Waning Crescent";
+      return "Waning Crescent";
+    }
 
-        // angle 0 = new, 180 = full
-        const rad = (angle % 360) * Math.PI / 180;
-        const illum = -Math.cos(rad); // -1=new .. 1=full
+    function updateMoonSVG(angle) {
+      const shadow = document.getElementById("moon-shadow");
+      if (!shadow) return;
+      const rad = (angle % 360) * Math.PI / 180;
+      const illum = -Math.cos(rad); // -1=new .. 1=full
+      const rx = 10, ry = 10;
+      const bulge = 10 * Math.abs(illum);
+      const dir = illum >= 0 ? 1 : -1;
+      const d = [
+        `M ${12 - rx},12`,
+        `A ${rx},${ry} 0 1 0 ${12 + rx},12`,
+        `A ${rx},${ry} 0 1 0 ${12 - rx},12`,
+        `M ${12 - rx},12`,
+        `A ${bulge},${ry} 0 1 0 ${12 + rx * dir},12`,
+        `A ${bulge},${ry} 0 1 0 ${12 - rx},12`,
+        `Z`
+      ].join(" ");
+      shadow.setAttribute("d", d);
+    }
 
-        const rx = 10; // base radius
-        const ry = 10;
-        const bulge = 10 * Math.abs(illum);
-        const dir = illum >= 0 ? 1 : -1;
+    async function fetchMoonPhase(lat, lon) {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "auto";
+      const day = todayYYYYMMDD();
+      const url = `https://api.open-meteo.com/v1/astronomy?latitude=${lat}&longitude=${lon}&daily=moon_phase&timezone=${encodeURIComponent(tz)}&start_date=${day}&end_date=${day}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Moon API error ${res.status}`);
+      const data = await res.json();
+      // Be tolerant of different value ranges:
+      let v = data?.daily?.moon_phase?.[0];
+      if (typeof v !== "number") throw new Error("No moon_phase value");
+      // normalize to angle in degrees
+      if (v <= 1) v = v * 360;           // 0..1 -> degrees
+      else if (v <= 100) v = v * 3.6;    // 0..100 -> degrees
+      // else assume 0..360 already
+      return v;
+    }
 
-        // Simple lens-ish overlay
-        const d = [
-          `M ${12 - rx},12`,
-          `A ${rx},${ry} 0 1 0 ${12 + rx},12`,
-          `A ${rx},${ry} 0 1 0 ${12 - rx},12`,
-          `M ${12 - rx},12`,
-          `A ${bulge},${ry} 0 1 0 ${12 + rx * dir},12`,
-          `A ${bulge},${ry} 0 1 0 ${12 - rx},12`,
-          `Z`
-        ].join(" ");
-        shadow.setAttribute("d", d);
-      }
+    function setLabel(text) {
+      const el = document.querySelector(".moon-label");
+      if (el) el.textContent = text;
+    }
 
-      async function fetchMoonPhase(lat, lon) {
-        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "auto";
-        const url = `https://api.open-meteo.com/v1/astronomy?latitude=${lat}&longitude=${lon}&daily=moon_phase&timezone=${encodeURIComponent(
-          tz
-        )}`;
-        const res = await fetch(url);
-        if (!res.ok) throw new Error("Moon API error");
-        const data = await res.json();
-        return data?.daily?.moon_phase?.[0] ?? 0;
-      }
+    function go(lat, lon) {
+      fetchMoonPhase(lat, lon)
+        .then((angle) => {
+          setLabel(phaseNameFromAngle(angle));
+          updateMoonSVG(angle);
+        })
+        .catch((e) => {
+          console.error(e);
+          setLabel("Moon phase unavailable");
+        });
+    }
 
-      function setMoonLabel(text) {
-        const el = document.querySelector(".moon-label");
-        if (el) el.textContent = text;
-      }
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => go(pos.coords.latitude, pos.coords.longitude),
+        () => go(40.7128, -74.0060),
+        { timeout: 6000 }
+      );
+    } else {
+      go(40.7128, -74.0060);
+    }
+  })();
+</script>
 
-      function go(lat, lon) {
-        fetchMoonPhase(lat, lon)
-          .then((angle) => {
-            setMoonLabel(phaseNameFromAngle(angle));
-            updateMoonSVG(angle);
-          })
-          .catch(() => {
-            setMoonLabel("Moon phase unavailable");
-          });
-      }
-
-      // Try geolocation; fall back to NYC
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            go(pos.coords.latitude, pos.coords.longitude);
-          },
-          () => {
-            go(40.7128, -74.0060);
-          },
-          { timeout: 6000 }
-        );
-      } else {
-        go(40.7128, -74.0060);
-      }
-    })();
-  </script>
 </body>
 </html>
 
