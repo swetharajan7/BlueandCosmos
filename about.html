@@ -72,7 +72,6 @@
       min-width:220px;flex-direction:column;box-shadow:0 8px 16px rgba(0,0,0,.2);z-index:1001;
       padding:.3em 0;border-radius:6px;
     }
-    /* show */
     .dropdown:hover .dropdown-content,
     .dropdown:focus-within .dropdown-content,
     .dropdown.open .dropdown-content{display:flex}
@@ -124,6 +123,8 @@
     body.dark .card{background:linear-gradient(180deg,rgba(30,30,30,.9),rgba(30,30,30,.8));border-color:var(--border-dark)}
     h2.section-title{font-size:1.8rem;margin:0 0 1rem 0;color:#111}
     body.dark h2.section-title{color:#fff}
+    .muted{color:#555}
+    body.dark .muted{color:#cfd9ff}
 
     /* Timeline */
     .timeline{position:relative;margin-left:1rem;padding-left:1.25rem}
@@ -137,19 +138,25 @@
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
     .w-item{padding:1rem;border:1px solid var(--border-light);border-radius:12px}
     body.dark .w-item{border-color:var(--border-dark)}
-    .w-item h3{margin:.3rem 0 0.5rem 0}
-    .muted{color:#555}
-    body.dark .muted{color:#cfd9ff}
+    .w-item h3{margin:.3rem 0 .5rem 0}
 
-    /* Team */
-    .team{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
-    .avatar{width:88px;height:88px;border-radius:50%;object-fit:cover;border:3px solid var(--accent)}
-    .member{display:flex;gap:1rem;align-items:center;border:1px solid var(--border-light);border-radius:12px;padding:1rem}
-    body.dark .member{border-color:var(--border-dark)}
-    .role{color:#666}
-    body.dark .role{color:#bcd0ff}
+    /* Careers */
+    .careers{display:grid;grid-template-columns:1fr;gap:1rem}
+    .job{display:flex;align-items:center;gap:.8rem;border:1px solid var(--border-light);border-radius:12px;padding:1rem}
+    body.dark .job{border-color:var(--border-dark)}
+    .job .title{font-weight:700}
+    .btn{
+      display:inline-block;margin:.5rem 0; padding:.8rem 1.2rem; border-radius:10px;
+      text-decoration:none; border:1px solid var(--accent);
+      transition:transform .15s ease, background .2s ease, color .2s ease;
+    }
+    .btn:hover{transform:translateY(-2px)}
+    .btn.primary{background:var(--accent);color:#fff}
+    .btn.primary:hover{background:#0b48c0}
+    .btn.ghost{color:var(--accent)}
+    .btn.ghost:hover{background:rgba(0,51,160,.1)}
 
-    /* Partners row */
+    /* Partners */
     .partners{display:flex;flex-wrap:wrap;gap:1rem;align-items:center}
     .partner{display:flex;align-items:center;gap:.5rem;padding:.6rem .8rem;border:1px dashed var(--border-light);border-radius:10px}
     body.dark .partner{border-color:var(--border-dark)}
@@ -161,16 +168,6 @@
       border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light)
     }
     body.dark .cta{border-color:var(--border-dark)}
-    .btn{
-      display:inline-block;margin:.5rem; padding:.8rem 1.2rem; border-radius:10px;
-      text-decoration:none; border:1px solid var(--accent);
-      transition:transform .15s ease, background .2s ease, color .2s ease;
-    }
-    .btn:hover{transform:translateY(-2px)}
-    .btn.primary{background:var(--accent);color:#fff}
-    .btn.primary:hover{background:#0b48c0}
-    .btn.ghost{color:var(--accent)}
-    .btn.ghost:hover{background:rgba(0,51,160,.1)}
 
     /* Footer */
     footer{
@@ -181,9 +178,7 @@
     footer a:hover{text-decoration:underline}
 
     /* Responsive */
-    @media (max-width:900px){
-      .twocol{grid-template-columns:1fr}
-    }
+    @media (max-width:900px){ .twocol{grid-template-columns:1fr} }
   </style>
 </head>
 
@@ -200,8 +195,6 @@
         </div>
       </div>
     </a>
-
-    <!-- Center left empty for balance -->
 
     <!-- Right: Nav + Theme -->
     <nav>
@@ -308,21 +301,37 @@
     </div>
   </section>
 
-  <!-- Meet the Team -->
+  <!-- Careers -->
   <section class="section">
-    <h2 class="section-title">Meet the Team</h2>
-    <div class="team">
-      <div class="member">
-        <img class="avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop" alt="Founder headshot"/>
-        <div>
-          <div><strong>Swetha Rajan</strong></div>
-          <div class="role">Founder & Creator</div>
-          <p class="muted" style="margin:.4rem 0 0 0;">
-            Energy markets + Earth systems + space — building tools at the intersection of exploration and sustainability.
-          </p>
+    <h2 class="section-title">Careers at BlueandCosmos</h2>
+    <div class="card">
+      <p class="muted" style="margin-top:.25rem">
+        We’re always looking for curious minds, creative thinkers, and problem-solvers who are passionate about space,
+        technology, and sustainability. If that’s you, we’d love to hear from you.
+      </p>
+      <div class="careers" style="margin-top:1rem">
+        <div class="job">
+          <div class="title">🌌 Space Data Analyst</div>
+          <div class="muted">Work with astronomy and Earth data to power our educational apps and dashboards.</div>
+        </div>
+        <div class="job">
+          <div class="title">🛰 API Integration Specialist</div>
+          <div class="muted">Integrate public space/earth APIs and maintain reliable data pipelines.</div>
+        </div>
+        <div class="job">
+          <div class="title">🌍 Sustainability Research Associate</div>
+          <div class="muted">Translate Earth systems insights into accessible learning experiences.</div>
+        </div>
+        <div class="job">
+          <div class="title">🎨 UI/UX Designer (Space Visualization)</div>
+          <div class="muted">Design engaging interfaces for space data, timelines, and live events.</div>
         </div>
       </div>
-      <!-- Add collaborators as you grow -->
+      <p style="margin-top:1rem">
+        <a class="btn primary" href="mailto:careers@blueandcosmos.com">Send Your CV</a>
+        <a class="btn ghost" href="contact.html">Contact Us</a>
+      </p>
+      <small class="muted">No recruiter agencies at this time.</small>
     </div>
   </section>
 
@@ -351,8 +360,8 @@
     </p>
     <p>
       <a class="btn primary" href="dashboard.html">Explore the Dashboard</a>
-      <a class="btn ghost" href="contact.html">Contact Us</a>
       <a class="btn ghost" href="discussion.html">Join the Community</a>
+      <a class="btn ghost" href="contact.html">Contact Us</a>
     </p>
   </section>
 
