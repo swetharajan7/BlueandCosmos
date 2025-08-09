@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About BlueandCosmos</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet"/>
+
+  <!-- Theme tokens -->
+  <style>
+    :root{
+      --accent:#0033a0;      /* Old Glory Blue */
+      --flag-blue:#002366;   /* Submenu hover bg */
+      --highlight:#ff4081;   /* Hot pink underline/hover */
+      --text-white:#ffffff;
+      --text-light:#cce0ff;
+      --dark-bg:#121212;
+      --dark-accent:#001f5b;
+      --card-light:#fafafa;
+      --card-dark:#1e1e1e;
+      --border-light:#ddd;
+      --border-dark:#444;
+      --content-max:1100px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:'Work Sans',sans-serif;
+      background:#fff;color:#000;
+      display:flex;flex-direction:column;min-height:100vh;
+    }
+    body.dark{background:var(--dark-bg);color:var(--text-white)}
+    main{flex:1 0 auto}
+    a{color:inherit}
+    :focus-visible{outline:2px dashed var(--highlight);outline-offset:2px}
+  </style>
+
+  <!-- Header styles (match site) -->
+  <style>
+    header{
+      background:var(--accent);color:var(--text-white);
+      padding:1em 2em;display:grid;grid-template-columns:auto 1fr auto;
+      align-items:center;gap:1em;position:sticky;top:0;z-index:1000;
+    }
+    /* Brand */
+    .logo-link{display:flex;align-items:center;text-decoration:none;color:inherit}
+    .logo-area{display:flex;align-items:center;gap:.4em}
+    .logo-area img{height:50px;width:50px;display:block}
+    .logo-text{display:flex;flex-direction:column;line-height:1.2;margin-left:-4px}
+    .logo-text .title{font-size:1.4em;font-weight:700;margin:0}
+    .logo-text .tagline{font-size:.85em;color:var(--text-light);margin:0}
+
+    /* Right nav */
+    nav{display:block}
+    .nav-right{display:flex;align-items:center;justify-content:flex-end;gap:1.2em}
+    .nav-right>*{display:inline-flex;align-items:center}
+
+    /* Dropdowns */
+    .dropdown{position:relative}
+    .dropbtn{
+      background:none;border:none;color:#fff;font-size:1em;cursor:pointer;padding:.4em 0;position:relative;
+    }
+    .dropbtn:hover,.dropbtn:focus{color:var(--highlight)}
+    .dropbtn::after{
+      content:"";position:absolute;left:0;bottom:-2px;width:0;height:2px;background:var(--highlight);
+      transition:width .25s ease-in-out;
+    }
+    .dropdown:hover>.dropbtn::after,.dropdown.open>.dropbtn::after,.dropbtn:focus::after{width:100%}
+    .dropdown-content{
+      display:none;position:absolute;top:calc(100% + .6em);left:0;background:var(--accent);
+      min-width:220px;flex-direction:column;box-shadow:0 8px 16px rgba(0,0,0,.2);z-index:1001;
+      padding:.3em 0;border-radius:6px;
+    }
+    /* show */
+    .dropdown:hover .dropdown-content,
+    .dropdown:focus-within .dropdown-content,
+    .dropdown.open .dropdown-content{display:flex}
+    .dropdown-content a{
+      color:var(--text-light);text-decoration:none;padding:.8em 1em;position:relative;white-space:nowrap;
+      transition:color .2s ease,background-color .2s ease,transform .15s ease;
+    }
+    .dropdown-content a:hover,.dropdown-content a:focus,.dropdown-content a.clicked{
+      background:var(--flag-blue);color:#fff !important;transform:translateX(5px);
+    }
+    .dropdown-content a::after{
+      content:"";position:absolute;left:1em;bottom:6px;width:0;height:2px;background:var(--highlight);transition:width .25s ease;
+    }
+    .dropdown-content a:hover::after,.dropdown-content a:focus::after,.dropdown-content a.clicked::after{width:calc(100% - 2em)}
+
+    /* Links */
+    .nav-link{color:#fff;text-decoration:none;position:relative;padding-bottom:2px}
+    .nav-link:hover{color:var(--highlight)}
+    .nav-link::after{
+      content:"";position:absolute;left:0;bottom:-2px;width:0;height:2px;background:var(--highlight);transition:width .25s ease-in-out;
+    }
+    .nav-link:hover::after{width:100%}
+
+    /* Theme toggle */
+    .toggle-theme{cursor:pointer;font-size:1.5em;line-height:1;user-select:none}
+
+    /* Dark header/footer */
+    body.dark header,body.dark footer{background:var(--dark-accent)}
+    body.dark .dropbtn,body.dark .nav-link{color:#e6f0ff}
+  </style>
+
+  <!-- Page section styles -->
+  <style>
+    .hero{
+      background-image:linear-gradient(rgba(0,0,0,.35),rgba(0,0,0,.35)),url('https://photojournal.jpl.nasa.gov/jpeg/PIA10231.jpg');
+      background-size:cover;background-position:center;
+      color:#fff;text-align:center;padding:6rem 1rem;
+    }
+    .hero h1{font-size:2.6rem;margin:.25rem 0}
+    .hero p{max-width:760px;margin:.5rem auto 0;font-size:1.1rem;color:#e8f0ff}
+
+    .section{max-width:var(--content-max);margin:0 auto;padding:3rem 1rem}
+    .twocol{display:grid;grid-template-columns:1.2fr 1fr;gap:2rem;align-items:center}
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.55));
+      border:1px solid var(--border-light); border-radius:14px; padding:1.25rem;
+      box-shadow:0 6px 20px rgba(0,0,0,.08);
+    }
+    body.dark .card{background:linear-gradient(180deg,rgba(30,30,30,.9),rgba(30,30,30,.8));border-color:var(--border-dark)}
+    h2.section-title{font-size:1.8rem;margin:0 0 1rem 0;color:#111}
+    body.dark h2.section-title{color:#fff}
+
+    /* Timeline */
+    .timeline{position:relative;margin-left:1rem;padding-left:1.25rem}
+    .timeline::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);border-radius:2px}
+    .t-item{position:relative;margin:1rem 0 1.5rem}
+    .t-item::before{content:"";position:absolute;left:-1.1rem;top:.25rem;width:.75rem;height:.75rem;background:var(--highlight);border-radius:50%}
+    .t-year{font-weight:700;color:var(--accent)}
+    body.dark .t-year{color:#8eb6ff}
+
+    /* What we do grid */
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
+    .w-item{padding:1rem;border:1px solid var(--border-light);border-radius:12px}
+    body.dark .w-item{border-color:var(--border-dark)}
+    .w-item h3{margin:.3rem 0 0.5rem 0}
+    .muted{color:#555}
+    body.dark .muted{color:#cfd9ff}
+
+    /* Team */
+    .team{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+    .avatar{width:88px;height:88px;border-radius:50%;object-fit:cover;border:3px solid var(--accent)}
+    .member{display:flex;gap:1rem;align-items:center;border:1px solid var(--border-light);border-radius:12px;padding:1rem}
+    body.dark .member{border-color:var(--border-dark)}
+    .role{color:#666}
+    body.dark .role{color:#bcd0ff}
+
+    /* Partners row */
+    .partners{display:flex;flex-wrap:wrap;gap:1rem;align-items:center}
+    .partner{display:flex;align-items:center;gap:.5rem;padding:.6rem .8rem;border:1px dashed var(--border-light);border-radius:10px}
+    body.dark .partner{border-color:var(--border-dark)}
+    .partner img{height:22px}
+
+    /* CTA */
+    .cta{
+      text-align:center;padding:3rem 1rem;background:linear-gradient(180deg,rgba(0,51,160,.06),rgba(255,64,129,.08));
+      border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light)
+    }
+    body.dark .cta{border-color:var(--border-dark)}
+    .btn{
+      display:inline-block;margin:.5rem; padding:.8rem 1.2rem; border-radius:10px;
+      text-decoration:none; border:1px solid var(--accent);
+      transition:transform .15s ease, background .2s ease, color .2s ease;
+    }
+    .btn:hover{transform:translateY(-2px)}
+    .btn.primary{background:var(--accent);color:#fff}
+    .btn.primary:hover{background:#0b48c0}
+    .btn.ghost{color:var(--accent)}
+    .btn.ghost:hover{background:rgba(0,51,160,.1)}
+
+    /* Footer */
+    footer{
+      background:var(--accent);color:#fff;padding:2em 1em;
+      display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1em;text-align:center;
+    }
+    footer a{color:#fff;text-decoration:none}
+    footer a:hover{text-decoration:underline}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .twocol{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+    <!-- Left: Brand -->
+    <a href="index.html" class="logo-link" aria-label="BlueandCosmos Home">
+      <div class="logo-area">
+        <img src="https://cdn.jsdelivr.net/gh/swetharajan7/blueandcosmos/assets/logo-transparent.png" alt="BlueandCosmos Logo"/>
+        <div class="logo-text">
+          <div class="title">BlueandCosmos</div>
+          <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
+        </div>
+      </div>
+    </a>
+
+    <!-- Center left empty for balance -->
+
+    <!-- Right: Nav + Theme -->
+    <nav>
+      <div class="nav-right">
+        <!-- About dropdown -->
+        <div class="dropdown" data-menu="about">
+          <button class="dropbtn" tabindex="0" aria-haspopup="true" aria-expanded="false">About</button>
+          <div class="dropdown-content" role="menu" aria-label="About submenu">
+            <a href="about.html" role="menuitem">About BlueandCosmos</a>
+            <a href="sustainability.html" role="menuitem">Sustainability</a>
+            <a href="news.html" role="menuitem">News</a>
+            <a href="myaccount.html" role="menuitem">My Account</a>
+          </div>
+        </div>
+
+        <!-- Livestream dropdown -->
+        <div class="dropdown" data-menu="livestream">
+          <button class="dropbtn" tabindex="0" aria-haspopup="true" aria-expanded="false">Livestream</button>
+          <div class="dropdown-content" role="menu" aria-label="Livestream submenu">
+            <a href="https://blueandcosmos.com/livestream-images" target="_blank" rel="noopener" role="menuitem">Live Stream Images</a>
+            <a href="https://blueandcosmos.com/launch-missions" target="_blank" rel="noopener" role="menuitem">Launch Missions</a>
+            <a href="https://blueandcosmos.com/webinars" target="_blank" rel="noopener" role="menuitem">Webinars</a>
+          </div>
+        </div>
+
+        <a class="nav-link" href="telescope.html" aria-label="Telescope">🔭 Telescope</a>
+        <a class="nav-link" href="discussion.html" aria-label="Community">💬 Community</a>
+        <a class="nav-link" href="dashboard.html" aria-label="Dashboard">Dashboard</a>
+
+        <div class="toggle-theme" id="themeToggle" role="button" aria-label="Toggle theme" title="Toggle light/dark theme">🌙</div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" aria-label="About hero">
+    <h1>About BlueandCosmos</h1>
+    <p>We build tools, data experiences, and a community that make space exploration accessible — while protecting the Earth we call home.</p>
+  </section>
+
+  <!-- Mission & Vision -->
+  <section class="section">
+    <div class="twocol">
+      <div class="card">
+        <h2 class="section-title">Our Mission</h2>
+        <p class="muted">
+          To bridge science, technology, and community engagement so anyone can explore the cosmos
+          — and use that knowledge to advance sustainability here on Earth.
+        </p>
+        <h2 class="section-title" style="margin-top:1.25rem;">Our Vision</h2>
+        <p class="muted">
+          A world where every learner and explorer has the tools to understand our planet’s systems,
+          plan for a carbon-neutral future, and reach for the stars responsibly.
+        </p>
+      </div>
+      <div class="card" style="text-align:center">
+        <img src="https://images.unsplash.com/photo-1454789548928-9efd52dc4031?q=80&w=1600&auto=format&fit=crop" alt="Earth and stars" style="width:100%;border-radius:12px;display:block"/>
+        <small class="muted" style="display:block;margin-top:.6rem;">Image credit: Unsplash</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Story -->
+  <section class="section">
+    <h2 class="section-title">Our Story</h2>
+    <div class="card">
+      <div class="timeline">
+        <div class="t-item">
+          <div class="t-year">2024</div>
+          <div>BlueandCosmos begins as a passion project to connect space curiosity with climate responsibility.</div>
+        </div>
+        <div class="t-item">
+          <div class="t-year">2025</div>
+          <div>Launched the BlueandCosmos Dashboard with APOD, Science News, Live Weather, Celestial Events, and Launch Tracker.</div>
+        </div>
+        <div class="t-item">
+          <div class="t-year">Today</div>
+          <div>Expanding educational apps, lunar intelligence, and community experiences — open for collaborators and partners.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What We Do -->
+  <section class="section">
+    <h2 class="section-title">What We Do</h2>
+    <div class="grid">
+      <div class="w-item">
+        <h3>🌍 Earth & Environment</h3>
+        <p class="muted">Sustainability learning, climate-aware features, and pathways to carbon-neutral exploration.</p>
+      </div>
+      <div class="w-item">
+        <h3>🚀 Exploration Tools</h3>
+        <p class="muted">Dashboards, live feeds, launch tracking, and hands-on data viewers for learners and enthusiasts.</p>
+      </div>
+      <div class="w-item">
+        <h3>📡 Data & Research</h3>
+        <p class="muted">Integrations with trusted APIs and datasets; open resources for analysis and teaching.</p>
+      </div>
+      <div class="w-item">
+        <h3>🤝 Community</h3>
+        <p class="muted">Forums, livestreams, and collaborative projects that make space a shared experience.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Meet the Team -->
+  <section class="section">
+    <h2 class="section-title">Meet the Team</h2>
+    <div class="team">
+      <div class="member">
+        <img class="avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop" alt="Founder headshot"/>
+        <div>
+          <div><strong>Swetha Rajan</strong></div>
+          <div class="role">Founder & Creator</div>
+          <p class="muted" style="margin:.4rem 0 0 0;">
+            Energy markets + Earth systems + space — building tools at the intersection of exploration and sustainability.
+          </p>
+        </div>
+      </div>
+      <!-- Add collaborators as you grow -->
+    </div>
+  </section>
+
+  <!-- Partners & Credits -->
+  <section class="section">
+    <h2 class="section-title">Partners & Credits</h2>
+    <div class="card">
+      <div class="partners" aria-label="Data sources and partners">
+        <div class="partner"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA"/><span>NASA APOD</span></div>
+        <div class="partner"><img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/The_New_York_Times_logo.png" alt="NYT" style="height:18px"/><span>NYT Science</span></div>
+        <div class="partner"><img src="https://openweathermap.org/themes/openweathermap/assets/img/logo_white_cropped.png" alt="OpenWeather"/><span>OpenWeather</span></div>
+        <div class="partner"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Heavens-Above_logo.png" alt="Heavens-Above" style="height:20px"/><span>Heavens-Above</span></div>
+        <div class="partner"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2b/Rocket_emoji.png" alt="Launch Library 2" style="height:20px"/><span>Launch Library 2</span></div>
+      </div>
+      <p class="muted" style="margin-top:.8rem">
+        We gratefully credit data and media to their respective sources. All trademarks belong to their owners.
+      </p>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="cta">
+    <h2 class="section-title" style="margin-bottom:.5rem;">Join Us on This Journey</h2>
+    <p class="muted" style="max-width:760px;margin:.25rem auto 1rem;">
+      Explore our live dashboard, connect with the community, or reach out about collaborations and ideas.
+    </p>
+    <p>
+      <a class="btn primary" href="dashboard.html">Explore the Dashboard</a>
+      <a class="btn ghost" href="contact.html">Contact Us</a>
+      <a class="btn ghost" href="discussion.html">Join the Community</a>
+    </p>
+  </section>
+
+  <!-- Image Credit (optional, matches index style) -->
+  <p style="text-align:center;font-size:.85rem;color:#9fb8ff;margin:1rem 0 0;">Image Credit: NASA/JPL-Caltech</p>
+
+  <!-- Footer (matches index) -->
+  <footer>
+    <!-- Left: App Store Logos -->
+    <div style="flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:.5em;">
+      <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play Store" style="height:40px;"/></a>
+      <a href="#"><img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Store" style="height:40px;"/></a>
+    </div>
+
+    <!-- Center: Legal Links and Trademark -->
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:.5em;">
+      <div style="font-weight:bold;">BlueandCosmos™ 2025</div>
+      <div style="display:flex;flex-wrap:wrap;gap:1em;justify-content:center;font-size:.9em;">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Use</a>
+        <a href="sitemap.html">Sitemap</a>
+        <a href="contact.html">Contact Us</a>
+      </div>
+    </div>
+
+    <!-- Right: Social Media -->
+    <div style="flex:1;display:flex;flex-direction:column;align-items:flex-end;gap:.5em;">
+      <div style="font-weight:bold;">Let's Connect!</div>
+      <div style="display:flex;gap:.5em;">
+        <a href="https://twitter.com/blueandcosmos" target="_blank" rel="noopener"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X" style="height:24px;filter:invert(1);"/></a>
+        <a href="https://instagram.com/blueandcosmos" target="_blank" rel="noopener"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" style="height:24px;filter:invert(1);"/></a>
+        <a href="https://tiktok.com/@blueandcosmos" target="_blank" rel="noopener"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok" style="height:24px;filter:invert(1);"/></a>
+        <a href="https://youtube.com/@blueandcosmos" target="_blank" rel="noopener"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube" style="height:24px;filter:invert(1);"/></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts: theme + sticky dropdowns -->
+  <script>
+    // Theme persistence (moon/sun)
+    (function(){
+      const t=document.getElementById("themeToggle");
+      if(localStorage.getItem("theme")==="dark"){
+        document.body.classList.add("dark");
+        if(t) t.textContent="☀️";
+      }
+      t?.addEventListener("click",()=>{
+        document.body.classList.toggle("dark");
+        const isDark=document.body.classList.contains("dark");
+        t.textContent=isDark?"☀️":"🌙";
+        localStorage.setItem("theme",isDark?"dark":"light");
+      });
+    })();
+
+    // Dropdown stickiness + click highlight (matches site)
+    (function(){
+      const OPEN="open"; const DELAY=160;
+      document.querySelectorAll(".dropdown").forEach(dd=>{
+        let timer=null; const btn=dd.querySelector(".dropbtn"); const menu=dd.querySelector(".dropdown-content");
+        const open=()=>{ dd.classList.add(OPEN); btn?.setAttribute("aria-expanded","true"); if(timer){clearTimeout(timer);timer=null;} };
+        const closeLater=()=>{ if(timer)clearTimeout(timer); timer=setTimeout(()=>{ dd.classList.remove(OPEN); btn?.setAttribute("aria-expanded","false"); },DELAY); };
+        dd.addEventListener("pointerenter",open);
+        dd.addEventListener("pointerleave",closeLater);
+        btn?.addEventListener("focus",open);
+        menu?.addEventListener("focusout",(e)=>{ if(!dd.contains(e.relatedTarget)) closeLater(); });
+        menu?.querySelectorAll("a").forEach(a=>{
+          a.addEventListener("click",()=>{
+            menu.querySelectorAll("a").forEach(el=>el.classList.remove("clicked"));
+            a.classList.add("clicked"); dd.classList.remove(OPEN); btn?.setAttribute("aria-expanded","false");
+          });
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
