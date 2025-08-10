@@ -81,6 +81,23 @@ class FlashcardsApp {
     document.getElementById('notebookLMBtn')?.addEventListener('click', () => {
       this.openNotebookLM(this.getCurrentTopic());
     });
+
+    // Custom flashcard creation
+    document.getElementById('createCardsBtn')?.addEventListener('click', () => {
+      this.openFlashcardCreator();
+    });
+
+    document.getElementById('notebookLMCreateBtn')?.addEventListener('click', () => {
+      this.openNotebookLMCreator();
+    });
+
+    document.getElementById('notebookLMAudioBtn')?.addEventListener('click', () => {
+      this.generateAudioSummary();
+    });
+
+    document.getElementById('closeCreator')?.addEventListener('click', () => {
+      this.closeFlashcardCreator();
+    });
     
     // Close sidebar when clicking outside on mobile
     document.addEventListener('click', (e) => {
@@ -538,6 +555,326 @@ class FlashcardsApp {
     return this.currentTopic ? 
       `${this.currentTopic.category} - ${this.currentTopic.topic}` : 
       'STEM Flashcards';
+  }
+
+  // Custom Flashcard Creation System
+  openFlashcardCreator() {
+    document.getElementById('flashcardCreator').style.display = 'flex';
+    this.initializeCreatorForm();
+  }
+
+  closeFlashcardCreator() {
+    document.getElementById('flashcardCreator').style.display = 'none';
+    this.resetCreatorForm();
+  }
+
+  openNotebookLMCreator() {
+    // Open NotebookLM with instructions for creating flashcards
+    const prompt = `I want to create educational flashcards. Please help me:
+
+1. Generate question and answer pairs for my study topic
+2. Create detailed explanations for complex concepts
+3. Suggest multimedia elements (images, audio descriptions)
+4. Organize content by difficulty level
+
+Topic: ${this.getCurrentTopic()}
+
+Please provide structured content that I can use to create comprehensive flashcards.`;
+
+    sessionStorage.setItem('flashcard_creation_prompt', prompt);
+    this.openNotebookLM('Flashcard Creation', { question: prompt, answer: '', explanation: '' });
+  }
+
+  generateAudioSummary() {
+    const currentCard = this.getCurrentCardContent();
+    if (currentCard) {
+      const audioPrompt = `Create an audio summary script for this flashcard:
+
+Question: ${currentCard.question}
+Answer: ${currentCard.answer}
+Explanation: ${currentCard.explanation || 'N/A'}
+
+Please provide a clear, engaging script that could be used for audio narration, including:
+- Clear pronunciation guides for technical terms
+- Natural speaking rhythm and pauses
+- Emphasis on key concepts
+- Estimated speaking time`;
+
+      sessionStorage.setItem('audio_summary_prompt', audioPrompt);
+      this.openNotebookLM('Audio Summary Generation', currentCard);
+    } else {
+      alert('Please select a flashcard first to generate an audio summary.');
+    }
+  }
+
+  initializeCreatorForm() {
+    // Initialize form event listeners
+    const form = document.getElementById('creatorForm');
+    const imageInput = document.getElementById('cardImage');
+    const audioInput = document.getElementById('cardAudio');
+    const videoInput = document.getElementById('cardVideo');
+
+    // Form submission
+    form?.addEventListener('submit', (e) => this.handleFormSubmission(e));
+
+    // Media preview handlers
+    imageInput?.addEventListener('change', (e) => this.handleImageUpload(e));
+    audioInput?.addEventListener('change', (e) => this.handleAudioUpload(e));
+    videoInput?.addEventListener('change', (e) => this.handleVideoUpload(e));
+
+    // AI enhancement buttons
+    document.getElementById('enhanceWithAI')?.addEventListener('click', () => this.enhanceWithAI());
+    document.getElementById('generateAudioSummary')?.addEventListener('click', () => this.generateAudioForCard());
+    document.getElementById('createVariations')?.addEventListener('click', () => this.createVariations());
+
+    // Record buttons
+    document.getElementById('recordAudioBtn')?.addEventListener('click', () => this.recordAudio());
+    document.getElementById('recordVideoBtn')?.addEventListener('click', () => this.recordVideo());
+
+    // Preview button
+    document.getElementById('previewCard')?.addEventListener('click', () => this.previewCustomCard());
+  }
+
+  handleFormSubmission(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const cardData = this.extractCardData(formData);
+    this.saveCustomCard(cardData);
+  }
+
+  extractCardData(formData) {
+    return {
+      id: 'custom_' + Date.now(),
+      type: 'Custom',
+      question: formData.get('question'),
+      answer: formData.get('answer'),
+      explanation: formData.get('explanation'),
+      category: formData.get('category'),
+      tags: formData.get('tags')?.split(',').map(tag => tag.trim()) || [],
+      difficulty: parseInt(formData.get('difficulty')),
+      media: {
+        image: this.processedMedia?.image || null,
+        audio: this.processedMedia?.audio || null,
+        video: this.processedMedia?.video || null
+      },
+      created: new Date().toISOString(),
+      lastStudied: null,
+      nextReview: null
+    };
+  }
+
+  saveCustomCard(cardData) {
+    // Save to localStorage
+    const customCards = JSON.parse(localStorage.getItem('custom_flashcards') || '[]');
+    customCards.push(cardData);
+    localStorage.setItem('custom_flashcards', JSON.stringify(customCards));
+
+    // Add to current study session if applicable
+    this.addToLog(`Created custom flashcard: ${cardData.question.substring(0, 50)}...`);
+
+    // Show success message
+    alert('✅ Custom flashcard created successfully!');
+    this.closeFlashcardCreator();
+  }
+
+  handleImageUpload(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const preview = document.getElementById('imagePreview');
+        preview.innerHTML = `<img src="${event.target.result}" style="max-width: 100%; max-height: 100px; border-radius: 4px;">`;
+        
+        if (!this.processedMedia) this.processedMedia = {};
+        this.processedMedia.image = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  handleAudioUpload(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const preview = document.getElementById('audioPreview');
+      const audio = document.createElement('audio');
+      audio.controls = true;
+      audio.style.width = '100%';
+      audio.src = URL.createObjectURL(file);
+      preview.innerHTML = '';
+      preview.appendChild(audio);
+
+      if (!this.processedMedia) this.processedMedia = {};
+      this.processedMedia.audio = URL.createObjectURL(file);
+    }
+  }
+
+  handleVideoUpload(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const preview = document.getElementById('videoPreview');
+      const video = document.createElement('video');
+      video.controls = true;
+      video.style.width = '100%';
+      video.style.maxHeight = '100px';
+      video.src = URL.createObjectURL(file);
+      preview.innerHTML = '';
+      preview.appendChild(video);
+
+      if (!this.processedMedia) this.processedMedia = {};
+      this.processedMedia.video = URL.createObjectURL(file);
+    }
+  }
+
+  enhanceWithAI() {
+    const question = document.getElementById('cardQuestion').value;
+    const answer = document.getElementById('cardAnswer').value;
+
+    if (!question && !answer) {
+      alert('Please enter at least a question or answer to enhance with AI.');
+      return;
+    }
+
+    const enhancementPrompt = `Please enhance this flashcard content:
+
+Question: ${question || '[Please suggest a question]'}
+Answer: ${answer || '[Please provide an answer]'}
+
+Please help me:
+1. Improve the question to be more engaging and educational
+2. Enhance the answer with clear, accurate information
+3. Add a detailed explanation with examples
+4. Suggest related concepts or follow-up questions
+5. Recommend visual or audio elements that would help learning
+
+Focus on making this content suitable for STEM education.`;
+
+    sessionStorage.setItem('flashcard_enhancement_prompt', enhancementPrompt);
+    this.openNotebookLM('Flashcard Enhancement', { question: enhancementPrompt, answer: '', explanation: '' });
+  }
+
+  generateAudioForCard() {
+    const question = document.getElementById('cardQuestion').value;
+    const answer = document.getElementById('cardAnswer').value;
+
+    if (!question || !answer) {
+      alert('Please enter both question and answer to generate audio summary.');
+      return;
+    }
+
+    const audioPrompt = `Create an audio narration script for this flashcard:
+
+Question: ${question}
+Answer: ${answer}
+
+Please provide:
+1. A clear, engaging narration script
+2. Pronunciation guides for technical terms
+3. Natural pauses and emphasis markers
+4. Estimated reading time
+5. Tips for effective audio delivery
+
+Make it suitable for educational audio content.`;
+
+    sessionStorage.setItem('audio_generation_prompt', audioPrompt);
+    this.openNotebookLM('Audio Script Generation', { question: audioPrompt, answer: '', explanation: '' });
+  }
+
+  createVariations() {
+    const question = document.getElementById('cardQuestion').value;
+    const answer = document.getElementById('cardAnswer').value;
+
+    if (!question || !answer) {
+      alert('Please enter both question and answer to create variations.');
+      return;
+    }
+
+    const variationPrompt = `Create multiple variations of this flashcard:
+
+Original Question: ${question}
+Original Answer: ${answer}
+
+Please create:
+1. 3-5 different ways to ask the same concept
+2. Varying difficulty levels (easier and harder versions)
+3. Different question formats (multiple choice, fill-in-blank, etc.)
+4. Related questions that test connected concepts
+5. Real-world application questions
+
+This will help create a comprehensive study set.`;
+
+    sessionStorage.setItem('variation_prompt', variationPrompt);
+    this.openNotebookLM('Flashcard Variations', { question: variationPrompt, answer: '', explanation: '' });
+  }
+
+  recordAudio() {
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+          // Audio recording implementation would go here
+          alert('🎤 Audio recording feature coming soon! For now, you can upload audio files or use NotebookLM to generate audio scripts.');
+        })
+        .catch(err => {
+          alert('Microphone access denied. Please upload an audio file instead.');
+        });
+    } else {
+      alert('Audio recording not supported in this browser. Please upload an audio file.');
+    }
+  }
+
+  recordVideo() {
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(stream => {
+          // Video recording implementation would go here
+          alert('📹 Video recording feature coming soon! For now, you can upload video files.');
+        })
+        .catch(err => {
+          alert('Camera access denied. Please upload a video file instead.');
+        });
+    } else {
+      alert('Video recording not supported in this browser. Please upload a video file.');
+    }
+  }
+
+  previewCustomCard() {
+    const question = document.getElementById('cardQuestion').value;
+    const answer = document.getElementById('cardAnswer').value;
+    const explanation = document.getElementById('cardExplanation').value;
+
+    if (!question || !answer) {
+      alert('Please enter at least a question and answer to preview.');
+      return;
+    }
+
+    // Create a temporary preview (you could enhance this with a modal)
+    const preview = `
+📝 FLASHCARD PREVIEW
+
+Question: ${question}
+
+Answer: ${answer}
+
+${explanation ? `Explanation: ${explanation}` : ''}
+
+${this.processedMedia?.image ? '📷 Image attached' : ''}
+${this.processedMedia?.audio ? '🎵 Audio attached' : ''}
+${this.processedMedia?.video ? '🎬 Video attached' : ''}
+    `;
+
+    alert(preview);
+  }
+
+  resetCreatorForm() {
+    document.getElementById('creatorForm')?.reset();
+    document.getElementById('imagePreview').innerHTML = '';
+    document.getElementById('audioPreview').innerHTML = '';
+    document.getElementById('videoPreview').innerHTML = '';
+    this.processedMedia = null;
+  }
+
+  loadCustomCards() {
+    const customCards = JSON.parse(localStorage.getItem('custom_flashcards') || '[]');
+    return customCards;
   }
 }
 
