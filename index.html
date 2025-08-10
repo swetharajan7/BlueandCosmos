@@ -134,6 +134,188 @@
       width: 100%;
     }
 
+    /* Flashcards Feature Section */
+    .flashcards-section {
+      background: linear-gradient(135deg, #0033a0 0%, #002366 100%);
+      color: white;
+      padding: 4em 2em;
+      margin: 2em 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .flashcards-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        radial-gradient(circle at 60% 20%, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+      background-size: 100px 100px;
+      pointer-events: none;
+    }
+
+    .flashcards-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .flashcards-header {
+      margin-bottom: 3em;
+    }
+
+    .flashcards-icon {
+      font-size: 4em;
+      margin-bottom: 0.5em;
+      display: block;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .flashcards-title {
+      font-size: 2.5em;
+      font-weight: bold;
+      margin-bottom: 0.5em;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .flashcards-subtitle {
+      font-size: 1.3em;
+      color: #cce0ff;
+      margin-bottom: 2em;
+      line-height: 1.4;
+    }
+
+    .flashcards-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2em;
+      margin-bottom: 3em;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 2em;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .feature-icon {
+      font-size: 3em;
+      margin-bottom: 1em;
+      display: block;
+    }
+
+    .feature-title {
+      font-size: 1.3em;
+      font-weight: bold;
+      margin-bottom: 0.5em;
+      color: #ffd700;
+    }
+
+    .feature-description {
+      color: #cce0ff;
+      line-height: 1.5;
+    }
+
+    .flashcards-cta {
+      display: flex;
+      gap: 1.5em;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .cta-button {
+      padding: 1.2em 2.5em;
+      border: none;
+      border-radius: 25px;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+
+    .cta-primary {
+      background: linear-gradient(45deg, #ff4081, #e91e63);
+      color: white;
+      box-shadow: 0 4px 15px rgba(255, 64, 129, 0.4);
+    }
+
+    .cta-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(255, 64, 129, 0.6);
+    }
+
+    .cta-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      color: white;
+    }
+
+    .cta-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-3px);
+    }
+
+    /* Dark theme adjustments */
+    body.dark .flashcards-section {
+      background: linear-gradient(135deg, #001f5b 0%, #000d2b 100%);
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .flashcards-section {
+        padding: 3em 1em;
+        margin: 1em 0;
+      }
+      
+      .flashcards-title {
+        font-size: 2em;
+      }
+      
+      .flashcards-subtitle {
+        font-size: 1.1em;
+      }
+      
+      .flashcards-features {
+        grid-template-columns: 1fr;
+        gap: 1.5em;
+      }
+      
+      .flashcards-cta {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .cta-button {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+    }
+
     footer {
       background-color: var(--accent);
       color: #fff;
@@ -192,6 +374,7 @@
         </div>
 
         <a class="nav-link" href="telescope.html">🔭 Telescope</a>
+        <a class="nav-link" href="flashcards.html">🧠 Flashcards</a>
         <a class="nav-link" href="discussion.html">💬 Community</a>
         <a class="nav-link" href="dashboard.html">Dashboard</a>
         <div class="toggle-theme" id="themeToggle">🌙</div>
@@ -201,6 +384,79 @@
 
   <main>
     <section class="hero" aria-label="Solar System hero image"></section>
+    
+    <!-- Physics Flashcards Feature Section -->
+    <section class="flashcards-section">
+      <div class="flashcards-content">
+        <div class="flashcards-header">
+          <span class="flashcards-icon">🧠</span>
+          <h2 class="flashcards-title">Master Physics with Smart Flashcards</h2>
+          <p class="flashcards-subtitle">
+            ANKI-style spaced repetition system covering physics from elementary to PhD level. 
+            Study offline, track progress, and accelerate your learning journey.
+          </p>
+        </div>
+        
+        <div class="flashcards-features">
+          <div class="feature-card">
+            <span class="feature-icon">🎯</span>
+            <h3 class="feature-title">Adaptive Learning</h3>
+            <p class="feature-description">
+              Spaced repetition algorithm adapts to your performance, showing cards when you need to review them most.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <span class="feature-icon">📚</span>
+            <h3 class="feature-title">K-12 to PhD</h3>
+            <p class="feature-description">
+              Progressive difficulty levels from basic forces to quantum field theory and general relativity.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <span class="feature-icon">📱</span>
+            <h3 class="feature-title">Study Anywhere</h3>
+            <p class="feature-description">
+              Works offline on all devices. Install as an app and study physics concepts anytime, anywhere.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <span class="feature-icon">📊</span>
+            <h3 class="feature-title">Track Progress</h3>
+            <p class="feature-description">
+              Detailed statistics, study streaks, and performance analytics to optimize your learning.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <span class="feature-icon">⚡</span>
+            <h3 class="feature-title">Quick Sessions</h3>
+            <p class="feature-description">
+              Efficient 5-15 minute study sessions that fit into your busy schedule for maximum retention.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <span class="feature-icon">🔬</span>
+            <h3 class="feature-title">Comprehensive</h3>
+            <p class="feature-description">
+              Mechanics, thermodynamics, electromagnetism, quantum physics, and advanced topics with formulas.
+            </p>
+          </div>
+        </div>
+        
+        <div class="flashcards-cta">
+          <a href="flashcards.html" class="cta-button cta-primary">
+            🚀 Start Learning Now
+          </a>
+          <a href="dashboard.html" class="cta-button cta-secondary">
+            📊 View Dashboard
+          </a>
+        </div>
+      </div>
+    </section>
     
     <!-- Newsletter Signup Component -->
     <section class="newsletter-signup" id="newsletter-signup">
