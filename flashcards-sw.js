@@ -1,5 +1,5 @@
 // Service Worker for Offline Functionality
-const CACHE_NAME = 'physics-flashcards-v1';
+const CACHE_NAME = 'stem-flashcards-v1';
 const urlsToCache = [
   '/flashcards.html',
   '/flashcards.css',

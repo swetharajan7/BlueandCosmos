@@ -1,7 +1,7 @@
 {
-  "name": "Physics Flashcards - BlueandCosmos",
-  "short_name": "Physics Cards",
-  "description": "ANKI-style physics flashcards for K-12 to PhD level students",
+  "name": "STEM Flashcards - BlueandCosmos",
+  "short_name": "STEM Cards",
+  "description": "ANKI-style STEM flashcards covering Physics, Math, Chemistry, and Earth Sciences for space science preparation",
   "start_url": "/flashcards.html",
   "display": "standalone",
   "background_color": "#0033a0",

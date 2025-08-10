@@ -1,4 +1,4 @@
-// Physics Flashcards Application Logic
+// STEM Flashcards Application Logic
 class FlashcardsApp {
   constructor() {
     this.currentLevel = 'high';
@@ -127,7 +127,7 @@ class FlashcardsApp {
   
   loadTopicCategories() {
     const container = document.getElementById('topicCategories');
-    const levelData = PHYSICS_DATA.levels[this.currentLevel];
+    const levelData = STEM_DATA.levels[this.currentLevel];
     
     if (!levelData) return;
     
@@ -179,7 +179,7 @@ class FlashcardsApp {
   }
   
   getTopicProgress(level, category, topic) {
-    const topicData = PHYSICS_DATA.levels[level]?.categories[category]?.topics[topic];
+    const topicData = STEM_DATA.levels[level]?.categories[category]?.topics[topic];
     if (!topicData) return { studied: 0, total: 0 };
     
     const total = topicData.cards.length;
@@ -191,7 +191,7 @@ class FlashcardsApp {
   }
   
   startStudySession(category, topic) {
-    const topicData = PHYSICS_DATA.levels[this.currentLevel]?.categories[category]?.topics[topic];
+    const topicData = STEM_DATA.levels[this.currentLevel]?.categories[category]?.topics[topic];
     if (!topicData) return;
     
     this.currentTopic = { category, topic };
@@ -493,7 +493,7 @@ function startQuickStudy(topic) {
   if (!app) return;
   
   // Find the topic in current level
-  const levelData = PHYSICS_DATA.levels[app.currentLevel];
+  const levelData = STEM_DATA.levels[app.currentLevel];
   if (!levelData) return;
   
   for (const [categoryName, categoryData] of Object.entries(levelData.categories)) {

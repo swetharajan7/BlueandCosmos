@@ -1,7 +1,8 @@
-// Physics Flashcards Database
-// Comprehensive physics content from K-12 to PhD level
+// STEM Flashcards Database
+// Comprehensive STEM content from K-12 to PhD level
+// Covers Physics, Mathematics, Chemistry, and Earth Sciences for space science preparation
 
-const PHYSICS_DATA = {
+const STEM_DATA = {
   // Education levels with their topics
   levels: {
     elementary: {
@@ -234,6 +235,56 @@ const PHYSICS_DATA = {
               ]
             }
           }
+        },
+        "Mathematics": {
+          icon: "📐",
+          topics: {
+            "Calculus": {
+              cards: [
+                {
+                  id: "high_calc_1",
+                  type: "Concept",
+                  question: "What is the derivative of sin(x)?",
+                  answer: "cos(x)",
+                  explanation: "The derivative of sin(x) with respect to x is cos(x). This is a fundamental trigonometric derivative used extensively in physics.",
+                  formula: "d/dx[sin(x)] = cos(x)",
+                  hint: "Think about the slope of the sine curve",
+                  difficulty: 3
+                }
+              ]
+            },
+            "Linear Algebra": {
+              cards: [
+                {
+                  id: "high_linalg_1",
+                  type: "Concept",
+                  question: "What is a vector?",
+                  answer: "A quantity with both magnitude and direction",
+                  explanation: "Vectors are mathematical objects that have both magnitude (size) and direction. They're essential for describing physical quantities like velocity, force, and electric fields.",
+                  hint: "Think about quantities that need direction",
+                  difficulty: 3
+                }
+              ]
+            }
+          }
+        },
+        "Chemistry": {
+          icon: "⚗️",
+          topics: {
+            "Atomic Structure": {
+              cards: [
+                {
+                  id: "high_chem_1",
+                  type: "Concept",
+                  question: "What determines an element's chemical properties?",
+                  answer: "The number of electrons in its outer shell",
+                  explanation: "An element's chemical properties are primarily determined by the number of valence electrons (electrons in the outermost shell). This determines how atoms bond with other atoms.",
+                  hint: "Think about what's involved in chemical bonding",
+                  difficulty: 3
+                }
+              ]
+            }
+          }
         }
       }
     },
@@ -414,5 +465,5 @@ const SRS_INTERVALS = {
 
 // Export for use in other modules
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { PHYSICS_DATA, SRS_INTERVALS };
+  module.exports = { STEM_DATA, SRS_INTERVALS };
 }
