@@ -76,6 +76,11 @@ class FlashcardsApp {
     document.getElementById('downloadBtn').addEventListener('click', () => {
       this.installPWA();
     });
+
+    // NotebookLM integration
+    document.getElementById('notebookLMBtn')?.addEventListener('click', () => {
+      this.openNotebookLM(this.getCurrentTopic());
+    });
     
     // Close sidebar when clicking outside on mobile
     document.addEventListener('click', (e) => {
@@ -485,6 +490,55 @@ class FlashcardsApp {
       alert('To install this app:\n\n1. Open browser menu\n2. Select "Add to Home Screen" or "Install App"\n3. Follow the prompts');
     }
   }
+
+  // NotebookLM Integration
+  openNotebookLM(topic = null, cardContent = null) {
+    let notebookLMUrl = 'https://notebooklm.google.com/';
+    
+    // If we have specific content, we can create a more targeted experience
+    if (topic || cardContent) {
+      const searchQuery = cardContent ? 
+        `${cardContent.question} ${cardContent.answer} ${cardContent.explanation || ''}` : 
+        `${topic} STEM education study guide`;
+      
+      // Create a study prompt for NotebookLM
+      const studyPrompt = `Study Topic: ${topic || 'STEM Concepts'}\n\n`;
+      const cardInfo = cardContent ? 
+        `Question: ${cardContent.question}\nAnswer: ${cardContent.answer}\nExplanation: ${cardContent.explanation || 'N/A'}\n\n` : '';
+      
+      const fullPrompt = studyPrompt + cardInfo + 
+        'Please help me understand this concept better and create study materials.';
+      
+      // Store the prompt in sessionStorage for NotebookLM to potentially use
+      sessionStorage.setItem('flashcard_study_prompt', fullPrompt);
+    }
+    
+    // Open NotebookLM in new tab
+    window.open(notebookLMUrl, '_blank', 'noopener,noreferrer');
+    
+    // Track usage
+    this.trackNotebookLMUsage(topic, cardContent);
+  }
+
+  trackNotebookLMUsage(topic, cardContent) {
+    console.log('NotebookLM opened for:', topic || 'general study');
+    
+    // Add to observation log
+    this.addToLog(`Opened NotebookLM for ${topic || 'current topic'}`);
+  }
+
+  getCurrentCardContent() {
+    if (this.currentCardIndex < this.currentCards.length) {
+      return this.currentCards[this.currentCardIndex];
+    }
+    return null;
+  }
+
+  getCurrentTopic() {
+    return this.currentTopic ? 
+      `${this.currentTopic.category} - ${this.currentTopic.topic}` : 
+      'STEM Flashcards';
+  }
 }
 
 // Quick study functions for welcome screen buttons
@@ -530,6 +584,15 @@ function startNewSession() {
 
 function viewProgress() {
   window.flashcardsApp?.viewProgress();
+}
+
+function openNotebookLMForCard() {
+  const app = window.flashcardsApp;
+  if (app) {
+    const currentCard = app.getCurrentCardContent();
+    const currentTopic = app.getCurrentTopic();
+    app.openNotebookLM(currentTopic, currentCard);
+  }
 }
 
 // Initialize app when DOM is loaded

@@ -342,6 +342,58 @@ body {
   color: var(--highlight);
 }
 
+/* NotebookLM Integration */
+.notebooklm-section {
+  margin-bottom: 2em;
+  padding: 1em;
+  background: rgba(66, 133, 244, 0.1);
+  border-radius: 10px;
+  border: 1px solid rgba(66, 133, 244, 0.2);
+  text-align: center;
+}
+
+.notebooklm-section h4 {
+  color: #4285f4;
+  margin-bottom: 1em;
+  font-size: 1.1em;
+}
+
+.notebooklm-btn {
+  width: 100%;
+  padding: 1em;
+  background: linear-gradient(45deg, #4285f4, #1a73e8);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 0.8em;
+  transition: all 0.3s ease;
+  font-size: 1em;
+}
+
+.notebooklm-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(66, 133, 244, 0.4);
+}
+
+.notebooklm-description {
+  font-size: 0.85em;
+  color: #666;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.notebooklm-study-btn {
+  background: linear-gradient(45deg, #4285f4, #1a73e8);
+  border-color: rgba(66, 133, 244, 0.3);
+}
+
+.notebooklm-study-btn:hover {
+  background: linear-gradient(45deg, #1a73e8, #1557b0);
+  box-shadow: 0 4px 15px rgba(66, 133, 244, 0.4);
+}
+
 /* Offline Section */
 .offline-section {
   text-align: center;
@@ -1066,6 +1118,34 @@ body.dark .quick-btn {
 
 body.dark .quick-btn:hover {
   box-shadow: 0 0 20px var(--dark-glow);
+}
+
+/* NotebookLM Dark Mode */
+body.dark .notebooklm-section {
+  background: rgba(66, 133, 244, 0.2);
+  border-color: rgba(66, 133, 244, 0.4);
+}
+
+body.dark .notebooklm-section h4 {
+  color: #8ab4f8;
+}
+
+body.dark .notebooklm-btn {
+  background: linear-gradient(45deg, #1a73e8, #4285f4);
+}
+
+body.dark .notebooklm-btn:hover {
+  box-shadow: 0 4px 15px rgba(66, 133, 244, 0.6);
+}
+
+body.dark .notebooklm-description {
+  color: var(--dark-text);
+}
+
+body.dark .notebooklm-study-btn {
+  background: linear-gradient(45deg, #1a73e8, #4285f4);
+  border-color: rgba(66, 133, 244, 0.4);
+  color: var(--dark-text);
 }
 
 /* Download Button Dark Mode */

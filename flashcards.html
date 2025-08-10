@@ -119,6 +119,17 @@
         </div>
       </div>
 
+      <!-- NotebookLM Integration -->
+      <div class="notebooklm-section">
+        <h4>🤖 AI Study Assistant</h4>
+        <button class="notebooklm-btn" id="notebookLMBtn">
+          📝 Open NotebookLM
+        </button>
+        <p class="notebooklm-description">
+          Use Google's NotebookLM to create study guides, summaries, and research notes from your flashcard topics.
+        </p>
+      </div>
+
       <!-- Download for Offline -->
       <div class="offline-section">
         <button class="download-btn" id="downloadBtn">
@@ -228,6 +239,9 @@
           </button>
           <button class="control-btn" id="pauseBtn" onclick="pauseStudy()">
             ⏸️ Pause
+          </button>
+          <button class="control-btn notebooklm-study-btn" id="notebookLMStudyBtn" onclick="openNotebookLMForCard()">
+            🤖 Research with AI
           </button>
         </div>
       </div>
