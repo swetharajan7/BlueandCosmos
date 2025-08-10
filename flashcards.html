@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Physics Flashcards - BlueandCosmos</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="flashcards.css" />
+  <link rel="stylesheet" href="newsletter-component.css" />
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="flashcards-manifest.json">
+  <meta name="theme-color" content="#0033a0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Physics Flashcards">
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="header">
+    <a href="index.html" class="logo-link" aria-label="BlueandCosmos Home">
+      <div class="logo-area">
+        <img src="https://cdn.jsdelivr.net/gh/swetharajan7/blueandcosmos/assets/logo-transparent.png" alt="BlueandCosmos Logo" />
+        <div class="logo-text">
+          <div class="title">BlueandCosmos</div>
+          <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
+        </div>
+      </div>
+    </a>
+
+    <div class="flashcards-title">🧠 Physics Flashcards</div>
+
+    <nav class="nav-right">
+      <div class="toggle-theme" id="themeToggle">🌙</div>
+      <a href="dashboard.html" class="nav-back">← Dashboard</a>
+    </nav>
+  </header>
+
+  <!-- Learning Objectives -->
+  <section class="learning-objectives">
+    <h2>📚 Master Physics Through Spaced Repetition</h2>
+    <div class="objectives-grid">
+      <div class="objective">
+        <div class="objective-icon">🎯</div>
+        <strong>Adaptive Learning</strong><br>
+        ANKI-style spaced repetition optimizes retention
+      </div>
+      <div class="objective">
+        <div class="objective-icon">📱</div>
+        <strong>Cross-Platform</strong><br>
+        Works offline on phones, tablets, and computers
+      </div>
+      <div class="objective">
+        <div class="objective-icon">🎓</div>
+        <strong>K-12 to PhD</strong><br>
+        Progressive difficulty from basics to advanced
+      </div>
+      <div class="objective">
+        <div class="objective-icon">📊</div>
+        <strong>Progress Tracking</strong><br>
+        Detailed statistics and performance analytics
+      </div>
+      <div class="objective">
+        <div class="objective-icon">🔬</div>
+        <strong>Comprehensive</strong><br>
+        All physics topics with visual aids
+      </div>
+      <div class="objective">
+        <div class="objective-icon">⚡</div>
+        <strong>Quick Review</strong><br>
+        Efficient study sessions anytime, anywhere
+      </div>
+    </div>
+  </section>
+
+  <!-- Main App Container -->
+  <main class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3>Study Decks</h3>
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+      </div>
+
+      <!-- Level Selection -->
+      <div class="level-selection">
+        <h4>Education Level</h4>
+        <select id="levelSelect" class="level-select">
+          <option value="elementary">Elementary (K-5)</option>
+          <option value="middle">Middle School (6-8)</option>
+          <option value="high" selected>High School (9-12)</option>
+          <option value="undergraduate">Undergraduate</option>
+          <option value="graduate">Graduate</option>
+          <option value="phd">PhD Level</option>
+        </select>
+      </div>
+
+      <!-- Topic Categories -->
+      <div class="topic-categories" id="topicCategories">
+        <!-- Will be populated by JavaScript -->
+      </div>
+
+      <!-- Study Statistics -->
+      <div class="study-stats">
+        <h4>Today's Progress</h4>
+        <div class="stat-item">
+          <span>Cards Studied</span>
+          <span class="stat-value" id="cardsStudied">0</span>
+        </div>
+        <div class="stat-item">
+          <span>Accuracy</span>
+          <span class="stat-value" id="accuracy">0%</span>
+        </div>
+        <div class="stat-item">
+          <span>Streak</span>
+          <span class="stat-value" id="streak">0 days</span>
+        </div>
+      </div>
+
+      <!-- Download for Offline -->
+      <div class="offline-section">
+        <button class="download-btn" id="downloadBtn">
+          📱 Install App
+        </button>
+        <div class="offline-status" id="offlineStatus">
+          <span class="status-indicator" id="statusIndicator">🟢</span>
+          <span id="statusText">Online</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Study Area -->
+    <section class="study-area">
+      <!-- Welcome Screen -->
+      <div class="welcome-screen" id="welcomeScreen">
+        <div class="welcome-content">
+          <h2>🚀 Ready to Master Physics?</h2>
+          <p>Select a topic from the sidebar to begin your spaced repetition journey!</p>
+          <div class="quick-start">
+            <h3>Quick Start Options:</h3>
+            <div class="quick-buttons">
+              <button class="quick-btn" onclick="startQuickStudy('mechanics')">
+                ⚙️ Mechanics
+              </button>
+              <button class="quick-btn" onclick="startQuickStudy('thermodynamics')">
+                🌡️ Thermodynamics
+              </button>
+              <button class="quick-btn" onclick="startQuickStudy('electromagnetism')">
+                ⚡ Electromagnetism
+              </button>
+              <button class="quick-btn" onclick="startQuickStudy('quantum')">
+                🔬 Quantum Physics
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flashcard Interface -->
+      <div class="flashcard-interface" id="flashcardInterface" style="display: none;">
+        <!-- Progress Bar -->
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-text">
+            <span id="currentCard">1</span> / <span id="totalCards">20</span>
+          </div>
+        </div>
+
+        <!-- Flashcard -->
+        <div class="flashcard-container">
+          <div class="flashcard" id="flashcard">
+            <div class="flashcard-inner">
+              <div class="flashcard-front">
+                <div class="card-content">
+                  <div class="card-type" id="cardType">Concept</div>
+                  <div class="card-question" id="cardQuestion">
+                    Loading question...
+                  </div>
+                  <div class="card-image" id="cardImage" style="display: none;">
+                    <!-- Images/diagrams will be inserted here -->
+                  </div>
+                  <div class="card-hint" id="cardHint" style="display: none;">
+                    💡 <span id="hintText"></span>
+                  </div>
+                </div>
+                <button class="flip-btn" id="flipBtn">Show Answer</button>
+              </div>
+              
+              <div class="flashcard-back">
+                <div class="card-content">
+                  <div class="card-answer" id="cardAnswer">
+                    Loading answer...
+                  </div>
+                  <div class="card-explanation" id="cardExplanation">
+                    <!-- Detailed explanation -->
+                  </div>
+                  <div class="card-formula" id="cardFormula" style="display: none;">
+                    <!-- Mathematical formulas -->
+                  </div>
+                </div>
+                <div class="difficulty-buttons">
+                  <button class="diff-btn hard" onclick="answerCard('hard')">
+                    😰 Hard (1 day)
+                  </button>
+                  <button class="diff-btn good" onclick="answerCard('good')">
+                    😊 Good (3 days)
+                  </button>
+                  <button class="diff-btn easy" onclick="answerCard('easy')">
+                    😎 Easy (7 days)
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Study Controls -->
+        <div class="study-controls">
+          <button class="control-btn" id="hintBtn" onclick="showHint()">
+            💡 Hint
+          </button>
+          <button class="control-btn" id="skipBtn" onclick="skipCard()">
+            ⏭️ Skip
+          </button>
+          <button class="control-btn" id="pauseBtn" onclick="pauseStudy()">
+            ⏸️ Pause
+          </button>
+        </div>
+      </div>
+
+      <!-- Study Complete Screen -->
+      <div class="study-complete" id="studyComplete" style="display: none;">
+        <div class="complete-content">
+          <h2>🎉 Study Session Complete!</h2>
+          <div class="session-stats">
+            <div class="stat-card">
+              <div class="stat-number" id="sessionCards">0</div>
+              <div class="stat-label">Cards Reviewed</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="sessionAccuracy">0%</div>
+              <div class="stat-label">Accuracy</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="sessionTime">0m</div>
+              <div class="stat-label">Study Time</div>
+            </div>
+          </div>
+          <div class="complete-actions">
+            <button class="action-btn primary" onclick="startNewSession()">
+              🔄 Study More
+            </button>
+            <button class="action-btn secondary" onclick="viewProgress()">
+              📊 View Progress
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Newsletter Component -->
+  <section class="newsletter-signup" id="newsletter-signup">
+    <div class="newsletter-content">
+      <span class="newsletter-icon">🚀</span>
+      <h2 class="newsletter-title">Join the Physics Learning Community</h2>
+      <p class="newsletter-subtitle">
+        Get exclusive physics study tips, new flashcard decks, and learning strategies delivered to your inbox.
+      </p>
+      
+      <form class="newsletter-form">
+        <input 
+          type="email" 
+          class="newsletter-input" 
+          placeholder="Enter your email address"
+          required
+          aria-label="Email address for newsletter signup"
+        >
+        <button type="submit" class="newsletter-button">🚀 Join the Mission</button>
+      </form>
+      
+      <div class="newsletter-features">
+        <div class="newsletter-feature">
+          <span class="newsletter-feature-icon">🧠</span>
+          <span>Study techniques</span>
+        </div>
+        <div class="newsletter-feature">
+          <span class="newsletter-feature-icon">📚</span>
+          <span>New flashcard decks</span>
+        </div>
+        <div class="newsletter-feature">
+          <span class="newsletter-feature-icon">🎯</span>
+          <span>Learning strategies</span>
+        </div>
+      </div>
+      
+      <div class="newsletter-message"></div>
+      
+      <p class="newsletter-privacy">
+        We respect your privacy. Unsubscribe at any time. 
+        <a href="privacy.html">Privacy Policy</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <a href="#">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play Store" style="height: 40px;" />
+        </a>
+        <a href="#">
+          <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Store" style="height: 40px;" />
+        </a>
+      </div>
+
+      <div class="footer-section">
+        <div style="font-weight: bold;">BlueandCosmos™ 2025</div>
+        <div class="footer-links">
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Use</a>
+          <a href="contact.html">Contact Us</a>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <div style="font-weight: bold;">Let's Connect!</div>
+        <div class="social-links">
+          <a href="https://twitter.com/blueandcosmos" target="_blank">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X" style="height: 24px; filter: invert(1);" />
+          </a>
+          <a href="https://instagram.com/blueandcosmos" target="_blank">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" style="height: 24px; filter: invert(1);" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="maximus.js"></script>
+  <script src="newsletter-component.js"></script>
+  <script src="flashcards-data.js"></script>
+  <script src="flashcards-app.js"></script>
+  <script src="flashcards-sw-register.js"></script>
+</body>
+</html>
