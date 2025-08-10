@@ -8,7 +8,7 @@ const STEM_DATA = {
     elementary: {
       name: "Elementary (K-5)",
       categories: {
-        "Basic Forces": {
+        "Physics": {
           icon: "⚡",
           topics: {
             "Push and Pull": {
@@ -48,18 +48,54 @@ const STEM_DATA = {
             }
           }
         },
-        "Light and Sound": {
-          icon: "🌈",
+        "Mathematics": {
+          icon: "📐",
           topics: {
-            "Light Sources": {
+            "Basic Numbers": {
               cards: [
                 {
-                  id: "elem_light_1",
+                  id: "elem_math_1",
                   type: "Concept",
-                  question: "Name three things that make their own light",
-                  answer: "The Sun, light bulbs, and fire",
-                  explanation: "Some objects make their own light and are called light sources. The Sun is our biggest light source, light bulbs use electricity to make light, and fire creates light through burning.",
-                  hint: "Think about what lights up your room at night",
+                  question: "What is addition?",
+                  answer: "Putting numbers together to make a bigger number",
+                  explanation: "Addition means combining quantities. When you add 2 + 3, you're putting 2 things together with 3 things to get 5 things total.",
+                  hint: "Think about counting objects together",
+                  difficulty: 1
+                }
+              ]
+            }
+          }
+        },
+        "Biology": {
+          icon: "🧬",
+          topics: {
+            "Living Things": {
+              cards: [
+                {
+                  id: "elem_bio_1",
+                  type: "Concept",
+                  question: "What do all living things need to survive?",
+                  answer: "Food, water, air, and shelter",
+                  explanation: "All living things need basic requirements to stay alive: food for energy, water to drink, air to breathe, and shelter for protection.",
+                  hint: "Think about what you need every day",
+                  difficulty: 1
+                }
+              ]
+            }
+          }
+        },
+        "Environmental Science": {
+          icon: "🌍",
+          topics: {
+            "Our Planet": {
+              cards: [
+                {
+                  id: "elem_env_1",
+                  type: "Concept",
+                  question: "Why should we recycle?",
+                  answer: "To protect the Earth and save resources",
+                  explanation: "Recycling helps reduce waste, saves natural resources, and keeps our planet clean for future generations.",
+                  hint: "Think about taking care of our home planet",
                   difficulty: 1
                 }
               ]
@@ -72,8 +108,8 @@ const STEM_DATA = {
     middle: {
       name: "Middle School (6-8)",
       categories: {
-        "Motion and Forces": {
-          icon: "🏃‍♂️",
+        "Physics": {
+          icon: "⚡",
           topics: {
             "Speed and Velocity": {
               cards: [
@@ -113,18 +149,72 @@ const STEM_DATA = {
             }
           }
         },
-        "Energy": {
-          icon: "⚡",
+        "Mathematics": {
+          icon: "📐",
           topics: {
-            "Types of Energy": {
+            "Algebra Basics": {
               cards: [
                 {
-                  id: "mid_energy_1",
+                  id: "mid_math_1",
                   type: "Concept",
-                  question: "What are the two main types of energy?",
-                  answer: "Kinetic energy and potential energy",
-                  explanation: "Kinetic energy is the energy of motion - anything that's moving has kinetic energy. Potential energy is stored energy - like a ball held up high or a stretched rubber band.",
-                  hint: "One is about moving, one is about storing",
+                  question: "What is a variable in algebra?",
+                  answer: "A letter that represents an unknown number",
+                  explanation: "Variables like x, y, or n are symbols that stand for numbers we don't know yet. They help us write equations and solve problems.",
+                  hint: "Think of it as a placeholder for a mystery number",
+                  difficulty: 2
+                }
+              ]
+            }
+          }
+        },
+        "Biology": {
+          icon: "🧬",
+          topics: {
+            "Cell Structure": {
+              cards: [
+                {
+                  id: "mid_bio_1",
+                  type: "Concept",
+                  question: "What is the basic unit of life?",
+                  answer: "The cell",
+                  explanation: "Cells are the smallest units that can be considered alive. All living things are made of one or more cells, from bacteria to humans.",
+                  hint: "Think about the building blocks of living things",
+                  difficulty: 2
+                }
+              ]
+            }
+          }
+        },
+        "Chemistry": {
+          icon: "⚗️",
+          topics: {
+            "Atoms and Elements": {
+              cards: [
+                {
+                  id: "mid_chem_1",
+                  type: "Concept",
+                  question: "What is an atom?",
+                  answer: "The smallest unit of an element",
+                  explanation: "Atoms are the tiny building blocks that make up all matter. Each element has its own unique type of atom.",
+                  hint: "Think about the smallest piece of something",
+                  difficulty: 2
+                }
+              ]
+            }
+          }
+        },
+        "Computer Science": {
+          icon: "💻",
+          topics: {
+            "Programming Basics": {
+              cards: [
+                {
+                  id: "mid_cs_1",
+                  type: "Concept",
+                  question: "What is an algorithm?",
+                  answer: "A step-by-step set of instructions to solve a problem",
+                  explanation: "An algorithm is like a recipe - it tells you exactly what steps to follow to accomplish a task or solve a problem.",
+                  hint: "Think about following directions to complete a task",
                   difficulty: 2
                 }
               ]
@@ -137,8 +227,8 @@ const STEM_DATA = {
     high: {
       name: "High School (9-12)",
       categories: {
-        "Mechanics": {
-          icon: "⚙️",
+        "Physics": {
+          icon: "⚡",
           topics: {
             "Kinematics": {
               cards: [
@@ -268,18 +358,109 @@ const STEM_DATA = {
             }
           }
         },
+        "Mathematics": {
+          icon: "📐",
+          topics: {
+            "Calculus": {
+              cards: [
+                {
+                  id: "high_calc_1",
+                  type: "Concept",
+                  question: "What is the derivative of sin(x)?",
+                  answer: "cos(x)",
+                  explanation: "The derivative of sin(x) with respect to x is cos(x). This is a fundamental trigonometric derivative used extensively in physics.",
+                  formula: "d/dx[sin(x)] = cos(x)",
+                  hint: "Think about the slope of the sine curve",
+                  difficulty: 3
+                }
+              ]
+            }
+          }
+        },
+        "Biology": {
+          icon: "🧬",
+          topics: {
+            "Genetics": {
+              cards: [
+                {
+                  id: "high_bio_1",
+                  type: "Concept",
+                  question: "What is DNA?",
+                  answer: "Deoxyribonucleic acid - the molecule that carries genetic information",
+                  explanation: "DNA is a double-helix molecule that contains the genetic instructions for all living organisms. It's made of four bases: A, T, G, and C.",
+                  hint: "Think about what carries hereditary information",
+                  difficulty: 3
+                }
+              ]
+            }
+          }
+        },
         "Chemistry": {
           icon: "⚗️",
           topics: {
-            "Atomic Structure": {
+            "Chemical Bonding": {
               cards: [
                 {
                   id: "high_chem_1",
                   type: "Concept",
-                  question: "What determines an element's chemical properties?",
-                  answer: "The number of electrons in its outer shell",
-                  explanation: "An element's chemical properties are primarily determined by the number of valence electrons (electrons in the outermost shell). This determines how atoms bond with other atoms.",
-                  hint: "Think about what's involved in chemical bonding",
+                  question: "What is an ionic bond?",
+                  answer: "A bond formed by the transfer of electrons between atoms",
+                  explanation: "Ionic bonds form when one atom gives up electrons to another atom, creating charged ions that attract each other.",
+                  hint: "Think about atoms gaining or losing electrons",
+                  difficulty: 3
+                }
+              ]
+            }
+          }
+        },
+        "Astronomy": {
+          icon: "🌟",
+          topics: {
+            "Solar System": {
+              cards: [
+                {
+                  id: "high_astro_1",
+                  type: "Concept",
+                  question: "What is a light-year?",
+                  answer: "The distance light travels in one year",
+                  explanation: "A light-year is about 9.46 trillion kilometers - the distance that light travels in a vacuum in one year. It's used to measure vast distances in space.",
+                  hint: "Think about how far light can go in a year",
+                  difficulty: 3
+                }
+              ]
+            }
+          }
+        },
+        "Environmental Science": {
+          icon: "🌍",
+          topics: {
+            "Climate Change": {
+              cards: [
+                {
+                  id: "high_env_1",
+                  type: "Concept",
+                  question: "What is the greenhouse effect?",
+                  answer: "The warming of Earth's surface due to atmospheric gases trapping heat",
+                  explanation: "Greenhouse gases like CO2 and methane trap heat from the sun in Earth's atmosphere, causing global temperatures to rise.",
+                  hint: "Think about how a greenhouse keeps plants warm",
+                  difficulty: 3
+                }
+              ]
+            }
+          }
+        },
+        "Computer Science": {
+          icon: "💻",
+          topics: {
+            "Data Structures": {
+              cards: [
+                {
+                  id: "high_cs_1",
+                  type: "Concept",
+                  question: "What is an array?",
+                  answer: "A collection of elements stored in contiguous memory locations",
+                  explanation: "Arrays are data structures that store multiple elements of the same type in a sequence, allowing efficient access by index.",
+                  hint: "Think about a list of items stored in order",
                   difficulty: 3
                 }
               ]
@@ -292,8 +473,8 @@ const STEM_DATA = {
     undergraduate: {
       name: "Undergraduate",
       categories: {
-        "Classical Mechanics": {
-          icon: "🎯",
+        "Physics": {
+          icon: "⚡",
           topics: {
             "Lagrangian Mechanics": {
               cards: [
@@ -344,19 +525,94 @@ const STEM_DATA = {
             }
           }
         },
-        "Quantum Mechanics": {
-          icon: "🔬",
+        "Mathematics": {
+          icon: "📐",
           topics: {
-            "Wave-Particle Duality": {
+            "Differential Equations": {
               cards: [
                 {
-                  id: "under_quantum_1",
+                  id: "under_math_1",
                   type: "Concept",
-                  question: "What is the de Broglie wavelength?",
-                  answer: "λ = h/p (Planck's constant divided by momentum)",
-                  explanation: "The de Broglie wavelength describes the wave nature of matter. Every particle has an associated wavelength inversely proportional to its momentum. This is fundamental to quantum mechanics.",
-                  formula: "λ = h/p",
-                  hint: "It relates wave properties to particle properties",
+                  question: "What is a differential equation?",
+                  answer: "An equation involving derivatives of a function",
+                  explanation: "Differential equations relate a function to its derivatives. They're used to model many physical phenomena like motion, heat transfer, and population growth.",
+                  hint: "Think about equations with dy/dx terms",
+                  difficulty: 4
+                }
+              ]
+            }
+          }
+        },
+        "Mechanical Engineering": {
+          icon: "⚙️",
+          topics: {
+            "Thermodynamics": {
+              cards: [
+                {
+                  id: "under_mech_1",
+                  type: "Concept",
+                  question: "What is the First Law of Thermodynamics?",
+                  answer: "Energy cannot be created or destroyed, only converted from one form to another",
+                  explanation: "The First Law states that the total energy of an isolated system remains constant. Energy can change forms but the total amount stays the same.",
+                  formula: "ΔU = Q - W",
+                  hint: "Think about conservation of energy",
+                  difficulty: 4
+                }
+              ]
+            }
+          }
+        },
+        "Electrical Engineering": {
+          icon: "⚡",
+          topics: {
+            "Circuit Analysis": {
+              cards: [
+                {
+                  id: "under_ee_1",
+                  type: "Concept",
+                  question: "What is Kirchhoff's Current Law?",
+                  answer: "The sum of currents entering a node equals the sum of currents leaving",
+                  explanation: "KCL states that at any junction in a circuit, the total current flowing in must equal the total current flowing out, based on conservation of charge.",
+                  formula: "Σ I_in = Σ I_out",
+                  hint: "Think about conservation of electric charge",
+                  difficulty: 4
+                }
+              ]
+            }
+          }
+        },
+        "Civil Engineering": {
+          icon: "🏗️",
+          topics: {
+            "Structural Analysis": {
+              cards: [
+                {
+                  id: "under_civil_1",
+                  type: "Concept",
+                  question: "What is stress in materials?",
+                  answer: "Force per unit area applied to a material",
+                  explanation: "Stress is the internal force per unit area within a material when external forces are applied. It's measured in Pascals (N/m²).",
+                  formula: "σ = F/A",
+                  hint: "Think about force distributed over an area",
+                  difficulty: 4
+                }
+              ]
+            }
+          }
+        },
+        "Aerospace Engineering": {
+          icon: "🚀",
+          topics: {
+            "Orbital Mechanics": {
+              cards: [
+                {
+                  id: "under_aero_1",
+                  type: "Concept",
+                  question: "What is escape velocity?",
+                  answer: "The minimum velocity needed to escape a celestial body's gravitational pull",
+                  explanation: "Escape velocity is the speed an object needs to break free from a planet's gravity without further propulsion. For Earth, it's about 11.2 km/s.",
+                  formula: "v_e = √(2GM/r)",
+                  hint: "Think about breaking free from gravity",
                   difficulty: 4
                 }
               ]

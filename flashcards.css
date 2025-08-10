@@ -1,19 +1,30 @@
 /* STEM Flashcards Styles */
 :root {
-  --accent: #0033a0;
-  --flag-blue: #002366;
-  --highlight: #ff4081;
-  --text-white: #ffffff;
-  --text-light: #cce0ff;
-  --dark-bg: #121212;
-  --dark-accent: #001f5b;
-  --card-light: #fafafa;
-  --card-dark: #1e1e1e;
-  --border-light: #ddd;
-  --border-dark: #444;
-  --success: #4CAF50;
-  --warning: #FF9800;
-  --error: #F44336;
+  /* Light Mode - Clean White/Black */
+  --light-bg: #ffffff;
+  --light-text: #000000;
+  --light-card: #ffffff;
+  --light-border: #e0e0e0;
+  --light-accent: #333333;
+  --light-highlight: #666666;
+  --light-button: #f5f5f5;
+  --light-button-hover: #e8e8e8;
+  
+  /* Dark Mode - Black/Green Neon */
+  --dark-bg: #000000;
+  --dark-text: #00ff00;
+  --dark-card: #0a0a0a;
+  --dark-border: #003300;
+  --dark-accent: #00cc00;
+  --dark-highlight: #00ff00;
+  --dark-button: #001100;
+  --dark-button-hover: #002200;
+  --dark-glow: #00ff0050;
+  
+  /* Status Colors */
+  --success: #00ff00;
+  --warning: #ffff00;
+  --error: #ff0000;
 }
 
 * {
@@ -24,17 +35,17 @@
 
 body {
   font-family: 'Work Sans', sans-serif;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  color: #333;
+  background: var(--light-bg);
+  color: var(--light-text);
   min-height: 100vh;
   transition: all 0.3s ease;
 }
 
 /* Header */
 .header {
-  background: rgba(0, 51, 160, 0.95);
-  backdrop-filter: blur(15px);
-  color: var(--text-white);
+  background: var(--light-bg);
+  border-bottom: 2px solid var(--light-border);
+  color: var(--light-text);
   padding: 1em 2em;
   display: grid;
   grid-template-columns: auto 1fr auto;
@@ -43,7 +54,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 1000;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
 }
 
 .logo-link {
@@ -74,20 +85,19 @@ body {
 .logo-text .title {
   font-size: 1.4em;
   font-weight: bold;
-  color: #fff;
+  color: var(--light-text);
 }
 
 .logo-text .tagline {
   font-size: 0.85em;
-  color: var(--text-light);
+  color: var(--light-highlight);
 }
 
 .flashcards-title {
   justify-self: center;
   font-size: 1.3em;
   font-weight: bold;
-  color: #ffd700;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  color: var(--light-accent);
 }
 
 .nav-right {
@@ -102,15 +112,16 @@ body {
   padding: 0.3em;
   border-radius: 50%;
   transition: all 0.3s ease;
+  color: var(--light-text);
 }
 
 .toggle-theme:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--light-button-hover);
   transform: scale(1.1);
 }
 
 .nav-back {
-  color: var(--text-light);
+  color: var(--light-highlight);
   text-decoration: none;
   padding: 0.5em 1em;
   border-radius: 25px;
@@ -118,24 +129,24 @@ body {
 }
 
 .nav-back:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: var(--light-button-hover);
+  color: var(--light-text);
 }
 
 /* Learning Objectives */
 .learning-objectives {
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(15px);
+  background: var(--light-card);
+  border: 2px solid var(--light-border);
   margin: 1em;
   border-radius: 15px;
   padding: 2em;
-  border: 1px solid rgba(255, 215, 0, 0.3);
-  color: white;
+  color: var(--light-text);
   text-align: center;
+  transition: all 0.3s ease;
 }
 
 .learning-objectives h2 {
-  color: #ffd700;
+  color: var(--light-accent);
   margin-bottom: 1.5em;
   font-size: 1.8em;
 }
@@ -168,15 +179,14 @@ body {
 
 /* Sidebar */
 .sidebar {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
+  background: var(--light-card);
+  border: 2px solid var(--light-border);
   border-radius: 15px;
   padding: 1.5em;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   height: fit-content;
   position: sticky;
   top: 120px;
+  transition: all 0.3s ease;
 }
 
 .sidebar-header {
@@ -189,7 +199,7 @@ body {
 }
 
 .sidebar-header h3 {
-  color: var(--accent);
+  color: var(--light-accent);
   font-size: 1.3em;
 }
 
@@ -199,7 +209,7 @@ body {
   border: none;
   font-size: 1.5em;
   cursor: pointer;
-  color: var(--accent);
+  color: var(--light-accent);
 }
 
 .level-selection {
@@ -207,7 +217,7 @@ body {
 }
 
 .level-selection h4 {
-  color: var(--accent);
+  color: var(--light-accent);
   margin-bottom: 0.8em;
   font-size: 1.1em;
 }
@@ -215,10 +225,10 @@ body {
 .level-select {
   width: 100%;
   padding: 0.8em;
-  border: 2px solid rgba(0, 51, 160, 0.2);
+  border: 2px solid var(--light-border);
   border-radius: 8px;
-  background: white;
-  color: var(--accent);
+  background: var(--light-bg);
+  color: var(--light-text);
   font-size: 0.9em;
   font-weight: 600;
   cursor: pointer;
@@ -227,8 +237,8 @@ body {
 
 .level-select:focus {
   outline: none;
-  border-color: var(--highlight);
-  box-shadow: 0 0 10px rgba(255, 64, 129, 0.3);
+  border-color: var(--light-accent);
+  box-shadow: 0 0 10px var(--light-border);
 }
 
 /* Topic Categories */
@@ -241,8 +251,9 @@ body {
 }
 
 .category-header {
-  background: linear-gradient(45deg, var(--accent), #0066cc);
-  color: white;
+  background: var(--light-button);
+  border: 2px solid var(--light-border);
+  color: var(--light-text);
   padding: 0.8em 1em;
   border-radius: 8px;
   cursor: pointer;
@@ -255,11 +266,13 @@ body {
 
 .category-header:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 51, 160, 0.3);
+  background: var(--light-button-hover);
+  box-shadow: 0 4px 15px var(--light-border);
 }
 
 .category-topics {
-  background: rgba(0, 51, 160, 0.05);
+  background: var(--light-card);
+  border: 1px solid var(--light-border);
   border-radius: 0 0 8px 8px;
   padding: 0.5em 0;
   display: none;
@@ -280,15 +293,15 @@ body {
 }
 
 .topic-item:hover {
-  background: rgba(0, 51, 160, 0.1);
-  border-left-color: var(--highlight);
+  background: var(--light-button-hover);
+  border-left-color: var(--light-accent);
   transform: translateX(5px);
 }
 
 .topic-item.active {
-  background: rgba(255, 64, 129, 0.1);
-  border-left-color: var(--highlight);
-  color: var(--highlight);
+  background: var(--light-button-hover);
+  border-left-color: var(--light-accent);
+  color: var(--light-accent);
   font-weight: 600;
 }
 
@@ -367,12 +380,11 @@ body {
 
 /* Study Area */
 .study-area {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
+  background: var(--light-card);
+  border: 2px solid var(--light-border);
   border-radius: 15px;
   padding: 2em;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 /* Welcome Screen */
@@ -382,14 +394,14 @@ body {
 }
 
 .welcome-content h2 {
-  color: var(--accent);
+  color: var(--light-accent);
   margin-bottom: 1em;
   font-size: 2.2em;
 }
 
 .welcome-content p {
   font-size: 1.2em;
-  color: #666;
+  color: var(--light-highlight);
   margin-bottom: 2em;
 }
 
@@ -408,9 +420,9 @@ body {
 
 .quick-btn {
   padding: 1em 1.5em;
-  background: linear-gradient(45deg, var(--accent), #0066cc);
-  color: white;
-  border: none;
+  background: var(--light-button);
+  border: 2px solid var(--light-border);
+  color: var(--light-text);
   border-radius: 10px;
   font-size: 1em;
   font-weight: 600;
@@ -420,7 +432,8 @@ body {
 
 .quick-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(0, 51, 160, 0.4);
+  background: var(--light-button-hover);
+  box-shadow: 0 6px 20px var(--light-border);
 }
 
 /* Progress Bar */
@@ -739,10 +752,12 @@ body {
 
 /* Footer */
 .footer {
-  background-color: var(--accent);
-  color: #fff;
+  background-color: var(--light-bg);
+  border-top: 2px solid var(--light-border);
+  color: var(--light-text);
   padding: 2em 1em;
   margin-top: 3em;
+  transition: all 0.3s ease;
 }
 
 .footer-content {
@@ -786,58 +801,289 @@ body {
   gap: 0.5em;
 }
 
-/* Dark Theme */
+/* Dark Theme - Black/Green Neon */
 body.dark {
-  background: radial-gradient(ellipse at center, #0a0a23 0%, #000000 100%);
-  color: white;
+  background: var(--dark-bg);
+  color: var(--dark-text);
 }
 
-body.dark .sidebar,
+/* Header Dark Mode */
+body.dark .header {
+  background: var(--dark-bg);
+  border-bottom: 2px solid var(--dark-border);
+  box-shadow: 0 0 20px var(--dark-glow);
+}
+
+body.dark .logo-text .title {
+  color: var(--dark-text);
+  text-shadow: 0 0 10px var(--dark-glow);
+}
+
+body.dark .logo-text .tagline {
+  color: var(--dark-accent);
+}
+
+body.dark .flashcards-title {
+  color: var(--dark-text);
+  text-shadow: 0 0 15px var(--dark-glow);
+}
+
+body.dark .toggle-theme {
+  color: var(--dark-text);
+}
+
+body.dark .toggle-theme:hover {
+  background: var(--dark-button-hover);
+  box-shadow: 0 0 10px var(--dark-glow);
+}
+
+body.dark .nav-back {
+  color: var(--dark-accent);
+}
+
+body.dark .nav-back:hover {
+  background: var(--dark-button-hover);
+  color: var(--dark-text);
+  box-shadow: 0 0 10px var(--dark-glow);
+}
+
+/* Learning Objectives Dark Mode */
+body.dark .learning-objectives {
+  background: var(--dark-card);
+  border: 2px solid var(--dark-border);
+  color: var(--dark-text);
+  box-shadow: 0 0 30px var(--dark-glow);
+}
+
+body.dark .learning-objectives h2 {
+  color: var(--dark-text);
+  text-shadow: 0 0 20px var(--dark-glow);
+}
+
+/* Sidebar Dark Mode */
+body.dark .sidebar {
+  background: var(--dark-card);
+  border: 2px solid var(--dark-border);
+  color: var(--dark-text);
+  box-shadow: 0 0 25px var(--dark-glow);
+}
+
+body.dark .sidebar-header h3 {
+  color: var(--dark-text);
+  text-shadow: 0 0 10px var(--dark-glow);
+}
+
+body.dark .sidebar-toggle {
+  color: var(--dark-text);
+}
+
+body.dark .level-selection h4 {
+  color: var(--dark-text);
+}
+
+body.dark .level-select {
+  background: var(--dark-button);
+  border: 2px solid var(--dark-border);
+  color: var(--dark-text);
+}
+
+body.dark .level-select:focus {
+  border-color: var(--dark-accent);
+  box-shadow: 0 0 15px var(--dark-glow);
+}
+
+/* Category Headers Dark Mode */
+body.dark .category-header {
+  background: var(--dark-button);
+  border: 2px solid var(--dark-border);
+  color: var(--dark-text);
+}
+
+body.dark .category-header:hover {
+  box-shadow: 0 0 15px var(--dark-glow);
+}
+
+body.dark .category-topics {
+  background: var(--dark-card);
+  border: 1px solid var(--dark-border);
+}
+
+body.dark .topic-item {
+  color: var(--dark-text);
+  border-left-color: transparent;
+}
+
+body.dark .topic-item:hover {
+  background: var(--dark-button-hover);
+  border-left-color: var(--dark-accent);
+  box-shadow: 0 0 10px var(--dark-glow);
+}
+
+body.dark .topic-item.active {
+  background: var(--dark-button-hover);
+  border-left-color: var(--dark-text);
+  color: var(--dark-text);
+  box-shadow: 0 0 15px var(--dark-glow);
+}
+
+/* Study Area Dark Mode */
 body.dark .study-area {
-  background: rgba(0, 0, 0, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
+  background: var(--dark-card);
+  border: 2px solid var(--dark-border);
+  color: var(--dark-text);
+  box-shadow: 0 0 25px var(--dark-glow);
 }
 
+/* Flashcards Dark Mode */
 body.dark .flashcard-front {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: white;
+  background: var(--dark-card);
+  border: 2px solid var(--dark-border);
+  color: var(--dark-text);
+  box-shadow: 0 0 20px var(--dark-glow);
 }
 
 body.dark .flashcard-back {
-  background: linear-gradient(135deg, #0f3460 0%, #16537e 100%);
-  border-color: rgba(255, 64, 129, 0.3);
-  color: white;
+  background: var(--dark-card);
+  border: 2px solid var(--dark-accent);
+  color: var(--dark-text);
+  box-shadow: 0 0 25px var(--dark-glow);
+}
+
+body.dark .card-type {
+  background: var(--dark-accent);
+  color: var(--dark-bg);
 }
 
 body.dark .card-question,
 body.dark .card-answer {
-  color: #ffd700;
+  color: var(--dark-text);
+  text-shadow: 0 0 10px var(--dark-glow);
 }
 
 body.dark .card-explanation {
-  color: #ccc;
+  color: var(--dark-accent);
 }
 
-body.dark .level-select {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
-  color: white;
+body.dark .card-formula {
+  background: var(--dark-button);
+  border: 1px solid var(--dark-border);
+  color: var(--dark-text);
 }
 
-body.dark .topic-item:hover {
-  background: rgba(255, 255, 255, 0.1);
+body.dark .flip-btn {
+  background: var(--dark-button);
+  border: 2px solid var(--dark-border);
+  color: var(--dark-text);
 }
 
+body.dark .flip-btn:hover {
+  box-shadow: 0 0 15px var(--dark-glow);
+}
+
+/* Buttons Dark Mode */
 body.dark .control-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
-  color: white;
+  background: var(--dark-button);
+  border: 2px solid var(--dark-border);
+  color: var(--dark-text);
 }
 
 body.dark .control-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--dark-button-hover);
+  box-shadow: 0 0 10px var(--dark-glow);
+}
+
+body.dark .diff-btn.hard {
+  background: var(--dark-button);
+  border: 2px solid #ff0000;
+  color: #ff0000;
+}
+
+body.dark .diff-btn.good {
+  background: var(--dark-button);
+  border: 2px solid #ffff00;
+  color: #ffff00;
+}
+
+body.dark .diff-btn.easy {
+  background: var(--dark-button);
+  border: 2px solid var(--dark-text);
+  color: var(--dark-text);
+}
+
+body.dark .diff-btn:hover {
+  box-shadow: 0 0 15px currentColor;
+}
+
+/* Progress Bar Dark Mode */
+body.dark .progress-bar {
+  background: var(--dark-button);
+  border: 1px solid var(--dark-border);
+}
+
+body.dark .progress-fill {
+  background: linear-gradient(90deg, var(--dark-accent), var(--dark-text));
+  box-shadow: 0 0 10px var(--dark-glow);
+}
+
+body.dark .progress-text {
+  color: var(--dark-text);
+}
+
+/* Stats Dark Mode */
+body.dark .study-stats {
+  background: var(--dark-button);
+  border: 1px solid var(--dark-border);
+}
+
+body.dark .study-stats h4 {
+  color: var(--dark-text);
+}
+
+body.dark .stat-item {
+  border-bottom-color: var(--dark-border);
+  color: var(--dark-text);
+}
+
+body.dark .stat-value {
+  color: var(--dark-accent);
+}
+
+/* Welcome Screen Dark Mode */
+body.dark .welcome-content h2 {
+  color: var(--dark-text);
+  text-shadow: 0 0 20px var(--dark-glow);
+}
+
+body.dark .welcome-content p {
+  color: var(--dark-accent);
+}
+
+body.dark .quick-btn {
+  background: var(--dark-button);
+  border: 2px solid var(--dark-border);
+  color: var(--dark-text);
+}
+
+body.dark .quick-btn:hover {
+  box-shadow: 0 0 20px var(--dark-glow);
+}
+
+/* Download Button Dark Mode */
+body.dark .download-btn {
+  background: var(--dark-button);
+  border: 2px solid var(--dark-accent);
+  color: var(--dark-text);
+}
+
+body.dark .download-btn:hover {
+  box-shadow: 0 0 20px var(--dark-glow);
+}
+
+/* Footer Dark Mode */
+body.dark .footer {
+  background: var(--dark-bg);
+  border-top: 2px solid var(--dark-border);
+  color: var(--dark-text);
 }
 
 /* Responsive Design */
