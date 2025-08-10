@@ -171,20 +171,22 @@
 
     <nav>
       <div class="nav-right">
+        <!-- About (internal links, same tab) -->
         <div class="dropdown" data-menu="about">
           <button class="dropbtn">About</button>
-          <div class="dropdown-content">
-            <a href="https://blueandcosmos.com/about" target="_blank" rel="noopener">About BlueandCosmos</a>
-            <a href="https://blueandcosmos.com/myaccount" target="_blank" rel="noopener">My Account</a>
+          <div class="dropdown-content" role="menu" aria-label="About submenu">
+            <a href="about.html" role="menuitem">About BlueandCosmos</a>
+            <a href="myaccount.html" role="menuitem">My Account</a>
           </div>
         </div>
 
+        <!-- Livestream (internal placeholders as relative links) -->
         <div class="dropdown" data-menu="livestream">
           <button class="dropbtn">Livestream</button>
-          <div class="dropdown-content">
-            <a href="https://blueandcosmos.com/livestream-images" target="_blank" rel="noopener">Live Stream Images</a>
-            <a href="https://blueandcosmos.com/launch-missions" target="_blank" rel="noopener">Launch Missions</a>
-            <a href="https://blueandcosmos.com/webinars" target="_blank" rel="noopener">Webinars</a>
+          <div class="dropdown-content" role="menu" aria-label="Livestream submenu">
+            <a href="livestream-images.html" role="menuitem">Live Stream Images</a>
+            <a href="launch-missions.html" role="menuitem">Launch Missions</a>
+            <a href="webinars.html" role="menuitem">Webinars</a>
           </div>
         </div>
 
@@ -211,6 +213,7 @@
     <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0.5em;">
       <div style="font-weight:bold;">BlueandCosmos™ 2025</div>
       <div style="display:flex;flex-wrap:wrap;gap:1em;justify-content:center;font-size:0.9em;">
+        <a href="about.html">About</a>
         <a href="privacy.html">Privacy Policy</a>
         <a href="terms.html">Terms of Use</a>
         <a href="sitemap.html">Sitemap</a>
