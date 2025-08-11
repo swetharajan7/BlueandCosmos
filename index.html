@@ -66,6 +66,21 @@
     body.dark .moon-label, body.dark .moon-context { color: #e0ecff; }
     @media (max-width: 900px) { .moon-widget { display: none; } }
 
+    .mars-widget {
+      display: flex; align-items: center; gap: 0.6em; justify-self: center;
+      user-select: none; text-decoration: none; color: inherit;
+      transition: transform 0.2s ease;
+    }
+    .mars-widget:hover { transform: scale(1.05); }
+    .mars-icon { 
+      width: 32px; height: 32px; border-radius: 50%; 
+      background: linear-gradient(135deg, #cd5c5c, #a0522d);
+      display: flex; align-items: center; justify-content: center; 
+      font-size: 18px; flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(205, 92, 92, 0.3);
+    }
+    @media (max-width: 1100px) { .mars-widget { display: none; } }
+
     nav { display: contents; }
     .dropdown { position: relative; }
     .dropbtn {
@@ -190,6 +205,10 @@
         <span class="moon-label">Loading moon phase…</span>
         <span class="moon-context" id="moon-context">New York City, NY</span>
       </div>
+    </a>
+
+    <a href="mars.html" class="mars-widget" title="Explore Mars - The Red Planet">
+      <div class="mars-icon">🔴</div>
     </a>
 
     <nav>

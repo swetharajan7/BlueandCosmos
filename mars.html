@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mars - The Red Planet | BlueandCosmos</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet" />
+  
+  <style>
+    :root {
+      --accent: #0033a0;
+      --mars-red: #cd5c5c;
+      --mars-dark: #a0522d;
+      --text-white: #ffffff;
+      --text-light: #cce0ff;
+      --dark-bg: #121212;
+    }
+    
+    body {
+      margin: 0;
+      font-family: 'Work Sans', sans-serif;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: white;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2em;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 3em;
+    }
+    
+    .mars-title {
+      font-size: 3em;
+      color: var(--mars-red);
+      margin-bottom: 0.5em;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    .mars-subtitle {
+      font-size: 1.2em;
+      color: var(--text-light);
+      margin-bottom: 2em;
+    }
+    
+    .mars-image {
+      width: 100%;
+      max-width: 600px;
+      height: 400px;
+      object-fit: cover;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(205, 92, 92, 0.3);
+      margin: 2em auto;
+      display: block;
+    }
+    
+    .mars-facts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2em;
+      margin: 3em 0;
+    }
+    
+    .fact-card {
+      background: rgba(205, 92, 92, 0.1);
+      border: 1px solid var(--mars-red);
+      border-radius: 10px;
+      padding: 1.5em;
+      backdrop-filter: blur(10px);
+    }
+    
+    .fact-title {
+      color: var(--mars-red);
+      font-size: 1.3em;
+      font-weight: bold;
+      margin-bottom: 0.5em;
+    }
+    
+    .back-link {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      padding: 0.8em 1.5em;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-top: 2em;
+      transition: background 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: var(--mars-red);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="mars-title">🔴 Mars</h1>
+      <p class="mars-subtitle">The Red Planet - Our Next Frontier</p>
+    </div>
+    
+    <img src="https://photojournal.jpl.nasa.gov/jpeg/PIA04413.jpg" 
+         alt="Mars - The Red Planet" 
+         class="mars-image" />
+    
+    <div class="mars-facts">
+      <div class="fact-card">
+        <div class="fact-title">Distance from Sun</div>
+        <p>227.9 million kilometers (141.6 million miles)</p>
+      </div>
+      
+      <div class="fact-card">
+        <div class="fact-title">Day Length</div>
+        <p>24 hours 37 minutes (similar to Earth!)</p>
+      </div>
+      
+      <div class="fact-card">
+        <div class="fact-title">Year Length</div>
+        <p>687 Earth days (1.9 Earth years)</p>
+      </div>
+      
+      <div class="fact-card">
+        <div class="fact-title">Moons</div>
+        <p>2 moons: Phobos and Deimos</p>
+      </div>
+      
+      <div class="fact-card">
+        <div class="fact-title">Atmosphere</div>
+        <p>95% carbon dioxide, very thin atmosphere</p>
+      </div>
+      
+      <div class="fact-card">
+        <div class="fact-title">Temperature</div>
+        <p>Average: -80°F (-62°C)</p>
+      </div>
+    </div>
+    
+    <a href="index.html" class="back-link">← Back to BlueandCosmos</a>
+  </div>
+</body>
+</html>
