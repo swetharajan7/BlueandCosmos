@@ -71,6 +71,13 @@
       user-select: none; text-decoration: none; color: inherit;
       transition: transform 0.2s ease;
     }
+    .mars-label {
+      color: var(--text-light); 
+      font-size: 0.95em; 
+      font-weight: 600; 
+      white-space: nowrap;
+    }
+    body.dark .mars-label { color: #e0ecff; }
     .mars-widget:hover { transform: scale(1.05); }
     .mars-icon { 
       width: 32px; height: 32px; border-radius: 50%; 
@@ -212,6 +219,7 @@
 
     <a href="mars.html" class="mars-widget" title="Explore Mars - The Red Planet">
       <div class="mars-icon"></div>
+      <span class="mars-label">MARS</span>
     </a>
 
     <nav>
