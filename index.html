@@ -140,15 +140,20 @@
 
     .hero-credit {
       position: absolute;
-      bottom: 20px;
+      bottom: 50%;
       right: 20px;
       background: rgba(0, 0, 0, 0.7);
       color: white;
-      padding: 0.5em 1em;
+      padding: 1em 0.5em;
       border-radius: 5px;
       font-size: 0.8em;
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.2);
+      transform: translateY(50%) rotate(-90deg);
+      transform-origin: center;
+      white-space: nowrap;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
     }
 
 
