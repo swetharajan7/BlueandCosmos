@@ -120,7 +120,7 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, universities }) => {
             </Box>
 
             <Box sx={{ maxHeight: 300, overflow: 'auto' }}>
-              {selectedUniversities.map((university, index) => (
+              {selectedUniversities.map((university) => (
                 <Box key={university.id} sx={{ mb: 1 }}>
                   <Chip
                     icon={<School />}
