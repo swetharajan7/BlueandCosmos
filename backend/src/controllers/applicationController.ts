@@ -190,6 +190,14 @@ export const applicationController = {
         status
       });
 
+      // Update Google Doc with new application data
+      try {
+        await applicationModel.updateGoogleDoc(id);
+      } catch (error) {
+        console.error('Failed to update Google Doc:', error);
+        // Don't fail the entire update if Google Docs update fails
+      }
+
       return res.json({
         success: true,
         data: application,

@@ -2,6 +2,7 @@ import { Pool } from 'pg';
 import { v4 as uuidv4 } from 'uuid';
 import { Application, University } from '../types';
 import { AppError } from '../utils/AppError';
+import { getGoogleDocsService } from '../config/googleDocs';
 
 export class ApplicationModel {
   private db: Pool;
@@ -56,7 +57,26 @@ export class ApplicationModel {
       await client.query('COMMIT');
 
       // Fetch the complete application with universities
-      return await this.findById(applicationId);
+      const application = await this.findById(applicationId);
+
+      // Create Google Doc for the application
+      try {
+        const googleDocsService = getGoogleDocsService();
+        const documentId = await googleDocsService.createApplicationDocument(application);
+        
+        // Update application with Google Doc ID
+        await client.query(
+          'UPDATE applications SET google_doc_id = $1 WHERE id = $2',
+          [documentId, applicationId]
+        );
+        
+        application.google_doc_id = documentId;
+      } catch (error) {
+        console.error('Failed to create Google Doc for application:', error);
+        // Don't fail the entire application creation if Google Docs fails
+      }
+
+      return application;
     } catch (error) {
       await client.query('ROLLBACK');
       throw error;
@@ -218,5 +238,88 @@ export class ApplicationModel {
     const query = 'SELECT id FROM applications WHERE id = $1 AND student_id = $2';
     const result = await this.db.query(query, [applicationId, studentId]);
     return result.rows.length > 0;
+  }
+
+  async updateGoogleDoc(applicationId: string): Promise<void> {
+    try {
+      const application = await this.findById(applicationId);
+      
+      if (!application.google_doc_id) {
+        console.warn(`No Google Doc ID found for application ${applicationId}`);
+        return;
+      }
+
+      const googleDocsService = getGoogleDocsService();
+      await googleDocsService.updateApplicationDocument(application.google_doc_id, application);
+    } catch (error) {
+      console.error('Failed to update Google Doc:', error);
+      throw new AppError('Failed to update Google Doc', 500);
+    }
+  }
+
+  async addRecommendationToDoc(
+    applicationId: string, 
+    universityName: string, 
+    recommendationContent: string,
+    recommenderName: string
+  ): Promise<void> {
+    try {
+      const application = await this.findById(applicationId);
+      
+      if (!application.google_doc_id) {
+        console.warn(`No Google Doc ID found for application ${applicationId}`);
+        return;
+      }
+
+      const googleDocsService = getGoogleDocsService();
+      await googleDocsService.addRecommendationContent(
+        application.google_doc_id,
+        universityName,
+        recommendationContent,
+        recommenderName
+      );
+    } catch (error) {
+      console.error('Failed to add recommendation to Google Doc:', error);
+      throw new AppError('Failed to add recommendation to Google Doc', 500);
+    }
+  }
+
+  async getGoogleDocUrl(applicationId: string): Promise<string | null> {
+    try {
+      const application = await this.findById(applicationId);
+      
+      if (!application.google_doc_id) {
+        return null;
+      }
+
+      const googleDocsService = getGoogleDocsService();
+      return await googleDocsService.getDocumentUrl(application.google_doc_id);
+    } catch (error) {
+      console.error('Failed to get Google Doc URL:', error);
+      return null;
+    }
+  }
+
+  async setGoogleDocPermissions(
+    applicationId: string, 
+    permissions: Array<{
+      type: 'user' | 'group' | 'domain' | 'anyone';
+      role: 'owner' | 'writer' | 'commenter' | 'reader';
+      emailAddress?: string;
+    }>
+  ): Promise<void> {
+    try {
+      const application = await this.findById(applicationId);
+      
+      if (!application.google_doc_id) {
+        throw new AppError('No Google Doc found for this application', 404);
+      }
+
+      const googleDocsService = getGoogleDocsService();
+      await googleDocsService.setDocumentPermissions(application.google_doc_id, permissions);
+    } catch (error) {
+      console.error('Failed to set Google Doc permissions:', error);
+      throw new AppError('Failed to set Google Doc permissions', 500);
+    }
   }
 }

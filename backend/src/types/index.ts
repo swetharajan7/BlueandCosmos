@@ -162,6 +162,32 @@ export interface AuthenticatedRequest extends Request {
   user?: JwtPayload;
 }
 
+// Google Docs types
+export interface GoogleDocumentPermission {
+  type: 'user' | 'group' | 'domain' | 'anyone';
+  role: 'owner' | 'writer' | 'commenter' | 'reader';
+  emailAddress?: string;
+}
+
+export interface GoogleDocumentMetadata {
+  id: string;
+  name: string;
+  createdTime: string;
+  modifiedTime: string;
+  owners?: Array<{
+    displayName: string;
+    emailAddress: string;
+  }>;
+  permissions?: GoogleDocumentPermission[];
+}
+
+export interface GoogleDocsConfig {
+  clientId: string;
+  clientSecret: string;
+  redirectUri: string;
+  serviceAccountKey?: string;
+}
+
 // Error types
 export class AppError extends Error {
   public statusCode: number;
