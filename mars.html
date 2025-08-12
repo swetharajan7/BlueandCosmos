@@ -33,6 +33,7 @@
     main { flex: 1 0 auto; }
     :focus-visible { outline: 2px dashed var(--highlight); outline-offset: 2px; }
 
+    /* Header (matches index.html layout & behavior) */
     header {
       background: var(--accent);
       color: var(--text-white);
@@ -158,20 +159,17 @@
       padding: 4em 2em;
       text-align: center;
     }
-    
     .mars-title {
       font-size: 3em;
       color: var(--mars-red);
       margin-bottom: 0.5em;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     }
-    
     .mars-subtitle {
       font-size: 1.2em;
       color: var(--text-light);
       margin-bottom: 2em;
     }
-    
     .mars-image {
       width: 100%;
       max-width: 600px;
@@ -182,20 +180,17 @@
       margin: 2em auto;
       display: block;
     }
-    
     .mars-content {
       max-width: 1200px;
       margin: 0 auto;
       padding: 2em;
     }
-    
     .mars-facts {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 2em;
       margin: 3em 0;
     }
-    
     .fact-card {
       background: rgba(205, 92, 92, 0.1);
       border: 1px solid var(--mars-red);
@@ -203,7 +198,6 @@
       padding: 1.5em;
       backdrop-filter: blur(10px);
     }
-    
     .fact-title {
       color: var(--mars-red);
       font-size: 1.3em;
@@ -280,6 +274,7 @@
             <a href="moon.html" role="menuitem">🌙 Lunar Intelligence Center</a>
             <a href="telescope.html" role="menuitem">🔭 Telescope</a>
             <a href="flashcards.html" role="menuitem">🧠 Flashcards</a>
+            <a href="stellarrec.html" role="menuitem">⭐ StellarRec</a>
             <a href="discussion.html" role="menuitem">💬 Community</a>
           </div>
         </div>
@@ -303,27 +298,22 @@
           <div class="fact-title">Distance from Sun</div>
           <p>227.9 million kilometers (141.6 million miles)</p>
         </div>
-        
         <div class="fact-card">
           <div class="fact-title">Day Length</div>
           <p>24 hours 37 minutes (similar to Earth!)</p>
         </div>
-        
         <div class="fact-card">
           <div class="fact-title">Year Length</div>
           <p>687 Earth days (1.9 Earth years)</p>
         </div>
-        
         <div class="fact-card">
           <div class="fact-title">Moons</div>
           <p>2 moons: Phobos and Deimos</p>
         </div>
-        
         <div class="fact-card">
           <div class="fact-title">Atmosphere</div>
           <p>95% carbon dioxide, very thin atmosphere</p>
         </div>
-        
         <div class="fact-card">
           <div class="fact-title">Temperature</div>
           <p>Average: -80°F (-62°C)</p>
@@ -360,6 +350,7 @@
 
   <script src="maximus.js"></script>
   <script>
+    // Theme persistence (same as index)
     (function initTheme(){
       const saved = localStorage.getItem("theme");
       if(saved==="dark"){document.body.classList.add("dark");document.getElementById("themeToggle").textContent="☀️";}
@@ -371,6 +362,7 @@
       });
     })();
 
+    // Sticky dropdowns (same behavior as index)
     (function stickyDropdowns(){
       const OPEN="open";const DELAY=160;
       document.querySelectorAll(".dropdown").forEach(dd=>{
@@ -380,23 +372,44 @@
         dd.addEventListener("pointerenter",open);dd.addEventListener("pointerleave",close);
         btn?.addEventListener("focus",open);
         menu?.addEventListener("focusout",e=>{if(!dd.contains(e.relatedTarget))close();});
-        menu?.querySelectorAll("a").forEach(a=>{a.addEventListener("click",()=>{menu.querySelectorAll("a").forEach(el=>el.classList.remove("clicked"));a.classList.add("clicked");dd.classList.remove(OPEN);btn?.setAttribute("aria-expanded","false");});});
+        menu?.querySelectorAll("a").forEach(a=>{
+          a.addEventListener("click",()=>{
+            menu.querySelectorAll("a").forEach(el=>el.classList.remove("clicked"));
+            a.classList.add("clicked");
+            dd.classList.remove(OPEN);
+            btn?.setAttribute("aria-expanded","false");
+          });
+        });
       });
     })();
 
+    // Moon widget phase (copied from index so header stays consistent site-wide)
     (function initMoonPhase(){
       function getMoonPhase(){
         const now=new Date();const m=now.getMonth()+1;const d=now.getDate();const y=now.getFullYear();
         if(y===2025&&m===8){
           if(d<=3)return 7;if(d<=6)return 0;if(d<=10)return 1;if(d<=13)return 2;if(d<=17)return 3;if(d<=20)return 4;if(d<=24)return 5;if(d<=27)return 6;return 7;
         }
-        const base=new Date(2024,7,4);const days=(now-base)/(1000*60*60*24);const cycle=days/29.53;return Math.floor((cycle-Math.floor(cycle))*8)%8;
+        const base=new Date(2024,7,4);const days=(now-base)/(1000*60*60*24);const cycle=days/29.53;
+        return Math.floor((cycle-Math.floor(cycle))*8)%8;
       }
-      function info(p){return[{name:"New Moon",emoji:"🌑"},{name:"Waxing Crescent",emoji:"🌒"},{name:"First Quarter",emoji:"🌓"},{name:"Waxing Gibbous",emoji:"🌔"},{name:"Full Moon",emoji:"🌕"},{name:"Waning Gibbous",emoji:"🌖"},{name:"Last Quarter",emoji:"🌗"},{name:"Waning Crescent",emoji:"🌘"}][p];}
+      function info(p){
+        return[
+          {name:"New Moon",emoji:"🌑"},
+          {name:"Waxing Crescent",emoji:"🌒"},
+          {name:"First Quarter",emoji:"🌓"},
+          {name:"Waxing Gibbous",emoji:"🌔"},
+          {name:"Full Moon",emoji:"🌕"},
+          {name:"Waning Gibbous",emoji:"🌖"},
+          {name:"Last Quarter",emoji:"🌗"},
+          {name:"Waning Crescent",emoji:"🌘"}
+        ][p];
+      }
       const phase=getMoonPhase(),data=info(phase),now=new Date();
       document.getElementById("moon-display").textContent=data.emoji;
       document.querySelector(".moon-label").textContent=data.name;
-      document.getElementById("moon-context").textContent=`${now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} • New York City, NY`;
+      document.getElementById("moon-context").textContent=
+        `${now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} • New York City, NY`;
     })();
   </script>
 </body>
