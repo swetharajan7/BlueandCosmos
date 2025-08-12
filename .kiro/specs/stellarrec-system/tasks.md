@@ -36,7 +36,7 @@
   - Implement application save/draft functionality
   - _Requirements: 1.3, 1.4, 9.1, 9.2_
 
-- [ ] 5. Implement university database and selection system
+- [x] 5. Implement university database and selection system
   - Create University model with all major US institutions
   - Populate database with Ivy League and top-tier universities
   - Build university search and filter functionality
@@ -44,7 +44,7 @@
   - Add program availability validation per university
   - _Requirements: 9.1, 9.2, 9.3_
 
-- [ ] 6. Build Google Docs integration system
+- [x] 6. Build Google Docs integration system
   - Set up Google Docs API authentication and permissions
   - Implement automatic document creation with proper header format
   - Create document sharing and access control
