@@ -286,6 +286,36 @@ export class AuthService {
   static getToken(): string | null {
     return localStorage.getItem('stellarrec_token');
   }
+
+  /**
+   * Login recommender
+   */
+  static async recommenderLogin(email: string, password: string): Promise<AuthResponse> {
+    try {
+      const response = await axios.post<ApiResponse<AuthResponse>>(`${API_BASE_URL}/recommender/login`, {
+        email,
+        password
+      });
+
+      if (response.data.success && response.data.data) {
+        const { user, token, refreshToken } = response.data.data;
+        
+        // Store tokens and user data
+        localStorage.setItem('stellarrec_token', token);
+        localStorage.setItem('stellarrec_refresh_token', refreshToken);
+        localStorage.setItem('stellarrec_user', JSON.stringify(user));
+        
+        return response.data.data;
+      } else {
+        throw new Error(response.data.error?.message || 'Login failed');
+      }
+    } catch (error: any) {
+      if (error.response?.data?.error?.message) {
+        throw new Error(error.response.data.error.message);
+      }
+      throw new Error('Login failed. Please check your credentials and try again.');
+    }
+  }
 }
 
 export default AuthService;

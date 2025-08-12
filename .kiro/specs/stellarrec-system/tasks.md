@@ -54,7 +54,7 @@
 
 ## Phase 3: Recommender Portal and Authentication
 
-- [ ] 7. Create recommender invitation system
+- [x] 7. Create recommender invitation system
   - Build recommender email invitation functionality
   - Generate secure invitation tokens with expiration
   - Create invitation email templates with professional design
@@ -62,7 +62,7 @@
   - Add resend invitation capability for students
   - _Requirements: 1.5, 1.6, 7.1_
 
-- [ ] 8. Build recommender portal authentication
+- [x] 8. Build recommender portal authentication
   - Create secure login system using invitation tokens
   - Implement recommender account creation from invitations
   - Build applicant information confirmation interface
@@ -70,7 +70,7 @@
   - Create recommender profile management
   - _Requirements: 2.1, 2.2, 2.3, 2.5_
 
-- [ ] 9. Implement recommender information collection
+- [x] 9. Implement recommender information collection
   - Create recommender profile form with validation
   - Collect professional title, affiliation, and contact information
   - Implement relationship duration and type selection

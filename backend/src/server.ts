@@ -9,6 +9,8 @@ import authRoutes from './routes/auth';
 import applicationRoutes from './routes/applications';
 import universityRoutes from './routes/universities';
 import googleDocsRoutes from './routes/googleDocs';
+import invitationRoutes from './routes/invitations';
+import recommenderRoutes from './routes/recommender';
 
 // Load environment variables
 dotenv.config();
@@ -60,6 +62,12 @@ app.use('/api/universities', universityRoutes);
 
 // Google Docs routes
 app.use('/api/google-docs', googleDocsRoutes);
+
+// Invitation routes
+app.use('/api', invitationRoutes);
+
+// Recommender routes
+app.use('/api/recommender', recommenderRoutes);
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {

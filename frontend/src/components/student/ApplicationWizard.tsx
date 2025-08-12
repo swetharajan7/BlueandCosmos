@@ -16,6 +16,7 @@ import { ApplicationForm, University } from '../../types';
 import { applicationService } from '../../services/applicationService';
 import BasicInfoStep from './wizard/BasicInfoStep';
 import UniversitySelectionStep from './wizard/UniversitySelectionStep';
+import RecommenderStep from './wizard/RecommenderStep';
 import ReviewStep from './wizard/ReviewStep';
 
 interface ApplicationWizardProps {
@@ -26,7 +27,7 @@ interface ApplicationWizardProps {
   applicationId?: string;
 }
 
-const steps = ['Basic Information', 'Select Universities', 'Review & Submit'];
+const steps = ['Basic Information', 'Select Universities', 'Invite Recommenders', 'Review & Submit'];
 
 const ApplicationWizard: React.FC<ApplicationWizardProps> = ({
   onComplete,
@@ -45,6 +46,8 @@ const ApplicationWizard: React.FC<ApplicationWizardProps> = ({
     application_term: initialData?.application_term || '',
     universities: initialData?.universities || []
   });
+  const [currentApplicationId, setCurrentApplicationId] = useState<string | undefined>(applicationId);
+  const [recommenderCount, setRecommenderCount] = useState(0);
 
   // Load universities on component mount
   useEffect(() => {
@@ -91,13 +94,20 @@ const ApplicationWizard: React.FC<ApplicationWizardProps> = ({
       };
 
       let result;
-      if (isEdit && applicationId) {
-        result = await applicationService.updateApplication(applicationId, applicationData);
+      if (isEdit && currentApplicationId) {
+        result = await applicationService.updateApplication(currentApplicationId, applicationData);
       } else {
         result = await applicationService.createApplication(applicationData);
+        setCurrentApplicationId(result.id);
       }
 
-      onComplete(result);
+      // Don't complete the wizard, just save and continue
+      if (activeStep < 2) {
+        // If we're not on the final steps, just show success message
+        setError(null);
+      } else {
+        onComplete(result);
+      }
     } catch (error: any) {
       console.error('Error saving draft:', error);
       setError(error.response?.data?.error?.message || 'Failed to save draft. Please try again.');
@@ -120,8 +130,8 @@ const ApplicationWizard: React.FC<ApplicationWizardProps> = ({
       };
 
       let result;
-      if (isEdit && applicationId) {
-        result = await applicationService.updateApplication(applicationId, applicationData);
+      if (isEdit && currentApplicationId) {
+        result = await applicationService.updateApplication(currentApplicationId, applicationData);
       } else {
         result = await applicationService.createApplication(applicationData);
       }
@@ -142,6 +152,8 @@ const ApplicationWizard: React.FC<ApplicationWizardProps> = ({
       case 1:
         return formData.universities.length > 0;
       case 2:
+        return !!currentApplicationId; // Recommender step requires saved application
+      case 3:
         return true;
       default:
         return false;
@@ -166,6 +178,13 @@ const ApplicationWizard: React.FC<ApplicationWizardProps> = ({
           />
         );
       case 2:
+        return (
+          <RecommenderStep
+            applicationId={currentApplicationId}
+            onRecommendersChange={setRecommenderCount}
+          />
+        );
+      case 3:
         return (
           <ReviewStep
             data={formData}
@@ -222,14 +241,16 @@ const ApplicationWizard: React.FC<ApplicationWizardProps> = ({
           </Button>
 
           <Box sx={{ display: 'flex', gap: 2 }}>
-            <Button
-              onClick={handleSaveDraft}
-              startIcon={<Save />}
-              variant="outlined"
-              disabled={loading || !isStepValid(0)}
-            >
-              {loading ? <CircularProgress size={20} /> : 'Save Draft'}
-            </Button>
+            {activeStep < 2 && (
+              <Button
+                onClick={handleSaveDraft}
+                startIcon={<Save />}
+                variant="outlined"
+                disabled={loading || !isStepValid(0)}
+              >
+                {loading ? <CircularProgress size={20} /> : 'Save Draft'}
+              </Button>
+            )}
 
             <Box sx={{ display: 'flex', gap: 1 }}>
               <Button

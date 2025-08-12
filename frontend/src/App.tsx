@@ -15,6 +15,7 @@ import EmailVerificationPage from './pages/EmailVerificationPage';
 import StudentDashboardPage from './pages/StudentDashboardPage';
 import ProfilePage from './pages/ProfilePage';
 import CreateApplicationPage from './pages/CreateApplicationPage';
+import RecommenderInvitationPage from './pages/RecommenderInvitationPage';
 
 // Common components
 import ProtectedRoute from './components/common/ProtectedRoute';
@@ -39,6 +40,9 @@ function App() {
           
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          
+          {/* Public recommender invitation route */}
+          <Route path="/recommender/invitation/:token" element={<RecommenderInvitationPage />} />
           
           {/* Email verification route - requires authentication but not verification */}
           <Route path="/verify-email" element={

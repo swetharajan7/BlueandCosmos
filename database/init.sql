@@ -61,10 +61,10 @@ CREATE TABLE application_universities (
 CREATE TABLE recommenders (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    title VARCHAR(255) NOT NULL,
-    organization VARCHAR(255) NOT NULL,
-    relationship_duration VARCHAR(100) NOT NULL,
-    relationship_type VARCHAR(100) NOT NULL,
+    title VARCHAR(255) NOT NULL DEFAULT '',
+    organization VARCHAR(255) NOT NULL DEFAULT '',
+    relationship_duration VARCHAR(100) NOT NULL DEFAULT '',
+    relationship_type VARCHAR(100) NOT NULL DEFAULT '',
     mobile_phone VARCHAR(20),
     professional_email VARCHAR(255) NOT NULL,
     invitation_token VARCHAR(255) UNIQUE,
@@ -72,6 +72,17 @@ CREATE TABLE recommenders (
     confirmed_at TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Application Recommenders junction table
+CREATE TABLE application_recommenders (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    application_id UUID NOT NULL REFERENCES applications(id) ON DELETE CASCADE,
+    recommender_id UUID NOT NULL REFERENCES recommenders(id) ON DELETE CASCADE,
+    status VARCHAR(20) NOT NULL DEFAULT 'invited' CHECK (status IN ('invited', 'confirmed', 'declined')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(application_id, recommender_id)
 );
 
 -- Recommendations table
@@ -142,6 +153,9 @@ CREATE INDEX idx_submissions_recommendation_id ON submissions(recommendation_id)
 CREATE INDEX idx_submissions_university_id ON submissions(university_id);
 CREATE INDEX idx_submissions_status ON submissions(status);
 CREATE INDEX idx_recommenders_invitation_token ON recommenders(invitation_token);
+CREATE INDEX idx_application_recommenders_application_id ON application_recommenders(application_id);
+CREATE INDEX idx_application_recommenders_recommender_id ON application_recommenders(recommender_id);
+CREATE INDEX idx_application_recommenders_status ON application_recommenders(status);
 CREATE INDEX idx_audit_logs_user_id ON audit_logs(user_id);
 CREATE INDEX idx_audit_logs_created_at ON audit_logs(created_at);
 
@@ -159,6 +173,7 @@ CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users FOR EACH ROW EXECU
 CREATE TRIGGER update_universities_updated_at BEFORE UPDATE ON universities FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_applications_updated_at BEFORE UPDATE ON applications FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_recommenders_updated_at BEFORE UPDATE ON recommenders FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER update_application_recommenders_updated_at BEFORE UPDATE ON application_recommenders FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_recommendations_updated_at BEFORE UPDATE ON recommendations FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_submissions_updated_at BEFORE UPDATE ON submissions FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
