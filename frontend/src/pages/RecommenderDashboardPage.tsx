@@ -186,7 +186,7 @@ const RecommenderDashboardPage: React.FC = () => {
                           cursor: 'pointer',
                           '&:hover': { bgcolor: 'action.hover' }
                         }}
-                        onClick={() => navigate(`/recommender/applications/${application.id}`)}
+                        onClick={() => navigate(`/recommender/applications/${application.id}/write`)}
                       >
                         <ListItemIcon>
                           {getStatusIcon(application.status)}
@@ -251,7 +251,7 @@ const RecommenderDashboardPage: React.FC = () => {
                     startIcon={<AssignmentIcon />}
                     onClick={() => {
                       if (applications.length > 0) {
-                        navigate(`/recommender/applications/${applications[0].id}`);
+                        navigate(`/recommender/applications/${applications[0].id}/write`);
                       }
                     }}
                     disabled={applications.length === 0}

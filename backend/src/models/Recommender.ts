@@ -520,4 +520,134 @@ export class RecommenderModel {
       throw new AppError('Failed to confirm application details', 500);
     }
   }
+
+  /**
+   * Get recommendation by application ID
+   */
+  async getRecommendationByApplicationId(applicationId: string): Promise<any | null> {
+    const query = `
+      SELECT * FROM recommendations 
+      WHERE application_id = $1
+      ORDER BY created_at DESC
+      LIMIT 1
+    `;
+
+    try {
+      const result = await this.db.query(query, [applicationId]);
+      return result.rows[0] || null;
+    } catch (error) {
+      throw new AppError('Failed to get recommendation by application ID', 500);
+    }
+  }
+
+  /**
+   * Get recommendation by ID
+   */
+  async getRecommendationById(recommendationId: string): Promise<any | null> {
+    const query = `
+      SELECT * FROM recommendations 
+      WHERE id = $1
+    `;
+
+    try {
+      const result = await this.db.query(query, [recommendationId]);
+      return result.rows[0] || null;
+    } catch (error) {
+      throw new AppError('Failed to get recommendation by ID', 500);
+    }
+  }
+
+  /**
+   * Create a new recommendation
+   */
+  async createRecommendation(data: {
+    application_id: string;
+    recommender_id: string;
+    content: string;
+    word_count: number;
+    ai_assistance_used: boolean;
+  }): Promise<any> {
+    const recommendationId = uuidv4();
+    const query = `
+      INSERT INTO recommendations (
+        id, application_id, recommender_id, content, word_count, 
+        ai_assistance_used, status, created_at, updated_at
+      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+      RETURNING *
+    `;
+
+    try {
+      const result = await this.db.query(query, [
+        recommendationId,
+        data.application_id,
+        data.recommender_id,
+        data.content,
+        data.word_count,
+        data.ai_assistance_used,
+        'draft'
+      ]);
+
+      return result.rows[0];
+    } catch (error) {
+      throw new AppError('Failed to create recommendation', 500);
+    }
+  }
+
+  /**
+   * Update an existing recommendation
+   */
+  async updateRecommendation(recommendationId: string, data: {
+    content: string;
+    word_count: number;
+  }): Promise<any> {
+    const query = `
+      UPDATE recommendations 
+      SET content = $1, word_count = $2, updated_at = CURRENT_TIMESTAMP
+      WHERE id = $3
+      RETURNING *
+    `;
+
+    try {
+      const result = await this.db.query(query, [
+        data.content,
+        data.word_count,
+        recommendationId
+      ]);
+
+      if (result.rows.length === 0) {
+        throw new AppError('Recommendation not found', 404);
+      }
+
+      return result.rows[0];
+    } catch (error) {
+      if (error instanceof AppError) throw error;
+      throw new AppError('Failed to update recommendation', 500);
+    }
+  }
+
+  /**
+   * Submit a recommendation
+   */
+  async submitRecommendation(recommendationId: string): Promise<any> {
+    const query = `
+      UPDATE recommendations 
+      SET status = 'submitted', submitted_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
+      WHERE id = $1
+      RETURNING *
+    `;
+
+    try {
+      const result = await this.db.query(query, [recommendationId]);
+
+      if (result.rows.length === 0) {
+        throw new AppError('Recommendation not found', 404);
+      }
+
+      return result.rows[0];
+    } catch (error) {
+      if (error instanceof AppError) throw error;
+      throw new AppError('Failed to submit recommendation', 500);
+    }
+  }
 }

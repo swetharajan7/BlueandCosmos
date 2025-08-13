@@ -75,4 +75,32 @@ router.get('/applications/:applicationId', authenticate, authorize('recommender'
  */
 router.post('/applications/:applicationId/confirm', authenticate, authorize('recommender'), recommenderController.confirmApplicationDetails);
 
+/**
+ * @route   GET /api/recommender/applications/:applicationId/recommendation
+ * @desc    Get recommendation for specific application
+ * @access  Private (Recommender)
+ */
+router.get('/applications/:applicationId/recommendation', authenticate, authorize('recommender'), recommenderController.getRecommendation);
+
+/**
+ * @route   POST /api/recommender/recommendations
+ * @desc    Create a new recommendation
+ * @access  Private (Recommender)
+ */
+router.post('/recommendations', authenticate, authorize('recommender'), recommenderController.createRecommendation);
+
+/**
+ * @route   PUT /api/recommender/recommendations/:recommendationId
+ * @desc    Update an existing recommendation
+ * @access  Private (Recommender)
+ */
+router.put('/recommendations/:recommendationId', authenticate, authorize('recommender'), recommenderController.updateRecommendation);
+
+/**
+ * @route   POST /api/recommender/recommendations/:recommendationId/submit
+ * @desc    Submit a recommendation
+ * @access  Private (Recommender)
+ */
+router.post('/recommendations/:recommendationId/submit', authenticate, authorize('recommender'), recommenderController.submitRecommendation);
+
 export default router;

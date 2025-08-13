@@ -85,6 +85,27 @@ export interface ProfileUpdateData {
   mobile_phone?: string;
 }
 
+export interface Recommendation {
+  id: string;
+  application_id: string;
+  content: string;
+  word_count: number;
+  status: 'draft' | 'submitted' | 'delivered';
+  ai_assistance_used: boolean;
+  created_at: string;
+  updated_at: string;
+  submitted_at?: string;
+}
+
+export interface CreateRecommendationData {
+  application_id: string;
+  content: string;
+}
+
+export interface UpdateRecommendationData {
+  content: string;
+}
+
 class RecommenderService {
   /**
    * Login recommender
@@ -296,6 +317,96 @@ class RecommenderService {
         throw new Error(error.response.data.error.message);
       }
       throw new Error('Failed to report discrepancy');
+    }
+  }
+
+  /**
+   * Get specific application (simplified method for writing page)
+   */
+  async getApplication(applicationId: string): Promise<RecommenderApplication> {
+    try {
+      const details = await this.getApplicationDetails(applicationId);
+      return details.application;
+    } catch (error: any) {
+      throw error;
+    }
+  }
+
+  /**
+   * Get recommendation for an application
+   */
+  async getRecommendation(applicationId: string): Promise<Recommendation> {
+    try {
+      const response = await api.get(`/recommender/applications/${applicationId}/recommendation`);
+      
+      if (response.data.success) {
+        return response.data.data;
+      } else {
+        throw new Error(response.data.error?.message || 'Failed to get recommendation');
+      }
+    } catch (error: any) {
+      if (error.response?.data?.error?.message) {
+        throw new Error(error.response.data.error.message);
+      }
+      throw new Error('Failed to get recommendation');
+    }
+  }
+
+  /**
+   * Create a new recommendation
+   */
+  async createRecommendation(data: CreateRecommendationData): Promise<Recommendation> {
+    try {
+      const response = await api.post('/recommender/recommendations', data);
+      
+      if (response.data.success) {
+        return response.data.data;
+      } else {
+        throw new Error(response.data.error?.message || 'Failed to create recommendation');
+      }
+    } catch (error: any) {
+      if (error.response?.data?.error?.message) {
+        throw new Error(error.response.data.error.message);
+      }
+      throw new Error('Failed to create recommendation');
+    }
+  }
+
+  /**
+   * Update an existing recommendation
+   */
+  async updateRecommendation(recommendationId: string, data: UpdateRecommendationData): Promise<Recommendation> {
+    try {
+      const response = await api.put(`/recommender/recommendations/${recommendationId}`, data);
+      
+      if (response.data.success) {
+        return response.data.data;
+      } else {
+        throw new Error(response.data.error?.message || 'Failed to update recommendation');
+      }
+    } catch (error: any) {
+      if (error.response?.data?.error?.message) {
+        throw new Error(error.response.data.error.message);
+      }
+      throw new Error('Failed to update recommendation');
+    }
+  }
+
+  /**
+   * Submit a recommendation
+   */
+  async submitRecommendation(recommendationId: string): Promise<void> {
+    try {
+      const response = await api.post(`/recommender/recommendations/${recommendationId}/submit`);
+      
+      if (!response.data.success) {
+        throw new Error(response.data.error?.message || 'Failed to submit recommendation');
+      }
+    } catch (error: any) {
+      if (error.response?.data?.error?.message) {
+        throw new Error(error.response.data.error.message);
+      }
+      throw new Error('Failed to submit recommendation');
     }
   }
 }

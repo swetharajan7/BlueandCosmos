@@ -16,6 +16,10 @@ import StudentDashboardPage from './pages/StudentDashboardPage';
 import ProfilePage from './pages/ProfilePage';
 import CreateApplicationPage from './pages/CreateApplicationPage';
 import RecommenderInvitationPage from './pages/RecommenderInvitationPage';
+import RecommenderLoginPage from './pages/RecommenderLoginPage';
+import RecommenderDashboardPage from './pages/RecommenderDashboardPage';
+import RecommenderProfilePage from './pages/RecommenderProfilePage';
+import RecommendationWritingPage from './pages/RecommendationWritingPage';
 
 // Common components
 import ProtectedRoute from './components/common/ProtectedRoute';
@@ -41,8 +45,9 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           
-          {/* Public recommender invitation route */}
+          {/* Public recommender routes */}
           <Route path="/recommender/invitation/:token" element={<RecommenderInvitationPage />} />
+          <Route path="/recommender/login" element={<RecommenderLoginPage />} />
           
           {/* Email verification route - requires authentication but not verification */}
           <Route path="/verify-email" element={
@@ -67,6 +72,25 @@ function App() {
           <Route path="/applications/create" element={
             <ProtectedRoute requiredRole="student" requireEmailVerification>
               <CreateApplicationPage />
+            </ProtectedRoute>
+          } />
+          
+          {/* Recommender protected routes */}
+          <Route path="/recommender/dashboard" element={
+            <ProtectedRoute requiredRole="recommender">
+              <RecommenderDashboardPage />
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/recommender/profile" element={
+            <ProtectedRoute requiredRole="recommender">
+              <RecommenderProfilePage />
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/recommender/applications/:applicationId/write" element={
+            <ProtectedRoute requiredRole="recommender">
+              <RecommendationWritingPage />
             </ProtectedRoute>
           } />
           

@@ -701,6 +701,272 @@ export class RecommenderController {
   };
 
   /**
+   * Get recommendation for specific application
+   */
+  getRecommendation = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+    try {
+      if (!req.user) {
+        throw new AppError('User not authenticated', 401);
+      }
+
+      const { applicationId } = req.params;
+      const recommender = await this.recommenderModel.findByUserId(req.user.userId);
+      if (!recommender) {
+        throw new AppError('Recommender profile not found', 404);
+      }
+
+      // Verify recommender has access to this application
+      const applicationIds = await this.recommenderModel.getApplicationsForRecommender(recommender.id);
+      if (!applicationIds.includes(applicationId)) {
+        throw new AppError('Application not found or access denied', 404);
+      }
+
+      const recommendation = await this.recommenderModel.getRecommendationByApplicationId(applicationId);
+      if (!recommendation) {
+        throw new AppError('Recommendation not found', 404);
+      }
+
+      res.json({
+        success: true,
+        data: recommendation,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      if (error instanceof AppError) {
+        res.status(error.statusCode).json({
+          success: false,
+          error: {
+            code: 'RECOMMENDATION_ERROR',
+            message: error.message
+          },
+          timestamp: new Date().toISOString()
+        });
+      } else {
+        console.error('Get recommendation error:', error);
+        res.status(500).json({
+          success: false,
+          error: {
+            code: 'INTERNAL_ERROR',
+            message: 'Failed to get recommendation'
+          },
+          timestamp: new Date().toISOString()
+        });
+      }
+    }
+  };
+
+  /**
+   * Create a new recommendation
+   */
+  createRecommendation = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+    try {
+      if (!req.user) {
+        throw new AppError('User not authenticated', 401);
+      }
+
+      const { application_id, content } = req.body;
+      
+      if (!application_id || !content) {
+        throw new AppError('Application ID and content are required', 400);
+      }
+
+      const recommender = await this.recommenderModel.findByUserId(req.user.userId);
+      if (!recommender) {
+        throw new AppError('Recommender profile not found', 404);
+      }
+
+      // Verify recommender has access to this application
+      const applicationIds = await this.recommenderModel.getApplicationsForRecommender(recommender.id);
+      if (!applicationIds.includes(application_id)) {
+        throw new AppError('Application not found or access denied', 404);
+      }
+
+      // Check if recommendation already exists
+      const existingRecommendation = await this.recommenderModel.getRecommendationByApplicationId(application_id);
+      if (existingRecommendation) {
+        throw new AppError('Recommendation already exists for this application', 409);
+      }
+
+      const recommendation = await this.recommenderModel.createRecommendation({
+        application_id,
+        recommender_id: recommender.id,
+        content: content.trim(),
+        word_count: content.trim().split(/\s+/).length,
+        ai_assistance_used: false // This could be tracked based on AI service usage
+      });
+
+      res.status(201).json({
+        success: true,
+        data: recommendation,
+        message: 'Recommendation created successfully',
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      if (error instanceof AppError) {
+        res.status(error.statusCode).json({
+          success: false,
+          error: {
+            code: error.statusCode === 409 ? 'RECOMMENDATION_EXISTS' : 'RECOMMENDATION_ERROR',
+            message: error.message
+          },
+          timestamp: new Date().toISOString()
+        });
+      } else {
+        console.error('Create recommendation error:', error);
+        res.status(500).json({
+          success: false,
+          error: {
+            code: 'INTERNAL_ERROR',
+            message: 'Failed to create recommendation'
+          },
+          timestamp: new Date().toISOString()
+        });
+      }
+    }
+  };
+
+  /**
+   * Update an existing recommendation
+   */
+  updateRecommendation = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+    try {
+      if (!req.user) {
+        throw new AppError('User not authenticated', 401);
+      }
+
+      const { recommendationId } = req.params;
+      const { content } = req.body;
+      
+      if (!content) {
+        throw new AppError('Content is required', 400);
+      }
+
+      const recommender = await this.recommenderModel.findByUserId(req.user.userId);
+      if (!recommender) {
+        throw new AppError('Recommender profile not found', 404);
+      }
+
+      // Verify recommender owns this recommendation
+      const recommendation = await this.recommenderModel.getRecommendationById(recommendationId);
+      if (!recommendation || recommendation.recommender_id !== recommender.id) {
+        throw new AppError('Recommendation not found or access denied', 404);
+      }
+
+      // Check if recommendation is already submitted
+      if (recommendation.status === 'submitted' || recommendation.status === 'delivered') {
+        throw new AppError('Cannot update submitted recommendation', 409);
+      }
+
+      const updatedRecommendation = await this.recommenderModel.updateRecommendation(recommendationId, {
+        content: content.trim(),
+        word_count: content.trim().split(/\s+/).length
+      });
+
+      res.json({
+        success: true,
+        data: updatedRecommendation,
+        message: 'Recommendation updated successfully',
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      if (error instanceof AppError) {
+        res.status(error.statusCode).json({
+          success: false,
+          error: {
+            code: error.statusCode === 409 ? 'RECOMMENDATION_SUBMITTED' : 'RECOMMENDATION_ERROR',
+            message: error.message
+          },
+          timestamp: new Date().toISOString()
+        });
+      } else {
+        console.error('Update recommendation error:', error);
+        res.status(500).json({
+          success: false,
+          error: {
+            code: 'INTERNAL_ERROR',
+            message: 'Failed to update recommendation'
+          },
+          timestamp: new Date().toISOString()
+        });
+      }
+    }
+  };
+
+  /**
+   * Submit a recommendation
+   */
+  submitRecommendation = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+    try {
+      if (!req.user) {
+        throw new AppError('User not authenticated', 401);
+      }
+
+      const { recommendationId } = req.params;
+
+      const recommender = await this.recommenderModel.findByUserId(req.user.userId);
+      if (!recommender) {
+        throw new AppError('Recommender profile not found', 404);
+      }
+
+      // Verify recommender owns this recommendation
+      const recommendation = await this.recommenderModel.getRecommendationById(recommendationId);
+      if (!recommendation || recommendation.recommender_id !== recommender.id) {
+        throw new AppError('Recommendation not found or access denied', 404);
+      }
+
+      // Check if recommendation is already submitted
+      if (recommendation.status === 'submitted' || recommendation.status === 'delivered') {
+        throw new AppError('Recommendation already submitted', 409);
+      }
+
+      // Validate content length
+      if (recommendation.word_count < 200) {
+        throw new AppError('Recommendation must be at least 200 words', 400);
+      }
+
+      if (recommendation.word_count > 1000) {
+        throw new AppError('Recommendation must be 1000 words or less', 400);
+      }
+
+      // Submit recommendation
+      const submittedRecommendation = await this.recommenderModel.submitRecommendation(recommendationId);
+
+      // TODO: Integrate with university submission system
+      // This would involve sending the recommendation to all selected universities
+      // For now, we'll just mark it as submitted
+
+      res.json({
+        success: true,
+        data: submittedRecommendation,
+        message: 'Recommendation submitted successfully',
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      if (error instanceof AppError) {
+        res.status(error.statusCode).json({
+          success: false,
+          error: {
+            code: error.statusCode === 409 ? 'RECOMMENDATION_ALREADY_SUBMITTED' : 
+                  error.statusCode === 400 ? 'VALIDATION_ERROR' : 'RECOMMENDATION_ERROR',
+            message: error.message
+          },
+          timestamp: new Date().toISOString()
+        });
+      } else {
+        console.error('Submit recommendation error:', error);
+        res.status(500).json({
+          success: false,
+          error: {
+            code: 'INTERNAL_ERROR',
+            message: 'Failed to submit recommendation'
+          },
+          timestamp: new Date().toISOString()
+        });
+      }
+    }
+  };
+
+  /**
    * Send welcome email to newly confirmed recommender
    */
   private async sendWelcomeEmail(recommender: any): Promise<void> {
