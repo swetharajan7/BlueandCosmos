@@ -27,6 +27,7 @@
     "openai": "^5.12.2",
     "pg": "^8.11.3",
     "redis": "^4.6.10",
+    "socket.io": "^4.7.5",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

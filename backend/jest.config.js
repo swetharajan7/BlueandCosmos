@@ -6,6 +6,12 @@ module.exports = {
   transform: {
     '^.+\\.ts$': 'ts-jest',
   },
+  transformIgnorePatterns: [
+    'node_modules/(?!(axios)/)'
+  ],
+  moduleNameMapper: {
+    '^axios$': require.resolve('axios'),
+  },
   collectCoverageFrom: [
     'src/**/*.ts',
     '!src/**/*.d.ts',

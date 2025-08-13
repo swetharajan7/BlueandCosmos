@@ -3,6 +3,9 @@ import { Submission, University } from '../types';
 import { SubmissionModel } from '../models/Submission';
 import { UniversityModel } from '../models/University';
 import { AppError } from '../utils/AppError';
+import { EmailService } from './emailService';
+import { WebSocketService, SubmissionStatusUpdate } from './websocketService';
+import axios from 'axios';
 
 // Abstract base class for university submission adapters
 export abstract class UniversitySubmissionAdapter {
@@ -45,6 +48,13 @@ export abstract class UniversitySubmissionAdapter {
 
 // Email-based submission adapter
 export class EmailSubmissionAdapter extends UniversitySubmissionAdapter {
+  private emailService: EmailService;
+
+  constructor(university: University) {
+    super(university);
+    this.emailService = new EmailService();
+  }
+
   async submitRecommendation(submissionData: {
     applicantName: string;
     programType: string;
@@ -70,13 +80,29 @@ export class EmailSubmissionAdapter extends UniversitySubmissionAdapter {
         universityName: this.university.name
       });
 
-      // TODO: Integrate with email service (SendGrid)
-      // For now, we'll simulate the email sending
+      // Create professional email subject
+      const subject = `Letter of Recommendation for ${submissionData.applicantName} - ${submissionData.programType} Program Application`;
+
+      // Create HTML email content
+      const htmlContent = this.createEmailHtml({
+        applicantName: submissionData.applicantName,
+        programType: submissionData.programType,
+        applicationTerm: submissionData.applicationTerm,
+        universityName: this.university.name,
+        recommendationContent: submissionData.recommendationContent,
+        wordCount: submissionData.wordCount
+      });
+
+      // Send email via email service
+      await this.emailService.sendEmail({
+        to: this.university.email_address,
+        subject: subject,
+        html: htmlContent,
+        text: formattedContent
+      });
+
       const emailReference = `EMAIL_${Date.now()}_${submissionData.submissionId.substring(0, 8)}`;
       
-      // Simulate email sending delay
-      await new Promise(resolve => setTimeout(resolve, 100));
-
       return {
         success: true,
         externalReference: emailReference
@@ -87,6 +113,99 @@ export class EmailSubmissionAdapter extends UniversitySubmissionAdapter {
         errorMessage: error instanceof Error ? error.message : 'Unknown error occurred'
       };
     }
+  }
+
+  private createEmailHtml(data: {
+    applicantName: string;
+    programType: string;
+    applicationTerm: string;
+    universityName: string;
+    recommendationContent: string;
+    wordCount: number;
+  }): string {
+    return `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <title>Letter of Recommendation - ${data.applicantName}</title>
+        <style>
+          body { font-family: 'Times New Roman', serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
+          .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #1976d2; padding-bottom: 20px; }
+          .header h1 { color: #1976d2; margin: 0; font-size: 24px; }
+          .header p { margin: 5px 0; color: #666; }
+          .application-details { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; }
+          .application-details h3 { margin-top: 0; color: #1976d2; }
+          .application-details table { width: 100%; border-collapse: collapse; }
+          .application-details td { padding: 8px 0; border-bottom: 1px solid #eee; }
+          .application-details td:first-child { font-weight: bold; width: 150px; }
+          .recommendation-content { margin: 30px 0; padding: 20px; background: white; border-left: 4px solid #1976d2; }
+          .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #666; text-align: center; }
+          .metadata { font-size: 11px; color: #999; margin-top: 20px; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>Letter of Recommendation</h1>
+          <p>Submitted via StellarRec™ Universal Recommendation System</p>
+        </div>
+
+        <div class="application-details">
+          <h3>Application Details</h3>
+          <table>
+            <tr>
+              <td>Applicant Name:</td>
+              <td>${data.applicantName}</td>
+            </tr>
+            <tr>
+              <td>University:</td>
+              <td>${data.universityName}</td>
+            </tr>
+            <tr>
+              <td>Program Type:</td>
+              <td>${data.programType.charAt(0).toUpperCase() + data.programType.slice(1)}</td>
+            </tr>
+            <tr>
+              <td>Application Term:</td>
+              <td>${data.applicationTerm}</td>
+            </tr>
+            <tr>
+              <td>Word Count:</td>
+              <td>${data.wordCount} words</td>
+            </tr>
+            <tr>
+              <td>Submission Date:</td>
+              <td>${new Date().toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZoneName: 'short'
+              })}</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="recommendation-content">
+          <h3>Letter of Recommendation</h3>
+          ${data.recommendationContent.split('\n').map(paragraph => 
+            paragraph.trim() ? `<p>${paragraph.trim()}</p>` : ''
+          ).join('')}
+        </div>
+
+        <div class="footer">
+          <p>This recommendation letter was submitted through StellarRec™, a secure university recommendation platform.</p>
+          <p>For verification or inquiries, please contact the recommender directly.</p>
+          
+          <div class="metadata">
+            <p>Submission ID: ${Date.now()}_${Math.random().toString(36).substring(2, 8)}</p>
+            <p>Generated on: ${new Date().toISOString()}</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
   }
 
   async validateSubmission(submissionData: any): Promise<boolean> {
@@ -103,6 +222,9 @@ export class EmailSubmissionAdapter extends UniversitySubmissionAdapter {
 
 // API-based submission adapter
 export class ApiSubmissionAdapter extends UniversitySubmissionAdapter {
+  private readonly timeout = 30000; // 30 seconds
+  private readonly maxRetries = 3;
+
   async submitRecommendation(submissionData: {
     applicantName: string;
     programType: string;
@@ -120,21 +242,36 @@ export class ApiSubmissionAdapter extends UniversitySubmissionAdapter {
         throw new Error('University API endpoint not configured');
       }
 
-      // TODO: Implement actual API calls to university systems
-      // For now, we'll simulate the API call
-      const apiReference = `API_${Date.now()}_${submissionData.submissionId.substring(0, 8)}`;
+      // Prepare API payload
+      const payload = {
+        applicant: {
+          name: submissionData.applicantName,
+          programType: submissionData.programType,
+          applicationTerm: submissionData.applicationTerm
+        },
+        recommendation: {
+          content: submissionData.recommendationContent,
+          wordCount: submissionData.wordCount,
+          submissionId: submissionData.submissionId,
+          submittedAt: new Date().toISOString()
+        },
+        university: {
+          name: this.university.name,
+          code: this.university.code
+        },
+        metadata: {
+          source: 'StellarRec',
+          version: '1.0',
+          format: 'json'
+        }
+      };
+
+      // Make API call with retry logic
+      const response = await this.makeApiCallWithRetry(payload);
       
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 200));
-
-      // Simulate occasional API failures for testing
-      if (Math.random() < 0.1) {
-        throw new Error('University API temporarily unavailable');
-      }
-
       return {
         success: true,
-        externalReference: apiReference
+        externalReference: response.referenceId || `API_${Date.now()}_${submissionData.submissionId.substring(0, 8)}`
       };
     } catch (error) {
       return {
@@ -142,6 +279,57 @@ export class ApiSubmissionAdapter extends UniversitySubmissionAdapter {
         errorMessage: error instanceof Error ? error.message : 'Unknown error occurred'
       };
     }
+  }
+
+  private async makeApiCallWithRetry(payload: any, attempt: number = 1): Promise<any> {
+    try {
+      const response = await axios.post(this.university.api_endpoint!, payload, {
+        timeout: this.timeout,
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'StellarRec/1.0',
+          'X-Submission-Source': 'StellarRec',
+          'X-University-Code': this.university.code,
+          // Add authentication headers if configured
+          ...(process.env.UNIVERSITY_API_KEY && {
+            'Authorization': `Bearer ${process.env.UNIVERSITY_API_KEY}`
+          })
+        },
+        validateStatus: (status) => status < 500 // Only retry on 5xx errors
+      });
+
+      // Check if the response indicates success
+      if (response.status >= 200 && response.status < 300) {
+        return response.data;
+      } else {
+        throw new Error(`University API returned status ${response.status}: ${response.data?.message || 'Unknown error'}`);
+      }
+    } catch (error) {
+      if (attempt < this.maxRetries && this.isRetryableError(error)) {
+        console.log(`API call attempt ${attempt} failed, retrying... Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        
+        // Exponential backoff: wait 1s, 2s, 4s
+        const delay = Math.pow(2, attempt - 1) * 1000;
+        await new Promise(resolve => setTimeout(resolve, delay));
+        
+        return this.makeApiCallWithRetry(payload, attempt + 1);
+      }
+      
+      throw error;
+    }
+  }
+
+  private isRetryableError(error: any): boolean {
+    if (axios.isAxiosError(error)) {
+      // Retry on network errors, timeouts, and 5xx server errors
+      return (
+        error.code === 'ECONNABORTED' || // Timeout
+        error.code === 'ENOTFOUND' ||   // DNS error
+        error.code === 'ECONNREFUSED' || // Connection refused
+        (error.response?.status !== undefined && error.response.status >= 500) // Server errors
+      );
+    }
+    return false;
   }
 
   async validateSubmission(submissionData: any): Promise<boolean> {
@@ -218,11 +406,13 @@ export class UniversityIntegrationService {
   private db: Pool;
   private submissionModel: SubmissionModel;
   private universityModel: UniversityModel;
+  private websocketService?: WebSocketService;
 
-  constructor(db: Pool) {
+  constructor(db: Pool, websocketService?: WebSocketService) {
     this.db = db;
     this.submissionModel = new SubmissionModel(db);
     this.universityModel = new UniversityModel(db);
+    this.websocketService = websocketService;
   }
 
   async submitRecommendation(recommendationId: string, universityIds: string[]): Promise<{
@@ -236,9 +426,30 @@ export class UniversityIntegrationService {
       // Create bulk submissions
       const submissions = await this.submissionModel.createBulkSubmissions(recommendationId, universityIds);
       
+      // Send initial progress update
+      if (this.websocketService) {
+        await this.websocketService.broadcastBulkSubmissionProgress(recommendationId, {
+          completed: 0,
+          total: submissions.length,
+          message: 'Starting submission process...'
+        });
+      }
+      
       // Process each submission
-      for (const submission of submissions) {
+      for (let i = 0; i < submissions.length; i++) {
+        const submission = submissions[i];
         try {
+          // Send progress update
+          if (this.websocketService) {
+            const university = await this.universityModel.findById(submission.university_id);
+            await this.websocketService.broadcastBulkSubmissionProgress(recommendationId, {
+              completed: i,
+              total: submissions.length,
+              currentUniversity: university.name,
+              message: `Submitting to ${university.name}...`
+            });
+          }
+
           await this.processSubmission(submission.id);
           successful.push(submission);
         } catch (error) {
@@ -247,6 +458,15 @@ export class UniversityIntegrationService {
             error: error instanceof Error ? error.message : 'Unknown error'
           });
         }
+      }
+
+      // Send completion progress update
+      if (this.websocketService) {
+        await this.websocketService.broadcastBulkSubmissionProgress(recommendationId, {
+          completed: submissions.length,
+          total: submissions.length,
+          message: `Completed: ${successful.length} successful, ${failed.length} failed`
+        });
       }
 
       return { successful, failed };
@@ -268,6 +488,16 @@ export class UniversityIntegrationService {
     const university = await this.universityModel.findById(submission.university_id);
     const adapter = SubmissionAdapterFactory.createAdapter(university);
 
+    // Send status update: validation starting
+    await this.broadcastStatusUpdate({
+      submissionId,
+      status: 'pending',
+      universityName: university.name,
+      applicantName: submission.applicant_name || 'Unknown',
+      timestamp: new Date(),
+      progress: { current: 1, total: 3, message: 'Validating submission data...' }
+    });
+
     // Validate submission data
     const isValid = await adapter.validateSubmission({
       applicantName: submission.applicant_name,
@@ -280,8 +510,28 @@ export class UniversityIntegrationService {
       await this.submissionModel.updateStatus(submissionId, 'failed', {
         error_message: 'Submission validation failed'
       });
+      
+      await this.broadcastStatusUpdate({
+        submissionId,
+        status: 'failed',
+        universityName: university.name,
+        applicantName: submission.applicant_name || 'Unknown',
+        timestamp: new Date(),
+        errorMessage: 'Submission validation failed'
+      });
+      
       throw new AppError('Submission validation failed', 400);
     }
+
+    // Send status update: submission starting
+    await this.broadcastStatusUpdate({
+      submissionId,
+      status: 'pending',
+      universityName: university.name,
+      applicantName: submission.applicant_name || 'Unknown',
+      timestamp: new Date(),
+      progress: { current: 2, total: 3, message: `Submitting to ${university.name}...` }
+    });
 
     // Attempt submission
     const result = await adapter.submitRecommendation({
@@ -298,11 +548,37 @@ export class UniversityIntegrationService {
         external_reference: result.externalReference,
         submitted_at: new Date()
       });
+
+      await this.broadcastStatusUpdate({
+        submissionId,
+        status: 'submitted',
+        universityName: university.name,
+        applicantName: submission.applicant_name || 'Unknown',
+        timestamp: new Date(),
+        externalReference: result.externalReference,
+        progress: { current: 3, total: 3, message: 'Successfully submitted!' }
+      });
     } else {
       await this.submissionModel.updateStatus(submissionId, 'failed', {
         error_message: result.errorMessage
       });
+
+      await this.broadcastStatusUpdate({
+        submissionId,
+        status: 'failed',
+        universityName: university.name,
+        applicantName: submission.applicant_name || 'Unknown',
+        timestamp: new Date(),
+        errorMessage: result.errorMessage
+      });
+      
       throw new AppError(result.errorMessage || 'Submission failed', 500);
+    }
+  }
+
+  private async broadcastStatusUpdate(update: SubmissionStatusUpdate): Promise<void> {
+    if (this.websocketService) {
+      await this.websocketService.broadcastSubmissionUpdate(update);
     }
   }
 

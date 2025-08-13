@@ -3,6 +3,7 @@ import { Pool } from 'pg';
 import { UniversityIntegrationService } from '../services/universityIntegrationService';
 import { SubmissionQueueService } from '../services/submissionQueueService';
 import { SubmissionModel } from '../models/Submission';
+import { WebSocketService } from '../services/websocketService';
 import { AppError } from '../utils/AppError';
 import { AuthenticatedRequest } from '../types';
 
@@ -11,8 +12,8 @@ export class SubmissionController {
   private queueService: SubmissionQueueService;
   private submissionModel: SubmissionModel;
 
-  constructor(db: Pool) {
-    this.integrationService = new UniversityIntegrationService(db);
+  constructor(db: Pool, websocketService?: WebSocketService) {
+    this.integrationService = new UniversityIntegrationService(db, websocketService);
     this.queueService = new SubmissionQueueService(db);
     this.submissionModel = new SubmissionModel(db);
   }

@@ -1,13 +1,14 @@
 import { Router } from 'express';
 import { Pool } from 'pg';
 import { SubmissionController } from '../controllers/submissionController';
+import { WebSocketService } from '../services/websocketService';
 import { authenticate } from '../middleware/auth';
 import { body, param, query } from 'express-validator';
 import { validateRequest } from '../middleware/validation';
 
-export function createSubmissionRoutes(db: Pool): Router {
+export function createSubmissionRoutes(db: Pool, websocketService?: WebSocketService): Router {
   const router = Router();
-  const submissionController = new SubmissionController(db);
+  const submissionController = new SubmissionController(db, websocketService);
 
   // Submit recommendation to universities
   router.post(

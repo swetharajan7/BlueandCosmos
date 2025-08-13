@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
+import { createServer } from 'http';
 import { connectDatabase } from './config/database';
 import { connectRedis } from './config/redis';
 import authRoutes from './routes/auth';
@@ -13,12 +14,16 @@ import invitationRoutes from './routes/invitations';
 import recommenderRoutes from './routes/recommender';
 import aiRoutes from './routes/ai';
 import { createSubmissionRoutes } from './routes/submissions';
+import { createWebhookRoutes } from './routes/webhooks';
 import { createSubmissionQueueTable } from './services/submissionQueueService';
+import { createSubmissionConfirmationsTable } from './services/submissionConfirmationService';
+import { WebSocketService } from './services/websocketService';
 
 // Load environment variables
 dotenv.config();
 
 const app = express();
+const server = createServer(app);
 const PORT = process.env.PORT || 3001;
 
 // Security middleware
@@ -104,21 +109,33 @@ async function startServer() {
     const { db } = await connectDatabase();
     console.log('✅ Database connected successfully');
 
-    // Initialize submission queue table
+    // Initialize database tables
     await createSubmissionQueueTable(db);
     console.log('✅ Submission queue table initialized');
+    
+    await createSubmissionConfirmationsTable(db);
+    console.log('✅ Submission confirmations table initialized');
 
-    // Initialize submission routes with database connection
-    app.use('/api/submissions', createSubmissionRoutes(db));
+    // Initialize WebSocket service
+    const websocketService = new WebSocketService(server, db);
+    console.log('✅ WebSocket service initialized');
+
+    // Initialize submission routes with database connection and WebSocket service
+    app.use('/api/submissions', createSubmissionRoutes(db, websocketService));
+    
+    // Initialize webhook routes
+    app.use('/api/webhooks', createWebhookRoutes(db, websocketService));
 
     // Connect to Redis
     await connectRedis();
     console.log('✅ Redis connected successfully');
 
     // Start server
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`🚀 StellarRec Backend running on port ${PORT}`);
       console.log(`📊 Health check: http://localhost:${PORT}/health`);
+      console.log(`🔌 WebSocket server ready for connections`);
+      console.log(`👥 Connected users: ${websocketService.getConnectedUsersCount()}`);
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error);
