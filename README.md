@@ -236,18 +236,6 @@ npm run test:integration
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🆘 Support
-
-For support and questions:
-- Create an issue in the repository
-- Contact the development team
-- Check the documentation
-
-## 🔄 Version History
-
-- **v1.0.0** - Initial release with core functionality
-- Development environment setup complete
-- Basic project structure established
 
 ---
 
