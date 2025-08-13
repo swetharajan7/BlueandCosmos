@@ -409,6 +409,74 @@ class RecommenderService {
       throw new Error('Failed to submit recommendation');
     }
   }
+
+  /**
+   * Analyze content quality
+   */
+  async analyzeContentQuality(content: string, applicationId: string): Promise<any> {
+    try {
+      const response = await api.post('/recommender/content/analyze-quality', {
+        content,
+        applicationId
+      });
+      
+      if (response.data.success) {
+        return response.data.data;
+      } else {
+        throw new Error(response.data.error?.message || 'Failed to analyze content quality');
+      }
+    } catch (error: any) {
+      if (error.response?.data?.error?.message) {
+        throw new Error(error.response.data.error.message);
+      }
+      throw new Error('Failed to analyze content quality');
+    }
+  }
+
+  /**
+   * Validate content
+   */
+  async validateContent(content: string): Promise<any> {
+    try {
+      const response = await api.post('/recommender/content/validate', {
+        content
+      });
+      
+      if (response.data.success) {
+        return response.data.data;
+      } else {
+        throw new Error(response.data.error?.message || 'Failed to validate content');
+      }
+    } catch (error: any) {
+      if (error.response?.data?.error?.message) {
+        throw new Error(error.response.data.error.message);
+      }
+      throw new Error('Failed to validate content');
+    }
+  }
+
+  /**
+   * Auto-save recommendation
+   */
+  async autoSaveRecommendation(content: string, applicationId: string): Promise<any> {
+    try {
+      const response = await api.post('/recommender/recommendations/auto-save', {
+        content,
+        applicationId
+      });
+      
+      if (response.data.success) {
+        return response.data.data;
+      } else {
+        throw new Error(response.data.error?.message || 'Failed to auto-save recommendation');
+      }
+    } catch (error: any) {
+      if (error.response?.data?.error?.message) {
+        throw new Error(error.response.data.error.message);
+      }
+      throw new Error('Failed to auto-save recommendation');
+    }
+  }
 }
 
 export const recommenderService = new RecommenderService();

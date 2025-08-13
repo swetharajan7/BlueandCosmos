@@ -6,6 +6,7 @@ import { ApplicationModel } from '../models/Application';
 import { UserModel } from '../models/User';
 import { authService } from '../services/authService';
 import { emailService } from '../services/emailService';
+import { contentQualityService } from '../services/contentQualityService';
 import { AppError } from '../utils/AppError';
 import { AuthenticatedRequest, LoginRequest, AuthResponse } from '../types';
 
@@ -1127,4 +1128,217 @@ export class RecommenderController {
       });
     }
   }
+
+  /**
+   * Analyze content quality for recommendation
+   */
+  analyzeContentQuality = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+    try {
+      if (!req.user) {
+        throw new AppError('User not authenticated', 401);
+      }
+
+      const { content, applicationId } = req.body;
+
+      if (!content || !applicationId) {
+        throw new AppError('Content and application ID are required', 400);
+      }
+
+      const recommender = await this.recommenderModel.findByUserId(req.user.userId);
+      if (!recommender) {
+        throw new AppError('Recommender profile not found', 404);
+      }
+
+      // Verify recommender has access to this application
+      const applicationIds = await this.recommenderModel.getApplicationsForRecommender(recommender.id);
+      if (!applicationIds.includes(applicationId)) {
+        throw new AppError('Application not found or access denied', 404);
+      }
+
+      // Get application details for context
+      const application = await this.applicationModel.findById(applicationId);
+      const student = await this.userModel.findById(application.student_id);
+
+      const applicationData = {
+        applicantName: `${student!.first_name} ${student!.last_name}`,
+        programType: application.program_type,
+        relationshipType: recommender.relationship_type,
+        relationshipDuration: recommender.relationship_duration
+      };
+
+      const qualityScore = await contentQualityService.analyzeQuality(content, applicationData);
+
+      res.json({
+        success: true,
+        data: qualityScore,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      if (error instanceof AppError) {
+        res.status(error.statusCode).json({
+          success: false,
+          error: {
+            code: 'QUALITY_ANALYSIS_ERROR',
+            message: error.message
+          },
+          timestamp: new Date().toISOString()
+        });
+      } else {
+        console.error('Content quality analysis error:', error);
+        res.status(500).json({
+          success: false,
+          error: {
+            code: 'INTERNAL_ERROR',
+            message: 'Failed to analyze content quality'
+          },
+          timestamp: new Date().toISOString()
+        });
+      }
+    }
+  };
+
+  /**
+   * Validate content for university-agnostic language
+   */
+  validateContent = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+    try {
+      if (!req.user) {
+        throw new AppError('User not authenticated', 401);
+      }
+
+      const { content } = req.body;
+
+      if (!content) {
+        throw new AppError('Content is required', 400);
+      }
+
+      const validation = await contentQualityService.validateContent(content);
+
+      res.json({
+        success: true,
+        data: validation,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      if (error instanceof AppError) {
+        res.status(error.statusCode).json({
+          success: false,
+          error: {
+            code: 'CONTENT_VALIDATION_ERROR',
+            message: error.message
+          },
+          timestamp: new Date().toISOString()
+        });
+      } else {
+        console.error('Content validation error:', error);
+        res.status(500).json({
+          success: false,
+          error: {
+            code: 'INTERNAL_ERROR',
+            message: 'Failed to validate content'
+          },
+          timestamp: new Date().toISOString()
+        });
+      }
+    }
+  };
+
+  /**
+   * Auto-save recommendation with quality analysis
+   */
+  autoSaveRecommendation = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+    try {
+      if (!req.user) {
+        throw new AppError('User not authenticated', 401);
+      }
+
+      const { content, applicationId } = req.body;
+
+      if (!content || !applicationId) {
+        throw new AppError('Content and application ID are required', 400);
+      }
+
+      const recommender = await this.recommenderModel.findByUserId(req.user.userId);
+      if (!recommender) {
+        throw new AppError('Recommender profile not found', 404);
+      }
+
+      // Verify recommender has access to this application
+      const applicationIds = await this.recommenderModel.getApplicationsForRecommender(recommender.id);
+      if (!applicationIds.includes(applicationId)) {
+        throw new AppError('Application not found or access denied', 404);
+      }
+
+      // Check if recommendation exists
+      let recommendation = await this.recommenderModel.getRecommendationByApplicationId(applicationId);
+      
+      const wordCount = content.trim().split(/\s+/).filter((word: string) => word.length > 0).length;
+
+      if (recommendation) {
+        // Update existing recommendation
+        if (recommendation.status === 'submitted' || recommendation.status === 'delivered') {
+          throw new AppError('Cannot update submitted recommendation', 409);
+        }
+        
+        recommendation = await this.recommenderModel.updateRecommendation(recommendation.id, {
+          content: content.trim(),
+          word_count: wordCount
+        });
+      } else {
+        // Create new recommendation
+        recommendation = await this.recommenderModel.createRecommendation({
+          application_id: applicationId,
+          recommender_id: recommender.id,
+          content: content.trim(),
+          word_count: wordCount,
+          ai_assistance_used: false
+        });
+      }
+
+      // Get application data for quality analysis
+      const application = await this.applicationModel.findById(applicationId);
+      const student = await this.userModel.findById(application.student_id);
+
+      const applicationData = {
+        applicantName: `${student!.first_name} ${student!.last_name}`,
+        programType: application.program_type,
+        relationshipType: recommender.relationship_type,
+        relationshipDuration: recommender.relationship_duration
+      };
+
+      // Perform quality analysis
+      const qualityAnalysis = await contentQualityService.autoSaveWithQuality(content, applicationData);
+
+      res.json({
+        success: true,
+        data: {
+          recommendation,
+          ...qualityAnalysis
+        },
+        message: 'Recommendation auto-saved successfully',
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      if (error instanceof AppError) {
+        res.status(error.statusCode).json({
+          success: false,
+          error: {
+            code: error.statusCode === 409 ? 'RECOMMENDATION_SUBMITTED' : 'AUTO_SAVE_ERROR',
+            message: error.message
+          },
+          timestamp: new Date().toISOString()
+        });
+      } else {
+        console.error('Auto-save recommendation error:', error);
+        res.status(500).json({
+          success: false,
+          error: {
+            code: 'INTERNAL_ERROR',
+            message: 'Failed to auto-save recommendation'
+          },
+          timestamp: new Date().toISOString()
+        });
+      }
+    }
+  };
 }

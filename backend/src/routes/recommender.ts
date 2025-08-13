@@ -103,4 +103,25 @@ router.put('/recommendations/:recommendationId', authenticate, authorize('recomm
  */
 router.post('/recommendations/:recommendationId/submit', authenticate, authorize('recommender'), recommenderController.submitRecommendation);
 
+/**
+ * @route   POST /api/recommender/content/analyze-quality
+ * @desc    Analyze content quality for recommendation
+ * @access  Private (Recommender)
+ */
+router.post('/content/analyze-quality', authenticate, authorize('recommender'), recommenderController.analyzeContentQuality);
+
+/**
+ * @route   POST /api/recommender/content/validate
+ * @desc    Validate content for university-agnostic language
+ * @access  Private (Recommender)
+ */
+router.post('/content/validate', authenticate, authorize('recommender'), recommenderController.validateContent);
+
+/**
+ * @route   POST /api/recommender/recommendations/auto-save
+ * @desc    Auto-save recommendation with quality analysis
+ * @access  Private (Recommender)
+ */
+router.post('/recommendations/auto-save', authenticate, authorize('recommender'), recommenderController.autoSaveRecommendation);
+
 export default router;

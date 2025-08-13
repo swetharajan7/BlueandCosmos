@@ -4,31 +4,28 @@ import {
   Card,
   CardContent,
   Typography,
-  TextField,
   Button,
   Grid,
   Alert,
-  LinearProgress,
-  Chip,
   Paper,
-  Divider,
   IconButton,
   Tooltip,
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions
+  DialogActions,
+  Chip
 } from '@mui/material';
 import {
   Save as SaveIcon,
   Send as SendIcon,
   AutoAwesome as AutoAwesomeIcon,
   Visibility as VisibilityIcon,
-  VisibilityOff as VisibilityOffIcon,
-  Warning as WarningIcon,
-  CheckCircle as CheckCircleIcon
+  VisibilityOff as VisibilityOffIcon
 } from '@mui/icons-material';
 import AIWritingAssistant from './AIWritingAssistant';
+import RichTextEditor from './RichTextEditor';
+import { recommenderService } from '../../services/recommenderService';
 
 interface RecommendationWritingFormProps {
   applicationData: {
@@ -45,7 +42,6 @@ interface RecommendationWritingFormProps {
   onSubmit: (content: string) => Promise<void>;
 }
 
-const WORD_LIMIT = 1000;
 const MIN_WORDS = 200;
 
 const RecommendationWritingForm: React.FC<RecommendationWritingFormProps> = ({
@@ -61,46 +57,46 @@ const RecommendationWritingForm: React.FC<RecommendationWritingFormProps> = ({
   const [success, setSuccess] = useState<string | null>(null);
   const [showAI, setShowAI] = useState(true);
   const [submitDialogOpen, setSubmitDialogOpen] = useState(false);
-  const textFieldRef = useRef<HTMLTextAreaElement>(null);
 
-  // Calculate word count and progress
+  // Calculate word count and validation
   const wordCount = content.trim().split(/\s+/).filter(word => word.length > 0).length;
-  const wordProgress = Math.min((wordCount / WORD_LIMIT) * 100, 100);
-  const isOverLimit = wordCount > WORD_LIMIT;
   const isUnderMinimum = wordCount < MIN_WORDS;
 
-  // Auto-save functionality
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (content !== initialContent && content.trim().length > 0) {
-        handleAutoSave();
-      }
-    }, 5000); // Auto-save after 5 seconds of inactivity
-
-    return () => clearTimeout(timer);
-  }, [content]);
-
-  const handleAutoSave = async () => {
-    try {
-      await onSave(content);
-      setSuccess('Draft saved automatically');
-      setTimeout(() => setSuccess(null), 2000);
-    } catch (err: any) {
-      console.warn('Auto-save failed:', err.message);
-    }
-  };
-
-  const handleContentChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setContent(event.target.value);
+  const handleContentChange = (value: string) => {
+    setContent(value);
     if (error) setError(null);
     if (success) setSuccess(null);
   };
 
-  const handleInsertText = (text: string, position?: number) => {
-    const textarea = textFieldRef.current;
-    if (!textarea) return;
+  const handleAutoSave = async (content: string) => {
+    try {
+      await recommenderService.autoSaveRecommendation(content, applicationData.id);
+    } catch (err: any) {
+      console.warn('Auto-save failed:', err.message);
+      throw err;
+    }
+  };
 
-    const insertPosition = position !== undefined ? position : textarea.selectionStart;
+  const handleQualityAnalysis = async (content: string) => {
+    try {
+      return await recommenderService.analyzeContentQuality(content, applicationData.id);
+    } catch (err: any) {
+      console.warn('Quality analysis failed:', err.message);
+      throw err;
+    }
+  };
+
+  const handleContentValidation = async (content: string) => {
+    try {
+      return await recommenderService.validateContent(content);
+    } catch (err: any) {
+      console.warn('Content validation failed:', err.message);
+      throw err;
+    }
+  };
+
+  const handleInsertText = (text: string, position?: number) => {
+    const insertPosition = position !== undefined ? position : content.length;
     const newContent = 
       content.slice(0, insertPosition) + 
       (insertPosition > 0 && content[insertPosition - 1] !== ' ' ? ' ' : '') +
@@ -109,13 +105,6 @@ const RecommendationWritingForm: React.FC<RecommendationWritingFormProps> = ({
       content.slice(insertPosition);
 
     setContent(newContent);
-    
-    // Focus and set cursor position after insertion
-    setTimeout(() => {
-      textarea.focus();
-      const newPosition = insertPosition + text.length + 2;
-      textarea.setSelectionRange(newPosition, newPosition);
-    }, 0);
   };
 
   const handleSave = async () => {
@@ -134,11 +123,6 @@ const RecommendationWritingForm: React.FC<RecommendationWritingFormProps> = ({
   };
 
   const handleSubmit = async () => {
-    if (isOverLimit) {
-      setError(`Please reduce content to ${WORD_LIMIT} words or less`);
-      return;
-    }
-
     if (isUnderMinimum) {
       setError(`Please write at least ${MIN_WORDS} words for a comprehensive recommendation`);
       return;
@@ -156,18 +140,6 @@ const RecommendationWritingForm: React.FC<RecommendationWritingFormProps> = ({
     } finally {
       setSubmitting(false);
     }
-  };
-
-  const getWordCountColor = () => {
-    if (isOverLimit) return 'error';
-    if (wordCount > WORD_LIMIT * 0.9) return 'warning';
-    return 'primary';
-  };
-
-  const getWordCountIcon = () => {
-    if (isOverLimit) return <WarningIcon fontSize="small" />;
-    if (wordCount >= MIN_WORDS) return <CheckCircleIcon fontSize="small" />;
-    return null;
   };
 
   return (
@@ -227,62 +199,16 @@ const RecommendationWritingForm: React.FC<RecommendationWritingFormProps> = ({
                 </Grid>
               </Paper>
 
-              {/* Word Count and Progress */}
-              <Box mb={2}>
-                <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-                  <Box display="flex" alignItems="center" gap={1}>
-                    {getWordCountIcon()}
-                    <Typography variant="body2" color={getWordCountColor()}>
-                      {wordCount} / {WORD_LIMIT} words
-                    </Typography>
-                    {isUnderMinimum && (
-                      <Chip 
-                        size="small" 
-                        label={`${MIN_WORDS - wordCount} more needed`}
-                        color="warning"
-                        variant="outlined"
-                      />
-                    )}
-                  </Box>
-                  <Typography variant="body2" color="text.secondary">
-                    Auto-save enabled
-                  </Typography>
-                </Box>
-                <LinearProgress
-                  variant="determinate"
-                  value={wordProgress}
-                  color={getWordCountColor()}
-                  sx={{ height: 6, borderRadius: 3 }}
-                />
-              </Box>
-
-              {/* Writing Area */}
-              <TextField
-                inputRef={textFieldRef}
-                fullWidth
-                multiline
-                rows={20}
+              {/* Rich Text Editor with Quality Analysis */}
+              <RichTextEditor
                 value={content}
                 onChange={handleContentChange}
+                onAutoSave={handleAutoSave}
+                onQualityAnalysis={handleQualityAnalysis}
+                onContentValidation={handleContentValidation}
+                applicationData={applicationData}
                 placeholder="Begin writing your recommendation letter here. Use the AI assistant for suggestions and improvements..."
-                variant="outlined"
-                error={isOverLimit}
-                helperText={
-                  isOverLimit 
-                    ? `Please reduce by ${wordCount - WORD_LIMIT} words`
-                    : isUnderMinimum
-                    ? `Write at least ${MIN_WORDS - wordCount} more words for a comprehensive recommendation`
-                    : 'Write a detailed, specific recommendation that highlights the applicant\'s strengths'
-                }
-                sx={{
-                  '& .MuiInputBase-root': {
-                    fontSize: '1rem',
-                    lineHeight: 1.6,
-                  },
-                  '& .MuiInputBase-input': {
-                    resize: 'vertical',
-                  }
-                }}
+                disabled={submitting}
               />
 
               {/* Action Buttons */}
@@ -299,7 +225,7 @@ const RecommendationWritingForm: React.FC<RecommendationWritingFormProps> = ({
                 <Button
                   variant="contained"
                   onClick={() => setSubmitDialogOpen(true)}
-                  disabled={submitting || isOverLimit || isUnderMinimum || !content.trim()}
+                  disabled={submitting || isUnderMinimum || !content.trim()}
                   startIcon={<SendIcon />}
                   size="large"
                 >
@@ -360,7 +286,7 @@ const RecommendationWritingForm: React.FC<RecommendationWritingFormProps> = ({
             onClick={handleSubmit}
             variant="contained"
             disabled={submitting}
-            startIcon={submitting ? <LinearProgress /> : <SendIcon />}
+            startIcon={<SendIcon />}
           >
             {submitting ? 'Submitting...' : 'Submit'}
           </Button>
