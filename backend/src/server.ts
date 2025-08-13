@@ -12,6 +12,8 @@ import googleDocsRoutes from './routes/googleDocs';
 import invitationRoutes from './routes/invitations';
 import recommenderRoutes from './routes/recommender';
 import aiRoutes from './routes/ai';
+import { createSubmissionRoutes } from './routes/submissions';
+import { createSubmissionQueueTable } from './services/submissionQueueService';
 
 // Load environment variables
 dotenv.config();
@@ -73,6 +75,8 @@ app.use('/api/recommender', recommenderRoutes);
 // AI routes
 app.use('/api/ai', aiRoutes);
 
+// Submission routes will be initialized after database connection
+
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error(err.stack);
@@ -97,8 +101,15 @@ app.use('*', (req, res) => {
 async function startServer() {
   try {
     // Connect to database
-    await connectDatabase();
+    const { db } = await connectDatabase();
     console.log('✅ Database connected successfully');
+
+    // Initialize submission queue table
+    await createSubmissionQueueTable(db);
+    console.log('✅ Submission queue table initialized');
+
+    // Initialize submission routes with database connection
+    app.use('/api/submissions', createSubmissionRoutes(db));
 
     // Connect to Redis
     await connectRedis();

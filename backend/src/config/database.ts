@@ -27,7 +27,7 @@ pool.on('error', (err) => {
 });
 
 // Database connection function
-export const connectDatabase = async (): Promise<void> => {
+export const connectDatabase = async (): Promise<{ db: Pool }> => {
   try {
     const client = await pool.connect();
     console.log('✅ PostgreSQL connected successfully');
@@ -37,6 +37,7 @@ export const connectDatabase = async (): Promise<void> => {
     console.log('📅 Database time:', result.rows[0].now);
     
     client.release();
+    return { db: pool };
   } catch (error) {
     console.error('❌ Database connection failed:', error);
     throw error;
