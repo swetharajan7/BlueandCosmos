@@ -15,9 +15,14 @@ import recommenderRoutes from './routes/recommender';
 import aiRoutes from './routes/ai';
 import { createSubmissionRoutes } from './routes/submissions';
 import { createWebhookRoutes } from './routes/webhooks';
+import { createAdminRoutes } from './routes/admin';
 import { createSubmissionQueueTable } from './services/submissionQueueService';
 import { createSubmissionConfirmationsTable } from './services/submissionConfirmationService';
 import { WebSocketService } from './services/websocketService';
+import { SubmissionMonitoringService } from './services/submissionMonitoringService';
+import { EmailService } from './services/emailService';
+import { createNotificationTables } from './services/adminNotificationService';
+import { createErrorLogsTable } from './services/errorLoggingService';
 
 // Load environment variables
 dotenv.config();
@@ -116,15 +121,31 @@ async function startServer() {
     await createSubmissionConfirmationsTable(db);
     console.log('✅ Submission confirmations table initialized');
 
-    // Initialize WebSocket service
+    // Initialize monitoring tables
+    await createErrorLogsTable(db);
+    console.log('✅ Error logs table initialized');
+    
+    await createNotificationTables(db);
+    console.log('✅ Notification tables initialized');
+
+    // Initialize services
     const websocketService = new WebSocketService(server, db);
     console.log('✅ WebSocket service initialized');
 
-    // Initialize submission routes with database connection and WebSocket service
+    const emailService = new EmailService();
+    console.log('✅ Email service initialized');
+
+    const monitoringService = new SubmissionMonitoringService(db, emailService, websocketService);
+    console.log('✅ Monitoring service initialized');
+
+    // Initialize routes with database connection and services
     app.use('/api/submissions', createSubmissionRoutes(db, websocketService));
-    
-    // Initialize webhook routes
     app.use('/api/webhooks', createWebhookRoutes(db, websocketService));
+    app.use('/api/admin', createAdminRoutes(db, emailService, websocketService));
+
+    // Start monitoring system
+    await monitoringService.startMonitoring(1); // Check every minute
+    console.log('✅ Submission monitoring started');
 
     // Connect to Redis
     await connectRedis();
