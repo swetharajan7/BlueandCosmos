@@ -62,4 +62,15 @@ router.delete('/:id',
   applicationController.delete
 );
 
+/**
+ * @route   GET /api/applications/:id/status
+ * @desc    Get detailed application status with submission tracking
+ * @access  Private (Student - own applications only)
+ */
+router.get('/:id/status', 
+  authenticate, 
+  authorize('student'), 
+  applicationController.getApplicationStatus
+);
+
 export default router;

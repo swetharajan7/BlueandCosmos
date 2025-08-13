@@ -83,5 +83,11 @@ export const applicationService = {
   async validateUniversityIds(ids: string[]): Promise<{ valid: string[]; invalid: string[] }> {
     const response = await api.post<ApiResponse<{ valid: string[]; invalid: string[] }>>('/universities/validate', { ids });
     return response.data.data!;
+  },
+
+  // Get detailed application status with submission tracking
+  async getApplicationStatus(id: string): Promise<ApplicationStatusResponse> {
+    const response = await api.get<ApiResponse<ApplicationStatusResponse>>(`/applications/${id}/status`);
+    return response.data.data!;
   }
 };

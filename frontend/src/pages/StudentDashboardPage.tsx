@@ -60,6 +60,10 @@ const StudentDashboardPage: React.FC = () => {
     navigate(`/applications/${applicationId}`);
   };
 
+  const handleViewApplicationStatus = (applicationId: string) => {
+    navigate(`/applications/${applicationId}/status`);
+  };
+
   const handleCloseNotification = () => {
     setNotification(null);
   };
@@ -76,6 +80,7 @@ const StudentDashboardPage: React.FC = () => {
         onCreateApplication={handleCreateApplication}
         onEditProfile={handleEditProfile}
         onViewApplication={handleViewApplication}
+        onViewApplicationStatus={handleViewApplicationStatus}
         isLoading={isLoading}
       />
       

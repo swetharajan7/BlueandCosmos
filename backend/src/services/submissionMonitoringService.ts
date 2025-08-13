@@ -133,10 +133,11 @@ export class SubmissionMonitoringService {
       // Broadcast real-time updates via WebSocket
       if (this.websocketService) {
         const dashboard = await this.getDashboard();
-        this.websocketService.broadcast('admin_dashboard', {
-          type: 'dashboard_update',
-          data: dashboard,
-          timestamp: new Date().toISOString()
+        this.websocketService.broadcastSystemNotification({
+          type: 'info',
+          title: 'Dashboard Update',
+          message: 'Submission monitoring dashboard has been updated',
+          timestamp: new Date()
         });
       }
 

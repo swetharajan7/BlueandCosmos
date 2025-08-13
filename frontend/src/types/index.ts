@@ -232,8 +232,50 @@ export interface StatusIndicatorProps {
 
 export interface SubmissionStatus {
   university: University;
-  status: 'pending' | 'submitted' | 'confirmed' | 'failed';
+  status: 'pending' | 'submitted' | 'confirmed' | 'failed' | 'not_started';
   submitted_at?: string;
   confirmed_at?: string;
   error_message?: string;
+  retry_count?: number;
+  external_reference?: string;
+}
+
+export interface RecommendationWithStatus {
+  id: string;
+  application_id: string;
+  recommender_id: string;
+  content: string;
+  word_count: number;
+  status: 'draft' | 'submitted' | 'delivered';
+  ai_assistance_used: boolean;
+  created_at: string;
+  updated_at: string;
+  submitted_at?: string;
+  recommender_name: string;
+  recommender_title: string;
+  recommender_organization: string;
+  university_statuses: SubmissionStatus[];
+  overall_status: 'not_started' | 'in_progress' | 'completed' | 'partial_failure';
+}
+
+export interface TimelineEvent {
+  event_type: 'application_created' | 'recommendation_submitted' | 'submission_completed';
+  timestamp: string;
+  title: string;
+  description: string;
+  metadata?: any;
+}
+
+export interface ApplicationStatusResponse {
+  application: Application;
+  recommendations: RecommendationWithStatus[];
+  overall_status: 'draft' | 'pending' | 'in_progress' | 'completed' | 'partial_failure';
+  timeline: TimelineEvent[];
+  summary: {
+    total_universities: number;
+    total_recommendations: number;
+    completed_submissions: number;
+    pending_submissions: number;
+    failed_submissions: number;
+  };
 }

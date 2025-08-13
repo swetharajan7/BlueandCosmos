@@ -3,7 +3,7 @@ import { Pool } from 'pg';
 import { AdminController } from '../controllers/adminController';
 import { EmailService } from '../services/emailService';
 import { WebSocketService } from '../services/websocketService';
-import { authenticateToken, requireRole } from '../middleware/auth';
+import { authenticate, authorize } from '../middleware/auth';
 
 export function createAdminRoutes(
   db: Pool, 
@@ -14,8 +14,8 @@ export function createAdminRoutes(
   const adminController = new AdminController(db, emailService, websocketService);
 
   // Apply authentication and admin role requirement to all routes
-  router.use(authenticateToken);
-  router.use(requireRole('admin'));
+  router.use(authenticate);
+  router.use(authorize('admin'));
 
   // Dashboard and Monitoring
   router.get('/dashboard', adminController.getDashboard.bind(adminController));

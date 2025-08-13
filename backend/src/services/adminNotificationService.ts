@@ -140,7 +140,7 @@ export class AdminNotificationService {
 
     if (updates.enabled !== undefined) {
       updateFields.push(`enabled = $${paramIndex}`);
-      values.push(updates.enabled);
+      values.push(updates.enabled.toString());
       paramIndex++;
     }
 
@@ -158,7 +158,7 @@ export class AdminNotificationService {
 
     if (updates.cooldownMinutes !== undefined) {
       updateFields.push(`cooldown_minutes = $${paramIndex}`);
-      values.push(updates.cooldownMinutes);
+      values.push(updates.cooldownMinutes.toString());
       paramIndex++;
     }
 
@@ -585,14 +585,13 @@ export class AdminNotificationService {
         await this.emailService.sendEmail({
           to: recipient,
           subject: `[StellarRec Alert] ${event.title}`,
-          template: emailConfig.template,
-          data: {
-            title: event.title,
-            message: event.message,
-            severity: event.severity,
-            timestamp: new Date().toISOString(),
-            data: event.data
-          }
+          html: `
+            <h2>${event.title}</h2>
+            <p><strong>Severity:</strong> ${event.severity}</p>
+            <p><strong>Message:</strong> ${event.message}</p>
+            <p><strong>Time:</strong> ${new Date().toISOString()}</p>
+            ${event.data ? `<p><strong>Details:</strong> ${JSON.stringify(event.data, null, 2)}</p>` : ''}
+          `
         });
       }
     } catch (error) {
@@ -634,13 +633,11 @@ export class AdminNotificationService {
     event: any
   ): Promise<void> {
     try {
-      this.websocketService?.broadcast(websocketConfig.channel, {
-        type: 'admin_notification',
+      this.websocketService?.broadcastSystemNotification({
+        type: event.severity as 'info' | 'warning' | 'error' | 'success',
         title: event.title,
         message: event.message,
-        severity: event.severity,
-        timestamp: new Date().toISOString(),
-        data: event.data
+        timestamp: new Date()
       });
     } catch (error) {
       console.error('Failed to send WebSocket notification:', error);

@@ -15,6 +15,7 @@ import EmailVerificationPage from './pages/EmailVerificationPage';
 import StudentDashboardPage from './pages/StudentDashboardPage';
 import ProfilePage from './pages/ProfilePage';
 import CreateApplicationPage from './pages/CreateApplicationPage';
+import ApplicationStatusPage from './pages/ApplicationStatusPage';
 import RecommenderInvitationPage from './pages/RecommenderInvitationPage';
 import RecommenderLoginPage from './pages/RecommenderLoginPage';
 import RecommenderDashboardPage from './pages/RecommenderDashboardPage';
@@ -72,6 +73,12 @@ function App() {
           <Route path="/applications/create" element={
             <ProtectedRoute requiredRole="student" requireEmailVerification>
               <CreateApplicationPage />
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/applications/:id/status" element={
+            <ProtectedRoute requiredRole="student" requireEmailVerification>
+              <ApplicationStatusPage />
             </ProtectedRoute>
           } />
           

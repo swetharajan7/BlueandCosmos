@@ -36,6 +36,7 @@ interface StudentDashboardProps {
   onCreateApplication: () => void;
   onEditProfile: () => void;
   onViewApplication: (applicationId: string) => void;
+  onViewApplicationStatus: (applicationId: string) => void;
   isLoading?: boolean;
 }
 
@@ -45,6 +46,7 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({
   onCreateApplication,
   onEditProfile,
   onViewApplication,
+  onViewApplicationStatus,
   isLoading = false
 }) => {
   const getStatusColor = (status: string) => {
@@ -254,6 +256,17 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({
                               <Typography variant="body2" color="text.secondary">
                                 {application.universities.length} universities selected
                               </Typography>
+                              <Button
+                                size="small"
+                                variant="outlined"
+                                sx={{ mt: 1 }}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onViewApplicationStatus(application.id);
+                                }}
+                              >
+                                View Status
+                              </Button>
                             </Box>
                           }
                         />
