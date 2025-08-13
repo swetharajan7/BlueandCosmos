@@ -11,6 +11,7 @@ import universityRoutes from './routes/universities';
 import googleDocsRoutes from './routes/googleDocs';
 import invitationRoutes from './routes/invitations';
 import recommenderRoutes from './routes/recommender';
+import aiRoutes from './routes/ai';
 
 // Load environment variables
 dotenv.config();
@@ -68,6 +69,9 @@ app.use('/api', invitationRoutes);
 
 // Recommender routes
 app.use('/api/recommender', recommenderRoutes);
+
+// AI routes
+app.use('/api/ai', aiRoutes);
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
