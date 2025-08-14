@@ -9,6 +9,7 @@ import { emailService } from '../services/emailService';
 import { contentQualityService } from '../services/contentQualityService';
 import { AppError } from '../utils/AppError';
 import { AuthenticatedRequest, LoginRequest, AuthResponse } from '../types';
+import { getNotificationService } from '../services/notificationService';
 
 export class RecommenderController {
   private recommenderModel: RecommenderModel;
@@ -931,6 +932,38 @@ export class RecommenderController {
 
       // Submit recommendation
       const submittedRecommendation = await this.recommenderModel.submitRecommendation(recommendationId);
+
+      // Trigger notification for recommendation submission
+      try {
+        const application = await this.applicationModel.findById(recommendation.application_id);
+        const studentQuery = `
+          SELECT u.email, u.first_name || ' ' || u.last_name as full_name, u.id as user_id
+          FROM users u
+          WHERE u.id = $1
+        `;
+        const studentResult = await this.recommenderModel.db.query(studentQuery, [application.student_id]);
+        
+        if (studentResult.rows.length > 0) {
+          const student = studentResult.rows[0];
+          
+          const notificationService = getNotificationService();
+          await notificationService.handleNotification({
+            event: 'recommendation_submitted',
+            userId: student.user_id,
+            data: {
+              studentEmail: student.email,
+              studentName: student.full_name,
+              recommenderName: `${recommender.title} ${recommender.first_name} ${recommender.last_name}`,
+              universities: application.universities.map(u => u.name),
+              submittedAt: new Date().toISOString(),
+              studentId: student.user_id
+            }
+          });
+        }
+      } catch (error) {
+        console.error('Failed to send recommendation submission notification:', error);
+        // Don't fail the submission if notification fails
+      }
 
       // TODO: Integrate with university submission system
       // This would involve sending the recommendation to all selected universities

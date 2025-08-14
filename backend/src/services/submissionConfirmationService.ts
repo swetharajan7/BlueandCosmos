@@ -3,6 +3,7 @@ import { SubmissionModel } from '../models/Submission';
 import { EmailService } from './emailService';
 import { WebSocketService } from './websocketService';
 import { AppError } from '../utils/AppError';
+import { getNotificationService } from './notificationService';
 
 export interface ConfirmationReceipt {
   submissionId: string;
@@ -282,12 +283,46 @@ export class SubmissionConfirmationService {
   }
 
   private async sendConfirmationNotifications(receipt: ConfirmationReceipt): Promise<void> {
-    // Get submission details for notification
-    const submission = await this.submissionModel.findById(receipt.submissionId);
-    
-    // Here you could send immediate confirmation emails or notifications
-    // For now, we'll rely on the summary email sent later
-    console.log(`Confirmation notification queued for submission ${receipt.submissionId}`);
+    try {
+      // Get submission details for notification
+      const submission = await this.submissionModel.findById(receipt.submissionId);
+      
+      if (submission) {
+        // Get student details
+        const studentQuery = `
+          SELECT u.email, u.first_name || ' ' || u.last_name as full_name, u.id as user_id
+          FROM users u
+          JOIN applications app ON u.id = app.student_id
+          JOIN recommendations r ON app.id = r.application_id
+          WHERE r.id = $1
+        `;
+        const studentResult = await this.db.query(studentQuery, [submission.recommendation_id]);
+        
+        if (studentResult.rows.length > 0) {
+          const student = studentResult.rows[0];
+          
+          // Trigger notification
+          const notificationService = getNotificationService();
+          await notificationService.handleNotification({
+            event: 'submission_confirmed',
+            userId: student.user_id,
+            data: {
+              studentEmail: student.email,
+              studentName: student.full_name,
+              universityName: receipt.universityName,
+              confirmedAt: receipt.confirmedAt.toISOString(),
+              externalReference: receipt.externalReference,
+              studentId: student.user_id
+            }
+          });
+        }
+      }
+      
+      console.log(`Confirmation notification sent for submission ${receipt.submissionId}`);
+    } catch (error) {
+      console.error('Failed to send confirmation notification:', error);
+      // Don't fail the confirmation process if notification fails
+    }
   }
 
   private async findSubmissionByExternalReference(externalReference: string): Promise<any> {

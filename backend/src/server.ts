@@ -16,12 +16,15 @@ import aiRoutes from './routes/ai';
 import { createSubmissionRoutes } from './routes/submissions';
 import { createWebhookRoutes } from './routes/webhooks';
 import { createAdminRoutes } from './routes/admin';
+import emailRoutes from './routes/email';
 import { createSubmissionQueueTable } from './services/submissionQueueService';
 import { createSubmissionConfirmationsTable } from './services/submissionConfirmationService';
 import { WebSocketService } from './services/websocketService';
 import { SubmissionMonitoringService } from './services/submissionMonitoringService';
-import { EmailService } from './services/emailService';
+import { initializeEmailService } from './services/emailService';
+import { initializeNotificationService } from './services/notificationService';
 import { createNotificationTables } from './services/adminNotificationService';
+import { initializeCronJobService } from './services/cronJobService';
 import { createErrorLogsTable } from './services/errorLoggingService';
 
 // Load environment variables
@@ -85,6 +88,8 @@ app.use('/api/recommender', recommenderRoutes);
 // AI routes
 app.use('/api/ai', aiRoutes);
 
+// Email routes will be initialized after database connection
+
 // Submission routes will be initialized after database connection
 
 // Error handling middleware
@@ -132,13 +137,21 @@ async function startServer() {
     const websocketService = new WebSocketService(server, db);
     console.log('✅ WebSocket service initialized');
 
-    const emailService = new EmailService();
+    const emailService = initializeEmailService(db);
     console.log('✅ Email service initialized');
+
+    const notificationService = initializeNotificationService(db);
+    console.log('✅ Notification service initialized');
+
+    const cronJobService = initializeCronJobService(db);
+    cronJobService.start();
+    console.log('✅ Cron job service initialized');
 
     const monitoringService = new SubmissionMonitoringService(db, emailService, websocketService);
     console.log('✅ Monitoring service initialized');
 
     // Initialize routes with database connection and services
+    app.use('/api/email', emailRoutes);
     app.use('/api/submissions', createSubmissionRoutes(db, websocketService));
     app.use('/api/webhooks', createWebhookRoutes(db, websocketService));
     app.use('/api/admin', createAdminRoutes(db, emailService, websocketService));

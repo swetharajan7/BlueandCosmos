@@ -5,6 +5,7 @@ import { SubmissionModel } from '../models/Submission';
 import { db } from '../config/database';
 import { AppError } from '../utils/AppError';
 import { AuthenticatedRequest } from '../types';
+import { getNotificationService } from '../services/notificationService';
 
 const applicationModel = new ApplicationModel(db);
 const universityModel = new UniversityModel(db);
@@ -155,6 +156,19 @@ export const applicationController = {
       const { legal_name, program_type, application_term, university_ids, status } = req.body;
       const student_id = req.user!.userId;
 
+      // Get current application for status comparison
+      const currentApplication = await applicationModel.findById(id);
+      if (!currentApplication) {
+        return res.status(404).json({
+          success: false,
+          error: {
+            code: 'NOT_FOUND',
+            message: 'Application not found'
+          },
+          timestamp: new Date().toISOString()
+        });
+      }
+
       // Verify ownership
       const isOwner = await applicationModel.validateOwnership(id, student_id);
       if (!isOwner) {
@@ -191,6 +205,26 @@ export const applicationController = {
         university_ids,
         status
       });
+
+      // Trigger notification if status changed
+      if (status && status !== currentApplication.status) {
+        try {
+          const notificationService = getNotificationService();
+          await notificationService.handleNotification({
+            event: 'application_status_changed',
+            userId: student_id,
+            data: {
+              applicationId: id,
+              oldStatus: currentApplication.status,
+              newStatus: status,
+              studentId: student_id
+            }
+          });
+        } catch (error) {
+          console.error('Failed to send status change notification:', error);
+          // Don't fail the entire update if notification fails
+        }
+      }
 
       // Update Google Doc with new application data
       try {

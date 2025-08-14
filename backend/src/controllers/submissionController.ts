@@ -6,6 +6,7 @@ import { SubmissionModel } from '../models/Submission';
 import { WebSocketService } from '../services/websocketService';
 import { AppError } from '../utils/AppError';
 import { AuthenticatedRequest } from '../types';
+import { getNotificationService } from '../services/notificationService';
 
 export class SubmissionController {
   private integrationService: UniversityIntegrationService;

@@ -5,6 +5,7 @@ import { UniversityModel } from '../models/University';
 import { AppError } from '../utils/AppError';
 import { EmailService } from './emailService';
 import { WebSocketService, SubmissionStatusUpdate } from './websocketService';
+import { getNotificationService } from './notificationService';
 import axios from 'axios';
 
 // Abstract base class for university submission adapters
@@ -571,6 +572,39 @@ export class UniversityIntegrationService {
         timestamp: new Date(),
         errorMessage: result.errorMessage
       });
+
+      // Trigger failure notification
+      try {
+        const studentQuery = `
+          SELECT u.email, u.first_name || ' ' || u.last_name as full_name, u.id as user_id
+          FROM users u
+          JOIN applications app ON u.id = app.student_id
+          JOIN recommendations r ON app.id = r.application_id
+          WHERE r.id = $1
+        `;
+        const studentResult = await this.db.query(studentQuery, [submission.recommendation_id]);
+        
+        if (studentResult.rows.length > 0) {
+          const student = studentResult.rows[0];
+          
+          const notificationService = getNotificationService();
+          await notificationService.handleNotification({
+            event: 'submission_failed',
+            userId: student.user_id,
+            data: {
+              studentEmail: student.email,
+              studentName: student.full_name,
+              universityName: university.name,
+              errorMessage: result.errorMessage || 'Submission failed',
+              nextRetryAt: 'Soon', // Could be calculated based on retry schedule
+              studentId: student.user_id
+            }
+          });
+        }
+      } catch (error) {
+        console.error('Failed to send failure notification:', error);
+        // Don't fail the submission process if notification fails
+      }
       
       throw new AppError(result.errorMessage || 'Submission failed', 500);
     }

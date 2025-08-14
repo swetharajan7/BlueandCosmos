@@ -4,6 +4,7 @@ import { ApplicationModel } from '../models/Application';
 import { emailService } from './emailService';
 import { AppError } from '../utils/AppError';
 import { Recommender, Application } from '../types';
+import { getNotificationService } from './notificationService';
 
 export class InvitationService {
   private recommenderModel: RecommenderModel;
@@ -41,6 +42,28 @@ export class InvitationService {
         studentName,
         customMessage
       );
+
+      // Trigger notification
+      try {
+        const notificationService = getNotificationService();
+        await notificationService.handleNotification({
+          event: 'invitation_sent',
+          userId: application.student_id,
+          data: {
+            recommenderEmail: recommenderEmail,
+            recommenderName: 'Recommender', // Will be updated when they confirm
+            studentName,
+            universities: application.universities.map(u => u.name),
+            programType: application.program_type,
+            applicationTerm: application.application_term,
+            invitationUrl: `${process.env.FRONTEND_URL}/recommender/invitation/${invitation_token}`,
+            studentId: application.student_id
+          }
+        });
+      } catch (error) {
+        console.error('Failed to send invitation notification:', error);
+        // Don't fail the invitation if notification fails
+      }
 
       return { recommender, invitation_token };
     } catch (error) {
