@@ -32,6 +32,7 @@ import { createWebhookRoutes } from './routes/webhooks';
 import { createAdminRoutes } from './routes/admin';
 import { createConfirmationRoutes } from './routes/confirmation';
 import emailRoutes from './routes/email';
+import complianceRoutes from './routes/compliance';
 import { createSubmissionQueueTable } from './services/submissionQueueService';
 import { createSubmissionConfirmationsTable } from './services/submissionConfirmationService';
 import { WebSocketService } from './services/websocketService';
@@ -41,6 +42,8 @@ import { initializeNotificationService } from './services/notificationService';
 import { createNotificationTables } from './services/adminNotificationService';
 import { initializeCronJobService } from './services/cronJobService';
 import { createErrorLogsTable } from './services/errorLoggingService';
+import { EncryptionService } from './services/encryptionService';
+import { DataRetentionService } from './services/dataRetentionService';
 
 // Function to initialize confirmation system tables
 async function initializeConfirmationSystemTables(db: any) {
@@ -53,6 +56,21 @@ async function initializeConfirmationSystemTables(db: any) {
     await db.query(sql);
   } catch (error) {
     console.error('Error initializing confirmation system tables:', error);
+    throw error;
+  }
+}
+
+// Function to initialize compliance system tables
+async function initializeComplianceSystemTables(db: any) {
+  const fs = require('fs');
+  const path = require('path');
+  
+  try {
+    const sqlPath = path.join(__dirname, '../../database/add_compliance_tables.sql');
+    const sql = fs.readFileSync(sqlPath, 'utf8');
+    await db.query(sql);
+  } catch (error) {
+    console.error('Error initializing compliance system tables:', error);
     throw error;
   }
 }
@@ -173,6 +191,10 @@ async function startServer() {
     const { db } = await connectDatabase();
     console.log('✅ Database connected successfully');
 
+    // Initialize encryption service
+    EncryptionService.initialize();
+    console.log('✅ Encryption service initialized');
+
     // Initialize database tables
     await createSubmissionQueueTable(db);
     console.log('✅ Submission queue table initialized');
@@ -183,6 +205,15 @@ async function startServer() {
     // Initialize confirmation system tables
     await initializeConfirmationSystemTables(db);
     console.log('✅ Confirmation system tables initialized');
+
+    // Initialize compliance system tables
+    await initializeComplianceSystemTables(db);
+    console.log('✅ Compliance system tables initialized');
+
+    // Initialize data retention policies
+    const retentionService = new DataRetentionService(db);
+    await retentionService.initializeRetentionPolicies();
+    console.log('✅ Data retention policies initialized');
 
     // Initialize monitoring tables
     await createErrorLogsTable(db);
@@ -214,6 +245,7 @@ async function startServer() {
     app.use('/api/webhooks', createWebhookRoutes(db, websocketService));
     app.use('/api/admin', createAdminRoutes(db, emailService, websocketService));
     app.use('/api/confirmation', createConfirmationRoutes(db, websocketService));
+    app.use('/api/compliance', complianceRoutes);
 
     // Start monitoring system
     await monitoringService.startMonitoring(1); // Check every minute
