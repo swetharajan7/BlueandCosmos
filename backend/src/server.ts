@@ -33,6 +33,7 @@ import { createAdminRoutes } from './routes/admin';
 import { createConfirmationRoutes } from './routes/confirmation';
 import emailRoutes from './routes/email';
 import complianceRoutes from './routes/compliance';
+import contentQualityRoutes from './routes/contentQuality';
 import { createSubmissionQueueTable } from './services/submissionQueueService';
 import { createSubmissionConfirmationsTable } from './services/submissionConfirmationService';
 import { WebSocketService } from './services/websocketService';
@@ -246,6 +247,7 @@ async function startServer() {
     app.use('/api/admin', createAdminRoutes(db, emailService, websocketService));
     app.use('/api/confirmation', createConfirmationRoutes(db, websocketService));
     app.use('/api/compliance', complianceRoutes);
+    app.use('/api/content-quality', contentQualityRoutes);
 
     // Start monitoring system
     await monitoringService.startMonitoring(1); // Check every minute
