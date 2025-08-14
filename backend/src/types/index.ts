@@ -153,8 +153,17 @@ export interface JwtPayload {
   userId: string;
   email: string;
   role: string;
+  first_name?: string;
+  last_name?: string;
   iat: number;
   exp: number;
+}
+
+// Extended JWT Payload with user details
+export interface ExtendedJwtPayload extends JwtPayload {
+  id: string;
+  first_name: string;
+  last_name: string;
 }
 
 // Request with authenticated user

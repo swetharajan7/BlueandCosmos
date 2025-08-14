@@ -16,6 +16,7 @@ import aiRoutes from './routes/ai';
 import { createSubmissionRoutes } from './routes/submissions';
 import { createWebhookRoutes } from './routes/webhooks';
 import { createAdminRoutes } from './routes/admin';
+import { createConfirmationRoutes } from './routes/confirmation';
 import emailRoutes from './routes/email';
 import { createSubmissionQueueTable } from './services/submissionQueueService';
 import { createSubmissionConfirmationsTable } from './services/submissionConfirmationService';
@@ -26,6 +27,21 @@ import { initializeNotificationService } from './services/notificationService';
 import { createNotificationTables } from './services/adminNotificationService';
 import { initializeCronJobService } from './services/cronJobService';
 import { createErrorLogsTable } from './services/errorLoggingService';
+
+// Function to initialize confirmation system tables
+async function initializeConfirmationSystemTables(db: any) {
+  const fs = require('fs');
+  const path = require('path');
+  
+  try {
+    const sqlPath = path.join(__dirname, '../../database/add_confirmation_system_tables.sql');
+    const sql = fs.readFileSync(sqlPath, 'utf8');
+    await db.query(sql);
+  } catch (error) {
+    console.error('Error initializing confirmation system tables:', error);
+    throw error;
+  }
+}
 
 // Load environment variables
 dotenv.config();
@@ -126,6 +142,10 @@ async function startServer() {
     await createSubmissionConfirmationsTable(db);
     console.log('✅ Submission confirmations table initialized');
 
+    // Initialize confirmation system tables
+    await initializeConfirmationSystemTables(db);
+    console.log('✅ Confirmation system tables initialized');
+
     // Initialize monitoring tables
     await createErrorLogsTable(db);
     console.log('✅ Error logs table initialized');
@@ -155,6 +175,7 @@ async function startServer() {
     app.use('/api/submissions', createSubmissionRoutes(db, websocketService));
     app.use('/api/webhooks', createWebhookRoutes(db, websocketService));
     app.use('/api/admin', createAdminRoutes(db, emailService, websocketService));
+    app.use('/api/confirmation', createConfirmationRoutes(db, websocketService));
 
     // Start monitoring system
     await monitoringService.startMonitoring(1); // Check every minute
