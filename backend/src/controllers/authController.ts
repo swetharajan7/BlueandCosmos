@@ -40,7 +40,7 @@ export class AuthController {
       const user = await this.userModel.create(userData);
 
       // Generate tokens
-      const { accessToken, refreshToken } = authService.generateTokens(user);
+      const { accessToken, refreshToken } = await authService.generateTokens(user);
 
       // Generate email verification token
       const verificationToken = authService.generateEmailVerificationToken(user.id, user.email);
@@ -143,7 +143,7 @@ export class AuthController {
       const { password_hash, ...userWithoutPassword } = user;
 
       // Generate tokens
-      const { accessToken, refreshToken } = authService.generateTokens(userWithoutPassword);
+      const { accessToken, refreshToken } = await authService.generateTokens(userWithoutPassword);
 
       const response: AuthResponse = {
         user: userWithoutPassword,
@@ -190,7 +190,7 @@ export class AuthController {
       }
 
       // Verify refresh token
-      const { userId } = authService.verifyRefreshToken(refreshToken);
+      const { userId } = await authService.verifyRefreshToken(refreshToken);
 
       // Get user
       const user = await this.userModel.findById(userId);
@@ -207,7 +207,7 @@ export class AuthController {
       }
 
       // Generate new tokens
-      const { accessToken, refreshToken: newRefreshToken } = authService.generateTokens(user);
+      const { accessToken, refreshToken: newRefreshToken } = await authService.generateTokens(user);
 
       res.status(200).json({
         success: true,

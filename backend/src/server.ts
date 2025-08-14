@@ -3,6 +3,20 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
+import {
+  enforceHTTPS,
+  securityHeaders,
+  generalRateLimit,
+  authRateLimit,
+  aiRateLimit,
+  speedLimiter,
+  sanitizeInput,
+  sqlInjectionValidation,
+  xssValidation,
+  handleValidationErrors,
+  ddosProtection,
+  requestSizeLimit
+} from './middleware/security';
 import { createServer } from 'http';
 import { connectDatabase } from './config/database';
 import { connectRedis } from './config/redis';
@@ -50,24 +64,48 @@ const app = express();
 const server = createServer(app);
 const PORT = process.env.PORT || 3001;
 
-// Security middleware
-app.use(helmet());
+// Trust proxy for accurate IP addresses
+app.set('trust proxy', 1);
+
+// HTTPS enforcement (production only)
+app.use(enforceHTTPS);
+
+// Comprehensive security headers
+app.use(securityHeaders);
+
+// CORS configuration
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Session-ID', 'X-Requested-With'],
+  exposedHeaders: ['X-Session-ID']
 }));
 
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.'
-});
-app.use(limiter);
+// DDoS protection
+app.use(ddosProtection);
 
-// Body parsing middleware
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true }));
+// Request size limiting
+app.use(requestSizeLimit);
+
+// Speed limiting for suspicious activity
+app.use(speedLimiter);
+
+// General rate limiting
+app.use(generalRateLimit);
+
+// Body parsing middleware with size limits
+app.use(express.json({ 
+  limit: '10mb',
+  verify: (req, res, buf) => {
+    // Store raw body for webhook verification if needed
+    (req as any).rawBody = buf;
+  }
+}));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Input sanitization
+app.use(sanitizeInput);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -83,8 +121,8 @@ app.get('/api', (req, res) => {
   res.json({ message: 'StellarRec™ API is running' });
 });
 
-// Authentication routes
-app.use('/api/auth', authRoutes);
+// Authentication routes with strict rate limiting
+app.use('/api/auth', authRateLimit, sqlInjectionValidation, xssValidation, handleValidationErrors, authRoutes);
 
 // Application routes
 app.use('/api/applications', applicationRoutes);
@@ -101,8 +139,8 @@ app.use('/api', invitationRoutes);
 // Recommender routes
 app.use('/api/recommender', recommenderRoutes);
 
-// AI routes
-app.use('/api/ai', aiRoutes);
+// AI routes with restrictive rate limiting
+app.use('/api/ai', aiRateLimit, sqlInjectionValidation, xssValidation, handleValidationErrors, aiRoutes);
 
 // Email routes will be initialized after database connection
 

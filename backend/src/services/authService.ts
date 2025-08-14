@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
-import { User, JwtPayload, AuthResponse } from '../types';
+import { User, JwtPayload } from '../types';
 import { AppError } from '../utils/AppError';
+import { redisClient } from '../config/redis';
 
 export class AuthService {
   private jwtSecret: string;
@@ -38,29 +39,36 @@ export class AuthService {
   }
 
   /**
-   * Generate refresh token
+   * Generate refresh token and store in Redis
    */
-  generateRefreshToken(userId: string): string {
+  async generateRefreshToken(userId: string): Promise<string> {
+    const tokenId = uuidv4();
     const payload = {
       userId,
-      tokenId: uuidv4(),
+      tokenId,
       type: 'refresh'
     };
 
-    return jwt.sign(payload, this.jwtRefreshSecret, {
+    const token = jwt.sign(payload, this.jwtRefreshSecret, {
       expiresIn: this.jwtRefreshExpiresIn,
       issuer: 'stellarrec',
       audience: 'stellarrec-users'
     });
+
+    // Store refresh token in Redis with expiration
+    const expirationSeconds = 7 * 24 * 60 * 60; // 7 days
+    await redisClient.setEx(`refresh_token:${tokenId}`, expirationSeconds, userId);
+
+    return token;
   }
 
   /**
    * Generate both access and refresh tokens
    */
-  generateTokens(user: Omit<User, 'password_hash'>): { accessToken: string; refreshToken: string } {
+  async generateTokens(user: Omit<User, 'password_hash'>): Promise<{ accessToken: string; refreshToken: string }> {
     return {
       accessToken: this.generateAccessToken(user),
-      refreshToken: this.generateRefreshToken(user.id)
+      refreshToken: await this.generateRefreshToken(user.id)
     };
   }
 
@@ -87,9 +95,9 @@ export class AuthService {
   }
 
   /**
-   * Verify refresh token
+   * Verify refresh token and check Redis blacklist
    */
-  verifyRefreshToken(token: string): { userId: string; tokenId: string } {
+  async verifyRefreshToken(token: string): Promise<{ userId: string; tokenId: string }> {
     try {
       const decoded = jwt.verify(token, this.jwtRefreshSecret, {
         issuer: 'stellarrec',
@@ -98,6 +106,12 @@ export class AuthService {
 
       if (decoded.type !== 'refresh') {
         throw new AppError('Invalid token type', 401);
+      }
+
+      // Check if token exists in Redis (not revoked)
+      const storedUserId = await redisClient.get(`refresh_token:${decoded.tokenId}`);
+      if (!storedUserId || storedUserId !== decoded.userId) {
+        throw new AppError('Refresh token revoked or invalid', 401);
       }
 
       return {
@@ -225,6 +239,142 @@ export class AuthService {
         throw new AppError('Email verification token verification failed', 401);
       }
     }
+  }
+
+  /**
+   * Revoke refresh token
+   */
+  async revokeRefreshToken(tokenId: string): Promise<void> {
+    await redisClient.del(`refresh_token:${tokenId}`);
+  }
+
+  /**
+   * Revoke all refresh tokens for a user
+   */
+  async revokeAllUserTokens(userId: string): Promise<void> {
+    const keys = await redisClient.keys('refresh_token:*');
+    const pipeline = redisClient.multi();
+    
+    for (const key of keys) {
+      const storedUserId = await redisClient.get(key);
+      if (storedUserId === userId) {
+        pipeline.del(key);
+      }
+    }
+    
+    await pipeline.exec();
+  }
+
+  /**
+   * Blacklist access token (for logout)
+   */
+  async blacklistAccessToken(token: string): Promise<void> {
+    try {
+      const decoded = jwt.decode(token) as any;
+      if (decoded && decoded.exp) {
+        const expirationTime = decoded.exp - Math.floor(Date.now() / 1000);
+        if (expirationTime > 0) {
+          await redisClient.setEx(`blacklist:${token}`, expirationTime, 'true');
+        }
+      }
+    } catch (error) {
+      // Token is invalid, no need to blacklist
+    }
+  }
+
+  /**
+   * Check if access token is blacklisted
+   */
+  async isTokenBlacklisted(token: string): Promise<boolean> {
+    const result = await redisClient.get(`blacklist:${token}`);
+    return result === 'true';
+  }
+
+  /**
+   * Create secure session
+   */
+  async createSession(userId: string, userAgent?: string, ipAddress?: string): Promise<string> {
+    const sessionId = uuidv4();
+    const sessionData = {
+      userId,
+      userAgent: userAgent || 'unknown',
+      ipAddress: ipAddress || 'unknown',
+      createdAt: new Date().toISOString(),
+      lastActivity: new Date().toISOString()
+    };
+
+    // Store session for 7 days
+    await redisClient.setEx(`session:${sessionId}`, 7 * 24 * 60 * 60, JSON.stringify(sessionData));
+    
+    return sessionId;
+  }
+
+  /**
+   * Validate session
+   */
+  async validateSession(sessionId: string, ipAddress?: string): Promise<any> {
+    const sessionData = await redisClient.get(`session:${sessionId}`);
+    
+    if (!sessionData) {
+      throw new AppError('Session not found or expired', 401);
+    }
+
+    const session = JSON.parse(sessionData);
+    
+    // Optional: Check IP address consistency
+    if (ipAddress && session.ipAddress !== ipAddress && process.env.NODE_ENV === 'production') {
+      throw new AppError('Session IP mismatch', 401);
+    }
+
+    // Update last activity
+    session.lastActivity = new Date().toISOString();
+    await redisClient.setEx(`session:${sessionId}`, 7 * 24 * 60 * 60, JSON.stringify(session));
+
+    return session;
+  }
+
+  /**
+   * Destroy session
+   */
+  async destroySession(sessionId: string): Promise<void> {
+    await redisClient.del(`session:${sessionId}`);
+  }
+
+  /**
+   * Get all user sessions
+   */
+  async getUserSessions(userId: string): Promise<any[]> {
+    const keys = await redisClient.keys('session:*');
+    const sessions = [];
+
+    for (const key of keys) {
+      const sessionData = await redisClient.get(key);
+      if (sessionData) {
+        const session = JSON.parse(sessionData);
+        if (session.userId === userId) {
+          sessions.push({
+            sessionId: key.replace('session:', ''),
+            ...session
+          });
+        }
+      }
+    }
+
+    return sessions;
+  }
+
+  /**
+   * Destroy all user sessions
+   */
+  async destroyAllUserSessions(userId: string): Promise<void> {
+    const sessions = await this.getUserSessions(userId);
+    const pipeline = redisClient.multi();
+
+    for (const session of sessions) {
+      pipeline.del(`session:${session.sessionId}`);
+    }
+
+    await pipeline.exec();
   }
 }
 

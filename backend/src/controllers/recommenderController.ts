@@ -90,7 +90,7 @@ export class RecommenderController {
       const { password_hash, ...userWithoutPassword } = user;
 
       // Generate tokens
-      const { accessToken, refreshToken } = authService.generateTokens(userWithoutPassword);
+      const { accessToken, refreshToken } = await authService.generateTokens(userWithoutPassword);
 
       const response: AuthResponse = {
         user: userWithoutPassword,

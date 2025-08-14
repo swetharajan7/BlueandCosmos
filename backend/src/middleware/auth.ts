@@ -15,11 +15,18 @@ declare global {
 }
 
 /**
- * Authentication middleware - verifies JWT token
+ * Authentication middleware - verifies JWT token with enhanced security
  */
 export const authenticate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const token = authService.extractTokenFromHeader(req.headers.authorization);
+    
+    // Check if token is blacklisted
+    const isBlacklisted = await authService.isTokenBlacklisted(token);
+    if (isBlacklisted) {
+      throw new AppError('Token has been revoked', 401);
+    }
+    
     const decoded = authService.verifyAccessToken(token);
     
     // Verify user still exists and is active
@@ -28,6 +35,14 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
     
     if (!user) {
       throw new AppError('User no longer exists', 401);
+    }
+
+    // Validate session if session ID is provided
+    const sessionId = req.headers['x-session-id'] as string;
+    if (sessionId) {
+      const clientIp = req.ip || req.connection.remoteAddress;
+      await authService.validateSession(sessionId, clientIp);
+      (req as any).sessionId = sessionId;
     }
 
     // Attach user info to request
@@ -171,5 +186,65 @@ export const requireEmailVerification = async (req: Request, res: Response, next
       },
       timestamp: new Date().toISOString()
     });
+  }
+};
+
+/**
+ * Middleware to require secure session
+ */
+export const requireSecureSession = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const sessionId = req.headers['x-session-id'] as string;
+    
+    if (!sessionId) {
+      res.status(401).json({
+        success: false,
+        error: {
+          code: 'SESSION_REQUIRED',
+          message: 'Secure session required'
+        },
+        timestamp: new Date().toISOString()
+      });
+      return;
+    }
+
+    const clientIp = req.ip || req.connection.remoteAddress;
+    const session = await authService.validateSession(sessionId, clientIp);
+    
+    // Ensure session belongs to authenticated user
+    if (req.user && session.userId !== req.user.userId) {
+      res.status(403).json({
+        success: false,
+        error: {
+          code: 'SESSION_MISMATCH',
+          message: 'Session does not match authenticated user'
+        },
+        timestamp: new Date().toISOString()
+      });
+      return;
+    }
+
+    (req as any).sessionId = sessionId;
+    next();
+  } catch (error) {
+    if (error instanceof AppError) {
+      res.status(error.statusCode).json({
+        success: false,
+        error: {
+          code: 'SESSION_ERROR',
+          message: error.message
+        },
+        timestamp: new Date().toISOString()
+      });
+    } else {
+      res.status(401).json({
+        success: false,
+        error: {
+          code: 'SESSION_ERROR',
+          message: 'Session validation failed'
+        },
+        timestamp: new Date().toISOString()
+      });
+    }
   }
 };
