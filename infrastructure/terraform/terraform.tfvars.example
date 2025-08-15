@@ -1,0 +1,28 @@
+# Example Terraform Variables File
+# Copy this file to terraform.tfvars and update with your values
+
+# AWS Configuration
+aws_region = "us-east-1"
+environment = "production"
+project_name = "stellarrec"
+
+# Domain Configuration
+domain_name = "stellarrec.com"
+
+# CloudFlare Configuration
+cloudflare_api_token = "your-cloudflare-api-token"
+cloudflare_zone_id = "your-cloudflare-zone-id"
+
+# Database Configuration
+db_username = "stellarrec_admin"
+db_password = "your-secure-database-password"
+
+# EC2 Configuration
+instance_type = "t3.medium"
+min_size = 2
+max_size = 10
+desired_capacity = 3
+
+# Redis Configuration
+redis_node_type = "cache.t3.micro"
+redis_num_cache_nodes = 2
