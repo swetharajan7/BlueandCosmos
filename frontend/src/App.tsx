@@ -21,6 +21,8 @@ import RecommenderLoginPage from './pages/RecommenderLoginPage';
 import RecommenderDashboardPage from './pages/RecommenderDashboardPage';
 import RecommenderProfilePage from './pages/RecommenderProfilePage';
 import RecommendationWritingPage from './pages/RecommendationWritingPage';
+import { AdminDashboardPage } from './pages/AdminDashboardPage';
+import SupportPage from './pages/SupportPage';
 
 // Common components
 import ProtectedRoute from './components/common/ProtectedRoute';
@@ -98,6 +100,20 @@ function App() {
           <Route path="/recommender/applications/:applicationId/write" element={
             <ProtectedRoute requiredRole="recommender">
               <RecommendationWritingPage />
+            </ProtectedRoute>
+          } />
+          
+          {/* Admin routes */}
+          <Route path="/admin" element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminDashboardPage />
+            </ProtectedRoute>
+          } />
+          
+          {/* Support routes */}
+          <Route path="/support" element={
+            <ProtectedRoute requireEmailVerification>
+              <SupportPage />
             </ProtectedRoute>
           } />
           

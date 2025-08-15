@@ -50,9 +50,10 @@ import {
   Assignment,
   Update
 } from '@mui/icons-material';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+// Using standard HTML datetime-local input for now
+// import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+// import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 interface MaintenanceWindow {
   id: string;
@@ -321,8 +322,7 @@ const MaintenanceManagement: React.FC = () => {
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Box sx={{ p: 3 }}>
+    <Box sx={{ p: 3 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
           <Typography variant="h4">Maintenance Management</Typography>
           <Box>
@@ -513,19 +513,29 @@ const MaintenanceManagement: React.FC = () => {
 
               <Grid container spacing={2} sx={{ mt: 1 }}>
                 <Grid item xs={6}>
-                  <DateTimePicker
+                  <TextField
+                    fullWidth
                     label="Scheduled Start"
-                    value={maintenanceForm.scheduledStart}
-                    onChange={(date) => date && setMaintenanceForm({ ...maintenanceForm, scheduledStart: date })}
-                    renderInput={(params) => <TextField {...params} fullWidth />}
+                    type="datetime-local"
+                    value={maintenanceForm.scheduledStart.toISOString().slice(0, 16)}
+                    onChange={(e) => setMaintenanceForm({ 
+                      ...maintenanceForm, 
+                      scheduledStart: new Date(e.target.value) 
+                    })}
+                    InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
                 <Grid item xs={6}>
-                  <DateTimePicker
+                  <TextField
+                    fullWidth
                     label="Scheduled End"
-                    value={maintenanceForm.scheduledEnd}
-                    onChange={(date) => date && setMaintenanceForm({ ...maintenanceForm, scheduledEnd: date })}
-                    renderInput={(params) => <TextField {...params} fullWidth />}
+                    type="datetime-local"
+                    value={maintenanceForm.scheduledEnd.toISOString().slice(0, 16)}
+                    onChange={(e) => setMaintenanceForm({ 
+                      ...maintenanceForm, 
+                      scheduledEnd: new Date(e.target.value) 
+                    })}
+                    InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
               </Grid>
@@ -693,8 +703,7 @@ const MaintenanceManagement: React.FC = () => {
           </DialogActions>
         </Dialog>
       </Box>
-    </LocalizationProvider>
-  );
+    );
 };
 
 export default MaintenanceManagement;

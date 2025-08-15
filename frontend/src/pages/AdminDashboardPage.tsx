@@ -19,6 +19,8 @@ import { SystemConfiguration } from '../components/admin/SystemConfiguration';
 import { BackupManagement } from '../components/admin/BackupManagement';
 import { AnalyticsDashboard } from '../components/admin/AnalyticsDashboard';
 import { SystemHealth } from '../components/admin/SystemHealth';
+import LaunchMonitoringDashboard from '../components/admin/LaunchMonitoringDashboard';
+import MaintenanceManagement from '../components/admin/MaintenanceManagement';
 import { adminService } from '../services/adminService';
 
 interface TabPanelProps {
@@ -170,8 +172,10 @@ export const AdminDashboardPage: React.FC = () => {
             <Tab label="Applications" {...a11yProps(2)} />
             <Tab label="Analytics" {...a11yProps(3)} />
             <Tab label="System Health" {...a11yProps(4)} />
-            <Tab label="Configuration" {...a11yProps(5)} />
-            <Tab label="Backups" {...a11yProps(6)} />
+            <Tab label="Launch Management" {...a11yProps(5)} />
+            <Tab label="Maintenance" {...a11yProps(6)} />
+            <Tab label="Configuration" {...a11yProps(7)} />
+            <Tab label="Backups" {...a11yProps(8)} />
           </Tabs>
         </Box>
 
@@ -196,10 +200,18 @@ export const AdminDashboardPage: React.FC = () => {
         </TabPanel>
 
         <TabPanel value={currentTab} index={5}>
-          <SystemConfiguration />
+          <LaunchMonitoringDashboard />
         </TabPanel>
 
         <TabPanel value={currentTab} index={6}>
+          <MaintenanceManagement />
+        </TabPanel>
+
+        <TabPanel value={currentTab} index={7}>
+          <SystemConfiguration />
+        </TabPanel>
+
+        <TabPanel value={currentTab} index={8}>
           <BackupManagement />
         </TabPanel>
       </Paper>

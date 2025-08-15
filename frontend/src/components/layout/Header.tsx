@@ -17,7 +17,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store/store';
 import { logoutUser } from '../../store/authSlice';
-import { Person, Settings, ExitToApp, Verified } from '@mui/icons-material';
+import { Person, Settings, ExitToApp, Verified, AdminPanelSettings, Support } from '@mui/icons-material';
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -47,6 +47,16 @@ const Header: React.FC = () => {
   const handleDashboard = () => {
     handleMenuClose();
     navigate('/dashboard');
+  };
+
+  const handleAdmin = () => {
+    handleMenuClose();
+    navigate('/admin');
+  };
+
+  const handleSupport = () => {
+    handleMenuClose();
+    navigate('/support');
   };
 
   return (
@@ -132,6 +142,22 @@ const Header: React.FC = () => {
                 </ListItemIcon>
                 <ListItemText>Profile Settings</ListItemText>
               </MenuItem>
+
+              <MenuItem onClick={handleSupport}>
+                <ListItemIcon>
+                  <Support fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Support</ListItemText>
+              </MenuItem>
+              
+              {user.role === 'admin' && (
+                <MenuItem onClick={handleAdmin}>
+                  <ListItemIcon>
+                    <AdminPanelSettings fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>Admin Dashboard</ListItemText>
+                </MenuItem>
+              )}
               
               <Divider />
               
