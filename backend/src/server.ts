@@ -15,6 +15,7 @@ import { metricsService } from './services/metricsService';
 import { monitoringInitializationService } from './services/monitoringInitializationService';
 import { setupMonitoring } from './middleware/monitoring';
 import monitoringRoutes from './routes/monitoring';
+import launchRoutes from './routes/launch';
 import {
   enforceHTTPS,
   securityHeaders,
@@ -306,6 +307,7 @@ async function startServer() {
     app.use('/api/confirmation', createConfirmationRoutes(db, websocketService));
     app.use('/api/compliance', complianceRoutes);
     app.use('/api/content-quality', contentQualityRoutes);
+    app.use('/api/launch', launchRoutes);
 
     // Start monitoring system
     await monitoringService.startMonitoring(1); // Check every minute
