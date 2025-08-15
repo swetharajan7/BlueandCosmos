@@ -42,6 +42,7 @@ import aiRoutes from './routes/ai';
 import { createSubmissionRoutes } from './routes/submissions';
 import { createWebhookRoutes } from './routes/webhooks';
 import { createAdminRoutes } from './routes/admin';
+import adminDashboardRoutes from './routes/adminDashboard';
 import { createConfirmationRoutes } from './routes/confirmation';
 import emailRoutes from './routes/email';
 import complianceRoutes from './routes/compliance';
@@ -99,6 +100,21 @@ async function initializeMonitoringTables(db: any) {
     await db.query(sql);
   } catch (error) {
     console.error('Error initializing monitoring tables:', error);
+    throw error;
+  }
+}
+
+// Function to initialize admin panel tables
+async function initializeAdminPanelTables(db: any) {
+  const fs = require('fs');
+  const path = require('path');
+  
+  try {
+    const sqlPath = path.join(__dirname, '../../database/add_admin_panel_tables.sql');
+    const sql = fs.readFileSync(sqlPath, 'utf8');
+    await db.query(sql);
+  } catch (error) {
+    console.error('Error initializing admin panel tables:', error);
     throw error;
   }
 }
@@ -248,6 +264,10 @@ async function startServer() {
     await initializeMonitoringTables(db);
     console.log('✅ Monitoring and observability tables initialized');
 
+    // Initialize admin panel tables
+    await initializeAdminPanelTables(db);
+    console.log('✅ Admin panel tables initialized');
+
     // Initialize data retention policies
     const retentionService = new DataRetentionService(db);
     await retentionService.initializeRetentionPolicies();
@@ -282,6 +302,7 @@ async function startServer() {
     app.use('/api/submissions', createSubmissionRoutes(db, websocketService));
     app.use('/api/webhooks', createWebhookRoutes(db, websocketService));
     app.use('/api/admin', createAdminRoutes(db, emailService, websocketService));
+    app.use('/api/admin-dashboard', adminDashboardRoutes);
     app.use('/api/confirmation', createConfirmationRoutes(db, websocketService));
     app.use('/api/compliance', complianceRoutes);
     app.use('/api/content-quality', contentQualityRoutes);
