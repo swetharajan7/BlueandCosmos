@@ -116,22 +116,42 @@ const LaunchMonitoringDashboard: React.FC = () => {
 
   const handleSubmitFeedback = async () => {
     try {
+      // Client-side validation
+      if (feedbackForm.rating < 1 || feedbackForm.rating > 5) {
+        alert('Rating must be between 1 and 5');
+        return;
+      }
+      
+      if (feedbackForm.comments.trim().length < 10 || feedbackForm.comments.trim().length > 1000) {
+        alert('Comments must be between 10 and 1000 characters');
+        return;
+      }
+
       const response = await fetch('/api/launch/feedback', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'X-Requested-With': 'XMLHttpRequest' // CSRF protection
         },
-        body: JSON.stringify(feedbackForm)
+        body: JSON.stringify({
+          ...feedbackForm,
+          comments: feedbackForm.comments.trim()
+        })
       });
 
+      const result = await response.json();
+      
       if (response.ok) {
         setFeedbackDialogOpen(false);
         setFeedbackForm({ rating: 5, comments: '', category: 'feature' });
         loadDashboardData(); // Refresh data
+      } else {
+        alert(result.message || 'Failed to submit feedback');
       }
     } catch (error) {
       console.error('Failed to submit feedback:', error);
+      alert('Failed to submit feedback. Please try again.');
     }
   };
 

@@ -131,6 +131,25 @@ class LaunchManagementService {
 
   async submitUserFeedback(feedback: Omit<UserFeedback, 'timestamp' | 'resolved'>): Promise<void> {
     try {
+      // Additional server-side validation
+      if (!feedback.userId || typeof feedback.userId !== 'string') {
+        throw new AppError('Invalid user ID', 400);
+      }
+      
+      if (!Number.isInteger(feedback.rating) || feedback.rating < 1 || feedback.rating > 5) {
+        throw new AppError('Invalid rating', 400);
+      }
+      
+      if (!feedback.comments || typeof feedback.comments !== 'string' || 
+          feedback.comments.length < 10 || feedback.comments.length > 1000) {
+        throw new AppError('Invalid comments', 400);
+      }
+      
+      const validCategories = ['bug', 'feature', 'usability', 'performance'];
+      if (!validCategories.includes(feedback.category)) {
+        throw new AppError('Invalid category', 400);
+      }
+
       const newFeedback: UserFeedback = {
         ...feedback,
         timestamp: new Date(),
