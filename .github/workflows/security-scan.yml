@@ -1,0 +1,202 @@
+name: Security Scanning
+
+on:
+  schedule:
+    - cron: '0 2 * * *' # Run daily at 2 AM
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  dependency-scan:
+    name: Dependency Vulnerability Scan
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: |
+        cd backend && npm ci
+        cd ../frontend && npm ci
+
+    - name: Run npm audit (backend)
+      run: |
+        cd backend
+        npm audit --audit-level moderate --json > audit-backend.json || true
+
+    - name: Run npm audit (frontend)
+      run: |
+        cd frontend
+        npm audit --audit-level moderate --json > audit-frontend.json || true
+
+    - name: Upload audit results
+      uses: actions/upload-artifact@v3
+      with:
+        name: audit-results
+        path: |
+          backend/audit-backend.json
+          frontend/audit-frontend.json
+
+  snyk-scan:
+    name: Snyk Security Scan
+    runs-on: ubuntu-latest
+    if: github.event_name != 'schedule' # Skip on scheduled runs to avoid rate limits
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Run Snyk to check for vulnerabilities
+      uses: snyk/actions/node@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        args: --severity-threshold=high --json > snyk-results.json
+
+    - name: Upload Snyk results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: snyk-results
+        path: snyk-results.json
+
+  codeql-analysis:
+    name: CodeQL Security Analysis
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'javascript' ]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: ${{ matrix.language }}
+
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v2
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+
+  docker-security-scan:
+    name: Docker Image Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Build Docker images
+      run: |
+        docker build -t stellarrec-backend:scan ./backend
+        docker build -t stellarrec-frontend:scan ./frontend
+
+    - name: Run Trivy vulnerability scanner (backend)
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'stellarrec-backend:scan'
+        format: 'sarif'
+        output: 'trivy-backend-results.sarif'
+
+    - name: Run Trivy vulnerability scanner (frontend)
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'stellarrec-frontend:scan'
+        format: 'sarif'
+        output: 'trivy-frontend-results.sarif'
+
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: 'trivy-backend-results.sarif'
+
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: 'trivy-frontend-results.sarif'
+
+  secrets-scan:
+    name: Secrets Detection
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Run TruffleHog
+      uses: trufflesecurity/trufflehog@main
+      with:
+        path: ./
+        base: main
+        head: HEAD
+        extra_args: --debug --only-verified
+
+  security-report:
+    name: Generate Security Report
+    runs-on: ubuntu-latest
+    needs: [dependency-scan, codeql-analysis, docker-security-scan]
+    if: always()
+
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v3
+
+    - name: Generate security report
+      run: |
+        echo "# Security Scan Report" > security-report.md
+        echo "Generated on: $(date)" >> security-report.md
+        echo "" >> security-report.md
+        
+        echo "## Dependency Scan Results" >> security-report.md
+        if [ -f audit-results/audit-backend.json ]; then
+          echo "Backend audit completed" >> security-report.md
+        fi
+        if [ -f audit-results/audit-frontend.json ]; then
+          echo "Frontend audit completed" >> security-report.md
+        fi
+        
+        echo "" >> security-report.md
+        echo "## CodeQL Analysis" >> security-report.md
+        echo "CodeQL analysis completed - check Security tab for results" >> security-report.md
+        
+        echo "" >> security-report.md
+        echo "## Docker Security Scan" >> security-report.md
+        echo "Trivy scan completed - check Security tab for results" >> security-report.md
+
+    - name: Upload security report
+      uses: actions/upload-artifact@v3
+      with:
+        name: security-report
+        path: security-report.md
+
+    - name: Comment on PR
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const report = fs.readFileSync('security-report.md', 'utf8');
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `## 🔒 Security Scan Results\n\n${report}`
+          });

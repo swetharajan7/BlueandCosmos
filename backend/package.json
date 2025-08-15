@@ -16,7 +16,13 @@
     "test:security": "jest --selectProjects security",
     "test:coverage": "jest --coverage",
     "test:comprehensive": "ts-node src/tests/test-runner.ts",
-    "test:ci": "jest --ci --coverage --watchAll=false"
+    "test:ci": "jest --ci --coverage --watchAll=false",
+    "migrate": "ts-node src/migrations/cli.ts migrate",
+    "migrate:rollback": "ts-node src/migrations/cli.ts rollback",
+    "migrate:rollback-one": "ts-node src/migrations/cli.ts rollback-one",
+    "migrate:status": "ts-node src/migrations/cli.ts status",
+    "migrate:create": "ts-node src/migrations/cli.ts create",
+    "migrate:test": "NODE_ENV=test ts-node src/migrations/cli.ts migrate"
   },
   "dependencies": {
     "@google-cloud/storage": "^7.16.0",

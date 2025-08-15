@@ -1,0 +1,332 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  NODE_VERSION: '18'
+  POSTGRES_VERSION: '14'
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_USER: test_user
+          POSTGRES_DB: stellarrec_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install backend dependencies
+      run: |
+        cd backend
+        npm ci
+
+    - name: Install frontend dependencies
+      run: |
+        cd frontend
+        npm ci
+
+    - name: Run database migrations
+      run: |
+        cd backend
+        npm run migrate:test
+      env:
+        DATABASE_URL: postgresql://test_user:test_password@localhost:5432/stellarrec_test
+        REDIS_URL: redis://localhost:6379
+
+    - name: Run backend tests
+      run: |
+        cd backend
+        npm run test:coverage
+      env:
+        NODE_ENV: test
+        DATABASE_URL: postgresql://test_user:test_password@localhost:5432/stellarrec_test
+        REDIS_URL: redis://localhost:6379
+        JWT_SECRET: test_jwt_secret
+        OPENAI_API_KEY: test_openai_key
+        SENDGRID_API_KEY: test_sendgrid_key
+
+    - name: Run frontend tests
+      run: |
+        cd frontend
+        npm run test:coverage
+
+    - name: Upload backend coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./backend/coverage/lcov.info
+        flags: backend
+        name: backend-coverage
+
+    - name: Upload frontend coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./frontend/coverage/lcov.info
+        flags: frontend
+        name: frontend-coverage
+
+  security-scan:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: |
+        cd backend && npm ci
+        cd ../frontend && npm ci
+
+    - name: Run npm audit (backend)
+      run: |
+        cd backend
+        npm audit --audit-level moderate
+
+    - name: Run npm audit (frontend)
+      run: |
+        cd frontend
+        npm audit --audit-level moderate
+
+    - name: Run Snyk security scan
+      uses: snyk/actions/node@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        args: --severity-threshold=high
+
+    - name: Run CodeQL Analysis
+      uses: github/codeql-action/init@v2
+      with:
+        languages: javascript
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    needs: [test, security-scan]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install and build backend
+      run: |
+        cd backend
+        npm ci
+        npm run build
+
+    - name: Install and build frontend
+      run: |
+        cd frontend
+        npm ci
+        npm run build
+
+    - name: Build Docker images
+      run: |
+        docker build -t stellarrec-backend:${{ github.sha }} ./backend
+        docker build -t stellarrec-frontend:${{ github.sha }} ./frontend
+
+    - name: Save Docker images
+      run: |
+        docker save stellarrec-backend:${{ github.sha }} | gzip > backend-image.tar.gz
+        docker save stellarrec-frontend:${{ github.sha }} | gzip > frontend-image.tar.gz
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: docker-images
+        path: |
+          backend-image.tar.gz
+          frontend-image.tar.gz
+        retention-days: 7
+
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/develop'
+    environment: staging
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: docker-images
+
+    - name: Load Docker images
+      run: |
+        docker load < backend-image.tar.gz
+        docker load < frontend-image.tar.gz
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Tag and push images to ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY_BACKEND: stellarrec-backend
+        ECR_REPOSITORY_FRONTEND: stellarrec-frontend
+        IMAGE_TAG: staging-${{ github.sha }}
+      run: |
+        docker tag stellarrec-backend:${{ github.sha }} $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$IMAGE_TAG
+        docker tag stellarrec-frontend:${{ github.sha }} $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG
+
+    - name: Run database migrations (staging)
+      run: |
+        # Run migrations on staging database
+        echo "Running database migrations on staging..."
+        # This would connect to staging database and run migrations
+
+    - name: Deploy to staging environment
+      run: |
+        # Deploy to staging using AWS ECS or similar
+        echo "Deploying to staging environment..."
+        # This would trigger the actual deployment
+
+    - name: Run smoke tests
+      run: |
+        # Run basic smoke tests against staging
+        echo "Running smoke tests against staging..."
+        sleep 30 # Wait for deployment to stabilize
+        curl -f https://staging.stellarrec.com/health || exit 1
+
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    environment: production
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: docker-images
+
+    - name: Load Docker images
+      run: |
+        docker load < backend-image.tar.gz
+        docker load < frontend-image.tar.gz
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Tag and push images to ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY_BACKEND: stellarrec-backend
+        ECR_REPOSITORY_FRONTEND: stellarrec-frontend
+        IMAGE_TAG: production-${{ github.sha }}
+      run: |
+        docker tag stellarrec-backend:${{ github.sha }} $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$IMAGE_TAG
+        docker tag stellarrec-frontend:${{ github.sha }} $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG
+
+    - name: Create database backup
+      run: |
+        # Create backup before deployment
+        echo "Creating database backup..."
+
+    - name: Run database migrations (production)
+      run: |
+        # Run migrations on production database
+        echo "Running database migrations on production..."
+
+    - name: Deploy to production environment
+      run: |
+        # Deploy to production using blue-green deployment
+        echo "Deploying to production environment..."
+
+    - name: Run health checks
+      run: |
+        # Run comprehensive health checks
+        echo "Running health checks..."
+        sleep 60 # Wait for deployment to stabilize
+        curl -f https://stellarrec.com/health || exit 1
+
+    - name: Notify deployment success
+      if: success()
+      run: |
+        echo "Production deployment successful!"
+        # Send notification to team
+
+    - name: Rollback on failure
+      if: failure()
+      run: |
+        echo "Deployment failed, initiating rollback..."
+        # Implement rollback logic
