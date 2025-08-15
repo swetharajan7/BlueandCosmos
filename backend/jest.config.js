@@ -6,6 +6,23 @@ module.exports = {
   transform: {
     '^.+\\.ts$': 'ts-jest',
   },
+  globals: {
+    'ts-jest': {
+      useESM: false,
+      tsconfig: {
+        compilerOptions: {
+          module: 'commonjs',
+          target: 'es2018',
+          lib: ['es2018'],
+          moduleResolution: 'node',
+          allowSyntheticDefaultImports: true,
+          esModuleInterop: true,
+          skipLibCheck: true,
+          strict: true
+        }
+      }
+    }
+  },
   transformIgnorePatterns: [
     'node_modules/(?!(axios)/)'
   ],
@@ -60,6 +77,31 @@ module.exports = {
       displayName: 'security',
       testMatch: ['<rootDir>/src/tests/security*.test.ts'],
       testTimeout: 90000
+    },
+    {
+      displayName: 'system-load',
+      testMatch: ['<rootDir>/src/tests/load-testing.test.ts'],
+      testTimeout: 120000
+    },
+    {
+      displayName: 'system-security',
+      testMatch: ['<rootDir>/src/tests/penetration-testing.test.ts'],
+      testTimeout: 90000
+    },
+    {
+      displayName: 'system-usability',
+      testMatch: ['<rootDir>/src/tests/usability-testing.test.ts'],
+      testTimeout: 60000
+    },
+    {
+      displayName: 'system-compatibility',
+      testMatch: ['<rootDir>/src/tests/compatibility-testing.test.ts'],
+      testTimeout: 60000
+    },
+    {
+      displayName: 'system-disaster-recovery',
+      testMatch: ['<rootDir>/src/tests/disaster-recovery-testing.test.ts'],
+      testTimeout: 120000
     }
   ]
 };
