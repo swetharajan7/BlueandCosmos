@@ -248,3 +248,7 @@ export const requireSecureSession = async (req: Request, res: Response, next: Ne
     }
   }
 };
+
+// Aliases for backward compatibility
+export const authenticateToken = authenticate;
+export const requireRole = (roles: string[]) => authorize(...roles);
