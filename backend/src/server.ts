@@ -1,8 +1,20 @@
+// Initialize New Relic first (must be first import)
+if (process.env.NODE_ENV === 'production' && process.env.NEW_RELIC_LICENSE_KEY) {
+  require('newrelic');
+}
+
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
+import { sentryService } from './config/sentry';
+import { cloudWatchLogger } from './config/cloudwatch';
+import { uptimeMonitoringService } from './services/uptimeMonitoringService';
+import { metricsService } from './services/metricsService';
+import { monitoringInitializationService } from './services/monitoringInitializationService';
+import { setupMonitoring } from './middleware/monitoring';
+import monitoringRoutes from './routes/monitoring';
 import {
   enforceHTTPS,
   securityHeaders,
@@ -76,6 +88,21 @@ async function initializeComplianceSystemTables(db: any) {
   }
 }
 
+// Function to initialize monitoring and observability tables
+async function initializeMonitoringTables(db: any) {
+  const fs = require('fs');
+  const path = require('path');
+  
+  try {
+    const sqlPath = path.join(__dirname, '../../database/add_monitoring_observability_tables.sql');
+    const sql = fs.readFileSync(sqlPath, 'utf8');
+    await db.query(sql);
+  } catch (error) {
+    console.error('Error initializing monitoring tables:', error);
+    throw error;
+  }
+}
+
 // Load environment variables
 dotenv.config();
 
@@ -126,6 +153,9 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Input sanitization
 app.use(sanitizeInput);
 
+// Set up monitoring middleware
+app.use(setupMonitoring());
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({
@@ -160,6 +190,9 @@ app.use('/api/recommender', recommenderRoutes);
 
 // AI routes with restrictive rate limiting
 app.use('/api/ai', aiRateLimit, sqlInjectionValidation, xssValidation, handleValidationErrors, aiRoutes);
+
+// Monitoring routes
+app.use('/api/monitoring', monitoringRoutes);
 
 // Email routes will be initialized after database connection
 
@@ -211,6 +244,10 @@ async function startServer() {
     await initializeComplianceSystemTables(db);
     console.log('✅ Compliance system tables initialized');
 
+    // Initialize monitoring and observability tables
+    await initializeMonitoringTables(db);
+    console.log('✅ Monitoring and observability tables initialized');
+
     // Initialize data retention policies
     const retentionService = new DataRetentionService(db);
     await retentionService.initializeRetentionPolicies();
@@ -252,6 +289,10 @@ async function startServer() {
     // Start monitoring system
     await monitoringService.startMonitoring(1); // Check every minute
     console.log('✅ Submission monitoring started');
+
+    // Initialize comprehensive monitoring and observability
+    await monitoringInitializationService.initialize(app);
+    console.log('✅ Monitoring and observability system initialized');
 
     // Connect to Redis
     await connectRedis();

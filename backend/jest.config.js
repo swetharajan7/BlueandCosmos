@@ -44,7 +44,7 @@ module.exports = {
     },
     {
       displayName: 'integration',
-      testMatch: ['<rootDir>/src/tests/*integration*.test.ts']
+      testMatch: ['<rootDir>/src/tests/*integration*.test.ts', '<rootDir>/src/tests/monitoring-observability.test.ts']
     },
     {
       displayName: 'e2e',
