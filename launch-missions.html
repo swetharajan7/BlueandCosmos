@@ -2467,6 +2467,401 @@
       100% { transform: scale(1); opacity: 1; }
     }
 
+    /* Comprehensive Media & Live Stream Styles */
+    .live-stream-section {
+      margin-bottom: 2em;
+      padding: 1.5em;
+      background: linear-gradient(135deg, rgba(255, 68, 68, 0.1), rgba(255, 68, 68, 0.05));
+      border-radius: 12px;
+      border: 2px solid rgba(255, 68, 68, 0.2);
+    }
+
+    .live-stream-section h3 {
+      color: var(--launch-live);
+      margin-bottom: 1em;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+
+    .stream-container {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 1em;
+    }
+
+    .stream-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: white;
+      text-align: center;
+      background: linear-gradient(135deg, #1a1a1a, #333);
+    }
+
+    .stream-icon {
+      font-size: 4em;
+      margin-bottom: 0.5em;
+      opacity: 0.7;
+    }
+
+    .stream-placeholder h4 {
+      margin-bottom: 0.5em;
+      font-size: 1.3em;
+    }
+
+    .stream-placeholder p {
+      margin-bottom: 1.5em;
+      opacity: 0.8;
+    }
+
+    .stream-btn {
+      background: var(--launch-live);
+      color: white;
+      border: none;
+      padding: 1em 2em;
+      border-radius: 25px;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      animation: pulse 2s infinite;
+    }
+
+    .stream-btn:hover {
+      background: #ff2222;
+      transform: scale(1.05);
+    }
+
+    .stream-embed {
+      width: 100%;
+      height: 100%;
+    }
+
+    .stream-embed iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .stream-controls {
+      display: flex;
+      gap: 0.8em;
+      justify-content: center;
+    }
+
+    .control-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 68, 68, 0.3);
+      color: var(--launch-live);
+      padding: 0.6em 1.2em;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9em;
+    }
+
+    .control-btn:hover {
+      background: rgba(255, 68, 68, 0.1);
+      border-color: var(--launch-live);
+      transform: translateY(-2px);
+    }
+
+    body.dark .control-btn {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-light);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    body.dark .control-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--text-light);
+    }
+
+    .media-section {
+      margin-bottom: 2.5em;
+    }
+
+    .media-section h3 {
+      color: var(--accent);
+      margin-bottom: 1em;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      font-size: 1.2em;
+    }
+
+    body.dark .media-section h3 {
+      color: var(--text-light);
+    }
+
+    .patch-gallery, .rocket-gallery, .diagram-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1em;
+    }
+
+    .video-gallery, .historical-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5em;
+    }
+
+    .media-item {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: rgba(0, 51, 160, 0.05);
+      border: 1px solid rgba(0, 51, 160, 0.1);
+    }
+
+    .media-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 24px rgba(0, 51, 160, 0.2);
+      border-color: var(--accent);
+    }
+
+    body.dark .media-item {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark .media-item:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      border-color: var(--text-light);
+    }
+
+    .media-item img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .media-item:hover img {
+      transform: scale(1.1);
+    }
+
+    .video-item {
+      position: relative;
+      height: 180px;
+    }
+
+    .video-item img {
+      height: 100%;
+    }
+
+    .video-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 0.8em;
+      border-radius: 50%;
+      font-size: 1.5em;
+      transition: all 0.3s ease;
+    }
+
+    .video-item:hover .video-overlay {
+      background: var(--launch-live);
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    .media-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+      color: white;
+      padding: 1em 0.8em 0.5em;
+      font-size: 0.8em;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .media-item:hover .media-caption {
+      opacity: 1;
+    }
+
+    .media-title {
+      font-weight: 600;
+      margin-bottom: 0.2em;
+    }
+
+    .media-description {
+      opacity: 0.9;
+      font-size: 0.9em;
+    }
+
+    .external-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1em;
+    }
+
+    .external-link {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      padding: 1em;
+      background: rgba(0, 51, 160, 0.05);
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--accent);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0, 51, 160, 0.1);
+    }
+
+    .external-link:hover {
+      background: rgba(0, 51, 160, 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 51, 160, 0.2);
+    }
+
+    body.dark .external-link {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-light);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark .external-link:hover {
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .link-icon {
+      font-size: 1.5em;
+      flex-shrink: 0;
+    }
+
+    .link-content {
+      flex: 1;
+    }
+
+    .link-title {
+      font-weight: 600;
+      margin-bottom: 0.2em;
+    }
+
+    .link-description {
+      font-size: 0.9em;
+      opacity: 0.8;
+    }
+
+    /* Media Lightbox */
+    .media-lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 10001;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 2em;
+    }
+
+    .media-lightbox.visible {
+      display: flex;
+    }
+
+    .lightbox-content {
+      max-width: 90vw;
+      max-height: 90vh;
+      position: relative;
+    }
+
+    .lightbox-content img, .lightbox-content video {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 8px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 2em;
+      cursor: pointer;
+      padding: 0.2em;
+    }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      color: white;
+      font-size: 2em;
+      padding: 0.5em;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.3s ease;
+    }
+
+    .lightbox-nav:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    .lightbox-prev {
+      left: -60px;
+    }
+
+    .lightbox-next {
+      right: -60px;
+    }
+
+    .lightbox-caption {
+      position: absolute;
+      bottom: -60px;
+      left: 0;
+      right: 0;
+      color: white;
+      text-align: center;
+      font-size: 1.1em;
+    }
+
+    /* Lazy Loading Animation */
+    .media-loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 120px;
+      background: rgba(0, 51, 160, 0.1);
+      border-radius: 8px;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(0, 51, 160, 0.2);
+      border-top: 4px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
     /* Enhanced Mobile Modal Styles */
     @media (max-width: 768px) {
       .modal-content.large {
@@ -2518,6 +2913,57 @@
 
       .link-grid {
         grid-template-columns: 1fr;
+      }
+
+      /* Mobile Media Optimizations */
+      .stream-container {
+        height: 200px;
+      }
+
+      .stream-controls {
+        flex-wrap: wrap;
+        gap: 0.5em;
+      }
+
+      .control-btn {
+        font-size: 0.8em;
+        padding: 0.5em 1em;
+      }
+
+      .patch-gallery, .rocket-gallery, .diagram-gallery {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 0.8em;
+      }
+
+      .video-gallery, .historical-gallery {
+        grid-template-columns: 1fr;
+        gap: 1em;
+      }
+
+      .video-item {
+        height: 150px;
+      }
+
+      .external-links {
+        grid-template-columns: 1fr;
+      }
+
+      .lightbox-nav {
+        font-size: 1.5em;
+        padding: 0.3em;
+      }
+
+      .lightbox-prev {
+        left: -50px;
+      }
+
+      .lightbox-next {
+        right: -50px;
+      }
+
+      .lightbox-caption {
+        font-size: 0.9em;
+        bottom: -40px;
       }
     }
   </style>
@@ -3232,9 +3678,73 @@
 
         <div class="tab-content" id="media-tab">
           <div class="media-gallery" id="modal-media-gallery">
-            <div class="media-placeholder">
-              <h3>Mission Media</h3>
-              <p>Images, videos, and media content will be displayed here</p>
+            <!-- Live Stream Section -->
+            <div class="live-stream-section" id="live-stream-section">
+              <h3>🔴 Live Stream</h3>
+              <div class="stream-container" id="stream-container">
+                <div class="stream-placeholder" id="stream-placeholder">
+                  <div class="stream-icon">📺</div>
+                  <h4>Live Stream Available</h4>
+                  <p>Watch the launch live when it begins</p>
+                  <button class="stream-btn primary" onclick="startLiveStream()">🔴 Watch Live</button>
+                </div>
+                <div class="stream-embed" id="stream-embed" style="display: none;">
+                  <!-- Live stream will be embedded here -->
+                </div>
+              </div>
+              <div class="stream-controls" id="stream-controls">
+                <button class="control-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+                <button class="control-btn" onclick="togglePictureInPicture()">📱 PiP</button>
+                <button class="control-btn" onclick="shareStream()">📤 Share</button>
+              </div>
+            </div>
+
+            <!-- Mission Patches Section -->
+            <div class="media-section">
+              <h3>🏆 Mission Patches & Logos</h3>
+              <div class="patch-gallery" id="patch-gallery">
+                <!-- Mission patches will be populated here -->
+              </div>
+            </div>
+
+            <!-- Rocket Images Section -->
+            <div class="media-section">
+              <h3>🚀 Rocket & Vehicle Images</h3>
+              <div class="rocket-gallery" id="rocket-gallery">
+                <!-- Rocket images will be populated here -->
+              </div>
+            </div>
+
+            <!-- Technical Diagrams Section -->
+            <div class="media-section">
+              <h3>📐 Technical Diagrams</h3>
+              <div class="diagram-gallery" id="diagram-gallery">
+                <!-- Technical diagrams will be populated here -->
+              </div>
+            </div>
+
+            <!-- Video Gallery Section -->
+            <div class="media-section">
+              <h3>🎬 Mission Videos</h3>
+              <div class="video-gallery" id="video-gallery">
+                <!-- Mission videos will be populated here -->
+              </div>
+            </div>
+
+            <!-- Historical Footage Section -->
+            <div class="media-section">
+              <h3>📹 Historical Footage</h3>
+              <div class="historical-gallery" id="historical-gallery">
+                <!-- Historical footage will be populated here -->
+              </div>
+            </div>
+
+            <!-- External Media Links -->
+            <div class="media-section">
+              <h3>🔗 External Media Resources</h3>
+              <div class="external-links" id="external-media-links">
+                <!-- External links will be populated here -->
+              </div>
             </div>
           </div>
         </div>
@@ -3258,6 +3768,8 @@
       </div>
     </div>
   </div>
+
+  <!-- Media Lightbox (Created dynamically by JavaScript) -->
 
   <script>
     // Theme Toggle Functionality (Inherited from BlueandCosmos)
@@ -5614,22 +6126,103 @@
     }
 
     function generateMissionMedia(missionName) {
-      return {
-        images: [
-          { url: 'https://via.placeholder.com/300x200/0033A0/FFFFFF?text=Launch+Pad', caption: 'Launch Pad Preparation' },
-          { url: 'https://via.placeholder.com/300x200/FF4444/FFFFFF?text=Rocket+Assembly', caption: 'Rocket Assembly' },
-          { url: 'https://via.placeholder.com/300x200/00AA44/FFFFFF?text=Payload+Integration', caption: 'Payload Integration' }
+      const mediaData = {
+        'Starship IFT-6': {
+          liveStream: {
+            available: true,
+            url: 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1',
+            title: 'SpaceX Starship IFT-6 Live Stream'
+          },
+          patches: [
+            { url: 'https://via.placeholder.com/150x150/0033A0/FFFFFF?text=IFT-6', title: 'IFT-6 Mission Patch', description: 'Official SpaceX mission patch' },
+            { url: 'https://via.placeholder.com/150x150/FF4444/FFFFFF?text=SpaceX', title: 'SpaceX Logo', description: 'Company logo' }
+          ],
+          rockets: [
+            { url: 'https://via.placeholder.com/300x400/333333/FFFFFF?text=Starship', title: 'Starship Vehicle', description: 'Super Heavy Booster with Starship upper stage' },
+            { url: 'https://via.placeholder.com/300x200/666666/FFFFFF?text=Raptor', title: 'Raptor Engines', description: '33 Raptor engines on Super Heavy' }
+          ],
+          diagrams: [
+            { url: 'https://via.placeholder.com/400x300/0033A0/FFFFFF?text=Flight+Profile', title: 'Flight Profile', description: 'Mission trajectory and key events' },
+            { url: 'https://via.placeholder.com/400x300/00AA44/FFFFFF?text=Vehicle+Specs', title: 'Vehicle Specifications', description: 'Technical specifications diagram' }
+          ],
+          videos: [
+            { url: 'https://via.placeholder.com/320x180/FF4444/FFFFFF?text=▶+Preview', title: 'Mission Preview', description: 'What to expect from IFT-6', thumbnail: 'https://via.placeholder.com/320x180/FF4444/FFFFFF?text=▶+Preview' },
+            { url: 'https://via.placeholder.com/320x180/00AA44/FFFFFF?text=▶+Assembly', title: 'Vehicle Assembly', description: 'Starship stacking timelapse', thumbnail: 'https://via.placeholder.com/320x180/00AA44/FFFFFF?text=▶+Assembly' }
+          ],
+          historical: [
+            { url: 'https://via.placeholder.com/320x180/666666/FFFFFF?text=▶+IFT-5', title: 'IFT-5 Highlights', description: 'Previous test flight success', thumbnail: 'https://via.placeholder.com/320x180/666666/FFFFFF?text=▶+IFT-5' },
+            { url: 'https://via.placeholder.com/320x180/333333/FFFFFF?text=▶+First+Flight', title: 'First Starship Flight', description: 'Historic first integrated test', thumbnail: 'https://via.placeholder.com/320x180/333333/FFFFFF?text=▶+First+Flight' }
+          ]
+        },
+        'Falcon 9': {
+          liveStream: {
+            available: true,
+            url: 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1',
+            title: 'SpaceX Falcon 9 Live Stream'
+          },
+          patches: [
+            { url: 'https://via.placeholder.com/150x150/005288/FFFFFF?text=F9', title: 'Falcon 9 Mission Patch', description: 'Mission-specific patch design' },
+            { url: 'https://via.placeholder.com/150x150/FF4444/FFFFFF?text=SpaceX', title: 'SpaceX Logo', description: 'Company logo' }
+          ],
+          rockets: [
+            { url: 'https://via.placeholder.com/300x400/005288/FFFFFF?text=Falcon+9', title: 'Falcon 9 Block 5', description: 'Two-stage orbital rocket' },
+            { url: 'https://via.placeholder.com/300x200/333333/FFFFFF?text=Merlin', title: 'Merlin Engines', description: '9 Merlin 1D engines' }
+          ],
+          diagrams: [
+            { url: 'https://via.placeholder.com/400x300/005288/FFFFFF?text=Mission+Profile', title: 'Mission Profile', description: 'Launch and deployment sequence' },
+            { url: 'https://via.placeholder.com/400x300/0033A0/FFFFFF?text=Recovery', title: 'Booster Recovery', description: 'Landing sequence diagram' }
+          ],
+          videos: [
+            { url: 'https://via.placeholder.com/320x180/005288/FFFFFF?text=▶+Launch', title: 'Launch Sequence', description: 'T-0 to orbit insertion', thumbnail: 'https://via.placeholder.com/320x180/005288/FFFFFF?text=▶+Launch' },
+            { url: 'https://via.placeholder.com/320x180/00AA44/FFFFFF?text=▶+Landing', title: 'Booster Landing', description: 'Autonomous spaceport drone ship landing', thumbnail: 'https://via.placeholder.com/320x180/00AA44/FFFFFF?text=▶+Landing' }
+          ],
+          historical: [
+            { url: 'https://via.placeholder.com/320x180/666666/FFFFFF?text=▶+First+Landing', title: 'First Successful Landing', description: 'Historic booster recovery', thumbnail: 'https://via.placeholder.com/320x180/666666/FFFFFF?text=▶+First+Landing' },
+            { url: 'https://via.placeholder.com/320x180/333333/FFFFFF?text=▶+Heavy+Lift', title: 'Falcon Heavy Demo', description: 'Triple booster configuration', thumbnail: 'https://via.placeholder.com/320x180/333333/FFFFFF?text=▶+Heavy+Lift' }
+          ]
+        }
+      };
+
+      const defaultMedia = {
+        liveStream: {
+          available: false,
+          url: '',
+          title: 'Live Stream Not Available'
+        },
+        patches: [
+          { url: 'https://via.placeholder.com/150x150/0033A0/FFFFFF?text=Mission', title: 'Mission Patch', description: 'Official mission insignia' },
+          { url: 'https://via.placeholder.com/150x150/666666/FFFFFF?text=Agency', title: 'Agency Logo', description: 'Launch provider logo' }
+        ],
+        rockets: [
+          { url: 'https://via.placeholder.com/300x400/333333/FFFFFF?text=Rocket', title: 'Launch Vehicle', description: 'Primary launch vehicle' },
+          { url: 'https://via.placeholder.com/300x200/666666/FFFFFF?text=Engines', title: 'Propulsion System', description: 'Rocket engines and propulsion' }
+        ],
+        diagrams: [
+          { url: 'https://via.placeholder.com/400x300/0033A0/FFFFFF?text=Flight+Path', title: 'Flight Profile', description: 'Mission trajectory overview' },
+          { url: 'https://via.placeholder.com/400x300/00AA44/FFFFFF?text=Timeline', title: 'Mission Timeline', description: 'Key mission milestones' }
         ],
         videos: [
-          { url: '#', title: 'Mission Overview Video' },
-          { url: '#', title: 'Rocket Assembly Timelapse' }
+          { url: 'https://via.placeholder.com/320x180/FF4444/FFFFFF?text=▶+Overview', title: 'Mission Overview', description: 'Mission objectives and goals', thumbnail: 'https://via.placeholder.com/320x180/FF4444/FFFFFF?text=▶+Overview' },
+          { url: 'https://via.placeholder.com/320x180/00AA44/FFFFFF?text=▶+Prep', title: 'Launch Preparation', description: 'Pre-launch activities', thumbnail: 'https://via.placeholder.com/320x180/00AA44/FFFFFF?text=▶+Prep' }
         ],
-        links: [
-          { url: '#', title: 'Official Mission Page', icon: '🌐' },
-          { url: '#', title: 'Live Stream', icon: '📺' },
-          { url: '#', title: 'Mission Press Kit', icon: '📄' }
+        historical: [
+          { url: 'https://via.placeholder.com/320x180/666666/FFFFFF?text=▶+Previous', title: 'Previous Missions', description: 'Similar past missions', thumbnail: 'https://via.placeholder.com/320x180/666666/FFFFFF?text=▶+Previous' }
         ]
       };
+
+      const media = mediaData[missionName] || defaultMedia;
+      
+      // Add external links
+      media.externalLinks = [
+        { url: '#', title: 'Official Mission Page', description: 'Complete mission details', icon: '🌐' },
+        { url: '#', title: 'Live Telemetry', description: 'Real-time mission data', icon: '📊' },
+        { url: '#', title: 'Press Kit', description: 'Media resources and facts', icon: '📄' },
+        { url: '#', title: 'Technical Documentation', description: 'Engineering specifications', icon: '🔧' },
+        { url: '#', title: 'Photo Gallery', description: 'High-resolution images', icon: '📸' },
+        { url: '#', title: 'Mission Blog', description: 'Updates and insights', icon: '📝' }
+      ];
+
+      return media;
     }
 
     function populateRocketSpecs(specs) {
@@ -5661,29 +6254,99 @@
     }
 
     function populateMediaGallery(media) {
-      const gallery = document.getElementById('modal-media-gallery');
-      gallery.innerHTML = `
-        <h3>Mission Media</h3>
-        <div class="media-grid">
-          ${media.images.map(img => `
-            <div class="media-item">
-              <img src="${img.url}" alt="${img.caption}" loading="lazy">
-              <div class="media-caption">${img.caption}</div>
+      // Populate live stream section
+      populateLiveStream(media.liveStream);
+      
+      // Populate mission patches
+      populateMediaSection('patch-gallery', media.patches, 'patch');
+      
+      // Populate rocket images
+      populateMediaSection('rocket-gallery', media.rockets, 'image');
+      
+      // Populate technical diagrams
+      populateMediaSection('diagram-gallery', media.diagrams, 'diagram');
+      
+      // Populate video gallery
+      populateMediaSection('video-gallery', media.videos, 'video');
+      
+      // Populate historical footage
+      populateMediaSection('historical-gallery', media.historical, 'video');
+      
+      // Populate external links
+      populateExternalLinks(media.externalLinks);
+    }
+
+    function populateLiveStream(streamData) {
+      const streamSection = document.getElementById('live-stream-section');
+      const streamContainer = document.getElementById('stream-container');
+      const streamPlaceholder = document.getElementById('stream-placeholder');
+      const streamEmbed = document.getElementById('stream-embed');
+      
+      if (streamData.available) {
+        streamSection.style.display = 'block';
+        streamPlaceholder.querySelector('h4').textContent = 'Live Stream Available';
+        streamPlaceholder.querySelector('p').textContent = 'Click to watch the mission live';
+        
+        // Store stream URL for later use
+        window.currentStreamUrl = streamData.url;
+        window.currentStreamTitle = streamData.title;
+      } else {
+        streamSection.style.display = 'block';
+        streamPlaceholder.querySelector('h4').textContent = 'Live Stream Coming Soon';
+        streamPlaceholder.querySelector('p').textContent = 'Stream will be available closer to launch';
+        streamPlaceholder.querySelector('.stream-btn').style.opacity = '0.5';
+        streamPlaceholder.querySelector('.stream-btn').style.cursor = 'not-allowed';
+      }
+    }
+
+    function populateMediaSection(containerId, items, type) {
+      const container = document.getElementById(containerId);
+      if (!container || !items || items.length === 0) {
+        if (container) {
+          container.innerHTML = '<div class="media-placeholder">No media available</div>';
+        }
+        return;
+      }
+
+      container.innerHTML = items.map((item, index) => {
+        if (type === 'video') {
+          return `
+            <div class="media-item video-item" onclick="openMediaLightbox('${type}', ${index}, '${containerId}')">
+              <img src="${item.thumbnail || item.url}" alt="${item.title}" loading="lazy">
+              <div class="video-overlay">▶</div>
+              <div class="media-caption">
+                <div class="media-title">${item.title}</div>
+                <div class="media-description">${item.description}</div>
+              </div>
             </div>
-          `).join('')}
-        </div>
-        <div class="media-links">
-          <h4>External Links</h4>
-          <div class="link-grid">
-            ${media.links.map(link => `
-              <a href="${link.url}" class="media-link" target="_blank">
-                <span class="link-icon">${link.icon}</span>
-                <span class="link-title">${link.title}</span>
-              </a>
-            `).join('')}
+          `;
+        } else {
+          return `
+            <div class="media-item" onclick="openMediaLightbox('${type}', ${index}, '${containerId}')">
+              <img src="${item.url}" alt="${item.title}" loading="lazy">
+              <div class="media-caption">
+                <div class="media-title">${item.title}</div>
+                <div class="media-description">${item.description}</div>
+              </div>
+            </div>
+          `;
+        }
+      }).join('');
+    }
+
+    function populateExternalLinks(links) {
+      const container = document.getElementById('external-media-links');
+      if (!container || !links || links.length === 0) return;
+
+      container.innerHTML = links.map(link => `
+        <a href="${link.url}" class="external-link" target="_blank">
+          <div class="link-icon">${link.icon}</div>
+          <div class="link-content">
+            <div class="link-title">${link.title}</div>
+            <div class="link-description">${link.description}</div>
           </div>
-        </div>
-      `;
+        </a>
+      `).join('');
     }
 
     function updateModalActions(data) {
@@ -5836,7 +6499,316 @@
       if (e.key === 'Escape' && document.getElementById('mission-modal').classList.contains('visible')) {
         closeMissionModal();
       }
+      if (e.key === 'Escape' && document.querySelector('.media-lightbox.visible')) {
+        closeMediaLightbox();
+      }
     });
+
+    // Comprehensive Media & Live Stream Functions
+    function startLiveStream() {
+      if (!window.currentStreamUrl) {
+        showNotification('Live stream not available yet! 📺', 'info');
+        return;
+      }
+
+      const streamPlaceholder = document.getElementById('stream-placeholder');
+      const streamEmbed = document.getElementById('stream-embed');
+      
+      // Create iframe for live stream
+      streamEmbed.innerHTML = `
+        <iframe 
+          src="${window.currentStreamUrl}" 
+          title="${window.currentStreamTitle}"
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
+      `;
+      
+      // Hide placeholder and show stream
+      streamPlaceholder.style.display = 'none';
+      streamEmbed.style.display = 'block';
+      
+      showNotification('Live stream started! 🚀', 'success');
+    }
+
+    function toggleFullscreen() {
+      const streamContainer = document.getElementById('stream-container');
+      
+      if (!document.fullscreenElement) {
+        streamContainer.requestFullscreen().catch(err => {
+          showNotification('Fullscreen not supported! 📺', 'error');
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    function togglePictureInPicture() {
+      const iframe = document.querySelector('#stream-embed iframe');
+      if (!iframe) {
+        showNotification('No active stream for Picture-in-Picture! 📱', 'info');
+        return;
+      }
+      
+      // Note: PiP for iframes is limited, this is a placeholder
+      showNotification('Picture-in-Picture requested! 📱', 'info');
+    }
+
+    function shareStream() {
+      const streamTitle = window.currentStreamTitle || 'Space Launch Live Stream';
+      
+      if (navigator.share) {
+        navigator.share({
+          title: streamTitle,
+          text: 'Watch this space launch live!',
+          url: window.location.href
+        });
+      } else {
+        navigator.clipboard.writeText(`${streamTitle} - ${window.location.href}`);
+        showNotification('Stream link copied to clipboard! 📋', 'success');
+      }
+    }
+
+    // Media Lightbox Functions
+    let currentLightboxItems = [];
+    let currentLightboxIndex = 0;
+
+    function openMediaLightbox(type, index, containerId) {
+      // Get the media items from the current mission data
+      const missionData = window.currentMissionData;
+      if (!missionData || !missionData.media) return;
+
+      let items = [];
+      switch (containerId) {
+        case 'patch-gallery':
+          items = missionData.media.patches;
+          break;
+        case 'rocket-gallery':
+          items = missionData.media.rockets;
+          break;
+        case 'diagram-gallery':
+          items = missionData.media.diagrams;
+          break;
+        case 'video-gallery':
+          items = missionData.media.videos;
+          break;
+        case 'historical-gallery':
+          items = missionData.media.historical;
+          break;
+      }
+
+      if (!items || items.length === 0) return;
+
+      currentLightboxItems = items;
+      currentLightboxIndex = index;
+
+      showMediaLightbox(type);
+    }
+
+    function showMediaLightbox(type) {
+      const lightbox = getOrCreateLightbox();
+      const item = currentLightboxItems[currentLightboxIndex];
+      
+      const lightboxContent = lightbox.querySelector('.lightbox-content');
+      
+      if (type === 'video') {
+        lightboxContent.innerHTML = `
+          <button class="lightbox-close" onclick="closeMediaLightbox()">&times;</button>
+          <video controls autoplay style="max-width: 100%; max-height: 100%; border-radius: 8px;">
+            <source src="${item.url}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <div class="lightbox-caption">
+            <strong>${item.title}</strong><br>
+            ${item.description}
+          </div>
+          ${currentLightboxItems.length > 1 ? `
+            <button class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1)">‹</button>
+            <button class="lightbox-nav lightbox-next" onclick="navigateLightbox(1)">›</button>
+          ` : ''}
+        `;
+      } else {
+        lightboxContent.innerHTML = `
+          <button class="lightbox-close" onclick="closeMediaLightbox()">&times;</button>
+          <img src="${item.url}" alt="${item.title}" style="max-width: 100%; max-height: 100%; border-radius: 8px;">
+          <div class="lightbox-caption">
+            <strong>${item.title}</strong><br>
+            ${item.description}
+          </div>
+          ${currentLightboxItems.length > 1 ? `
+            <button class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1)">‹</button>
+            <button class="lightbox-nav lightbox-next" onclick="navigateLightbox(1)">›</button>
+          ` : ''}
+        `;
+      }
+      
+      lightbox.classList.add('visible');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function getOrCreateLightbox() {
+      let lightbox = document.getElementById('media-lightbox');
+      if (!lightbox) {
+        lightbox = document.createElement('div');
+        lightbox.id = 'media-lightbox';
+        lightbox.className = 'media-lightbox';
+        lightbox.innerHTML = '<div class="lightbox-content"></div>';
+        document.body.appendChild(lightbox);
+        
+        // Close on background click
+        lightbox.addEventListener('click', (e) => {
+          if (e.target === lightbox) {
+            closeMediaLightbox();
+          }
+        });
+      }
+      return lightbox;
+    }
+
+    function closeMediaLightbox() {
+      const lightbox = document.getElementById('media-lightbox');
+      if (lightbox) {
+        lightbox.classList.remove('visible');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function navigateLightbox(direction) {
+      currentLightboxIndex += direction;
+      
+      if (currentLightboxIndex < 0) {
+        currentLightboxIndex = currentLightboxItems.length - 1;
+      } else if (currentLightboxIndex >= currentLightboxItems.length) {
+        currentLightboxIndex = 0;
+      }
+      
+      // Determine type based on current items
+      const type = currentLightboxItems[0].thumbnail ? 'video' : 'image';
+      showMediaLightbox(type);
+    }
+
+    // Enhanced populateMissionModal to store current mission data
+    const originalPopulateMissionModal = populateMissionModal;
+    function populateMissionModal(data) {
+      // Store mission data globally for lightbox access
+      window.currentMissionData = data;
+      
+      // Call original function
+      originalPopulateMissionModal(data);
+    }
+
+    // Lazy Loading Implementation
+    function implementLazyLoading() {
+      const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            const src = img.dataset.src;
+            
+            if (src) {
+              // Show loading spinner
+              const loadingDiv = document.createElement('div');
+              loadingDiv.className = 'media-loading';
+              loadingDiv.innerHTML = '<div class="loading-spinner"></div>';
+              img.parentNode.insertBefore(loadingDiv, img);
+              
+              // Load the image
+              const tempImg = new Image();
+              tempImg.onload = () => {
+                img.src = src;
+                img.removeAttribute('data-src');
+                loadingDiv.remove();
+                img.style.opacity = '1';
+              };
+              tempImg.onerror = () => {
+                loadingDiv.innerHTML = '<div style="color: #999;">Failed to load</div>';
+              };
+              tempImg.src = src;
+              
+              observer.unobserve(img);
+            }
+          }
+        });
+      });
+
+      // Observe all images with data-src attribute
+      document.querySelectorAll('img[data-src]').forEach(img => {
+        img.style.opacity = '0';
+        imageObserver.observe(img);
+      });
+    }
+
+    // Enhanced media section population with lazy loading
+    function populateMediaSectionWithLazyLoading(containerId, items, type) {
+      const container = document.getElementById(containerId);
+      if (!container || !items || items.length === 0) {
+        if (container) {
+          container.innerHTML = '<div class="media-placeholder">No media available</div>';
+        }
+        return;
+      }
+
+      container.innerHTML = items.map((item, index) => {
+        if (type === 'video') {
+          return `
+            <div class="media-item video-item" onclick="openMediaLightbox('${type}', ${index}, '${containerId}')">
+              <img data-src="${item.thumbnail || item.url}" alt="${item.title}" loading="lazy" style="opacity: 0;">
+              <div class="video-overlay">▶</div>
+              <div class="media-caption">
+                <div class="media-title">${item.title}</div>
+                <div class="media-description">${item.description}</div>
+              </div>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="media-item" onclick="openMediaLightbox('${type}', ${index}, '${containerId}')">
+              <img data-src="${item.url}" alt="${item.title}" loading="lazy" style="opacity: 0;">
+              <div class="media-caption">
+                <div class="media-title">${item.title}</div>
+                <div class="media-description">${item.description}</div>
+              </div>
+            </div>
+          `;
+        }
+      }).join('');
+
+      // Implement lazy loading for new images
+      setTimeout(() => implementLazyLoading(), 100);
+    }
+
+    // Performance Optimization: Debounced resize handler
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        // Recalculate media grid layouts if needed
+        const mediaGrids = document.querySelectorAll('.patch-gallery, .rocket-gallery, .diagram-gallery, .video-gallery, .historical-gallery');
+        mediaGrids.forEach(grid => {
+          // Force reflow for responsive grids
+          grid.style.display = 'none';
+          grid.offsetHeight; // Trigger reflow
+          grid.style.display = '';
+        });
+      }, 250);
+    });
+
+    // Preload critical media for better UX
+    function preloadCriticalMedia(missionData) {
+      if (!missionData.media) return;
+      
+      // Preload first few images from each category
+      const criticalImages = [
+        ...(missionData.media.patches?.slice(0, 2) || []),
+        ...(missionData.media.rockets?.slice(0, 1) || [])
+      ];
+      
+      criticalImages.forEach(item => {
+        const img = new Image();
+        img.src = item.url;
+      });
+    }
 
     function setNotification(button) {
       const card = button.closest('.launch-card');
