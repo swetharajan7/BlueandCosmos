@@ -424,6 +424,25 @@
       text-align: center;
     }
 
+    .statistics-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 0.8em 1.2em;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9em;
+      font-weight: 600;
+      margin-left: 1em;
+    }
+
+    .statistics-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
     .dashboard-header::before {
       content: '';
       position: absolute;
@@ -3367,6 +3386,355 @@
       opacity: 0.8;
     }
 
+    /* Historical Launch Data and Statistics Dashboard Styles */
+    .statistics-dashboard-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 10003;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2em;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .statistics-dashboard {
+      background: var(--text-white);
+      border-radius: 20px;
+      width: 95vw;
+      height: 90vh;
+      max-width: 1400px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: slideInUp 0.4s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body.dark .statistics-dashboard {
+      background: var(--dark-bg);
+      color: var(--text-white);
+    }
+
+    .dashboard-header {
+      padding: 2em;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--flag-blue) 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .dashboard-header h2 {
+      margin: 0;
+      font-size: 1.8em;
+    }
+
+    .dashboard-close {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      font-size: 1.5em;
+      cursor: pointer;
+      padding: 0.3em;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .dashboard-close:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    .dashboard-tabs {
+      display: flex;
+      background: rgba(0, 51, 160, 0.05);
+      border-bottom: 1px solid rgba(0, 51, 160, 0.1);
+    }
+
+    body.dark .dashboard-tabs {
+      background: rgba(255, 255, 255, 0.05);
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .dashboard-tab {
+      flex: 1;
+      background: none;
+      border: none;
+      padding: 1.2em 1.5em;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: 600;
+      color: var(--accent);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .dashboard-tab:hover {
+      background: rgba(0, 51, 160, 0.1);
+    }
+
+    .dashboard-tab.active {
+      background: var(--accent);
+      color: white;
+    }
+
+    .dashboard-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--highlight);
+    }
+
+    body.dark .dashboard-tab {
+      color: var(--text-light);
+    }
+
+    body.dark .dashboard-tab:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark .dashboard-tab.active {
+      background: var(--dark-accent);
+      color: white;
+    }
+
+    .dashboard-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 2em;
+    }
+
+    .dashboard-tab-content {
+      display: none;
+    }
+
+    .dashboard-tab-content.active {
+      display: block;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5em;
+      margin-bottom: 2em;
+    }
+
+    .stat-card {
+      background: rgba(0, 51, 160, 0.05);
+      padding: 2em;
+      border-radius: 12px;
+      text-align: center;
+      border: 1px solid rgba(0, 51, 160, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 51, 160, 0.2);
+    }
+
+    body.dark .stat-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark .stat-card:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .stat-number {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: var(--accent);
+      margin-bottom: 0.3em;
+    }
+
+    body.dark .stat-number {
+      color: var(--text-light);
+    }
+
+    .stat-label {
+      font-size: 0.9em;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2em;
+    }
+
+    .chart-container {
+      background: rgba(0, 51, 160, 0.05);
+      padding: 1.5em;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 51, 160, 0.1);
+    }
+
+    body.dark .chart-container {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .chart-container h3,
+    .chart-container h4 {
+      color: var(--accent);
+      margin-bottom: 1em;
+      text-align: center;
+    }
+
+    body.dark .chart-container h3,
+    body.dark .chart-container h4 {
+      color: var(--text-light);
+    }
+
+    .chart-container canvas {
+      width: 100%;
+      height: 300px;
+      background: white;
+      border-radius: 8px;
+    }
+
+    body.dark .chart-container canvas {
+      background: var(--dark-bg);
+    }
+
+    .comparison-grid,
+    .rocket-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5em;
+      margin-bottom: 2em;
+    }
+
+    .comparison-card,
+    .rocket-card {
+      background: rgba(0, 51, 160, 0.05);
+      padding: 1.5em;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 51, 160, 0.1);
+    }
+
+    body.dark .comparison-card,
+    body.dark .rocket-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .archive-controls {
+      display: flex;
+      gap: 2em;
+      margin-bottom: 2em;
+      flex-wrap: wrap;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5em;
+    }
+
+    .filter-group label {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    body.dark .filter-group label {
+      color: var(--text-light);
+    }
+
+    .filter-group select {
+      padding: 0.8em;
+      border: 1px solid rgba(0, 51, 160, 0.2);
+      border-radius: 6px;
+      background: white;
+      color: var(--text-dark);
+      font-size: 0.9em;
+    }
+
+    body.dark .filter-group select {
+      background: var(--dark-bg);
+      color: var(--text-white);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .archive-results {
+      background: rgba(0, 51, 160, 0.05);
+      border-radius: 8px;
+      padding: 1.5em;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    body.dark .archive-results {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .archive-item {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr auto;
+      gap: 1em;
+      padding: 1em;
+      border-bottom: 1px solid rgba(0, 51, 160, 0.1);
+      align-items: center;
+    }
+
+    body.dark .archive-item {
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .archive-item:hover {
+      background: rgba(0, 51, 160, 0.1);
+    }
+
+    body.dark .archive-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .archive-mission {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    body.dark .archive-mission {
+      color: var(--text-light);
+    }
+
+    .archive-status {
+      padding: 0.3em 0.8em;
+      border-radius: 12px;
+      font-size: 0.8em;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .archive-status.success {
+      background: var(--launch-success);
+      color: white;
+    }
+
+    .archive-status.failure {
+      background: var(--launch-failure);
+      color: white;
+    }
+
     /* Enhanced Mobile Modal Styles */
     @media (max-width: 768px) {
       .modal-content.large {
@@ -3513,6 +3881,80 @@
         flex-direction: column;
         gap: 1em;
         text-align: center;
+      }
+
+      /* Mobile Statistics Dashboard */
+      .statistics-dashboard {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+      }
+
+      .dashboard-header {
+        padding: 1.5em;
+      }
+
+      .dashboard-header h2 {
+        font-size: 1.4em;
+      }
+
+      .dashboard-tabs {
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+
+      .dashboard-tab {
+        min-width: 120px;
+        padding: 1em;
+        font-size: 0.9em;
+      }
+
+      .dashboard-content {
+        padding: 1em;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1em;
+      }
+
+      .stat-card {
+        padding: 1.5em 1em;
+      }
+
+      .stat-number {
+        font-size: 2em;
+      }
+
+      .charts-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5em;
+      }
+
+      .chart-container canvas {
+        height: 250px;
+      }
+
+      .comparison-grid,
+      .rocket-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .archive-controls {
+        flex-direction: column;
+        gap: 1em;
+      }
+
+      .archive-item {
+        grid-template-columns: 1fr;
+        gap: 0.5em;
+        text-align: center;
+      }
+
+      .statistics-btn {
+        margin-left: 0;
+        margin-top: 0.5em;
+        width: 100%;
       }
     }
   </style>
@@ -8571,6 +9013,913 @@
 
     // Initialize live tracking manager
     const liveTrackingManager = new LiveTrackingManager();
+
+    // Historical Launch Data and Statistics Dashboard System
+    class HistoricalDataManager {
+      constructor() {
+        this.historicalData = new Map();
+        this.statisticsCache = new Map();
+        this.chartInstances = new Map();
+        this.init();
+      }
+
+      init() {
+        // Generate comprehensive historical data
+        this.generateHistoricalData();
+        
+        // Add statistics dashboard to navigation
+        this.addStatisticsNavigation();
+        
+        // Initialize chart library (using Chart.js-like API simulation)
+        this.initializeChartLibrary();
+      }
+
+      generateHistoricalData() {
+        // Generate 5 years of historical launch data
+        const agencies = ['SpaceX', 'NASA', 'Blue Origin', 'ESA', 'ISRO', 'CNSA', 'Roscosmos'];
+        const rockets = {
+          'SpaceX': ['Falcon 9', 'Falcon Heavy', 'Starship'],
+          'NASA': ['SLS', 'Atlas V', 'Delta IV Heavy'],
+          'Blue Origin': ['New Shepard', 'New Glenn'],
+          'ESA': ['Ariane 5', 'Ariane 6', 'Vega'],
+          'ISRO': ['PSLV', 'GSLV', 'GSLV Mk III'],
+          'CNSA': ['Long March 2F', 'Long March 3B', 'Long March 5'],
+          'Roscosmos': ['Soyuz', 'Proton-M', 'Angara']
+        };
+
+        const currentYear = new Date().getFullYear();
+        
+        for (let year = currentYear - 4; year <= currentYear; year++) {
+          for (const agency of agencies) {
+            const launchCount = this.generateLaunchCount(agency, year);
+            
+            for (let i = 0; i < launchCount; i++) {
+              const launch = this.generateHistoricalLaunch(agency, rockets[agency], year);
+              const key = `${agency}-${year}-${i}`;
+              this.historicalData.set(key, launch);
+            }
+          }
+        }
+
+        console.log(`Generated ${this.historicalData.size} historical launches`);
+      }
+
+      generateLaunchCount(agency, year) {
+        const baseCounts = {
+          'SpaceX': 25,
+          'NASA': 8,
+          'Blue Origin': 6,
+          'ESA': 12,
+          'ISRO': 4,
+          'CNSA': 15,
+          'Roscosmos': 18
+        };
+        
+        const baseCount = baseCounts[agency] || 5;
+        const yearFactor = (year - 2020) * 0.1; // Slight increase over years
+        const randomFactor = (Math.random() - 0.5) * 0.3;
+        
+        return Math.max(1, Math.floor(baseCount * (1 + yearFactor + randomFactor)));
+      }
+
+      generateHistoricalLaunch(agency, rockets, year) {
+        const rocket = rockets[Math.floor(Math.random() * rockets.length)];
+        const month = Math.floor(Math.random() * 12) + 1;
+        const day = Math.floor(Math.random() * 28) + 1;
+        const date = new Date(year, month - 1, day);
+        
+        const success = Math.random() > this.getFailureRate(agency, rocket);
+        const cost = this.generateLaunchCost(agency, rocket);
+        const payload = this.generatePayloadMass(rocket);
+        
+        return {
+          agency,
+          rocket,
+          date: date.toISOString(),
+          success,
+          cost,
+          payloadMass: payload,
+          mission: this.generateMissionName(agency, rocket),
+          orbit: this.generateOrbit(),
+          customer: this.generateCustomer(agency)
+        };
+      }
+
+      getFailureRate(agency, rocket) {
+        const failureRates = {
+          'SpaceX': { 'Falcon 9': 0.02, 'Falcon Heavy': 0.05, 'Starship': 0.15 },
+          'NASA': { 'SLS': 0.03, 'Atlas V': 0.01, 'Delta IV Heavy': 0.02 },
+          'Blue Origin': { 'New Shepard': 0.05, 'New Glenn': 0.08 },
+          'ESA': { 'Ariane 5': 0.02, 'Ariane 6': 0.04, 'Vega': 0.06 },
+          'ISRO': { 'PSLV': 0.03, 'GSLV': 0.05, 'GSLV Mk III': 0.04 },
+          'CNSA': { 'Long March 2F': 0.02, 'Long March 3B': 0.03, 'Long March 5': 0.04 },
+          'Roscosmos': { 'Soyuz': 0.02, 'Proton-M': 0.04, 'Angara': 0.06 }
+        };
+        
+        return failureRates[agency]?.[rocket] || 0.05;
+      }
+
+      generateLaunchCost(agency, rocket) {
+        const costs = {
+          'SpaceX': { 'Falcon 9': 67, 'Falcon Heavy': 150, 'Starship': 10 },
+          'NASA': { 'SLS': 2000, 'Atlas V': 180, 'Delta IV Heavy': 350 },
+          'Blue Origin': { 'New Shepard': 28, 'New Glenn': 120 },
+          'ESA': { 'Ariane 5': 200, 'Ariane 6': 120, 'Vega': 40 },
+          'ISRO': { 'PSLV': 15, 'GSLV': 45, 'GSLV Mk III': 60 },
+          'CNSA': { 'Long March 2F': 70, 'Long March 3B': 90, 'Long March 5': 150 },
+          'Roscosmos': { 'Soyuz': 80, 'Proton-M': 100, 'Angara': 120 }
+        };
+        
+        const baseCost = costs[agency]?.[rocket] || 100;
+        return baseCost + (Math.random() - 0.5) * baseCost * 0.2; // ±20% variation
+      }
+
+      generatePayloadMass(rocket) {
+        const masses = {
+          'Falcon 9': 22800, 'Falcon Heavy': 63800, 'Starship': 100000,
+          'SLS': 95000, 'Atlas V': 18500, 'Delta IV Heavy': 28790,
+          'New Shepard': 0, 'New Glenn': 45000,
+          'Ariane 5': 21000, 'Ariane 6': 21500, 'Vega': 2300,
+          'PSLV': 3800, 'GSLV': 5000, 'GSLV Mk III': 10000,
+          'Long March 2F': 8400, 'Long March 3B': 12000, 'Long March 5': 25000,
+          'Soyuz': 7150, 'Proton-M': 23000, 'Angara': 24500
+        };
+        
+        const baseMass = masses[rocket] || 10000;
+        return Math.floor(baseMass * (0.3 + Math.random() * 0.7)); // 30-100% of capacity
+      }
+
+      generateMissionName(agency, rocket) {
+        const prefixes = {
+          'SpaceX': ['Starlink', 'Dragon', 'Crew', 'Transporter'],
+          'NASA': ['Artemis', 'JWST', 'Parker', 'Europa'],
+          'Blue Origin': ['NS', 'Tourism', 'Cargo'],
+          'ESA': ['Sentinel', 'BepiColombo', 'JUICE'],
+          'ISRO': ['Chandrayaan', 'Mangalyaan', 'RISAT'],
+          'CNSA': ['Tianwen', 'Chang\'e', 'Shenzhou'],
+          'Roscosmos': ['Progress', 'Soyuz MS', 'Luna']
+        };
+        
+        const agencyPrefixes = prefixes[agency] || ['Mission'];
+        const prefix = agencyPrefixes[Math.floor(Math.random() * agencyPrefixes.length)];
+        const number = Math.floor(Math.random() * 50) + 1;
+        
+        return `${prefix}-${number}`;
+      }
+
+      generateOrbit() {
+        const orbits = ['LEO', 'GTO', 'SSO', 'GEO', 'Lunar', 'Interplanetary', 'Suborbital'];
+        return orbits[Math.floor(Math.random() * orbits.length)];
+      }
+
+      generateCustomer(agency) {
+        const customers = {
+          'SpaceX': ['NASA', 'Commercial', 'Starlink', 'Military'],
+          'NASA': ['Government', 'Science', 'International'],
+          'Blue Origin': ['Tourism', 'Commercial', 'NASA'],
+          'ESA': ['European', 'Commercial', 'Science'],
+          'ISRO': ['Indian Gov', 'Commercial', 'International'],
+          'CNSA': ['Chinese Gov', 'Military', 'Science'],
+          'Roscosmos': ['Russian Gov', 'Commercial', 'ISS']
+        };
+        
+        const agencyCustomers = customers[agency] || ['Government'];
+        return agencyCustomers[Math.floor(Math.random() * agencyCustomers.length)];
+      }
+
+      showStatisticsDashboard() {
+        const dashboard = this.createStatisticsDashboard();
+        document.body.appendChild(dashboard);
+        
+        // Generate and display charts
+        setTimeout(() => {
+          this.renderAllCharts();
+        }, 100);
+      }
+
+      createStatisticsDashboard() {
+        const overlay = document.createElement('div');
+        overlay.className = 'statistics-dashboard-overlay';
+        overlay.innerHTML = `
+          <div class="statistics-dashboard">
+            <div class="dashboard-header">
+              <h2>📊 Launch Statistics Dashboard</h2>
+              <button class="dashboard-close" onclick="this.closest('.statistics-dashboard-overlay').remove()">&times;</button>
+            </div>
+            
+            <div class="dashboard-tabs">
+              <button class="dashboard-tab active" data-tab="overview" onclick="historicalDataManager.switchDashboardTab('overview')">Overview</button>
+              <button class="dashboard-tab" data-tab="agencies" onclick="historicalDataManager.switchDashboardTab('agencies')">Agencies</button>
+              <button class="dashboard-tab" data-tab="rockets" onclick="historicalDataManager.switchDashboardTab('rockets')">Rockets</button>
+              <button class="dashboard-tab" data-tab="trends" onclick="historicalDataManager.switchDashboardTab('trends')">Trends</button>
+              <button class="dashboard-tab" data-tab="archive" onclick="historicalDataManager.switchDashboardTab('archive')">Archive</button>
+            </div>
+
+            <div class="dashboard-content">
+              <!-- Overview Tab -->
+              <div class="dashboard-tab-content active" id="overview-content">
+                <div class="stats-grid">
+                  <div class="stat-card">
+                    <div class="stat-number" id="total-launches">0</div>
+                    <div class="stat-label">Total Launches</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-number" id="success-rate">0%</div>
+                    <div class="stat-label">Overall Success Rate</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-number" id="total-payload">0</div>
+                    <div class="stat-label">Total Payload (tons)</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-number" id="active-agencies">0</div>
+                    <div class="stat-label">Active Agencies</div>
+                  </div>
+                </div>
+                
+                <div class="charts-grid">
+                  <div class="chart-container">
+                    <h3>Launch Frequency by Year</h3>
+                    <canvas id="yearly-launches-chart"></canvas>
+                  </div>
+                  <div class="chart-container">
+                    <h3>Success Rate by Agency</h3>
+                    <canvas id="agency-success-chart"></canvas>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Agencies Tab -->
+              <div class="dashboard-tab-content" id="agencies-content">
+                <div class="agency-comparison">
+                  <h3>Agency Performance Comparison</h3>
+                  <div class="comparison-grid" id="agency-comparison-grid">
+                    <!-- Agency comparison cards will be populated here -->
+                  </div>
+                </div>
+                
+                <div class="chart-container">
+                  <h3>Market Share by Launch Count</h3>
+                  <canvas id="market-share-chart"></canvas>
+                </div>
+              </div>
+
+              <!-- Rockets Tab -->
+              <div class="dashboard-tab-content" id="rockets-content">
+                <div class="rocket-stats">
+                  <h3>Rocket Performance Analysis</h3>
+                  <div class="rocket-grid" id="rocket-performance-grid">
+                    <!-- Rocket performance cards will be populated here -->
+                  </div>
+                </div>
+                
+                <div class="chart-container">
+                  <h3>Cost vs Payload Efficiency</h3>
+                  <canvas id="cost-efficiency-chart"></canvas>
+                </div>
+              </div>
+
+              <!-- Trends Tab -->
+              <div class="dashboard-tab-content" id="trends-content">
+                <div class="trend-analysis">
+                  <h3>Launch Industry Trends</h3>
+                  <div class="charts-grid">
+                    <div class="chart-container">
+                      <h4>Launch Frequency Trend</h4>
+                      <canvas id="frequency-trend-chart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                      <h4>Cost Reduction Trend</h4>
+                      <canvas id="cost-trend-chart"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Archive Tab -->
+              <div class="dashboard-tab-content" id="archive-content">
+                <div class="archive-controls">
+                  <div class="filter-group">
+                    <label>Agency:</label>
+                    <select id="archive-agency-filter">
+                      <option value="">All Agencies</option>
+                    </select>
+                  </div>
+                  <div class="filter-group">
+                    <label>Year:</label>
+                    <select id="archive-year-filter">
+                      <option value="">All Years</option>
+                    </select>
+                  </div>
+                  <div class="filter-group">
+                    <label>Status:</label>
+                    <select id="archive-status-filter">
+                      <option value="">All</option>
+                      <option value="success">Success</option>
+                      <option value="failure">Failure</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="archive-results" id="archive-results">
+                  <!-- Historical launch results will be populated here -->
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        return overlay;
+      }
+
+      switchDashboardTab(tabName) {
+        // Hide all tab contents
+        document.querySelectorAll('.dashboard-tab-content').forEach(tab => {
+          tab.classList.remove('active');
+        });
+        
+        // Remove active class from all tab buttons
+        document.querySelectorAll('.dashboard-tab').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        
+        // Show selected tab content
+        document.getElementById(`${tabName}-content`).classList.add('active');
+        
+        // Add active class to selected tab button
+        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        
+        // Load tab-specific content
+        this.loadTabContent(tabName);
+      }
+
+      loadTabContent(tabName) {
+        switch (tabName) {
+          case 'overview':
+            this.loadOverviewContent();
+            break;
+          case 'agencies':
+            this.loadAgenciesContent();
+            break;
+          case 'rockets':
+            this.loadRocketsContent();
+            break;
+          case 'trends':
+            this.loadTrendsContent();
+            break;
+          case 'archive':
+            this.loadArchiveContent();
+            break;
+        }
+      }
+
+      loadOverviewContent() {
+        const stats = this.calculateOverallStatistics();
+        
+        document.getElementById('total-launches').textContent = stats.totalLaunches.toLocaleString();
+        document.getElementById('success-rate').textContent = `${stats.successRate.toFixed(1)}%`;
+        document.getElementById('total-payload').textContent = (stats.totalPayload / 1000).toFixed(0);
+        document.getElementById('active-agencies').textContent = stats.activeAgencies;
+      }
+
+      calculateOverallStatistics() {
+        const launches = Array.from(this.historicalData.values());
+        const totalLaunches = launches.length;
+        const successfulLaunches = launches.filter(l => l.success).length;
+        const successRate = (successfulLaunches / totalLaunches) * 100;
+        const totalPayload = launches.reduce((sum, l) => sum + l.payloadMass, 0);
+        const activeAgencies = new Set(launches.map(l => l.agency)).size;
+        
+        return {
+          totalLaunches,
+          successRate,
+          totalPayload,
+          activeAgencies
+        };
+      }
+
+      renderAllCharts() {
+        this.renderYearlyLaunchesChart();
+        this.renderAgencySuccessChart();
+        this.renderMarketShareChart();
+        this.renderCostEfficiencyChart();
+        this.renderFrequencyTrendChart();
+        this.renderCostTrendChart();
+      }
+
+      // Simulated chart rendering (in production, would use Chart.js or similar)
+      renderYearlyLaunchesChart() {
+        const canvas = document.getElementById('yearly-launches-chart');
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        const data = this.getYearlyLaunchData();
+        
+        // Simple bar chart simulation
+        this.drawBarChart(ctx, data, 'Launches per Year');
+      }
+
+      renderAgencySuccessChart() {
+        const canvas = document.getElementById('agency-success-chart');
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        const data = this.getAgencySuccessData();
+        
+        this.drawBarChart(ctx, data, 'Success Rate by Agency');
+      }
+
+      getYearlyLaunchData() {
+        const launches = Array.from(this.historicalData.values());
+        const yearData = {};
+        
+        launches.forEach(launch => {
+          const year = new Date(launch.date).getFullYear();
+          yearData[year] = (yearData[year] || 0) + 1;
+        });
+        
+        return Object.entries(yearData).map(([year, count]) => ({
+          label: year,
+          value: count
+        }));
+      }
+
+      getAgencySuccessData() {
+        const launches = Array.from(this.historicalData.values());
+        const agencyData = {};
+        
+        launches.forEach(launch => {
+          if (!agencyData[launch.agency]) {
+            agencyData[launch.agency] = { total: 0, successful: 0 };
+          }
+          agencyData[launch.agency].total++;
+          if (launch.success) {
+            agencyData[launch.agency].successful++;
+          }
+        });
+        
+        return Object.entries(agencyData).map(([agency, data]) => ({
+          label: agency,
+          value: (data.successful / data.total) * 100
+        }));
+      }
+
+      drawBarChart(ctx, data, title) {
+        const canvas = ctx.canvas;
+        const width = canvas.width;
+        const height = canvas.height;
+        
+        // Clear canvas
+        ctx.clearRect(0, 0, width, height);
+        
+        // Set up chart area
+        const margin = 40;
+        const chartWidth = width - 2 * margin;
+        const chartHeight = height - 2 * margin;
+        
+        // Find max value for scaling
+        const maxValue = Math.max(...data.map(d => d.value));
+        
+        // Draw bars
+        const barWidth = chartWidth / data.length * 0.8;
+        const barSpacing = chartWidth / data.length * 0.2;
+        
+        ctx.fillStyle = '#0033A0';
+        
+        data.forEach((item, index) => {
+          const barHeight = (item.value / maxValue) * chartHeight;
+          const x = margin + index * (barWidth + barSpacing);
+          const y = height - margin - barHeight;
+          
+          ctx.fillRect(x, y, barWidth, barHeight);
+          
+          // Draw labels
+          ctx.fillStyle = '#333';
+          ctx.font = '12px Arial';
+          ctx.textAlign = 'center';
+          ctx.fillText(item.label, x + barWidth / 2, height - 10);
+          ctx.fillText(Math.round(item.value), x + barWidth / 2, y - 5);
+          
+          ctx.fillStyle = '#0033A0';
+        });
+        
+        // Draw title
+        ctx.fillStyle = '#333';
+        ctx.font = 'bold 16px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(title, width / 2, 25);
+      }
+
+      addStatisticsNavigation() {
+        // Add statistics button to dashboard controls
+        const dashboardControls = document.querySelector('.dashboard-controls');
+        if (dashboardControls) {
+          const statsButton = document.createElement('button');
+          statsButton.className = 'statistics-btn';
+          statsButton.onclick = () => this.showStatisticsDashboard();
+          statsButton.innerHTML = '📊 Statistics';
+          statsButton.title = 'View Launch Statistics';
+          
+          dashboardControls.appendChild(statsButton);
+        }
+      }
+
+      loadAgenciesContent() {
+        const agencyStats = this.calculateAgencyStatistics();
+        const grid = document.getElementById('agency-comparison-grid');
+        
+        if (grid) {
+          grid.innerHTML = agencyStats.map(agency => `
+            <div class="comparison-card">
+              <h4>${agency.name}</h4>
+              <div class="agency-stats">
+                <div class="agency-stat">
+                  <span class="stat-value">${agency.totalLaunches}</span>
+                  <span class="stat-label">Total Launches</span>
+                </div>
+                <div class="agency-stat">
+                  <span class="stat-value">${agency.successRate.toFixed(1)}%</span>
+                  <span class="stat-label">Success Rate</span>
+                </div>
+                <div class="agency-stat">
+                  <span class="stat-value">$${agency.avgCost.toFixed(0)}M</span>
+                  <span class="stat-label">Avg Cost</span>
+                </div>
+              </div>
+            </div>
+          `).join('');
+        }
+        
+        setTimeout(() => this.renderMarketShareChart(), 100);
+      }
+
+      loadRocketsContent() {
+        const rocketStats = this.calculateRocketStatistics();
+        const grid = document.getElementById('rocket-performance-grid');
+        
+        if (grid) {
+          grid.innerHTML = rocketStats.map(rocket => `
+            <div class="rocket-card">
+              <h4>${rocket.name}</h4>
+              <div class="rocket-stats">
+                <div class="rocket-stat">
+                  <span class="stat-value">${rocket.launches}</span>
+                  <span class="stat-label">Launches</span>
+                </div>
+                <div class="rocket-stat">
+                  <span class="stat-value">${rocket.successRate.toFixed(1)}%</span>
+                  <span class="stat-label">Success Rate</span>
+                </div>
+                <div class="rocket-stat">
+                  <span class="stat-value">${(rocket.avgPayload / 1000).toFixed(1)}t</span>
+                  <span class="stat-label">Avg Payload</span>
+                </div>
+              </div>
+            </div>
+          `).join('');
+        }
+        
+        setTimeout(() => this.renderCostEfficiencyChart(), 100);
+      }
+
+      loadTrendsContent() {
+        setTimeout(() => {
+          this.renderFrequencyTrendChart();
+          this.renderCostTrendChart();
+        }, 100);
+      }
+
+      loadArchiveContent() {
+        this.populateArchiveFilters();
+        this.displayArchiveResults();
+      }
+
+      calculateAgencyStatistics() {
+        const launches = Array.from(this.historicalData.values());
+        const agencyData = {};
+        
+        launches.forEach(launch => {
+          if (!agencyData[launch.agency]) {
+            agencyData[launch.agency] = {
+              name: launch.agency,
+              launches: [],
+              totalCost: 0
+            };
+          }
+          agencyData[launch.agency].launches.push(launch);
+          agencyData[launch.agency].totalCost += launch.cost;
+        });
+        
+        return Object.values(agencyData).map(agency => ({
+          name: agency.name,
+          totalLaunches: agency.launches.length,
+          successRate: (agency.launches.filter(l => l.success).length / agency.launches.length) * 100,
+          avgCost: agency.totalCost / agency.launches.length
+        })).sort((a, b) => b.totalLaunches - a.totalLaunches);
+      }
+
+      calculateRocketStatistics() {
+        const launches = Array.from(this.historicalData.values());
+        const rocketData = {};
+        
+        launches.forEach(launch => {
+          if (!rocketData[launch.rocket]) {
+            rocketData[launch.rocket] = {
+              name: launch.rocket,
+              launches: [],
+              totalPayload: 0
+            };
+          }
+          rocketData[launch.rocket].launches.push(launch);
+          rocketData[launch.rocket].totalPayload += launch.payloadMass;
+        });
+        
+        return Object.values(rocketData).map(rocket => ({
+          name: rocket.name,
+          launches: rocket.launches.length,
+          successRate: (rocket.launches.filter(l => l.success).length / rocket.launches.length) * 100,
+          avgPayload: rocket.totalPayload / rocket.launches.length
+        })).sort((a, b) => b.launches - a.launches).slice(0, 10);
+      }
+
+      populateArchiveFilters() {
+        const launches = Array.from(this.historicalData.values());
+        const agencies = [...new Set(launches.map(l => l.agency))].sort();
+        const years = [...new Set(launches.map(l => new Date(l.date).getFullYear()))].sort((a, b) => b - a);
+        
+        const agencyFilter = document.getElementById('archive-agency-filter');
+        const yearFilter = document.getElementById('archive-year-filter');
+        
+        if (agencyFilter) {
+          agencyFilter.innerHTML = '<option value="">All Agencies</option>' +
+            agencies.map(agency => `<option value="${agency}">${agency}</option>`).join('');
+        }
+        
+        if (yearFilter) {
+          yearFilter.innerHTML = '<option value="">All Years</option>' +
+            years.map(year => `<option value="${year}">${year}</option>`).join('');
+        }
+        
+        // Add event listeners for filters
+        [agencyFilter, yearFilter, document.getElementById('archive-status-filter')].forEach(filter => {
+          if (filter) {
+            filter.addEventListener('change', () => this.displayArchiveResults());
+          }
+        });
+      }
+
+      displayArchiveResults() {
+        const launches = Array.from(this.historicalData.values());
+        const agencyFilter = document.getElementById('archive-agency-filter')?.value;
+        const yearFilter = document.getElementById('archive-year-filter')?.value;
+        const statusFilter = document.getElementById('archive-status-filter')?.value;
+        
+        let filteredLaunches = launches;
+        
+        if (agencyFilter) {
+          filteredLaunches = filteredLaunches.filter(l => l.agency === agencyFilter);
+        }
+        
+        if (yearFilter) {
+          filteredLaunches = filteredLaunches.filter(l => new Date(l.date).getFullYear().toString() === yearFilter);
+        }
+        
+        if (statusFilter) {
+          filteredLaunches = filteredLaunches.filter(l => 
+            statusFilter === 'success' ? l.success : !l.success
+          );
+        }
+        
+        // Sort by date (newest first)
+        filteredLaunches.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        const resultsContainer = document.getElementById('archive-results');
+        if (resultsContainer) {
+          resultsContainer.innerHTML = `
+            <div class="archive-header">
+              <strong>Showing ${filteredLaunches.length} launches</strong>
+            </div>
+            ${filteredLaunches.slice(0, 100).map(launch => `
+              <div class="archive-item">
+                <div class="archive-mission">${launch.mission}</div>
+                <div class="archive-agency">${launch.agency}</div>
+                <div class="archive-rocket">${launch.rocket}</div>
+                <div class="archive-date">${new Date(launch.date).toLocaleDateString()}</div>
+                <div class="archive-status ${launch.success ? 'success' : 'failure'}">
+                  ${launch.success ? 'Success' : 'Failure'}
+                </div>
+              </div>
+            `).join('')}
+            ${filteredLaunches.length > 100 ? '<div class="archive-more">Showing first 100 results...</div>' : ''}
+          `;
+        }
+      }
+
+      renderMarketShareChart() {
+        const canvas = document.getElementById('market-share-chart');
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        const agencyStats = this.calculateAgencyStatistics();
+        
+        this.drawPieChart(ctx, agencyStats.map(a => ({
+          label: a.name,
+          value: a.totalLaunches
+        })), 'Market Share by Launch Count');
+      }
+
+      renderCostEfficiencyChart() {
+        const canvas = document.getElementById('cost-efficiency-chart');
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        const rocketStats = this.calculateRocketStatistics();
+        
+        this.drawScatterChart(ctx, rocketStats.map(r => ({
+          x: r.avgPayload / 1000, // Convert to tons
+          y: 100, // Placeholder cost per kg
+          label: r.name
+        })), 'Cost vs Payload Efficiency');
+      }
+
+      renderFrequencyTrendChart() {
+        const canvas = document.getElementById('frequency-trend-chart');
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        const yearData = this.getYearlyLaunchData();
+        
+        this.drawLineChart(ctx, yearData, 'Launch Frequency Trend');
+      }
+
+      renderCostTrendChart() {
+        const canvas = document.getElementById('cost-trend-chart');
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        const costData = this.getYearlyCostData();
+        
+        this.drawLineChart(ctx, costData, 'Average Launch Cost Trend');
+      }
+
+      getYearlyCostData() {
+        const launches = Array.from(this.historicalData.values());
+        const yearData = {};
+        
+        launches.forEach(launch => {
+          const year = new Date(launch.date).getFullYear();
+          if (!yearData[year]) {
+            yearData[year] = { total: 0, count: 0 };
+          }
+          yearData[year].total += launch.cost;
+          yearData[year].count++;
+        });
+        
+        return Object.entries(yearData).map(([year, data]) => ({
+          label: year,
+          value: data.total / data.count
+        }));
+      }
+
+      drawPieChart(ctx, data, title) {
+        const canvas = ctx.canvas;
+        const width = canvas.width;
+        const height = canvas.height;
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const radius = Math.min(width, height) / 3;
+        
+        ctx.clearRect(0, 0, width, height);
+        
+        const total = data.reduce((sum, item) => sum + item.value, 0);
+        let currentAngle = -Math.PI / 2;
+        
+        const colors = ['#0033A0', '#FF4444', '#00AA44', '#FF9500', '#9966CC', '#FF6B9D', '#00CCAA'];
+        
+        data.forEach((item, index) => {
+          const sliceAngle = (item.value / total) * 2 * Math.PI;
+          
+          ctx.beginPath();
+          ctx.moveTo(centerX, centerY);
+          ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
+          ctx.closePath();
+          ctx.fillStyle = colors[index % colors.length];
+          ctx.fill();
+          
+          // Draw label
+          const labelAngle = currentAngle + sliceAngle / 2;
+          const labelX = centerX + Math.cos(labelAngle) * (radius + 30);
+          const labelY = centerY + Math.sin(labelAngle) * (radius + 30);
+          
+          ctx.fillStyle = '#333';
+          ctx.font = '12px Arial';
+          ctx.textAlign = 'center';
+          ctx.fillText(item.label, labelX, labelY);
+          
+          currentAngle += sliceAngle;
+        });
+        
+        // Draw title
+        ctx.fillStyle = '#333';
+        ctx.font = 'bold 16px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(title, width / 2, 25);
+      }
+
+      drawLineChart(ctx, data, title) {
+        const canvas = ctx.canvas;
+        const width = canvas.width;
+        const height = canvas.height;
+        const margin = 40;
+        const chartWidth = width - 2 * margin;
+        const chartHeight = height - 2 * margin;
+        
+        ctx.clearRect(0, 0, width, height);
+        
+        const maxValue = Math.max(...data.map(d => d.value));
+        const minValue = Math.min(...data.map(d => d.value));
+        const valueRange = maxValue - minValue;
+        
+        ctx.strokeStyle = '#0033A0';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        
+        data.forEach((point, index) => {
+          const x = margin + (index / (data.length - 1)) * chartWidth;
+          const y = height - margin - ((point.value - minValue) / valueRange) * chartHeight;
+          
+          if (index === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+          
+          // Draw point
+          ctx.fillStyle = '#0033A0';
+          ctx.beginPath();
+          ctx.arc(x, y, 4, 0, 2 * Math.PI);
+          ctx.fill();
+          
+          // Draw label
+          ctx.fillStyle = '#333';
+          ctx.font = '12px Arial';
+          ctx.textAlign = 'center';
+          ctx.fillText(point.label, x, height - 10);
+        });
+        
+        ctx.stroke();
+        
+        // Draw title
+        ctx.fillStyle = '#333';
+        ctx.font = 'bold 16px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(title, width / 2, 25);
+      }
+
+      drawScatterChart(ctx, data, title) {
+        const canvas = ctx.canvas;
+        const width = canvas.width;
+        const height = canvas.height;
+        const margin = 60;
+        const chartWidth = width - 2 * margin;
+        const chartHeight = height - 2 * margin;
+        
+        ctx.clearRect(0, 0, width, height);
+        
+        const maxX = Math.max(...data.map(d => d.x));
+        const maxY = Math.max(...data.map(d => d.y));
+        
+        data.forEach(point => {
+          const x = margin + (point.x / maxX) * chartWidth;
+          const y = height - margin - (point.y / maxY) * chartHeight;
+          
+          ctx.fillStyle = '#0033A0';
+          ctx.beginPath();
+          ctx.arc(x, y, 6, 0, 2 * Math.PI);
+          ctx.fill();
+          
+          // Draw label
+          ctx.fillStyle = '#333';
+          ctx.font = '10px Arial';
+          ctx.textAlign = 'center';
+          ctx.fillText(point.label, x, y - 10);
+        });
+        
+        // Draw title
+        ctx.fillStyle = '#333';
+        ctx.font = 'bold 16px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(title, width / 2, 25);
+      }
+
+      initializeChartLibrary() {
+        // In production, this would initialize Chart.js or similar
+        console.log('Chart library initialized');
+      }
+    }
+
+    // Initialize historical data manager
+    const historicalDataManager = new HistoricalDataManager();
 
     // Enhanced setNotification function
     function setNotification(button) {
