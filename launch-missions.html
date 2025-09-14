@@ -1507,6 +1507,189 @@
         font-size: 0.8em;
       }
     }
+
+    /* Advanced Filtering Styles */
+    .sort-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+
+    .sort-select {
+      padding: 0.6em 1em;
+      border: 1px solid rgba(0, 51, 160, 0.3);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--accent);
+      font-size: 0.9em;
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+    }
+
+    .sort-select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 51, 160, 0.1);
+    }
+
+    body.dark .sort-select {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-light);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    body.dark .sort-select:focus {
+      border-color: var(--text-light);
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+    }
+
+    .filter-stats {
+      background: rgba(0, 51, 160, 0.1);
+      color: var(--accent);
+      padding: 0.4em 0.8em;
+      border-radius: 15px;
+      font-size: 0.8em;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    body.dark .filter-stats {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-light);
+    }
+
+    /* Pagination Styles */
+    .pagination-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5em;
+      margin: 2em 0;
+      padding: 1em;
+    }
+
+    .pagination-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(0, 51, 160, 0.3);
+      color: var(--accent);
+      padding: 0.6em 1em;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9em;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      min-width: 40px;
+    }
+
+    .pagination-btn:hover:not(:disabled) {
+      background: rgba(0, 51, 160, 0.1);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .pagination-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .pagination-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    body.dark .pagination-btn {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-light);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    body.dark .pagination-btn:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--text-light);
+    }
+
+    body.dark .pagination-btn.active {
+      background: var(--dark-accent);
+      color: white;
+      border-color: var(--dark-accent);
+    }
+
+    /* Filter Animation Enhancements */
+    .launch-card {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .launch-card.filtering {
+      opacity: 0.5;
+      transform: scale(0.95);
+    }
+
+    /* Advanced Search Highlighting */
+    .search-highlight {
+      background: rgba(255, 64, 129, 0.2);
+      padding: 0.1em 0.2em;
+      border-radius: 3px;
+    }
+
+    /* Filter Clear Button */
+    .filter-clear-btn {
+      background: var(--launch-delayed);
+      color: white;
+      border: none;
+      padding: 0.6em 1em;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9em;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .filter-clear-btn:hover {
+      background: var(--launch-failure);
+      transform: translateY(-2px);
+    }
+
+    /* Responsive Filter Adjustments */
+    @media (max-width: 900px) {
+      .sort-controls {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .filter-stats {
+        order: 4;
+        text-align: center;
+      }
+
+      .pagination-controls {
+        flex-wrap: wrap;
+        gap: 0.3em;
+      }
+
+      .pagination-btn {
+        padding: 0.5em 0.8em;
+        font-size: 0.8em;
+        min-width: 35px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .sort-select {
+        width: 100%;
+        font-size: 0.85em;
+      }
+
+      .filter-stats {
+        font-size: 0.75em;
+      }
+
+      .pagination-controls {
+        margin: 1.5em 0;
+      }
+    }
   </style>
 </head>
 
@@ -1640,6 +1823,7 @@
       <div class="search-controls">
         <input type="text" id="mission-search" placeholder="Search missions, rockets, payloads..." class="search-input">
         <button class="search-btn" title="Search">🔍</button>
+        <button class="filter-clear-btn" onclick="window.filterManager?.clearAllFilters()" title="Clear All Filters">Clear</button>
       </div>
     </section>
 
@@ -4474,31 +4658,518 @@
       return date.toLocaleDateString('en-US', options);
     }
 
-    // Enhanced Filter and Search Functions
-    function applyFilter(filterType) {
-      if (!window.launchDataManager) return;
-      
-      let filteredLaunches;
-      
-      if (filterType === 'all') {
-        filteredLaunches = Array.from(launchDataManager.launches.values());
-      } else {
-        filteredLaunches = launchDataManager.filterByCategory(filterType);
+    // Advanced Filtering and Search System
+    class FilterManager {
+      constructor() {
+        this.activeFilters = {
+          agency: 'all',
+          status: 'all',
+          missionType: 'all',
+          rocketType: 'all',
+          country: 'all'
+        };
+        this.searchQuery = '';
+        this.sortBy = 'launchTime';
+        this.sortOrder = 'asc';
+        this.resultsPerPage = 6;
+        this.currentPage = 1;
+        this.animationDuration = 300;
       }
-      
-      // Update grid with filtered data
-      updateGridWithLaunches(filteredLaunches.slice(0, 6));
-      
-      console.log(`🔍 Applied filter: ${filterType}, found ${filteredLaunches.length} launches`);
+
+      init() {
+        this.setupFilterEventListeners();
+        this.setupSearchEventListeners();
+        this.setupSortingControls();
+        this.loadFilterStateFromURL();
+        console.log('🔍 Advanced Filter Manager initialized');
+      }
+
+      setupFilterEventListeners() {
+        // Enhanced filter button handling
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const filterType = e.target.dataset.filter;
+            const filterCategory = e.target.dataset.category || 'agency';
+            
+            this.setFilter(filterCategory, filterType);
+            this.updateFilterUI(filterCategory, filterType);
+            this.applyFilters();
+          });
+        });
+
+        // View control buttons
+        const viewButtons = document.querySelectorAll('.view-btn');
+        viewButtons.forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const viewType = e.target.dataset.view;
+            this.setFilter('status', viewType === 'upcoming' ? 'upcoming' : 
+                                   viewType === 'live' ? 'live' : 
+                                   viewType === 'recent' ? 'recent' : 'all');
+            this.updateViewUI(viewType);
+            this.applyFilters();
+          });
+        });
+      }
+
+      setupSearchEventListeners() {
+        const searchInput = document.getElementById('mission-search');
+        const searchBtn = document.querySelector('.search-btn');
+        
+        if (searchInput) {
+          // Real-time search with debouncing
+          let searchTimeout;
+          searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+              this.searchQuery = e.target.value.trim();
+              this.applyFilters();
+              this.updateURL();
+            }, 300);
+          });
+
+          // Search on Enter key
+          searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+              this.searchQuery = e.target.value.trim();
+              this.applyFilters();
+              this.updateURL();
+            }
+          });
+        }
+
+        if (searchBtn) {
+          searchBtn.addEventListener('click', () => {
+            if (searchInput) {
+              this.searchQuery = searchInput.value.trim();
+              this.applyFilters();
+              this.updateURL();
+            }
+          });
+        }
+      }
+
+      setupSortingControls() {
+        // Add sorting dropdown if it doesn't exist
+        this.createSortingControls();
+      }
+
+      createSortingControls() {
+        const controlsBar = document.querySelector('.controls-bar');
+        if (!controlsBar || document.querySelector('.sort-controls')) return;
+
+        const sortControls = document.createElement('div');
+        sortControls.className = 'sort-controls';
+        sortControls.innerHTML = `
+          <select class="sort-select" id="sort-select">
+            <option value="launchTime-asc">Launch Time (Earliest)</option>
+            <option value="launchTime-desc">Launch Time (Latest)</option>
+            <option value="name-asc">Mission Name (A-Z)</option>
+            <option value="name-desc">Mission Name (Z-A)</option>
+            <option value="agency-asc">Agency (A-Z)</option>
+            <option value="rocket-asc">Rocket (A-Z)</option>
+          </select>
+        `;
+
+        controlsBar.appendChild(sortControls);
+
+        const sortSelect = document.getElementById('sort-select');
+        sortSelect.addEventListener('change', (e) => {
+          const [sortBy, sortOrder] = e.target.value.split('-');
+          this.sortBy = sortBy;
+          this.sortOrder = sortOrder;
+          this.applyFilters();
+          this.updateURL();
+        });
+      }
+
+      setFilter(category, value) {
+        this.activeFilters[category] = value;
+        this.currentPage = 1; // Reset to first page when filtering
+      }
+
+      updateFilterUI(category, value) {
+        // Update filter button states
+        const categoryButtons = document.querySelectorAll(`[data-category="${category}"], .filter-btn, .view-btn`);
+        categoryButtons.forEach(btn => {
+          btn.classList.remove('active');
+          if (btn.dataset.filter === value || btn.dataset.view === value) {
+            btn.classList.add('active');
+          }
+        });
+
+        // Add visual feedback
+        const activeButton = document.querySelector(`[data-filter="${value}"], [data-view="${value}"]`);
+        if (activeButton) {
+          activeButton.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            activeButton.style.transform = '';
+          }, 150);
+        }
+      }
+
+      updateViewUI(viewType) {
+        const viewButtons = document.querySelectorAll('.view-btn');
+        viewButtons.forEach(btn => {
+          btn.classList.remove('active');
+          if (btn.dataset.view === viewType) {
+            btn.classList.add('active');
+          }
+        });
+      }
+
+      applyFilters() {
+        if (!window.launchDataManager) return;
+
+        let filteredLaunches = Array.from(launchDataManager.launches.values());
+
+        // Apply agency filter
+        if (this.activeFilters.agency !== 'all') {
+          filteredLaunches = filteredLaunches.filter(launch => 
+            launch.agency === this.activeFilters.agency
+          );
+        }
+
+        // Apply status filter
+        if (this.activeFilters.status !== 'all') {
+          if (this.activeFilters.status === 'recent') {
+            filteredLaunches = filteredLaunches.filter(launch => 
+              ['success', 'failure'].includes(launch.status)
+            );
+          } else {
+            filteredLaunches = filteredLaunches.filter(launch => 
+              launch.status === this.activeFilters.status
+            );
+          }
+        }
+
+        // Apply mission type filter
+        if (this.activeFilters.missionType !== 'all') {
+          filteredLaunches = filteredLaunches.filter(launch => 
+            launch.mission?.type === this.activeFilters.missionType ||
+            launch.international?.missionType === this.activeFilters.missionType
+          );
+        }
+
+        // Apply rocket type filter
+        if (this.activeFilters.rocketType !== 'all') {
+          filteredLaunches = filteredLaunches.filter(launch => 
+            launch.rocket?.type === this.activeFilters.rocketType
+          );
+        }
+
+        // Apply country filter
+        if (this.activeFilters.country !== 'all') {
+          filteredLaunches = filteredLaunches.filter(launch => 
+            launch.international?.agencyCountry === this.activeFilters.country ||
+            launch.rocket?.country === this.activeFilters.country
+          );
+        }
+
+        // Apply search query
+        if (this.searchQuery) {
+          filteredLaunches = this.performAdvancedSearch(filteredLaunches, this.searchQuery);
+        }
+
+        // Apply sorting
+        filteredLaunches = this.sortLaunches(filteredLaunches);
+
+        // Apply pagination
+        const startIndex = (this.currentPage - 1) * this.resultsPerPage;
+        const paginatedLaunches = filteredLaunches.slice(startIndex, startIndex + this.resultsPerPage);
+
+        // Update UI with smooth animations
+        this.updateGridWithAnimation(paginatedLaunches);
+        this.updateFilterStats(filteredLaunches.length);
+        this.updatePagination(filteredLaunches.length);
+
+        console.log(`🔍 Applied filters: ${JSON.stringify(this.activeFilters)}, found ${filteredLaunches.length} launches`);
+      }
+
+      performAdvancedSearch(launches, query) {
+        const searchTerms = query.toLowerCase().split(' ').filter(term => term.length > 0);
+        
+        return launches.filter(launch => {
+          const searchableText = [
+            launch.name,
+            launch.description,
+            launch.rocket?.name,
+            launch.rocket?.family,
+            launch.payload?.name,
+            launch.launchSite?.name,
+            launch.launchSite?.location,
+            launch.international?.launchProvider,
+            launch.mission?.type,
+            launch.agency
+          ].filter(Boolean).join(' ').toLowerCase();
+
+          // All search terms must be found (AND logic)
+          return searchTerms.every(term => searchableText.includes(term));
+        });
+      }
+
+      sortLaunches(launches) {
+        return launches.sort((a, b) => {
+          let aValue, bValue;
+
+          switch (this.sortBy) {
+            case 'launchTime':
+              aValue = new Date(a.schedule.launchTime);
+              bValue = new Date(b.schedule.launchTime);
+              break;
+            case 'name':
+              aValue = a.name.toLowerCase();
+              bValue = b.name.toLowerCase();
+              break;
+            case 'agency':
+              aValue = a.agency.toLowerCase();
+              bValue = b.agency.toLowerCase();
+              break;
+            case 'rocket':
+              aValue = a.rocket?.name?.toLowerCase() || '';
+              bValue = b.rocket?.name?.toLowerCase() || '';
+              break;
+            default:
+              return 0;
+          }
+
+          if (aValue < bValue) return this.sortOrder === 'asc' ? -1 : 1;
+          if (aValue > bValue) return this.sortOrder === 'asc' ? 1 : -1;
+          return 0;
+        });
+      }
+
+      updateGridWithAnimation(launches) {
+        const launchGrid = document.getElementById('launch-grid');
+        const existingCards = launchGrid.querySelectorAll('.launch-card');
+
+        // Fade out existing cards
+        existingCards.forEach((card, index) => {
+          setTimeout(() => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+          }, index * 50);
+        });
+
+        // Update cards after fade out
+        setTimeout(() => {
+          launches.forEach((launch, index) => {
+            if (index < existingCards.length) {
+              updateLaunchCard(existingCards[index], launch);
+              existingCards[index].style.display = 'block';
+              
+              // Fade in updated card
+              setTimeout(() => {
+                existingCards[index].style.opacity = '1';
+                existingCards[index].style.transform = 'translateY(0)';
+              }, index * 50);
+            }
+          });
+
+          // Hide unused cards
+          for (let i = launches.length; i < existingCards.length; i++) {
+            existingCards[i].style.display = 'none';
+          }
+        }, this.animationDuration);
+      }
+
+      updateFilterStats(totalResults) {
+        // Update or create filter stats display
+        let statsElement = document.querySelector('.filter-stats');
+        if (!statsElement) {
+          statsElement = document.createElement('div');
+          statsElement.className = 'filter-stats';
+          const controlsBar = document.querySelector('.controls-bar');
+          if (controlsBar) {
+            controlsBar.appendChild(statsElement);
+          }
+        }
+
+        const activeFilterCount = Object.values(this.activeFilters).filter(f => f !== 'all').length;
+        const searchActive = this.searchQuery.length > 0;
+        
+        let statsText = `${totalResults} launches`;
+        if (activeFilterCount > 0 || searchActive) {
+          statsText += ` (filtered)`;
+        }
+
+        statsElement.textContent = statsText;
+      }
+
+      updatePagination(totalResults) {
+        const totalPages = Math.ceil(totalResults / this.resultsPerPage);
+        
+        // Create or update pagination controls
+        let paginationElement = document.querySelector('.pagination-controls');
+        if (!paginationElement && totalPages > 1) {
+          paginationElement = document.createElement('div');
+          paginationElement.className = 'pagination-controls';
+          
+          const launchGrid = document.getElementById('launch-grid');
+          if (launchGrid) {
+            launchGrid.parentNode.insertBefore(paginationElement, launchGrid.nextSibling);
+          }
+        }
+
+        if (paginationElement) {
+          if (totalPages <= 1) {
+            paginationElement.style.display = 'none';
+            return;
+          }
+
+          paginationElement.style.display = 'flex';
+          paginationElement.innerHTML = '';
+
+          // Previous button
+          const prevBtn = document.createElement('button');
+          prevBtn.className = 'pagination-btn';
+          prevBtn.textContent = '‹ Previous';
+          prevBtn.disabled = this.currentPage === 1;
+          prevBtn.addEventListener('click', () => this.goToPage(this.currentPage - 1));
+          paginationElement.appendChild(prevBtn);
+
+          // Page numbers
+          for (let i = 1; i <= Math.min(totalPages, 5); i++) {
+            const pageBtn = document.createElement('button');
+            pageBtn.className = `pagination-btn ${i === this.currentPage ? 'active' : ''}`;
+            pageBtn.textContent = i.toString();
+            pageBtn.addEventListener('click', () => this.goToPage(i));
+            paginationElement.appendChild(pageBtn);
+          }
+
+          // Next button
+          const nextBtn = document.createElement('button');
+          nextBtn.className = 'pagination-btn';
+          nextBtn.textContent = 'Next ›';
+          nextBtn.disabled = this.currentPage === totalPages;
+          nextBtn.addEventListener('click', () => this.goToPage(this.currentPage + 1));
+          paginationElement.appendChild(nextBtn);
+        }
+      }
+
+      goToPage(page) {
+        this.currentPage = page;
+        this.applyFilters();
+        this.updateURL();
+      }
+
+      updateURL() {
+        const params = new URLSearchParams();
+        
+        Object.entries(this.activeFilters).forEach(([key, value]) => {
+          if (value !== 'all') {
+            params.set(key, value);
+          }
+        });
+
+        if (this.searchQuery) {
+          params.set('search', this.searchQuery);
+        }
+
+        if (this.sortBy !== 'launchTime' || this.sortOrder !== 'asc') {
+          params.set('sort', `${this.sortBy}-${this.sortOrder}`);
+        }
+
+        if (this.currentPage > 1) {
+          params.set('page', this.currentPage.toString());
+        }
+
+        const newURL = params.toString() ? `${window.location.pathname}?${params.toString()}` : window.location.pathname;
+        window.history.replaceState({}, '', newURL);
+      }
+
+      loadFilterStateFromURL() {
+        const params = new URLSearchParams(window.location.search);
+        
+        // Load filters from URL
+        Object.keys(this.activeFilters).forEach(key => {
+          const value = params.get(key);
+          if (value) {
+            this.activeFilters[key] = value;
+          }
+        });
+
+        // Load search query
+        const search = params.get('search');
+        if (search) {
+          this.searchQuery = search;
+          const searchInput = document.getElementById('mission-search');
+          if (searchInput) {
+            searchInput.value = search;
+          }
+        }
+
+        // Load sort settings
+        const sort = params.get('sort');
+        if (sort) {
+          const [sortBy, sortOrder] = sort.split('-');
+          this.sortBy = sortBy;
+          this.sortOrder = sortOrder;
+          
+          const sortSelect = document.getElementById('sort-select');
+          if (sortSelect) {
+            sortSelect.value = sort;
+          }
+        }
+
+        // Load page
+        const page = params.get('page');
+        if (page) {
+          this.currentPage = parseInt(page);
+        }
+
+        // Apply loaded state
+        this.applyFilters();
+      }
+
+      // Public API
+      clearAllFilters() {
+        this.activeFilters = {
+          agency: 'all',
+          status: 'all',
+          missionType: 'all',
+          rocketType: 'all',
+          country: 'all'
+        };
+        this.searchQuery = '';
+        this.currentPage = 1;
+        
+        // Clear UI
+        const searchInput = document.getElementById('mission-search');
+        if (searchInput) searchInput.value = '';
+        
+        // Reset filter buttons
+        document.querySelectorAll('.filter-btn, .view-btn').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        document.querySelector('[data-filter="all"]')?.classList.add('active');
+        document.querySelector('[data-view="upcoming"]')?.classList.add('active');
+        
+        this.applyFilters();
+        this.updateURL();
+      }
+
+      getActiveFilters() {
+        return { ...this.activeFilters, searchQuery: this.searchQuery };
+      }
+    }
+
+    // Initialize global filter manager
+    const filterManager = new FilterManager();
+
+    // Legacy functions for compatibility
+    function applyFilter(filterType) {
+      if (window.filterManager) {
+        filterManager.setFilter('agency', filterType);
+        filterManager.applyFilters();
+      }
     }
 
     function performSearch(query) {
-      if (!window.launchDataManager) return;
-      
-      const results = launchDataManager.searchLaunches(query);
-      updateGridWithLaunches(results.slice(0, 6));
-      
-      console.log(`🔎 Search for "${query}" found ${results.length} results`);
+      if (window.filterManager) {
+        filterManager.searchQuery = query;
+        filterManager.applyFilters();
+      }
     }
 
     function updateGridWithLaunches(launches) {
@@ -4616,9 +5287,14 @@
         await launchDataManager.init();
         console.log('🚀 Launch Data Manager Initialized');
         
+        // Initialize Filter Manager
+        filterManager.init();
+        console.log('🔍 Advanced Filter Manager Initialized');
+        
         // Make managers globally available
         window.countdownManager = countdownManager;
         window.launchDataManager = launchDataManager;
+        window.filterManager = filterManager;
         
         // Update UI with real data
         updateLaunchGrid();
