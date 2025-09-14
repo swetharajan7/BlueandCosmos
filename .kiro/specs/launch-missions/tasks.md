@@ -40,7 +40,7 @@
   - Add error handling for API failures and network issues with cached data fallbacks
   - _Requirements: 1.1, 1.4, 6.1, 7.1_
 
-- [ ] 6. Integrate SpaceX API for launch data
+- [x] 6. Integrate SpaceX API for launch data
   - Set up SpaceX API integration for upcoming and recent launches
   - Implement Falcon 9, Falcon Heavy, and Starship launch data parsing
   - Create rocket specification mapping and payload information extraction

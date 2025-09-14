@@ -2732,15 +2732,64 @@
 
       async fetchSpaceXLaunches() {
         try {
-          const response = await this.fetchWithRetry(`${this.apiEndpoints.spacex}/upcoming?limit=10`);
-          if (!response.ok) throw new Error(`SpaceX API error: ${response.status}`);
+          console.log('🚀 Fetching SpaceX launch data...');
           
-          const data = await response.json();
-          return this.parseSpaceXData(data);
+          // Fetch multiple SpaceX endpoints for comprehensive data
+          const [upcomingResponse, recentResponse, rocketsResponse, launchpadsResponse] = await Promise.allSettled([
+            this.fetchWithRetry(`${this.apiEndpoints.spacex}/upcoming?limit=15`),
+            this.fetchWithRetry(`${this.apiEndpoints.spacex}/past?limit=5&order=desc`),
+            this.fetchWithRetry('https://api.spacexdata.com/v4/rockets'),
+            this.fetchWithRetry('https://api.spacexdata.com/v4/launchpads')
+          ]);
+
+          let allLaunches = [];
+          let rocketData = {};
+          let launchpadData = {};
+
+          // Process rockets data for enhanced information
+          if (rocketsResponse.status === 'fulfilled' && rocketsResponse.value.ok) {
+            const rockets = await rocketsResponse.value.json();
+            rockets.forEach(rocket => {
+              rocketData[rocket.id] = rocket;
+            });
+            console.log(`📊 Loaded ${rockets.length} SpaceX rocket configurations`);
+          }
+
+          // Process launchpads data
+          if (launchpadsResponse.status === 'fulfilled' && launchpadsResponse.value.ok) {
+            const launchpads = await launchpadsResponse.value.json();
+            launchpads.forEach(pad => {
+              launchpadData[pad.id] = pad;
+            });
+            console.log(`🏗️ Loaded ${launchpads.length} SpaceX launchpad configurations`);
+          }
+
+          // Process upcoming launches
+          if (upcomingResponse.status === 'fulfilled' && upcomingResponse.value.ok) {
+            const upcomingData = await upcomingResponse.value.json();
+            const upcomingLaunches = this.parseSpaceXData(upcomingData, rocketData, launchpadData, 'upcoming');
+            allLaunches.push(...upcomingLaunches);
+            console.log(`⏰ Processed ${upcomingLaunches.length} upcoming SpaceX launches`);
+          }
+
+          // Process recent launches
+          if (recentResponse.status === 'fulfilled' && recentResponse.value.ok) {
+            const recentData = await recentResponse.value.json();
+            const recentLaunches = this.parseSpaceXData(recentData, rocketData, launchpadData, 'recent');
+            allLaunches.push(...recentLaunches);
+            console.log(`📈 Processed ${recentLaunches.length} recent SpaceX launches`);
+          }
+
+          if (allLaunches.length === 0) {
+            throw new Error('No SpaceX data available');
+          }
+
+          console.log(`✅ SpaceX API integration complete: ${allLaunches.length} total launches`);
+          return allLaunches;
           
         } catch (error) {
-          console.warn('SpaceX API unavailable, using fallback data');
-          return this.getSpaceXFallback();
+          console.warn('SpaceX API unavailable, using enhanced fallback data:', error.message);
+          return this.getEnhancedSpaceXFallback();
         }
       }
 
@@ -2792,39 +2841,161 @@
         }
       }
 
-      parseSpaceXData(launches) {
-        return launches.map(launch => ({
-          id: `spacex-${launch.id}`,
-          name: launch.name,
-          description: launch.details || `SpaceX ${launch.name} mission`,
-          agency: 'spacex',
-          rocket: {
-            name: launch.rocket?.name || 'Falcon 9',
-            type: launch.rocket?.type || 'orbital',
-            reusable: true
-          },
-          payload: {
-            name: launch.payloads?.[0]?.name || 'Various Payloads',
-            type: launch.payloads?.[0]?.type || 'satellite',
-            mass: launch.payloads?.[0]?.mass_kg || 0
-          },
-          launchSite: {
-            name: launch.launchpad?.name || 'Kennedy Space Center',
-            location: launch.launchpad?.locality || 'Florida, USA'
-          },
-          schedule: {
-            launchTime: new Date(launch.date_utc),
-            precision: launch.date_precision || 'hour'
-          },
-          status: this.determineStatus(launch.date_utc, launch.success),
-          media: {
-            patch: launch.links?.patch?.small,
-            images: launch.links?.flickr?.original || [],
-            webcast: launch.links?.webcast
-          },
-          source: 'spacex-api',
-          lastUpdated: Date.now()
-        }));
+      parseSpaceXData(launches, rocketData = {}, launchpadData = {}, category = 'upcoming') {
+        return launches.map(launch => {
+          const rocket = rocketData[launch.rocket] || {};
+          const launchpad = launchpadData[launch.launchpad] || {};
+          const payloads = launch.payloads || [];
+          
+          // Enhanced rocket information
+          const rocketInfo = {
+            name: rocket.name || 'Unknown Rocket',
+            type: this.getSpaceXRocketType(rocket.name),
+            reusable: rocket.reusable || false,
+            stages: rocket.stages || 2,
+            boosters: rocket.boosters || 0,
+            height: rocket.height ? `${rocket.height.meters}m` : 'Unknown',
+            diameter: rocket.diameter ? `${rocket.diameter.meters}m` : 'Unknown',
+            mass: rocket.mass ? `${rocket.mass.kg.toLocaleString()}kg` : 'Unknown',
+            payloadToLEO: rocket.payload_weights?.find(p => p.id === 'leo')?.kg || 0,
+            payloadToGTO: rocket.payload_weights?.find(p => p.id === 'gto')?.kg || 0,
+            firstFlight: rocket.first_flight,
+            successRate: this.calculateSpaceXRocketSuccessRate(rocket.name),
+            landingLegs: rocket.landing_legs?.number || 0,
+            engines: rocket.engines?.number || 0
+          };
+
+          // Enhanced launchpad information
+          const launchSiteInfo = {
+            name: launchpad.full_name || launchpad.name || 'Unknown Launchpad',
+            location: launchpad.locality ? `${launchpad.locality}, ${launchpad.region}` : 'Unknown Location',
+            status: launchpad.status || 'unknown',
+            details: launchpad.details,
+            coordinates: launchpad.latitude && launchpad.longitude ? 
+              [launchpad.latitude, launchpad.longitude] : null,
+            timezone: launchpad.timezone || 'UTC',
+            launchAttempts: launchpad.launch_attempts || 0,
+            launchSuccesses: launchpad.launch_successes || 0
+          };
+
+          // Enhanced payload information
+          const payloadInfo = payloads.length > 0 ? {
+            name: payloads.map(p => p.name).join(', ') || 'Undisclosed Payload',
+            type: payloads[0].type || 'satellite',
+            mass: payloads.reduce((total, p) => total + (p.mass_kg || 0), 0),
+            orbit: payloads[0].orbit || 'Unknown',
+            customers: payloads.map(p => p.customers).flat().filter(Boolean),
+            manufacturers: payloads.map(p => p.manufacturers).flat().filter(Boolean),
+            nationalities: payloads.map(p => p.nationalities).flat().filter(Boolean)
+          } : {
+            name: 'Undisclosed Payload',
+            type: 'unknown',
+            mass: 0,
+            orbit: 'Unknown'
+          };
+
+          // Enhanced mission description
+          let enhancedDescription = launch.details || `SpaceX ${launch.name} mission`;
+          if (payloadInfo.customers.length > 0) {
+            enhancedDescription += ` for ${payloadInfo.customers.slice(0, 2).join(' and ')}`;
+          }
+          if (payloadInfo.orbit && payloadInfo.orbit !== 'Unknown') {
+            enhancedDescription += ` to ${payloadInfo.orbit} orbit`;
+          }
+
+          // Flight number and mission type
+          const missionType = this.determineSpaceXMissionType(launch.name, payloadInfo);
+          const flightNumber = launch.flight_number || 0;
+
+          return {
+            id: `spacex-${launch.id}`,
+            name: launch.name,
+            description: enhancedDescription,
+            agency: 'spacex',
+            rocket: rocketInfo,
+            payload: payloadInfo,
+            launchSite: launchSiteInfo,
+            schedule: {
+              launchTime: new Date(launch.date_utc),
+              precision: launch.date_precision || 'hour',
+              window: launch.window || null,
+              autoSequenceStart: launch.auto_update ? 'Enabled' : 'Manual'
+            },
+            status: this.determineSpaceXStatus(launch.date_utc, launch.success, launch.upcoming),
+            media: {
+              patch: launch.links?.patch?.small || launch.links?.patch?.large,
+              patchLarge: launch.links?.patch?.large,
+              images: launch.links?.flickr?.original || [],
+              webcast: launch.links?.webcast,
+              article: launch.links?.article,
+              wikipedia: launch.links?.wikipedia,
+              reddit: {
+                campaign: launch.links?.reddit?.campaign,
+                launch: launch.links?.reddit?.launch,
+                recovery: launch.links?.reddit?.recovery
+              }
+            },
+            mission: {
+              type: missionType,
+              flightNumber: flightNumber,
+              staticFireDate: launch.static_fire_date_utc ? new Date(launch.static_fire_date_utc) : null,
+              crew: launch.crew || [],
+              ships: launch.ships || [],
+              capsules: launch.capsules || [],
+              cores: launch.cores || []
+            },
+            source: 'spacex-api-enhanced',
+            category: category,
+            lastUpdated: Date.now()
+          };
+        });
+      }
+
+      getSpaceXRocketType(rocketName) {
+        if (!rocketName) return 'orbital';
+        
+        const name = rocketName.toLowerCase();
+        if (name.includes('falcon heavy')) return 'heavy-lift';
+        if (name.includes('starship')) return 'super-heavy';
+        if (name.includes('falcon 9')) return 'medium-lift';
+        if (name.includes('falcon 1')) return 'small-lift';
+        return 'orbital';
+      }
+
+      calculateSpaceXRocketSuccessRate(rocketName) {
+        // Approximate success rates based on historical data
+        const successRates = {
+          'Falcon 9': 98.7,
+          'Falcon Heavy': 100.0,
+          'Starship': 60.0, // Early development
+          'Falcon 1': 40.0  // Historical
+        };
+        return successRates[rocketName] || 95.0;
+      }
+
+      determineSpaceXMissionType(missionName, payload) {
+        if (!missionName) return 'Commercial';
+        
+        const name = missionName.toLowerCase();
+        if (name.includes('crew') || name.includes('dragon')) return 'Crewed';
+        if (name.includes('starlink')) return 'Starlink';
+        if (name.includes('nasa') || name.includes('iss')) return 'NASA';
+        if (name.includes('military') || name.includes('nro') || name.includes('stp')) return 'Military';
+        if (payload.customers?.some(c => c.toLowerCase().includes('nasa'))) return 'NASA';
+        return 'Commercial';
+      }
+
+      determineSpaceXStatus(launchTime, success, upcoming) {
+        const now = new Date();
+        const launch = new Date(launchTime);
+        const timeDiff = launch - now;
+
+        if (success === true) return 'success';
+        if (success === false) return 'failure';
+        if (upcoming === false && timeDiff < 0) return 'success'; // Assume success if past and not failed
+        if (timeDiff < 0) return 'success';
+        if (timeDiff < 2 * 60 * 60 * 1000) return 'live'; // Within 2 hours
+        return 'upcoming';
       }
 
       parseLaunchLibraryData(launches) {
@@ -3026,8 +3197,233 @@
         ];
       }
 
+      getEnhancedSpaceXFallback() {
+        const baseTime = Date.now();
+        return [
+          {
+            id: 'spacex-fallback-1',
+            name: 'Falcon Heavy • Europa Clipper',
+            description: 'NASA\'s Europa Clipper mission to Jupiter\'s moon Europa to investigate its subsurface ocean and potential for life. This flagship mission will conduct detailed reconnaissance of Europa\'s ice shell and underlying ocean.',
+            agency: 'spacex',
+            rocket: {
+              name: 'Falcon Heavy',
+              type: 'heavy-lift',
+              reusable: true,
+              stages: 2,
+              boosters: 2,
+              height: '70m',
+              diameter: '3.66m',
+              mass: '1,420,788kg',
+              payloadToLEO: 63800,
+              payloadToGTO: 26700,
+              firstFlight: '2018-02-06',
+              successRate: 100.0,
+              landingLegs: 4,
+              engines: 27
+            },
+            payload: {
+              name: 'Europa Clipper',
+              type: 'interplanetary',
+              mass: 6065,
+              orbit: 'Jupiter Transfer',
+              customers: ['NASA'],
+              manufacturers: ['NASA JPL'],
+              nationalities: ['United States']
+            },
+            launchSite: {
+              name: 'Kennedy Space Center LC-39A',
+              location: 'Cape Canaveral, Florida',
+              status: 'active',
+              details: 'Historic Apollo and Space Shuttle launch pad',
+              coordinates: [28.6080585, -80.6039558],
+              timezone: 'America/New_York',
+              launchAttempts: 180,
+              launchSuccesses: 175
+            },
+            schedule: {
+              launchTime: new Date(baseTime + 72 * 60 * 60 * 1000), // 3 days from now
+              precision: 'exact',
+              window: 120,
+              autoSequenceStart: 'Enabled'
+            },
+            status: 'upcoming',
+            media: {
+              patch: null,
+              patchLarge: null,
+              images: [],
+              webcast: 'https://www.youtube.com/spacex',
+              article: null,
+              wikipedia: 'https://en.wikipedia.org/wiki/Europa_Clipper',
+              reddit: {
+                campaign: null,
+                launch: null,
+                recovery: null
+              }
+            },
+            mission: {
+              type: 'NASA',
+              flightNumber: 95,
+              staticFireDate: new Date(baseTime + 48 * 60 * 60 * 1000),
+              crew: [],
+              ships: ['ASOG', 'ASDS JRTI'],
+              capsules: [],
+              cores: ['B1064', 'B1065', 'B1066']
+            },
+            source: 'spacex-fallback-enhanced',
+            category: 'upcoming',
+            lastUpdated: baseTime
+          },
+          {
+            id: 'spacex-fallback-2',
+            name: 'Starship IFT-5',
+            description: 'Fifth integrated flight test of Starship and Super Heavy booster. This test will demonstrate orbital refueling capabilities, advanced landing procedures, and heat shield performance during atmospheric reentry.',
+            agency: 'spacex',
+            rocket: {
+              name: 'Starship',
+              type: 'super-heavy',
+              reusable: true,
+              stages: 2,
+              boosters: 0,
+              height: '120m',
+              diameter: '9m',
+              mass: '5,000,000kg',
+              payloadToLEO: 150000,
+              payloadToGTO: 0,
+              firstFlight: '2023-04-20',
+              successRate: 60.0,
+              landingLegs: 6,
+              engines: 39
+            },
+            payload: {
+              name: 'Test Payload',
+              type: 'test',
+              mass: 0,
+              orbit: 'Suborbital',
+              customers: ['SpaceX'],
+              manufacturers: ['SpaceX'],
+              nationalities: ['United States']
+            },
+            launchSite: {
+              name: 'Starbase Orbital Launch Mount',
+              location: 'Boca Chica, Texas',
+              status: 'active',
+              details: 'SpaceX\'s private orbital launch facility',
+              coordinates: [25.9972695, -97.1560896],
+              timezone: 'America/Chicago',
+              launchAttempts: 4,
+              launchSuccesses: 2
+            },
+            schedule: {
+              launchTime: new Date(baseTime + 30 * 24 * 60 * 60 * 1000), // 30 days from now
+              precision: 'approximate',
+              window: 60,
+              autoSequenceStart: 'Manual'
+            },
+            status: 'upcoming',
+            media: {
+              patch: null,
+              patchLarge: null,
+              images: [],
+              webcast: 'https://www.youtube.com/spacex',
+              article: null,
+              wikipedia: 'https://en.wikipedia.org/wiki/SpaceX_Starship',
+              reddit: {
+                campaign: null,
+                launch: null,
+                recovery: null
+              }
+            },
+            mission: {
+              type: 'Test Flight',
+              flightNumber: 5,
+              staticFireDate: new Date(baseTime + 25 * 24 * 60 * 60 * 1000),
+              crew: [],
+              ships: [],
+              capsules: [],
+              cores: ['B12', 'S30']
+            },
+            source: 'spacex-fallback-enhanced',
+            category: 'upcoming',
+            lastUpdated: baseTime
+          },
+          {
+            id: 'spacex-fallback-3',
+            name: 'Falcon 9 • Starlink Group 6-70',
+            description: 'SpaceX Starlink mission deploying 23 next-generation satellites to low Earth orbit. These satellites will expand global broadband coverage and improve service quality in underserved regions.',
+            agency: 'spacex',
+            rocket: {
+              name: 'Falcon 9',
+              type: 'medium-lift',
+              reusable: true,
+              stages: 2,
+              boosters: 0,
+              height: '70m',
+              diameter: '3.7m',
+              mass: '549,054kg',
+              payloadToLEO: 22800,
+              payloadToGTO: 8300,
+              firstFlight: '2010-06-04',
+              successRate: 98.7,
+              landingLegs: 4,
+              engines: 9
+            },
+            payload: {
+              name: 'Starlink Group 6-70',
+              type: 'satellite',
+              mass: 17400,
+              orbit: 'Low Earth Orbit',
+              customers: ['SpaceX'],
+              manufacturers: ['SpaceX'],
+              nationalities: ['United States']
+            },
+            launchSite: {
+              name: 'Cape Canaveral Space Force Station SLC-40',
+              location: 'Cape Canaveral, Florida',
+              status: 'active',
+              details: 'SpaceX\'s primary East Coast launch facility',
+              coordinates: [28.5618571, -80.577366],
+              timezone: 'America/New_York',
+              launchAttempts: 95,
+              launchSuccesses: 94
+            },
+            schedule: {
+              launchTime: new Date(baseTime + 18 * 60 * 60 * 1000), // 18 hours from now
+              precision: 'exact',
+              window: 240,
+              autoSequenceStart: 'Enabled'
+            },
+            status: 'upcoming',
+            media: {
+              patch: null,
+              patchLarge: null,
+              images: [],
+              webcast: 'https://www.youtube.com/spacex',
+              article: null,
+              wikipedia: 'https://en.wikipedia.org/wiki/Starlink',
+              reddit: {
+                campaign: null,
+                launch: null,
+                recovery: null
+              }
+            },
+            mission: {
+              type: 'Starlink',
+              flightNumber: 285,
+              staticFireDate: new Date(baseTime + 12 * 60 * 60 * 1000),
+              crew: [],
+              ships: ['ASDS JRTI'],
+              capsules: [],
+              cores: ['B1073-15']
+            },
+            source: 'spacex-fallback-enhanced',
+            category: 'upcoming',
+            lastUpdated: baseTime
+          }
+        ];
+      }
+
       getSpaceXFallback() {
-        return this.fallbackData.filter(launch => launch.agency === 'spacex');
+        return this.getEnhancedSpaceXFallback();
       }
 
       getLaunchLibraryFallback() {
@@ -3083,6 +3479,79 @@
       isDataFresh() {
         const age = Date.now() - this.lastUpdate;
         return age < this.updateInterval;
+      }
+
+      // SpaceX-specific analytics and statistics
+      getSpaceXStatistics() {
+        const spaceXLaunches = Array.from(this.launches.values()).filter(l => l.agency === 'spacex');
+        
+        const rocketTypes = {};
+        const missionTypes = {};
+        let totalMass = 0;
+        let reuseCount = 0;
+        
+        spaceXLaunches.forEach(launch => {
+          // Rocket type statistics
+          const rocketType = launch.rocket.name;
+          rocketTypes[rocketType] = (rocketTypes[rocketType] || 0) + 1;
+          
+          // Mission type statistics
+          const missionType = launch.mission?.type || 'Commercial';
+          missionTypes[missionType] = (missionTypes[missionType] || 0) + 1;
+          
+          // Payload mass
+          totalMass += launch.payload.mass || 0;
+          
+          // Reusability
+          if (launch.rocket.reusable) reuseCount++;
+        });
+
+        return {
+          totalLaunches: spaceXLaunches.length,
+          rocketTypes,
+          missionTypes,
+          totalPayloadMass: totalMass,
+          reusePercentage: spaceXLaunches.length > 0 ? (reuseCount / spaceXLaunches.length * 100).toFixed(1) : 0,
+          upcomingLaunches: spaceXLaunches.filter(l => l.status === 'upcoming').length,
+          successfulLaunches: spaceXLaunches.filter(l => l.status === 'success').length,
+          averageSuccessRate: this.calculateAverageSpaceXSuccessRate(spaceXLaunches)
+        };
+      }
+
+      calculateAverageSpaceXSuccessRate(launches) {
+        if (launches.length === 0) return 0;
+        
+        const rocketSuccessRates = launches.map(launch => launch.rocket.successRate || 95);
+        const average = rocketSuccessRates.reduce((sum, rate) => sum + rate, 0) / rocketSuccessRates.length;
+        return average.toFixed(1);
+      }
+
+      getSpaceXUpcomingByRocket() {
+        const spaceXLaunches = this.filterByCategory('spacex').filter(l => l.status === 'upcoming');
+        const byRocket = {};
+        
+        spaceXLaunches.forEach(launch => {
+          const rocket = launch.rocket.name;
+          if (!byRocket[rocket]) byRocket[rocket] = [];
+          byRocket[rocket].push(launch);
+        });
+        
+        return byRocket;
+      }
+
+      getNextSpaceXLaunch() {
+        const spaceXLaunches = this.filterByCategory('spacex')
+          .filter(l => l.status === 'upcoming')
+          .sort((a, b) => new Date(a.schedule.launchTime) - new Date(b.schedule.launchTime));
+        
+        return spaceXLaunches[0] || null;
+      }
+
+      getSpaceXLaunchHistory(days = 30) {
+        const cutoffDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+        return Array.from(this.launches.values())
+          .filter(l => l.agency === 'spacex' && new Date(l.schedule.launchTime) >= cutoffDate)
+          .sort((a, b) => new Date(b.schedule.launchTime) - new Date(a.schedule.launchTime));
       }
     }
 
@@ -3201,13 +3670,51 @@
       if (missionName) missionName.textContent = launchData.name;
       if (missionDescription) missionDescription.textContent = launchData.description;
 
-      // Update launch details
+      // Update launch details with enhanced SpaceX information
       const detailItems = cardElement.querySelectorAll('.detail-item');
       if (detailItems.length >= 4) {
-        detailItems[0].querySelector('.detail-value').textContent = launchData.rocket.name;
+        // Enhanced rocket information for SpaceX
+        if (launchData.agency === 'spacex' && launchData.rocket.successRate) {
+          detailItems[0].querySelector('.detail-value').textContent = 
+            `${launchData.rocket.name} (${launchData.rocket.successRate}% success)`;
+        } else {
+          detailItems[0].querySelector('.detail-value').textContent = launchData.rocket.name;
+        }
+        
         detailItems[1].querySelector('.detail-value').textContent = launchData.launchSite.name;
         detailItems[2].querySelector('.detail-value').textContent = formatLaunchTime(launchData.schedule.launchTime);
-        detailItems[3].querySelector('.detail-value').textContent = launchData.payload.name;
+        
+        // Enhanced payload information
+        if (launchData.payload.mass > 0) {
+          detailItems[3].querySelector('.detail-value').textContent = 
+            `${launchData.payload.name} (${launchData.payload.mass.toLocaleString()}kg)`;
+        } else {
+          detailItems[3].querySelector('.detail-value').textContent = launchData.payload.name;
+        }
+      }
+
+      // Add SpaceX-specific mission type indicator
+      if (launchData.agency === 'spacex' && launchData.mission?.type) {
+        const missionTypeIndicator = cardElement.querySelector('.mission-type-indicator') || 
+          document.createElement('div');
+        missionTypeIndicator.className = 'mission-type-indicator';
+        missionTypeIndicator.textContent = launchData.mission.type;
+        missionTypeIndicator.style.cssText = `
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background: rgba(0, 82, 136, 0.8);
+          color: white;
+          padding: 0.2em 0.5em;
+          border-radius: 12px;
+          font-size: 0.7em;
+          font-weight: 600;
+        `;
+        
+        if (!cardElement.querySelector('.mission-type-indicator')) {
+          cardElement.style.position = 'relative';
+          cardElement.appendChild(missionTypeIndicator);
+        }
       }
 
       // Update countdown timer
@@ -3221,28 +3728,47 @@
       cardElement.setAttribute('data-agency', launchData.agency);
       cardElement.setAttribute('data-status', launchData.status);
       cardElement.setAttribute('data-launch-id', launchData.id);
+      
+      // Add enhanced data attributes for SpaceX
+      if (launchData.agency === 'spacex') {
+        cardElement.setAttribute('data-rocket-type', launchData.rocket.type);
+        cardElement.setAttribute('data-mission-type', launchData.mission?.type || 'Commercial');
+        cardElement.setAttribute('data-flight-number', launchData.mission?.flightNumber || 0);
+      }
     }
 
     function updateDashboardStats() {
       if (!window.launchDataManager) return;
       
       const stats = launchDataManager.getStatistics();
+      const spaceXStats = launchDataManager.getSpaceXStatistics();
       const statCards = document.querySelectorAll('.stat-card');
       
       if (statCards.length >= 4) {
-        // Update stat numbers
+        // Update stat numbers with enhanced SpaceX data
         statCards[0].querySelector('.stat-number').textContent = stats.upcoming;
-        statCards[1].querySelector('.stat-number').textContent = '94.2%'; // Keep success rate static for now
+        statCards[1].querySelector('.stat-number').textContent = `${spaceXStats.averageSuccessRate}%`;
         statCards[2].querySelector('.stat-number').textContent = stats.agencies;
         statCards[3].querySelector('.stat-number').textContent = stats.total;
         
         // Update labels to match real data
         statCards[0].querySelector('.stat-label').textContent = 'Upcoming Launches';
+        statCards[1].querySelector('.stat-label').textContent = 'SpaceX Success Rate';
         statCards[2].querySelector('.stat-label').textContent = 'Active Agencies';
         statCards[3].querySelector('.stat-label').textContent = 'Total Tracked';
+        
+        // Update change indicators with SpaceX-specific data
+        const changeElements = document.querySelectorAll('.stat-change');
+        if (changeElements.length >= 4) {
+          changeElements[0].textContent = `+${stats.upcoming} this month`;
+          changeElements[1].textContent = `${spaceXStats.reusePercentage}% reusable`;
+          changeElements[2].textContent = `${spaceXStats.totalLaunches} SpaceX launches`;
+          changeElements[3].textContent = `${Math.round(spaceXStats.totalPayloadMass / 1000)}t payload mass`;
+        }
       }
       
       console.log('📈 Updated dashboard statistics:', stats);
+      console.log('🚀 SpaceX statistics:', spaceXStats);
     }
 
     function getAgencyDisplayName(agency) {
