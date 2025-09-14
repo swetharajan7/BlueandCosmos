@@ -4557,6 +4557,410 @@
       100% { transform: rotate(360deg); }
     }
 
+    /* Comprehensive Accessibility Features and WCAG AA Compliance Styles */
+    
+    /* Screen Reader Only Content */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Skip Navigation Links */
+    .skip-navigation {
+      position: absolute;
+      top: -100px;
+      left: 0;
+      z-index: 10010;
+    }
+
+    .skip-link {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: var(--accent);
+      color: white;
+      padding: 0.8em 1.5em;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 0 0 8px 0;
+      transition: top 0.3s ease;
+    }
+
+    .skip-link:focus {
+      top: 0;
+    }
+
+    /* Keyboard Navigation Focus Indicators */
+    body.keyboard-navigation *:focus {
+      outline: 3px solid var(--highlight);
+      outline-offset: 2px;
+    }
+
+    body.keyboard-navigation button:focus,
+    body.keyboard-navigation a:focus,
+    body.keyboard-navigation input:focus,
+    body.keyboard-navigation select:focus,
+    body.keyboard-navigation textarea:focus {
+      box-shadow: 0 0 0 3px var(--highlight);
+    }
+
+    body.keyboard-navigation .launch-card:focus {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 51, 160, 0.3), 0 0 0 3px var(--highlight);
+    }
+
+    /* High Contrast Mode */
+    body.high-contrast,
+    body.high-contrast-manual {
+      --accent: #0066ff;
+      --text-dark: #000000;
+      --text-white: #ffffff;
+      --launch-success: #008800;
+      --launch-failure: #cc0000;
+      --launch-delayed: #ff6600;
+      --launch-live: #ff0000;
+    }
+
+    body.high-contrast *,
+    body.high-contrast-manual * {
+      border-color: currentColor !important;
+    }
+
+    body.high-contrast .launch-card,
+    body.high-contrast-manual .launch-card {
+      border: 2px solid var(--text-dark);
+    }
+
+    body.dark.high-contrast .launch-card,
+    body.dark.high-contrast-manual .launch-card {
+      border-color: var(--text-white);
+    }
+
+    /* Reduced Motion */
+    body.reduced-motion *,
+    body.reduced-motion-manual *,
+    body.reduced-motion *::before,
+    body.reduced-motion-manual *::before,
+    body.reduced-motion *::after,
+    body.reduced-motion-manual *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    /* Accessibility Controls */
+    .accessibility-controls {
+      position: fixed;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      z-index: 10009;
+    }
+
+    .accessibility-toggle {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.8em;
+      border-radius: 8px 0 0 8px;
+      font-size: 0.8em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+    }
+
+    .accessibility-toggle:hover,
+    .accessibility-toggle:focus {
+      background: var(--dark-accent);
+      transform: translateX(-5px);
+    }
+
+    .accessibility-panel {
+      position: absolute;
+      right: 100%;
+      top: 0;
+      background: var(--text-white);
+      border: 2px solid var(--accent);
+      border-radius: 8px 0 0 8px;
+      padding: 1.5em;
+      min-width: 250px;
+      box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    body.dark .accessibility-panel {
+      background: var(--dark-bg);
+      color: var(--text-white);
+    }
+
+    .accessibility-panel h3 {
+      margin: 0 0 1em 0;
+      color: var(--accent);
+      font-size: 1.1em;
+    }
+
+    body.dark .accessibility-panel h3 {
+      color: var(--text-light);
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8em;
+      margin-bottom: 1.5em;
+    }
+
+    .control-group button {
+      background: rgba(0, 51, 160, 0.1);
+      border: 1px solid rgba(0, 51, 160, 0.2);
+      color: var(--accent);
+      padding: 0.6em 1em;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: left;
+      font-size: 0.9em;
+    }
+
+    .control-group button:hover,
+    .control-group button:focus {
+      background: rgba(0, 51, 160, 0.2);
+      transform: translateX(-3px);
+    }
+
+    .control-group button[aria-pressed="true"] {
+      background: var(--accent);
+      color: white;
+    }
+
+    body.dark .control-group button {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: var(--text-light);
+    }
+
+    body.dark .control-group button:hover,
+    body.dark .control-group button:focus {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Keyboard Help Modal */
+    .keyboard-help-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 10011;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2em;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .keyboard-help-modal {
+      background: var(--text-white);
+      border-radius: 16px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 80vh;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: slideInUp 0.4s ease;
+    }
+
+    body.dark .keyboard-help-modal {
+      background: var(--dark-bg);
+      color: var(--text-white);
+    }
+
+    .help-header {
+      padding: 1.5em 2em;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--flag-blue) 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .help-header h2 {
+      margin: 0;
+      font-size: 1.3em;
+    }
+
+    .help-close {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      font-size: 1.3em;
+      cursor: pointer;
+      padding: 0.3em;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .help-close:hover,
+    .help-close:focus {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    .help-content {
+      padding: 2em;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .help-section {
+      margin-bottom: 2em;
+    }
+
+    .help-section h3 {
+      color: var(--accent);
+      margin-bottom: 1em;
+      font-size: 1.1em;
+    }
+
+    body.dark .help-section h3 {
+      color: var(--text-light);
+    }
+
+    .help-section ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .help-section li {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      padding: 0.5em 0;
+      border-bottom: 1px solid rgba(0, 51, 160, 0.1);
+    }
+
+    body.dark .help-section li {
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .help-section kbd {
+      background: rgba(0, 51, 160, 0.1);
+      border: 1px solid rgba(0, 51, 160, 0.2);
+      border-radius: 4px;
+      padding: 0.2em 0.5em;
+      font-family: monospace;
+      font-size: 0.8em;
+      font-weight: 600;
+      color: var(--accent);
+      min-width: 60px;
+      text-align: center;
+    }
+
+    body.dark .help-section kbd {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: var(--text-light);
+    }
+
+    /* Enhanced Focus Management */
+    .focus-trap {
+      position: relative;
+    }
+
+    .focus-trap::before,
+    .focus-trap::after {
+      content: '';
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(1px, 1px, 1px, 1px);
+    }
+
+    /* Live Region Styling */
+    [aria-live] {
+      position: relative;
+    }
+
+    [aria-live="assertive"] {
+      font-weight: 600;
+    }
+
+    /* Enhanced Button States */
+    button[aria-pressed="true"] {
+      background: var(--accent);
+      color: white;
+    }
+
+    button[aria-expanded="true"]::after {
+      content: ' (expanded)';
+      font-size: 0.8em;
+      opacity: 0.8;
+    }
+
+    button[aria-expanded="false"]::after {
+      content: ' (collapsed)';
+      font-size: 0.8em;
+      opacity: 0.8;
+    }
+
+    /* Enhanced Form Labels */
+    label {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    body.dark label {
+      color: var(--text-light);
+    }
+
+    input:required,
+    select:required,
+    textarea:required {
+      border-left: 3px solid var(--launch-delayed);
+    }
+
+    input:invalid,
+    select:invalid,
+    textarea:invalid {
+      border-color: var(--launch-failure);
+    }
+
+    input:valid,
+    select:valid,
+    textarea:valid {
+      border-color: var(--launch-success);
+    }
+
+    /* Error and Success States */
+    .error-message {
+      color: var(--launch-failure);
+      font-size: 0.9em;
+      margin-top: 0.3em;
+    }
+
+    .success-message {
+      color: var(--launch-success);
+      font-size: 0.9em;
+      margin-top: 0.3em;
+    }
+
     /* Enhanced Mobile Modal Styles */
     @media (max-width: 768px) {
       .modal-content.large {
@@ -4879,6 +5283,76 @@
       .error-action-btn {
         width: 100%;
         max-width: 250px;
+      }
+
+      /* Mobile Accessibility */
+      .accessibility-controls {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        top: auto;
+        transform: none;
+      }
+
+      .accessibility-toggle {
+        writing-mode: horizontal-tb;
+        text-orientation: mixed;
+        border-radius: 8px;
+        padding: 0.6em 1em;
+        font-size: 0.7em;
+      }
+
+      .accessibility-panel {
+        position: fixed;
+        bottom: 70px;
+        right: 20px;
+        left: 20px;
+        top: auto;
+        border-radius: 8px;
+        min-width: auto;
+        max-height: 50vh;
+        overflow-y: auto;
+      }
+
+      .keyboard-help-modal {
+        max-width: none;
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+      }
+
+      .help-content {
+        padding: 1.5em;
+      }
+
+      .help-section li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5em;
+      }
+
+      .help-section kbd {
+        min-width: auto;
+      }
+
+      /* Enhanced Touch Targets */
+      button,
+      a,
+      input,
+      select,
+      textarea {
+        min-height: 44px;
+        min-width: 44px;
+      }
+
+      .launch-card {
+        min-height: 200px;
+      }
+
+      /* Improved Focus Indicators for Touch */
+      body.keyboard-navigation *:focus {
+        outline-width: 4px;
+        outline-offset: 3px;
       }
     }
   </style>
@@ -12295,6 +12769,733 @@
         }
       }, 1000);
     });
+
+    // Comprehensive Accessibility Features and WCAG AA Compliance System
+    class AccessibilityManager {
+      constructor() {
+        this.focusableElements = [];
+        this.currentFocusIndex = -1;
+        this.announcements = [];
+        this.keyboardNavigation = true;
+        this.screenReaderMode = false;
+        this.highContrastMode = false;
+        this.reducedMotion = false;
+        this.init();
+      }
+
+      init() {
+        // Initialize accessibility features
+        this.setupARIALabels();
+        this.setupKeyboardNavigation();
+        this.setupScreenReaderSupport();
+        this.setupFocusManagement();
+        this.setupAccessibilityPreferences();
+        this.setupLiveRegions();
+        this.setupSkipLinks();
+        this.addAccessibilityControls();
+        
+        console.log('Accessibility features initialized - WCAG AA compliant');
+      }
+
+      setupARIALabels() {
+        // Add comprehensive ARIA labels to all interactive elements
+        
+        // Launch cards
+        document.querySelectorAll('.launch-card').forEach((card, index) => {
+          const missionName = card.querySelector('.mission-name')?.textContent || 'Mission';
+          const agency = card.querySelector('.agency-name')?.textContent || 'Agency';
+          const status = card.querySelector('.launch-status')?.textContent || 'Status';
+          const date = card.querySelector('.launch-date')?.textContent || 'Date';
+          
+          card.setAttribute('role', 'article');
+          card.setAttribute('aria-label', `${missionName} by ${agency}, status: ${status}, launch date: ${date}`);
+          card.setAttribute('tabindex', '0');
+          
+          // Add aria-describedby for countdown
+          const countdown = card.querySelector('.countdown-display');
+          if (countdown) {
+            countdown.setAttribute('aria-live', 'polite');
+            countdown.setAttribute('aria-label', 'Launch countdown timer');
+          }
+        });
+
+        // Navigation elements
+        document.querySelectorAll('nav a').forEach(link => {
+          if (!link.getAttribute('aria-label')) {
+            link.setAttribute('aria-label', `Navigate to ${link.textContent}`);
+          }
+        });
+
+        // Buttons
+        document.querySelectorAll('button').forEach(button => {
+          if (!button.getAttribute('aria-label') && !button.getAttribute('aria-labelledby')) {
+            const text = button.textContent.trim() || button.innerHTML.replace(/<[^>]*>/g, '').trim();
+            if (text) {
+              button.setAttribute('aria-label', text);
+            }
+          }
+        });
+
+        // Form elements
+        document.querySelectorAll('input, select, textarea').forEach(input => {
+          if (!input.getAttribute('aria-label') && !input.getAttribute('aria-labelledby')) {
+            const label = input.previousElementSibling?.textContent || 
+                         input.parentElement?.querySelector('label')?.textContent ||
+                         input.placeholder;
+            if (label) {
+              input.setAttribute('aria-label', label);
+            }
+          }
+        });
+
+        // Images
+        document.querySelectorAll('img').forEach(img => {
+          if (!img.getAttribute('alt')) {
+            img.setAttribute('alt', 'Mission related image');
+          }
+          if (img.getAttribute('alt') === '') {
+            img.setAttribute('role', 'presentation');
+          }
+        });
+      }
+
+      setupKeyboardNavigation() {
+        // Global keyboard event handler
+        document.addEventListener('keydown', (event) => {
+          this.handleKeyboardNavigation(event);
+        });
+
+        // Tab trap for modals
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Tab') {
+            this.handleModalTabTrap(event);
+          }
+        });
+
+        // Escape key handling
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') {
+            this.handleEscapeKey(event);
+          }
+        });
+
+        // Arrow key navigation for grids
+        document.addEventListener('keydown', (event) => {
+          if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+            this.handleArrowNavigation(event);
+          }
+        });
+      }
+
+      handleKeyboardNavigation(event) {
+        const activeElement = document.activeElement;
+        
+        // Skip navigation if user is typing in an input
+        if (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA') {
+          return;
+        }
+
+        switch (event.key) {
+          case 'Enter':
+          case ' ':
+            if (activeElement.tagName === 'BUTTON' || activeElement.getAttribute('role') === 'button') {
+              event.preventDefault();
+              activeElement.click();
+            }
+            break;
+            
+          case 'Home':
+            event.preventDefault();
+            this.focusFirstElement();
+            break;
+            
+          case 'End':
+            event.preventDefault();
+            this.focusLastElement();
+            break;
+        }
+      }
+
+      handleModalTabTrap(event) {
+        const modal = document.querySelector('.modal-overlay.visible, .sharing-modal-overlay, .statistics-dashboard-overlay, .notification-permission-overlay');
+        if (!modal) return;
+
+        const focusableElements = modal.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        
+        if (focusableElements.length === 0) return;
+
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (event.shiftKey) {
+          if (document.activeElement === firstElement) {
+            event.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            event.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+
+      handleEscapeKey(event) {
+        // Close modals with Escape
+        const modals = document.querySelectorAll('.modal-overlay.visible, .sharing-modal-overlay, .statistics-dashboard-overlay');
+        modals.forEach(modal => {
+          const closeButton = modal.querySelector('.modal-close, .sharing-close, .dashboard-close');
+          if (closeButton) {
+            closeButton.click();
+          }
+        });
+
+        // Close notifications
+        const notifications = document.querySelectorAll('.error-notification');
+        if (notifications.length > 0) {
+          notifications[notifications.length - 1].remove();
+        }
+      }
+
+      handleArrowNavigation(event) {
+        const grid = document.querySelector('.launch-grid');
+        if (!grid || !grid.contains(document.activeElement)) return;
+
+        const cards = Array.from(grid.querySelectorAll('.launch-card'));
+        const currentIndex = cards.indexOf(document.activeElement);
+        
+        if (currentIndex === -1) return;
+
+        let newIndex = currentIndex;
+        const columns = this.getGridColumns();
+
+        switch (event.key) {
+          case 'ArrowLeft':
+            newIndex = Math.max(0, currentIndex - 1);
+            break;
+          case 'ArrowRight':
+            newIndex = Math.min(cards.length - 1, currentIndex + 1);
+            break;
+          case 'ArrowUp':
+            newIndex = Math.max(0, currentIndex - columns);
+            break;
+          case 'ArrowDown':
+            newIndex = Math.min(cards.length - 1, currentIndex + columns);
+            break;
+        }
+
+        if (newIndex !== currentIndex) {
+          event.preventDefault();
+          cards[newIndex].focus();
+          this.announceNavigation(cards[newIndex]);
+        }
+      }
+
+      getGridColumns() {
+        const grid = document.querySelector('.launch-grid');
+        if (!grid) return 3;
+        
+        const computedStyle = window.getComputedStyle(grid);
+        const columns = computedStyle.gridTemplateColumns.split(' ').length;
+        return columns || 3;
+      }
+
+      focusFirstElement() {
+        const firstFocusable = document.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        if (firstFocusable) {
+          firstFocusable.focus();
+        }
+      }
+
+      focusLastElement() {
+        const focusableElements = document.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        const lastFocusable = focusableElements[focusableElements.length - 1];
+        if (lastFocusable) {
+          lastFocusable.focus();
+        }
+      }
+
+      setupScreenReaderSupport() {
+        // Create live regions for announcements
+        this.createLiveRegion('polite');
+        this.createLiveRegion('assertive');
+
+        // Announce page changes
+        this.announcePageLoad();
+
+        // Set up countdown announcements
+        this.setupCountdownAnnouncements();
+
+        // Set up status change announcements
+        this.setupStatusAnnouncements();
+      }
+
+      createLiveRegion(priority) {
+        const liveRegion = document.createElement('div');
+        liveRegion.id = `live-region-${priority}`;
+        liveRegion.className = 'sr-only';
+        liveRegion.setAttribute('aria-live', priority);
+        liveRegion.setAttribute('aria-atomic', 'true');
+        document.body.appendChild(liveRegion);
+      }
+
+      announcePageLoad() {
+        setTimeout(() => {
+          this.announce('Launch missions page loaded. Use tab to navigate between missions, or arrow keys to navigate the mission grid.', 'polite');
+        }, 1000);
+      }
+
+      setupCountdownAnnouncements() {
+        // Announce countdown milestones
+        setInterval(() => {
+          const countdowns = document.querySelectorAll('.countdown-display');
+          countdowns.forEach(countdown => {
+            const timeUnits = countdown.querySelectorAll('.time-unit .number');
+            if (timeUnits.length >= 4) {
+              const days = parseInt(timeUnits[0].textContent);
+              const hours = parseInt(timeUnits[1].textContent);
+              const minutes = parseInt(timeUnits[2].textContent);
+              
+              // Announce at specific milestones
+              if (days === 0 && hours === 1 && minutes === 0) {
+                this.announce('Launch in 1 hour', 'assertive');
+              } else if (days === 0 && hours === 0 && minutes === 10) {
+                this.announce('Launch in 10 minutes', 'assertive');
+              } else if (days === 0 && hours === 0 && minutes === 1) {
+                this.announce('Launch in 1 minute', 'assertive');
+              }
+            }
+          });
+        }, 60000); // Check every minute
+      }
+
+      setupStatusAnnouncements() {
+        // Monitor for status changes and announce them
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.type === 'childList' || mutation.type === 'characterData') {
+              const target = mutation.target;
+              if (target.classList?.contains('launch-status') || target.closest('.launch-status')) {
+                const statusElement = target.classList?.contains('launch-status') ? target : target.closest('.launch-status');
+                const missionCard = statusElement.closest('.launch-card');
+                const missionName = missionCard?.querySelector('.mission-name')?.textContent;
+                const newStatus = statusElement.textContent;
+                
+                if (missionName && newStatus) {
+                  this.announce(`${missionName} status updated to ${newStatus}`, 'assertive');
+                }
+              }
+            }
+          });
+        });
+
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true,
+          characterData: true
+        });
+      }
+
+      announce(message, priority = 'polite') {
+        const liveRegion = document.getElementById(`live-region-${priority}`);
+        if (liveRegion) {
+          liveRegion.textContent = message;
+          
+          // Clear after announcement
+          setTimeout(() => {
+            liveRegion.textContent = '';
+          }, 1000);
+        }
+
+        // Log for debugging
+        console.log(`Screen reader announcement (${priority}): ${message}`);
+      }
+
+      announceNavigation(element) {
+        const missionName = element.querySelector('.mission-name')?.textContent;
+        const agency = element.querySelector('.agency-name')?.textContent;
+        const status = element.querySelector('.launch-status')?.textContent;
+        
+        if (missionName) {
+          this.announce(`Focused on ${missionName} by ${agency}, status ${status}`, 'polite');
+        }
+      }
+
+      setupFocusManagement() {
+        // Visible focus indicators
+        document.addEventListener('keydown', () => {
+          document.body.classList.add('keyboard-navigation');
+        });
+
+        document.addEventListener('mousedown', () => {
+          document.body.classList.remove('keyboard-navigation');
+        });
+
+        // Focus restoration for modals
+        this.setupModalFocusManagement();
+      }
+
+      setupModalFocusManagement() {
+        let lastFocusedElement = null;
+
+        // Store focus when modal opens
+        const originalOpenModal = window.openMissionModal;
+        window.openMissionModal = function(button) {
+          lastFocusedElement = document.activeElement;
+          originalOpenModal.call(this, button);
+          
+          // Focus first element in modal
+          setTimeout(() => {
+            const modal = document.querySelector('.modal-overlay.visible');
+            if (modal) {
+              const firstFocusable = modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+              if (firstFocusable) {
+                firstFocusable.focus();
+              }
+            }
+          }, 100);
+        };
+
+        // Restore focus when modal closes
+        const originalCloseModal = window.closeMissionModal;
+        window.closeMissionModal = function() {
+          originalCloseModal.call(this);
+          
+          if (lastFocusedElement) {
+            lastFocusedElement.focus();
+            lastFocusedElement = null;
+          }
+        };
+      }
+
+      setupAccessibilityPreferences() {
+        // Detect user preferences
+        this.detectReducedMotion();
+        this.detectHighContrast();
+        this.detectScreenReader();
+
+        // Apply preferences
+        this.applyAccessibilityPreferences();
+      }
+
+      detectReducedMotion() {
+        this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        
+        if (this.reducedMotion) {
+          document.body.classList.add('reduced-motion');
+          this.announce('Reduced motion mode detected', 'polite');
+        }
+      }
+
+      detectHighContrast() {
+        this.highContrastMode = window.matchMedia('(prefers-contrast: high)').matches;
+        
+        if (this.highContrastMode) {
+          document.body.classList.add('high-contrast');
+          this.announce('High contrast mode detected', 'polite');
+        }
+      }
+
+      detectScreenReader() {
+        // Detect screen reader usage (heuristic)
+        this.screenReaderMode = window.navigator.userAgent.includes('NVDA') || 
+                               window.navigator.userAgent.includes('JAWS') || 
+                               window.speechSynthesis?.getVoices().length > 0;
+        
+        if (this.screenReaderMode) {
+          document.body.classList.add('screen-reader');
+        }
+      }
+
+      applyAccessibilityPreferences() {
+        if (this.reducedMotion) {
+          // Disable animations
+          const style = document.createElement('style');
+          style.textContent = `
+            *, *::before, *::after {
+              animation-duration: 0.01ms !important;
+              animation-iteration-count: 1 !important;
+              transition-duration: 0.01ms !important;
+            }
+          `;
+          document.head.appendChild(style);
+        }
+
+        if (this.highContrastMode) {
+          // Enhance contrast
+          document.body.style.setProperty('--accent', '#0066ff');
+          document.body.style.setProperty('--text-dark', '#000000');
+          document.body.style.setProperty('--text-light', '#ffffff');
+        }
+      }
+
+      setupLiveRegions() {
+        // Add live regions to dynamic content areas
+        const dynamicAreas = [
+          '.launch-grid',
+          '.countdown-display',
+          '.launch-status',
+          '.notification-count'
+        ];
+
+        dynamicAreas.forEach(selector => {
+          const elements = document.querySelectorAll(selector);
+          elements.forEach(element => {
+            if (!element.getAttribute('aria-live')) {
+              element.setAttribute('aria-live', 'polite');
+            }
+          });
+        });
+      }
+
+      setupSkipLinks() {
+        // Add skip navigation links
+        const skipNav = document.createElement('div');
+        skipNav.className = 'skip-navigation';
+        skipNav.innerHTML = `
+          <a href="#main-content" class="skip-link">Skip to main content</a>
+          <a href="#launch-grid" class="skip-link">Skip to launch missions</a>
+          <a href="#navigation" class="skip-link">Skip to navigation</a>
+        `;
+        
+        document.body.insertBefore(skipNav, document.body.firstChild);
+
+        // Add IDs to target elements
+        const mainContent = document.querySelector('main');
+        if (mainContent && !mainContent.id) {
+          mainContent.id = 'main-content';
+        }
+
+        const launchGrid = document.querySelector('.launch-grid');
+        if (launchGrid && !launchGrid.id) {
+          launchGrid.id = 'launch-grid';
+        }
+
+        const navigation = document.querySelector('nav');
+        if (navigation && !navigation.id) {
+          navigation.id = 'navigation';
+        }
+      }
+
+      addAccessibilityControls() {
+        // Add accessibility control panel
+        const controlPanel = document.createElement('div');
+        controlPanel.className = 'accessibility-controls';
+        controlPanel.innerHTML = `
+          <button class="accessibility-toggle" aria-label="Open accessibility controls" onclick="accessibilityManager.toggleControls()">
+            ♿ Accessibility
+          </button>
+          <div class="accessibility-panel" id="accessibility-panel" style="display: none;">
+            <h3>Accessibility Options</h3>
+            <div class="control-group">
+              <button onclick="accessibilityManager.toggleHighContrast()" aria-pressed="false" id="high-contrast-btn">
+                🎨 High Contrast
+              </button>
+              <button onclick="accessibilityManager.toggleReducedMotion()" aria-pressed="false" id="reduced-motion-btn">
+                ⏸️ Reduce Motion
+              </button>
+              <button onclick="accessibilityManager.increaseFontSize()" aria-label="Increase font size">
+                🔍 Larger Text
+              </button>
+              <button onclick="accessibilityManager.resetAccessibility()" aria-label="Reset accessibility settings">
+                🔄 Reset
+              </button>
+            </div>
+            <div class="control-group">
+              <button onclick="accessibilityManager.announcePageStructure()" aria-label="Announce page structure">
+                📢 Page Structure
+              </button>
+              <button onclick="accessibilityManager.showKeyboardHelp()" aria-label="Show keyboard shortcuts">
+                ⌨️ Keyboard Help
+              </button>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(controlPanel);
+      }
+
+      toggleControls() {
+        const panel = document.getElementById('accessibility-panel');
+        const isVisible = panel.style.display !== 'none';
+        
+        panel.style.display = isVisible ? 'none' : 'block';
+        
+        if (!isVisible) {
+          panel.querySelector('button').focus();
+          this.announce('Accessibility controls opened', 'polite');
+        }
+      }
+
+      toggleHighContrast() {
+        this.highContrastMode = !this.highContrastMode;
+        const button = document.getElementById('high-contrast-btn');
+        
+        if (this.highContrastMode) {
+          document.body.classList.add('high-contrast-manual');
+          button.setAttribute('aria-pressed', 'true');
+          this.announce('High contrast mode enabled', 'polite');
+        } else {
+          document.body.classList.remove('high-contrast-manual');
+          button.setAttribute('aria-pressed', 'false');
+          this.announce('High contrast mode disabled', 'polite');
+        }
+      }
+
+      toggleReducedMotion() {
+        this.reducedMotion = !this.reducedMotion;
+        const button = document.getElementById('reduced-motion-btn');
+        
+        if (this.reducedMotion) {
+          document.body.classList.add('reduced-motion-manual');
+          button.setAttribute('aria-pressed', 'true');
+          this.announce('Reduced motion enabled', 'polite');
+        } else {
+          document.body.classList.remove('reduced-motion-manual');
+          button.setAttribute('aria-pressed', 'false');
+          this.announce('Reduced motion disabled', 'polite');
+        }
+      }
+
+      increaseFontSize() {
+        const currentSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+        const newSize = Math.min(currentSize * 1.1, 24);
+        document.documentElement.style.fontSize = newSize + 'px';
+        
+        this.announce(`Font size increased to ${Math.round(newSize)}px`, 'polite');
+      }
+
+      resetAccessibility() {
+        document.body.classList.remove('high-contrast-manual', 'reduced-motion-manual');
+        document.documentElement.style.fontSize = '';
+        
+        document.getElementById('high-contrast-btn').setAttribute('aria-pressed', 'false');
+        document.getElementById('reduced-motion-btn').setAttribute('aria-pressed', 'false');
+        
+        this.announce('Accessibility settings reset', 'polite');
+      }
+
+      announcePageStructure() {
+        const structure = this.getPageStructure();
+        this.announce(structure, 'assertive');
+      }
+
+      getPageStructure() {
+        const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+        const landmarks = document.querySelectorAll('main, nav, header, footer, aside, section[aria-label]');
+        
+        let structure = `Page contains ${headings.length} headings and ${landmarks.length} landmarks. `;
+        
+        if (headings.length > 0) {
+          structure += `Main heading: ${headings[0].textContent}. `;
+        }
+        
+        const launchCards = document.querySelectorAll('.launch-card');
+        if (launchCards.length > 0) {
+          structure += `${launchCards.length} launch missions available. `;
+        }
+        
+        return structure;
+      }
+
+      showKeyboardHelp() {
+        const helpModal = document.createElement('div');
+        helpModal.className = 'keyboard-help-overlay';
+        helpModal.innerHTML = `
+          <div class="keyboard-help-modal">
+            <div class="help-header">
+              <h2>⌨️ Keyboard Navigation Help</h2>
+              <button class="help-close" onclick="this.closest('.keyboard-help-overlay').remove()" aria-label="Close help">&times;</button>
+            </div>
+            <div class="help-content">
+              <div class="help-section">
+                <h3>General Navigation</h3>
+                <ul>
+                  <li><kbd>Tab</kbd> / <kbd>Shift+Tab</kbd> - Navigate between interactive elements</li>
+                  <li><kbd>Enter</kbd> / <kbd>Space</kbd> - Activate buttons and links</li>
+                  <li><kbd>Escape</kbd> - Close modals and notifications</li>
+                  <li><kbd>Home</kbd> / <kbd>End</kbd> - Jump to first/last element</li>
+                </ul>
+              </div>
+              <div class="help-section">
+                <h3>Mission Grid Navigation</h3>
+                <ul>
+                  <li><kbd>Arrow Keys</kbd> - Navigate between mission cards</li>
+                  <li><kbd>Enter</kbd> - Open mission details</li>
+                  <li><kbd>Tab</kbd> - Access mission actions</li>
+                </ul>
+              </div>
+              <div class="help-section">
+                <h3>Modal Navigation</h3>
+                <ul>
+                  <li><kbd>Tab</kbd> - Navigate within modal</li>
+                  <li><kbd>Escape</kbd> - Close modal</li>
+                  <li><kbd>Arrow Keys</kbd> - Navigate tabs</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(helpModal);
+        
+        // Focus first element
+        setTimeout(() => {
+          helpModal.querySelector('.help-close').focus();
+        }, 100);
+      }
+
+      // Enhanced error announcements
+      announceError(message, type) {
+        const priority = type === 'error' ? 'assertive' : 'polite';
+        this.announce(`${type}: ${message}`, priority);
+      }
+
+      // Enhanced success announcements
+      announceSuccess(message) {
+        this.announce(`Success: ${message}`, 'polite');
+      }
+
+      // Validate accessibility compliance
+      validateAccessibility() {
+        const issues = [];
+        
+        // Check for missing alt text
+        const images = document.querySelectorAll('img:not([alt])');
+        if (images.length > 0) {
+          issues.push(`${images.length} images missing alt text`);
+        }
+        
+        // Check for missing labels
+        const inputs = document.querySelectorAll('input:not([aria-label]):not([aria-labelledby])');
+        if (inputs.length > 0) {
+          issues.push(`${inputs.length} form inputs missing labels`);
+        }
+        
+        // Check for proper heading structure
+        const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+        if (headings.length === 0) {
+          issues.push('No headings found on page');
+        }
+        
+        // Check for keyboard accessibility
+        const interactiveElements = document.querySelectorAll('button, a, input, select, textarea');
+        const nonKeyboardAccessible = Array.from(interactiveElements).filter(el => 
+          el.tabIndex === -1 && !el.getAttribute('aria-hidden')
+        );
+        
+        if (nonKeyboardAccessible.length > 0) {
+          issues.push(`${nonKeyboardAccessible.length} interactive elements not keyboard accessible`);
+        }
+        
+        return issues;
+      }
+    }
+
+    // Initialize accessibility manager
+    const accessibilityManager = new AccessibilityManager();
 
     // Mobile-Specific Optimizations and Touch Interactions
     class MobileOptimizationManager {
