@@ -17,6 +17,32 @@
       --text-light: #cce0ff;
       --dark-bg: #121212;
       --dark-accent: #001f5b;
+      
+      /* Theme-aware custom properties */
+      --image-overlay-bg: rgba(0, 0, 0, 0.6);
+      --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --text-primary: #333333;
+      --text-secondary: #666666;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --border-color: #eeeeee;
+      --modal-backdrop: rgba(0, 0, 0, 0.8);
+      --search-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --status-border: rgba(0, 0, 0, 0.2);
+    }
+
+    /* Dark theme custom properties */
+    body.dark {
+      --image-overlay-bg: rgba(0, 0, 0, 0.8);
+      --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      --text-primary: #ffffff;
+      --text-secondary: #cccccc;
+      --bg-primary: #121212;
+      --bg-secondary: #1a1a1a;
+      --border-color: #333333;
+      --modal-backdrop: rgba(0, 0, 0, 0.95);
+      --search-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      --status-border: rgba(255, 255, 255, 0.2);
     }
 
     html,
@@ -1854,7 +1880,8 @@
 
       /* Mobile performance optimizations */
       .image-card:hover {
-        transform: none; /* Disable hover effects on mobile */
+        transform: none;
+        /* Disable hover effects on mobile */
       }
 
       .image-container:hover img {
@@ -1973,6 +2000,175 @@
 
     body.dark .image-card:hover {
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Enhanced Dark Mode Styles */
+    body.dark {
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    }
+
+    body.dark .livestream-container {
+      background: transparent;
+    }
+
+    body.dark .page-title {
+      background: linear-gradient(135deg, #66b3ff, #ff6b9d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    body.dark .controls-bar {
+      background: rgba(0, 31, 91, 0.3);
+      border-color: rgba(0, 31, 91, 0.4);
+      backdrop-filter: blur(10px);
+    }
+
+    body.dark .search-input {
+      background: #2a2a2a;
+      border-color: #444;
+      color: #fff;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    body.dark .search-input::placeholder {
+      color: #888;
+    }
+
+    body.dark .search-input:focus {
+      border-color: #66b3ff;
+      box-shadow: 0 0 0 3px rgba(102, 179, 255, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    body.dark .search-suggestions {
+      background: #2a2a2a;
+      border-color: #444;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    body.dark .image-card {
+      background: linear-gradient(145deg, #1e1e1e, #2a2a2a);
+      border: 1px solid #333;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    body.dark .image-card:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      border-color: #444;
+    }
+
+    body.dark .image-overlay {
+      background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.9) 100%);
+    }
+
+    body.dark .overlay-btn {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+    }
+
+    body.dark .overlay-btn:hover {
+      background: rgba(255, 255, 255, 1);
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+    }
+
+    body.dark .modal-content {
+      background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+      border: 1px solid #333;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    }
+
+    body.dark .modal-close {
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid #444;
+    }
+
+    body.dark .modal-close:hover {
+      background: rgba(0, 0, 0, 0.95);
+      border-color: #666;
+    }
+
+    body.dark .nav-btn {
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid #444;
+    }
+
+    body.dark .nav-btn:hover {
+      background: rgba(0, 0, 0, 0.95);
+      border-color: #666;
+    }
+
+    body.dark .modal-attribution {
+      background: rgba(255, 255, 255, 0.1);
+      border-left-color: #66b3ff;
+    }
+
+    body.dark .social-share-expanded {
+      background: rgba(255, 255, 255, 0.1);
+      border-left-color: #ff6b9d;
+    }
+
+    body.dark .auto-refresh-status {
+      background: rgba(0, 0, 0, 0.9);
+      border-color: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(15px);
+    }
+
+    body.dark .results-count {
+      color: #aaa !important;
+    }
+
+    /* Dark mode loading states */
+    body.dark .loading-message {
+      background: linear-gradient(135deg, rgba(0, 31, 91, 0.3), rgba(255, 64, 129, 0.2));
+      border-color: rgba(0, 31, 91, 0.4);
+      color: #ccc;
+    }
+
+    body.dark .error-message {
+      background: rgba(255, 64, 129, 0.3);
+      border-color: #ff6b9d;
+      color: #ff9db4;
+    }
+
+    /* Enhanced contrast for better readability */
+    body.dark .image-title {
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    body.dark .image-description {
+      color: #ddd;
+    }
+
+    body.dark .image-meta {
+      color: #bbb;
+    }
+
+    body.dark .modal-title {
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    body.dark .modal-description {
+      color: #ddd;
+      line-height: 1.7;
+    }
+
+    /* Dark mode animations */
+    @keyframes darkModeGlow {
+      0%, 100% { box-shadow: 0 0 5px rgba(102, 179, 255, 0.3); }
+      50% { box-shadow: 0 0 20px rgba(102, 179, 255, 0.5); }
+    }
+
+    body.dark .image-card:hover {
+      animation: darkModeGlow 2s ease-in-out infinite;
+    }
+
+    /* Disable glow animation on mobile for performance */
+    @media (max-width: 768px) {
+      body.dark .image-card:hover {
+        animation: none;
+      }
     }
 
     .image-container {
@@ -2307,7 +2503,8 @@
       }
 
       .search-input {
-        font-size: 16px; /* Prevents zoom on iOS */
+        font-size: 16px;
+        /* Prevents zoom on iOS */
         padding: 0.9em 3em 0.9em 1em;
       }
 
@@ -4663,39 +4860,39 @@
       function getOptimizedImageUrl(thumbnailUrl, fullUrl) {
         // Check for mobile device
         const isMobile = window.innerWidth <= 768;
-        
+
         // Check for high DPI displays
         const isHighDPI = window.devicePixelRatio > 1.5;
-        
+
         // Check connection speed (if available)
         const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
         const isSlowConnection = connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g');
-        
+
         // Mobile-specific optimizations
         if (isMobile) {
           // Always use thumbnails on slow connections
           if (isSlowConnection) {
             return thumbnailUrl;
           }
-          
+
           // Use thumbnails on small screens even with fast connection
           if (window.innerWidth <= 480) {
             return thumbnailUrl;
           }
-          
+
           // Use full resolution only for high DPI mobile displays with good connection
           if (isHighDPI && !isSlowConnection && fullUrl && fullUrl !== thumbnailUrl) {
             return fullUrl;
           }
-          
+
           return thumbnailUrl;
         }
-        
+
         // Desktop behavior (existing logic)
         if (isHighDPI && !isSlowConnection && fullUrl && fullUrl !== thumbnailUrl) {
           return fullUrl;
         }
-        
+
         return thumbnailUrl;
       }
 
@@ -5317,7 +5514,7 @@
         currentY: 0,
         isDragging: false,
         isModalOpen: false,
-        
+
         init() {
           if ('ontouchstart' in window) {
             this.setupTouchEvents();
@@ -5325,48 +5522,48 @@
             this.optimizeForMobile();
           }
         },
-        
+
         setupTouchEvents() {
           // Gallery swipe navigation
           gallery.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: false });
           gallery.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
           gallery.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: false });
-          
+
           // Modal swipe navigation
           const modal = document.getElementById('image-modal');
           modal.addEventListener('touchstart', this.handleModalTouchStart.bind(this), { passive: false });
           modal.addEventListener('touchmove', this.handleModalTouchMove.bind(this), { passive: false });
           modal.addEventListener('touchend', this.handleModalTouchEnd.bind(this), { passive: false });
         },
-        
+
         handleTouchStart(e) {
           this.startX = e.touches[0].clientX;
           this.startY = e.touches[0].clientY;
           this.isDragging = false;
         },
-        
+
         handleTouchMove(e) {
           if (!this.startX || !this.startY) return;
-          
+
           this.currentX = e.touches[0].clientX;
           this.currentY = e.touches[0].clientY;
-          
+
           const diffX = Math.abs(this.currentX - this.startX);
           const diffY = Math.abs(this.currentY - this.startY);
-          
+
           // Detect horizontal swipe
           if (diffX > diffY && diffX > 50) {
             this.isDragging = true;
             e.preventDefault(); // Prevent scrolling
           }
         },
-        
+
         handleTouchEnd(e) {
           if (!this.isDragging) return;
-          
+
           const diffX = this.currentX - this.startX;
           const threshold = 100;
-          
+
           if (Math.abs(diffX) > threshold) {
             if (diffX > 0) {
               // Swipe right - previous filter
@@ -5376,39 +5573,39 @@
               this.navigateFilter('next');
             }
           }
-          
+
           this.resetTouch();
         },
-        
+
         handleModalTouchStart(e) {
           if (!document.getElementById('image-modal').classList.contains('active')) return;
-          
+
           this.isModalOpen = true;
           this.startX = e.touches[0].clientX;
           this.startY = e.touches[0].clientY;
         },
-        
+
         handleModalTouchMove(e) {
           if (!this.isModalOpen) return;
-          
+
           this.currentX = e.touches[0].clientX;
           this.currentY = e.touches[0].clientY;
-          
+
           const diffX = Math.abs(this.currentX - this.startX);
           const diffY = Math.abs(this.currentY - this.startY);
-          
+
           if (diffX > diffY && diffX > 30) {
             e.preventDefault();
           }
         },
-        
+
         handleModalTouchEnd(e) {
           if (!this.isModalOpen) return;
-          
+
           const diffX = this.currentX - this.startX;
           const diffY = this.currentY - this.startY;
           const threshold = 80;
-          
+
           if (Math.abs(diffX) > threshold && Math.abs(diffX) > Math.abs(diffY)) {
             if (diffX > 0) {
               // Swipe right - previous image
@@ -5421,26 +5618,26 @@
             // Swipe down - close modal
             document.querySelector('.modal-close').click();
           }
-          
+
           this.resetTouch();
         },
-        
+
         navigateFilter(direction) {
           const filterBtns = Array.from(document.querySelectorAll('.filter-btn'));
           const activeBtn = filterBtns.find(btn => btn.classList.contains('active'));
           const currentIndex = filterBtns.indexOf(activeBtn);
-          
+
           let newIndex;
           if (direction === 'next') {
             newIndex = (currentIndex + 1) % filterBtns.length;
           } else {
             newIndex = currentIndex === 0 ? filterBtns.length - 1 : currentIndex - 1;
           }
-          
+
           filterBtns[newIndex].click();
           this.showSwipeHint(direction);
         },
-        
+
         showSwipeHint(direction) {
           const hint = document.createElement('div');
           hint.className = 'swipe-hint';
@@ -5458,46 +5655,46 @@
             font-size: 0.9em;
             pointer-events: none;
           `;
-          
+
           document.body.appendChild(hint);
           setTimeout(() => {
             document.body.removeChild(hint);
           }, 1500);
         },
-        
+
         setupPullToRefresh() {
           let startY = 0;
           let pullDistance = 0;
           const threshold = 100;
-          
+
           document.addEventListener('touchstart', (e) => {
             if (window.scrollY === 0) {
               startY = e.touches[0].clientY;
             }
           }, { passive: true });
-          
+
           document.addEventListener('touchmove', (e) => {
             if (startY && window.scrollY === 0) {
               pullDistance = e.touches[0].clientY - startY;
-              
+
               if (pullDistance > 0) {
                 this.updatePullIndicator(pullDistance, threshold);
               }
             }
           }, { passive: true });
-          
+
           document.addEventListener('touchend', () => {
             if (pullDistance > threshold) {
               autoRefreshManager.forceRefresh();
               showAutoRefreshStatus('Pull to refresh triggered', 'success');
             }
-            
+
             this.hidePullIndicator();
             startY = 0;
             pullDistance = 0;
           }, { passive: true });
         },
-        
+
         updatePullIndicator(distance, threshold) {
           let indicator = document.getElementById('pull-indicator');
           if (!indicator) {
@@ -5519,11 +5716,11 @@
             `;
             document.body.appendChild(indicator);
           }
-          
+
           const progress = Math.min(distance / threshold, 1);
           indicator.style.opacity = progress;
           indicator.style.transform = `translateX(-50%) translateY(${-20 + (progress * 20)}px)`;
-          
+
           if (progress >= 1) {
             indicator.innerHTML = '↑ Release to refresh';
             indicator.style.background = 'var(--highlight)';
@@ -5532,7 +5729,7 @@
             indicator.style.background = 'var(--accent)';
           }
         },
-        
+
         hidePullIndicator() {
           const indicator = document.getElementById('pull-indicator');
           if (indicator) {
@@ -5544,7 +5741,7 @@
             }, 200);
           }
         },
-        
+
         optimizeForMobile() {
           // Optimize touch targets
           const touchTargets = document.querySelectorAll('button, .image-card, .filter-btn');
@@ -5554,10 +5751,10 @@
               target.style.minHeight = '44px';
             }
           });
-          
+
           // Add mobile-specific classes
           document.body.classList.add('mobile-optimized');
-          
+
           // Optimize scroll performance
           document.addEventListener('touchmove', (e) => {
             if (e.target.closest('.image-gallery')) {
@@ -5565,7 +5762,7 @@
             }
           }, { passive: true });
         },
-        
+
         resetTouch() {
           this.startX = 0;
           this.startY = 0;
@@ -5575,9 +5772,225 @@
           this.isModalOpen = false;
         }
       };
-      
+
       // Initialize mobile gestures
       mobileGestureManager.init();
+
+      // Enhanced Dark Mode Integration
+      const themeManager = {
+        init() {
+          this.setupThemeIntegration();
+          this.enhanceDarkModeStyles();
+          this.setupThemeTransitions();
+          this.handleSystemThemeChanges();
+        },
+
+        setupThemeIntegration() {
+          // Listen for theme changes from the main site
+          const themeToggle = document.getElementById('themeToggle');
+          if (themeToggle) {
+            // Override the existing theme toggle to include livestream-specific enhancements
+            const originalToggle = themeToggle.onclick;
+            themeToggle.onclick = null;
+            
+            themeToggle.addEventListener('click', () => {
+              document.body.classList.toggle('dark');
+              const isDark = document.body.classList.contains('dark');
+              themeToggle.textContent = isDark ? '☀️' : '🌙';
+              localStorage.setItem('theme', isDark ? 'dark' : 'light');
+              
+              // Apply livestream-specific theme enhancements
+              this.applyThemeEnhancements(isDark);
+              this.updateImageContrast(isDark);
+              this.animateThemeTransition();
+            });
+          }
+
+          // Apply initial theme
+          const savedTheme = localStorage.getItem('theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const shouldBeDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+          
+          if (shouldBeDark) {
+            document.body.classList.add('dark');
+            if (themeToggle) themeToggle.textContent = '☀️';
+            this.applyThemeEnhancements(true);
+          }
+        },
+
+        applyThemeEnhancements(isDark) {
+          // Update CSS custom properties for smooth transitions
+          const root = document.documentElement;
+          
+          if (isDark) {
+            root.style.setProperty('--image-overlay-bg', 'rgba(0, 0, 0, 0.8)');
+            root.style.setProperty('--card-shadow', '0 4px 12px rgba(0, 0, 0, 0.4)');
+            root.style.setProperty('--text-primary', '#ffffff');
+            root.style.setProperty('--text-secondary', '#cccccc');
+            root.style.setProperty('--bg-primary', '#121212');
+            root.style.setProperty('--bg-secondary', '#1a1a1a');
+            root.style.setProperty('--border-color', '#333333');
+          } else {
+            root.style.setProperty('--image-overlay-bg', 'rgba(0, 0, 0, 0.6)');
+            root.style.setProperty('--card-shadow', '0 4px 12px rgba(0, 0, 0, 0.1)');
+            root.style.setProperty('--text-primary', '#333333');
+            root.style.setProperty('--text-secondary', '#666666');
+            root.style.setProperty('--bg-primary', '#ffffff');
+            root.style.setProperty('--bg-secondary', '#f8f9fa');
+            root.style.setProperty('--border-color', '#eeeeee');
+          }
+
+          // Update modal backdrop
+          this.updateModalBackdrop(isDark);
+          
+          // Update search suggestions theme
+          this.updateSearchTheme(isDark);
+          
+          // Update auto-refresh status theme
+          this.updateStatusTheme(isDark);
+        },
+
+        updateImageContrast(isDark) {
+          // Adjust image contrast for better visibility in dark mode
+          const images = document.querySelectorAll('.image-container img');
+          images.forEach(img => {
+            if (isDark) {
+              img.style.filter = 'brightness(0.9) contrast(1.1)';
+            } else {
+              img.style.filter = 'none';
+            }
+          });
+        },
+
+        updateModalBackdrop(isDark) {
+          const modal = document.getElementById('image-modal');
+          if (modal) {
+            if (isDark) {
+              modal.style.background = 'rgba(0, 0, 0, 0.95)';
+            } else {
+              modal.style.background = 'rgba(0, 0, 0, 0.8)';
+            }
+          }
+        },
+
+        updateSearchTheme(isDark) {
+          const searchSuggestions = document.getElementById('search-suggestions');
+          if (searchSuggestions) {
+            if (isDark) {
+              searchSuggestions.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.5)';
+            } else {
+              searchSuggestions.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+            }
+          }
+        },
+
+        updateStatusTheme(isDark) {
+          const statusElement = document.getElementById('auto-refresh-status');
+          if (statusElement) {
+            if (isDark) {
+              statusElement.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+            } else {
+              statusElement.style.borderColor = 'rgba(0, 0, 0, 0.2)';
+            }
+          }
+        },
+
+        setupThemeTransitions() {
+          // Add smooth transitions for theme changes
+          const style = document.createElement('style');
+          style.textContent = `
+            * {
+              transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+            }
+            
+            .image-container img {
+              transition: filter 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+            }
+          `;
+          document.head.appendChild(style);
+          
+          // Remove transitions after theme change is complete
+          setTimeout(() => {
+            style.remove();
+          }, 300);
+        },
+
+        animateThemeTransition() {
+          // Create a subtle animation effect for theme switching
+          const overlay = document.createElement('div');
+          overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: ${document.body.classList.contains('dark') ? '#000' : '#fff'};
+            opacity: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transition: opacity 0.15s ease;
+          `;
+          
+          document.body.appendChild(overlay);
+          
+          requestAnimationFrame(() => {
+            overlay.style.opacity = '0.3';
+            setTimeout(() => {
+              overlay.style.opacity = '0';
+              setTimeout(() => {
+                document.body.removeChild(overlay);
+              }, 150);
+            }, 50);
+          });
+        },
+
+        handleSystemThemeChanges() {
+          // Listen for system theme changes
+          const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+          mediaQuery.addListener((e) => {
+            // Only auto-switch if user hasn't manually set a preference
+            const savedTheme = localStorage.getItem('theme');
+            if (!savedTheme) {
+              const shouldBeDark = e.matches;
+              document.body.classList.toggle('dark', shouldBeDark);
+              
+              const themeToggle = document.getElementById('themeToggle');
+              if (themeToggle) {
+                themeToggle.textContent = shouldBeDark ? '☀️' : '🌙';
+              }
+              
+              this.applyThemeEnhancements(shouldBeDark);
+              this.animateThemeTransition();
+            }
+          });
+        },
+
+        // Method to programmatically switch themes
+        setTheme(theme) {
+          const isDark = theme === 'dark';
+          document.body.classList.toggle('dark', isDark);
+          
+          const themeToggle = document.getElementById('themeToggle');
+          if (themeToggle) {
+            themeToggle.textContent = isDark ? '☀️' : '🌙';
+          }
+          
+          localStorage.setItem('theme', theme);
+          this.applyThemeEnhancements(isDark);
+          this.animateThemeTransition();
+        },
+
+        // Get current theme
+        getCurrentTheme() {
+          return document.body.classList.contains('dark') ? 'dark' : 'light';
+        }
+      };
+
+      // Initialize theme manager
+      themeManager.init();
+
+      // Make theme manager globally available
+      window.livestreamThemeManager = themeManager;
 
       // Cleanup on page unload
       window.addEventListener('beforeunload', cleanupResources);
