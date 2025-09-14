@@ -336,9 +336,105 @@
       animation: spin 1s linear infinite;
     }
 
+    .refresh-btn.success {
+      background: #28a745;
+      border-color: #28a745;
+      color: white;
+    }
+
+    .refresh-btn.error {
+      background: #dc3545;
+      border-color: #dc3545;
+      color: white;
+    }
+
     @keyframes spin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
+    }
+
+    /* Auto-refresh status indicator */
+    .auto-refresh-status {
+      position: fixed;
+      bottom: 2em;
+      right: 2em;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 0.8em 1.2em;
+      border-radius: 8px;
+      font-size: 0.85em;
+      z-index: 9999;
+      display: none;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .auto-refresh-status.visible {
+      display: block;
+      animation: slideInUp 0.3s ease;
+    }
+
+    .auto-refresh-status.success {
+      background: rgba(40, 167, 69, 0.9);
+      border-color: rgba(40, 167, 69, 0.5);
+    }
+
+    .auto-refresh-status.error {
+      background: rgba(220, 53, 69, 0.9);
+      border-color: rgba(220, 53, 69, 0.5);
+    }
+
+    @keyframes slideInUp {
+      from {
+        transform: translateY(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* Auto-refresh controls */
+    .auto-refresh-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      font-size: 0.8em;
+      color: #666;
+    }
+
+    body.dark .auto-refresh-controls {
+      color: #aaa;
+    }
+
+    .auto-refresh-toggle {
+      background: none;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 0.2em 0.5em;
+      cursor: pointer;
+      font-size: 0.75em;
+      transition: all 0.2s ease;
+    }
+
+    .auto-refresh-toggle:hover {
+      background: #f8f9fa;
+    }
+
+    .auto-refresh-toggle.enabled {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    body.dark .auto-refresh-toggle {
+      border-color: #444;
+      color: #aaa;
+    }
+
+    body.dark .auto-refresh-toggle:hover {
+      background: #333;
     }
 
     body.dark .refresh-btn {
@@ -1613,7 +1709,12 @@
         <button class="view-btn" data-view="list" title="List View">☰</button>
       </div>
       <div class="refresh-indicator">
-        <span class="last-updated">Updated: <time id="last-refresh">just now</time></span>
+        <div class="auto-refresh-controls">
+          <span class="last-updated">Updated: <time id="last-refresh">just now</time></span>
+          <button class="auto-refresh-toggle enabled" id="auto-refresh-toggle" title="Toggle Auto-refresh">
+            Auto
+          </button>
+        </div>
         <button class="refresh-btn" title="Refresh Now">🔄</button>
       </div>
     </section>
@@ -1910,6 +2011,11 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Auto-refresh status indicator -->
+  <div class="auto-refresh-status" id="auto-refresh-status">
+    <span class="status-text"></span>
   </div>
 
   <footer>
@@ -3210,6 +3316,20 @@
         socialShareMenu.style.display = isVisible ? 'none' : 'block';
       }
 
+      // Show auto-refresh status
+      function showAutoRefreshStatus(message, type = 'info') {
+        const statusElement = document.getElementById('auto-refresh-status');
+        const statusText = statusElement.querySelector('.status-text');
+        
+        statusText.textContent = message;
+        statusElement.className = `auto-refresh-status visible ${type}`;
+        
+        // Auto-hide after 3 seconds
+        setTimeout(() => {
+          statusElement.classList.remove('visible');
+        }, 3000);
+      }
+
       // Show toast notification
       function showToast(message) {
         const toast = document.createElement('div');
@@ -3376,13 +3496,18 @@
         currentView = view;
       }
 
-      // Refresh functionality
+      // Enhanced refresh functionality
       async function refreshGallery() {
+        const startTime = performance.now();
         refreshBtn.classList.add('spinning');
         
         try {
           // Fetch fresh data from all sources
           const images = await imageDataManager.fetchAllImages();
+          
+          // Check if we got new content
+          const hasNewContent = images.length !== currentImageData.length || 
+                               images.some((img, index) => img.id !== currentImageData[index]?.id);
           
           // Update the gallery with new images
           await updateGalleryWithImages(images);
@@ -3392,12 +3517,24 @@
           // Re-apply current filter to maintain state
           filterImages(currentFilter);
           
+          const endTime = performance.now();
+          const refreshTime = Math.round(endTime - startTime);
+          
           // Show success feedback
           const originalText = refreshBtn.title;
-          refreshBtn.title = 'Refreshed!';
+          refreshBtn.title = `Refreshed in ${refreshTime}ms`;
           setTimeout(() => {
             refreshBtn.title = originalText;
           }, 2000);
+          
+          // Show status for auto-refresh
+          if (hasNewContent) {
+            showAutoRefreshStatus(`Gallery updated with fresh content (${refreshTime}ms)`, 'success');
+          } else {
+            showAutoRefreshStatus(`No new content available (${refreshTime}ms)`, 'info');
+          }
+          
+          return true; // Success
           
         } catch (error) {
           console.error('Refresh failed:', error);
@@ -3408,6 +3545,11 @@
           setTimeout(() => {
             refreshBtn.title = originalText;
           }, 3000);
+          
+          showAutoRefreshStatus('Refresh failed - check connection', 'error');
+          
+          throw error; // Re-throw for auto-refresh manager
+          
         } finally {
           refreshBtn.classList.remove('spinning');
         }
@@ -3694,7 +3836,22 @@
         });
       });
 
-      refreshBtn.addEventListener('click', refreshGallery);
+      refreshBtn.addEventListener('click', () => {
+        autoRefreshManager.forceRefresh();
+      });
+
+      // Auto-refresh toggle
+      const autoRefreshToggle = document.getElementById('auto-refresh-toggle');
+      autoRefreshToggle.addEventListener('click', () => {
+        autoRefreshManager.toggle();
+        autoRefreshToggle.classList.toggle('enabled', autoRefreshManager.isEnabled);
+        autoRefreshToggle.textContent = autoRefreshManager.isEnabled ? 'Auto' : 'Manual';
+        
+        showAutoRefreshStatus(
+          autoRefreshManager.isEnabled ? 'Auto-refresh enabled' : 'Auto-refresh disabled',
+          autoRefreshManager.isEnabled ? 'success' : 'error'
+        );
+      });
 
       // Keyboard navigation for controls
       document.addEventListener('keydown', (e) => {
@@ -3766,18 +3923,252 @@
       // Start initialization
       initializeGallery();
       
-      // Auto-refresh every 5 minutes with performance consideration
-      setInterval(() => {
-        if (document.visibilityState === 'visible') {
-          // Only refresh if performance is good
-          const avgLoadTime = performanceMonitor.getAverageLoadTime();
-          if (avgLoadTime < 3000) { // Less than 3 seconds average
-            refreshGallery();
-          } else {
-            console.log('⏳ Skipping auto-refresh due to slow performance');
+      // Enhanced Auto-Refresh System
+      const autoRefreshManager = {
+        interval: 5 * 60 * 1000, // 5 minutes default
+        minInterval: 2 * 60 * 1000, // 2 minutes minimum
+        maxInterval: 15 * 60 * 1000, // 15 minutes maximum
+        currentInterval: 5 * 60 * 1000,
+        intervalId: null,
+        lastUserActivity: Date.now(),
+        isEnabled: true,
+        consecutiveFailures: 0,
+        
+        init() {
+          this.startAutoRefresh();
+          this.setupActivityTracking();
+          this.setupVisibilityTracking();
+          this.setupNetworkTracking();
+        },
+        
+        startAutoRefresh() {
+          this.stopAutoRefresh();
+          this.intervalId = setInterval(() => {
+            this.performAutoRefresh();
+          }, this.currentInterval);
+          
+          console.log(`🔄 Auto-refresh started: ${this.currentInterval / 1000}s interval`);
+        },
+        
+        stopAutoRefresh() {
+          if (this.intervalId) {
+            clearInterval(this.intervalId);
+            this.intervalId = null;
           }
+        },
+        
+        async performAutoRefresh() {
+          if (!this.shouldRefresh()) {
+            return;
+          }
+          
+          console.log('🔄 Auto-refresh triggered');
+          
+          try {
+            await refreshGallery();
+            this.onRefreshSuccess();
+          } catch (error) {
+            this.onRefreshFailure(error);
+          }
+        },
+        
+        shouldRefresh() {
+          // Don't refresh if disabled
+          if (!this.isEnabled) {
+            console.log('⏸️ Auto-refresh disabled');
+            return false;
+          }
+          
+          // Don't refresh if page is not visible
+          if (document.visibilityState !== 'visible') {
+            console.log('👁️ Page not visible, skipping refresh');
+            return false;
+          }
+          
+          // Don't refresh if modal is open
+          if (document.getElementById('image-modal').classList.contains('active')) {
+            console.log('🖼️ Modal open, skipping refresh');
+            return false;
+          }
+          
+          // Don't refresh if performance is poor
+          const avgLoadTime = performanceMonitor.getAverageLoadTime();
+          if (avgLoadTime > 5000) {
+            console.log('⏳ Poor performance, skipping refresh');
+            this.adjustInterval('increase');
+            return false;
+          }
+          
+          // Don't refresh if user was recently active
+          const timeSinceActivity = Date.now() - this.lastUserActivity;
+          if (timeSinceActivity < 30000) { // 30 seconds
+            console.log('👆 Recent user activity, skipping refresh');
+            return false;
+          }
+          
+          return true;
+        },
+        
+        onRefreshSuccess() {
+          this.consecutiveFailures = 0;
+          
+          // Improve interval if performance is good
+          const avgLoadTime = performanceMonitor.getAverageLoadTime();
+          if (avgLoadTime < 2000) {
+            this.adjustInterval('decrease');
+          }
+          
+          this.updateRefreshIndicator('success');
+        },
+        
+        onRefreshFailure(error) {
+          console.error('Auto-refresh failed:', error);
+          this.consecutiveFailures++;
+          
+          // Increase interval after failures
+          if (this.consecutiveFailures >= 2) {
+            this.adjustInterval('increase');
+          }
+          
+          // Disable after too many failures
+          if (this.consecutiveFailures >= 5) {
+            this.disable();
+            showToast('Auto-refresh disabled due to repeated failures');
+          }
+          
+          this.updateRefreshIndicator('error');
+        },
+        
+        adjustInterval(direction) {
+          const oldInterval = this.currentInterval;
+          
+          if (direction === 'increase') {
+            this.currentInterval = Math.min(this.currentInterval * 1.5, this.maxInterval);
+          } else if (direction === 'decrease') {
+            this.currentInterval = Math.max(this.currentInterval * 0.8, this.minInterval);
+          }
+          
+          if (this.currentInterval !== oldInterval) {
+            console.log(`⏱️ Interval adjusted: ${oldInterval / 1000}s → ${this.currentInterval / 1000}s`);
+            this.startAutoRefresh(); // Restart with new interval
+          }
+        },
+        
+        setupActivityTracking() {
+          const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
+          
+          events.forEach(event => {
+            document.addEventListener(event, () => {
+              this.lastUserActivity = Date.now();
+            }, { passive: true });
+          });
+        },
+        
+        setupVisibilityTracking() {
+          document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+              console.log('👁️ Page visible, resuming auto-refresh');
+              this.lastUserActivity = Date.now();
+              
+              // Check if we should refresh immediately after becoming visible
+              const timeSinceLastRefresh = Date.now() - this.getLastRefreshTime();
+              if (timeSinceLastRefresh > this.currentInterval) {
+                setTimeout(() => this.performAutoRefresh(), 2000); // Small delay
+              }
+            } else {
+              console.log('👁️ Page hidden, auto-refresh will pause');
+            }
+          });
+        },
+        
+        setupNetworkTracking() {
+          if ('connection' in navigator) {
+            const connection = navigator.connection;
+            
+            const updateForConnection = () => {
+              const effectiveType = connection.effectiveType;
+              
+              if (effectiveType === 'slow-2g' || effectiveType === '2g') {
+                this.currentInterval = this.maxInterval;
+                console.log('📶 Slow connection detected, using maximum interval');
+              } else if (effectiveType === '4g') {
+                this.currentInterval = this.minInterval;
+                console.log('📶 Fast connection detected, using minimum interval');
+              }
+              
+              this.startAutoRefresh();
+            };
+            
+            connection.addEventListener('change', updateForConnection);
+            updateForConnection(); // Initial setup
+          }
+        },
+        
+        getLastRefreshTime() {
+          const lastRefreshElement = document.getElementById('last-refresh');
+          const lastRefreshText = lastRefreshElement?.textContent;
+          
+          if (lastRefreshText && lastRefreshText !== '--' && lastRefreshText !== 'just now') {
+            // Parse time from "3:45 PM" format
+            const today = new Date();
+            const [time, period] = lastRefreshText.split(' ');
+            const [hours, minutes] = time.split(':').map(Number);
+            
+            let hour24 = hours;
+            if (period === 'PM' && hours !== 12) hour24 += 12;
+            if (period === 'AM' && hours === 12) hour24 = 0;
+            
+            const lastRefresh = new Date(today.getFullYear(), today.getMonth(), today.getDate(), hour24, minutes);
+            return lastRefresh.getTime();
+          }
+          
+          return Date.now() - this.currentInterval; // Assume it's time to refresh
+        },
+        
+        updateRefreshIndicator(status) {
+          const refreshBtn = document.querySelector('.refresh-btn');
+          
+          refreshBtn.classList.remove('success', 'error');
+          
+          if (status === 'success') {
+            refreshBtn.classList.add('success');
+            setTimeout(() => refreshBtn.classList.remove('success'), 2000);
+          } else if (status === 'error') {
+            refreshBtn.classList.add('error');
+            setTimeout(() => refreshBtn.classList.remove('error'), 3000);
+          }
+        },
+        
+        enable() {
+          this.isEnabled = true;
+          this.consecutiveFailures = 0;
+          this.startAutoRefresh();
+          console.log('✅ Auto-refresh enabled');
+        },
+        
+        disable() {
+          this.isEnabled = false;
+          this.stopAutoRefresh();
+          console.log('❌ Auto-refresh disabled');
+        },
+        
+        toggle() {
+          if (this.isEnabled) {
+            this.disable();
+          } else {
+            this.enable();
+          }
+        },
+        
+        forceRefresh() {
+          console.log('🔄 Force refresh triggered');
+          this.lastUserActivity = Date.now() - 60000; // Fake old activity
+          this.performAutoRefresh();
         }
-      }, 300000); // 5 minutes
+      };
+      
+      // Initialize auto-refresh system
+      autoRefreshManager.init();
 
       // Cleanup on page unload
       window.addEventListener('beforeunload', cleanupResources);
