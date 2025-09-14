@@ -1690,6 +1690,836 @@
         margin: 1.5em 0;
       }
     }
+
+    /* Mission Detail Modal Styles */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 10000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-overlay.visible {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2em;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      max-width: 1000px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      animation: slideInUp 0.3s ease;
+    }
+
+    .modal-content.large {
+      max-width: 1200px;
+    }
+
+    body.dark .modal-content {
+      background: var(--dark-bg);
+      color: var(--text-white);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1em;
+      right: 1em;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: var(--accent);
+      font-size: 2em;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      z-index: 10001;
+    }
+
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+
+    body.dark .modal-close {
+      color: var(--text-light);
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    body.dark .modal-close:hover {
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 2em;
+      padding: 2em;
+      background: linear-gradient(135deg, var(--accent), var(--flag-blue));
+      color: white;
+      border-radius: 20px 20px 0 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .modal-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="1" fill="white" opacity="0.2"/><circle cx="80" cy="40" r="0.5" fill="white" opacity="0.3"/><circle cx="40" cy="80" r="1.5" fill="white" opacity="0.1"/></svg>');
+      animation: twinkle 10s linear infinite;
+    }
+
+    .mission-patch {
+      position: relative;
+      z-index: 1;
+    }
+
+    .mission-patch img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      object-fit: cover;
+    }
+
+    .mission-title-section {
+      position: relative;
+      z-index: 1;
+    }
+
+    .modal-mission-name {
+      font-size: 2.5em;
+      font-weight: bold;
+      margin-bottom: 0.3em;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-mission-subtitle {
+      font-size: 1.2em;
+      opacity: 0.9;
+      margin-bottom: 1em;
+    }
+
+    .modal-agency-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+
+    .modal-agency-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      filter: invert(1);
+    }
+
+    .modal-agency-name {
+      font-size: 1.1em;
+      font-weight: 600;
+    }
+
+    .modal-countdown-section {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .modal-countdown {
+      display: flex;
+      gap: 0.5em;
+      justify-content: center;
+    }
+
+    .modal-countdown .time-unit {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.8em 0.6em;
+      border-radius: 8px;
+      min-width: 60px;
+      backdrop-filter: blur(10px);
+    }
+
+    .modal-countdown .time-unit .number {
+      font-size: 1.5em;
+      font-weight: bold;
+      font-family: 'Courier New', monospace;
+      line-height: 1;
+    }
+
+    .modal-countdown .time-unit .label {
+      font-size: 0.7em;
+      opacity: 0.8;
+      margin-top: 0.2em;
+    }
+
+    .modal-body {
+      padding: 0;
+    }
+
+    .modal-tabs {
+      display: flex;
+      background: rgba(0, 51, 160, 0.05);
+      border-bottom: 1px solid rgba(0, 51, 160, 0.1);
+    }
+
+    body.dark .modal-tabs {
+      background: rgba(255, 255, 255, 0.05);
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      padding: 1.2em 1em;
+      font-size: 1em;
+      font-weight: 600;
+      color: var(--accent);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .tab-btn:hover {
+      background: rgba(0, 51, 160, 0.1);
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: white;
+    }
+
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--highlight);
+    }
+
+    body.dark .tab-btn {
+      color: var(--text-light);
+    }
+
+    body.dark .tab-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark .tab-btn.active {
+      background: var(--dark-accent);
+      color: white;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 2em;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Overview Tab Styles */
+    .mission-overview {
+      display: grid;
+      gap: 2em;
+    }
+
+    .overview-section h3 {
+      color: var(--accent);
+      font-size: 1.4em;
+      margin-bottom: 1em;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 0.5em;
+    }
+
+    body.dark .overview-section h3 {
+      color: var(--text-light);
+      border-bottom-color: var(--text-light);
+    }
+
+    .mission-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5em;
+      margin: 2em 0;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 1.5em;
+      background: rgba(0, 51, 160, 0.05);
+      border-radius: 12px;
+      border: 1px solid rgba(0, 51, 160, 0.1);
+    }
+
+    body.dark .stat-item {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .stat-item .stat-value {
+      display: block;
+      font-size: 2em;
+      font-weight: bold;
+      color: var(--accent);
+      margin-bottom: 0.3em;
+      font-family: 'Courier New', monospace;
+    }
+
+    body.dark .stat-item .stat-value {
+      color: var(--text-light);
+    }
+
+    .stat-item .stat-label {
+      font-size: 0.9em;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    body.dark .stat-item .stat-label {
+      color: #cce0ff;
+    }
+
+    .mission-details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2em;
+      margin-top: 2em;
+    }
+
+    .detail-section h4 {
+      color: var(--accent);
+      font-size: 1.2em;
+      margin-bottom: 1em;
+    }
+
+    body.dark .detail-section h4 {
+      color: var(--text-light);
+    }
+
+    .detail-list {
+      display: grid;
+      gap: 0.8em;
+    }
+
+    .detail-list .detail-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.8em;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 8px;
+      border: 1px solid rgba(0, 51, 160, 0.1);
+    }
+
+    body.dark .detail-list .detail-item {
+      background: rgba(0, 0, 0, 0.2);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Rocket Tab Styles */
+    .rocket-specs {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 3em;
+    }
+
+    .rocket-visual {
+      text-align: center;
+      padding: 2em;
+      background: rgba(0, 51, 160, 0.05);
+      border-radius: 16px;
+      border: 2px solid rgba(0, 51, 160, 0.1);
+    }
+
+    body.dark .rocket-visual {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .rocket-illustration {
+      font-size: 8em;
+      margin-bottom: 0.5em;
+      filter: drop-shadow(0 4px 8px rgba(0, 51, 160, 0.3));
+    }
+
+    .rocket-name {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: var(--accent);
+    }
+
+    body.dark .rocket-name {
+      color: var(--text-light);
+    }
+
+    .specs-table h3 {
+      color: var(--accent);
+      font-size: 1.4em;
+      margin-bottom: 1em;
+    }
+
+    body.dark .specs-table h3 {
+      color: var(--text-light);
+    }
+
+    .specs-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .specs-table td {
+      padding: 0.8em;
+      border-bottom: 1px solid rgba(0, 51, 160, 0.1);
+    }
+
+    .specs-table td:first-child {
+      font-weight: 600;
+      color: var(--accent);
+      width: 40%;
+    }
+
+    body.dark .specs-table td {
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark .specs-table td:first-child {
+      color: var(--text-light);
+    }
+
+    /* Timeline Tab Styles */
+    .mission-timeline {
+      position: relative;
+      padding-left: 2em;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 1.5em 0 1.5em 2em;
+      border-left: 3px solid rgba(0, 51, 160, 0.2);
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -8px;
+      top: 2em;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: rgba(0, 51, 160, 0.3);
+      border: 3px solid white;
+    }
+
+    .timeline-item.completed::before {
+      background: var(--launch-success);
+    }
+
+    .timeline-item.active::before {
+      background: var(--launch-live);
+      animation: pulse 2s infinite;
+    }
+
+    .timeline-item.upcoming::before {
+      background: var(--launch-upcoming);
+    }
+
+    .timeline-content h4 {
+      color: var(--accent);
+      font-size: 1.2em;
+      margin-bottom: 0.5em;
+    }
+
+    body.dark .timeline-content h4 {
+      color: var(--text-light);
+    }
+
+    .timeline-date {
+      font-size: 0.9em;
+      color: var(--text-light);
+      font-weight: 600;
+    }
+
+    body.dark .timeline-date {
+      color: #cce0ff;
+    }
+
+    /* Media Tab Styles */
+    .media-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5em;
+    }
+
+    .media-item {
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(0, 51, 160, 0.05);
+      border: 1px solid rgba(0, 51, 160, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .media-item:hover {
+      transform: scale(1.05);
+    }
+
+    body.dark .media-item {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .media-item img,
+    .media-item video {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .media-placeholder {
+      text-align: center;
+      padding: 3em;
+      color: var(--text-light);
+    }
+
+    body.dark .media-placeholder {
+      color: #cce0ff;
+    }
+
+    /* Modal Footer */
+    .modal-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5em 2em;
+      background: rgba(0, 51, 160, 0.05);
+      border-top: 1px solid rgba(0, 51, 160, 0.1);
+      border-radius: 0 0 20px 20px;
+    }
+
+    body.dark .modal-footer {
+      background: rgba(255, 255, 255, 0.05);
+      border-top-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .live-countdown {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+    }
+
+    .countdown-label {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    body.dark .countdown-label {
+      color: var(--text-light);
+    }
+
+    .countdown-display.compact {
+      display: flex;
+      gap: 0.5em;
+    }
+
+    .countdown-display.compact .time-unit {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.5em 0.4em;
+      border-radius: 6px;
+      min-width: 45px;
+    }
+
+    .countdown-display.compact .time-unit .number {
+      font-size: 1.2em;
+      font-weight: bold;
+      font-family: 'Courier New', monospace;
+    }
+
+    .countdown-display.compact .time-unit .label {
+      font-size: 0.6em;
+      opacity: 0.8;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 1em;
+    }
+
+    /* Responsive Modal */
+    @media (max-width: 900px) {
+      .modal-overlay {
+        padding: 1em;
+      }
+
+      .modal-header {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 1em;
+      }
+
+      .modal-mission-name {
+        font-size: 2em;
+      }
+
+      .rocket-specs {
+        grid-template-columns: 1fr;
+        gap: 2em;
+      }
+
+      .mission-details-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5em;
+      }
+
+      .mission-stats {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+
+      .modal-footer {
+        flex-direction: column;
+        gap: 1em;
+        text-align: center;
+      }
+
+      .modal-actions {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .modal-content {
+        margin: 0.5em;
+        border-radius: 16px;
+      }
+
+      .modal-header {
+        padding: 1.5em;
+      }
+
+      .modal-mission-name {
+        font-size: 1.6em;
+      }
+
+      .tab-content {
+        padding: 1.5em;
+      }
+
+      .mission-stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 1em;
+      }
+
+      .stat-item {
+        padding: 1em;
+      }
+
+      .stat-item .stat-value {
+        font-size: 1.5em;
+      }
+
+      .modal-actions {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .action-btn {
+        width: 100%;
+      }
+    }
+
+    /* Animation Keyframes */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideInUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Additional Comprehensive Modal Styles */
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5em 0;
+      border-bottom: 1px solid rgba(0, 51, 160, 0.1);
+    }
+
+    body.dark .detail-item {
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .detail-label {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    body.dark .detail-label {
+      color: var(--text-light);
+    }
+
+    .detail-value {
+      color: var(--text-dark);
+    }
+
+    body.dark .detail-value {
+      color: var(--text-white);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 1.5em 0 1.5em 3em;
+      border-left: 3px solid rgba(0, 51, 160, 0.2);
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -8px;
+      top: 2em;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 3px solid white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .timeline-item.completed::before {
+      background: var(--launch-success);
+    }
+
+    .timeline-item.active::before {
+      background: var(--highlight);
+      animation: pulse 2s infinite;
+    }
+
+    .timeline-content h4 {
+      color: var(--accent);
+      margin-bottom: 0.5em;
+    }
+
+    body.dark .timeline-content h4 {
+      color: var(--text-light);
+    }
+
+    .timeline-time {
+      font-size: 0.9em;
+      color: var(--launch-delayed);
+      font-weight: 600;
+      font-family: 'Courier New', monospace;
+    }
+
+    .media-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+      color: white;
+      padding: 1em 0.5em 0.5em;
+      font-size: 0.8em;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .media-item:hover .media-caption {
+      opacity: 1;
+    }
+
+    .link-icon {
+      font-size: 1.2em;
+    }
+
+    .link-title {
+      font-weight: 600;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.7; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Enhanced Mobile Modal Styles */
+    @media (max-width: 768px) {
+      .modal-content.large {
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        max-height: none;
+        border-radius: 0;
+      }
+
+      .modal-header {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 1em;
+      }
+
+      .modal-mission-name {
+        font-size: 1.8em;
+      }
+
+      .countdown-display.compact {
+        justify-content: center;
+      }
+
+      .modal-actions {
+        flex-direction: column;
+        gap: 0.5em;
+      }
+
+      .action-btn {
+        width: 100%;
+      }
+
+      .overview-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .rocket-specs {
+        grid-template-columns: 1fr;
+      }
+
+      .analytics-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .media-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+
+      .link-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 
@@ -2284,6 +3114,150 @@
       </div>
     </div>
   </footer>
+
+  <!-- Mission Detail Modal -->
+  <div class="modal-overlay" id="mission-modal">
+    <div class="modal-content large">
+      <button class="modal-close" title="Close" onclick="closeMissionModal()">&times;</button>
+      
+      <div class="modal-header">
+        <div class="mission-patch">
+          <img id="modal-mission-patch" src="" alt="Mission Patch">
+        </div>
+        <div class="mission-title-section">
+          <h1 class="modal-mission-name" id="modal-mission-name">Mission Name</h1>
+          <p class="modal-mission-subtitle" id="modal-mission-subtitle">Mission Subtitle</p>
+          <div class="modal-agency-info">
+            <img id="modal-agency-logo" src="" alt="Agency" class="modal-agency-logo">
+            <span class="modal-agency-name" id="modal-agency-name">Agency Name</span>
+          </div>
+        </div>
+        <div class="modal-countdown-section">
+          <div class="modal-countdown" id="modal-countdown">
+            <span class="time-unit">
+              <span class="number">--</span>
+              <span class="label">Days</span>
+            </span>
+            <span class="time-unit">
+              <span class="number">--</span>
+              <span class="label">Hours</span>
+            </span>
+            <span class="time-unit">
+              <span class="number">--</span>
+              <span class="label">Min</span>
+            </span>
+            <span class="time-unit">
+              <span class="number">--</span>
+              <span class="label">Sec</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-tabs">
+          <button class="tab-btn active" data-tab="overview" onclick="switchModalTab('overview')">Overview</button>
+          <button class="tab-btn" data-tab="rocket" onclick="switchModalTab('rocket')">Rocket</button>
+          <button class="tab-btn" data-tab="timeline" onclick="switchModalTab('timeline')">Timeline</button>
+          <button class="tab-btn" data-tab="media" onclick="switchModalTab('media')">Media</button>
+        </div>
+
+        <div class="tab-content active" id="overview-tab">
+          <div class="mission-overview">
+            <div class="overview-section">
+              <h3>Mission Objectives</h3>
+              <p id="modal-mission-objectives">Loading mission objectives...</p>
+            </div>
+            
+            <div class="mission-stats">
+              <div class="stat-item">
+                <span class="stat-value" id="modal-mission-cost">$0</span>
+                <span class="stat-label">Mission Cost</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="modal-mission-duration">0 days</span>
+                <span class="stat-label">Mission Duration</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="modal-payload-mass">0 kg</span>
+                <span class="stat-label">Payload Mass</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="modal-success-rate">0%</span>
+                <span class="stat-label">Rocket Success Rate</span>
+              </div>
+            </div>
+
+            <div class="mission-details-grid">
+              <div class="detail-section">
+                <h4>Launch Details</h4>
+                <div class="detail-list" id="modal-launch-details">
+                  <!-- Dynamic content -->
+                </div>
+              </div>
+              <div class="detail-section">
+                <h4>Payload Information</h4>
+                <div class="detail-list" id="modal-payload-details">
+                  <!-- Dynamic content -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-content" id="rocket-tab">
+          <div class="rocket-specs">
+            <div class="rocket-diagram">
+              <div class="rocket-visual" id="modal-rocket-visual">
+                <div class="rocket-illustration">🚀</div>
+                <div class="rocket-name" id="modal-rocket-name">Rocket Name</div>
+              </div>
+            </div>
+            <div class="specs-table">
+              <h3>Rocket Specifications</h3>
+              <table id="modal-rocket-specs">
+                <tbody>
+                  <!-- Dynamic content -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-content" id="timeline-tab">
+          <div class="mission-timeline" id="modal-timeline">
+            <!-- Dynamic timeline content -->
+          </div>
+        </div>
+
+        <div class="tab-content" id="media-tab">
+          <div class="media-gallery" id="modal-media-gallery">
+            <div class="media-placeholder">
+              <h3>Mission Media</h3>
+              <p>Images, videos, and media content will be displayed here</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="live-countdown">
+          <span class="countdown-label">Launch in:</span>
+          <div class="countdown-display compact" id="modal-footer-countdown">
+            <span class="time-unit"><span class="number">--</span><span class="label">D</span></span>
+            <span class="time-unit"><span class="number">--</span><span class="label">H</span></span>
+            <span class="time-unit"><span class="number">--</span><span class="label">M</span></span>
+            <span class="time-unit"><span class="number">--</span><span class="label">S</span></span>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="action-btn primary" id="modal-primary-action">🔔 Set Launch Alert</button>
+          <button class="action-btn secondary" id="modal-stream-action">📺 Watch Live Stream</button>
+          <button class="action-btn secondary" id="modal-share-action">📤 Share Mission</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     // Theme Toggle Functionality (Inherited from BlueandCosmos)
@@ -4425,10 +5399,10 @@
       }
     }
 
-    // Modal Functions (Placeholder)
+    // Comprehensive Mission Detail Modal Functions
     function openMissionModal(button) {
       const card = button.closest('.launch-card');
-      const missionName = card.querySelector('.mission-name').textContent;
+      const missionData = extractMissionData(card);
       
       // Add visual feedback
       button.style.transform = 'scale(0.95)';
@@ -4436,11 +5410,433 @@
         button.style.transform = '';
       }, 150);
       
-      console.log(`Opening modal for: ${missionName}`);
+      // Populate modal with mission data
+      populateMissionModal(missionData);
       
-      // Show temporary notification
-      showNotification(`Mission details for ${missionName} - Coming in Task 9!`, 'info');
+      // Show modal with animation
+      const modal = document.getElementById('mission-modal');
+      modal.classList.add('visible');
+      document.body.style.overflow = 'hidden';
+      
+      // Start modal countdown if mission is upcoming
+      if (missionData.launchTime) {
+        startModalCountdown(missionData.launchTime);
+      }
+      
+      console.log(`Opened comprehensive modal for: ${missionData.name}`);
     }
+
+    function extractMissionData(card) {
+      const missionName = card.querySelector('.mission-name')?.textContent || 'Unknown Mission';
+      const agencyName = card.querySelector('.agency-name')?.textContent || 'Unknown Agency';
+      const launchDate = card.querySelector('.launch-date')?.textContent || 'TBD';
+      const launchTime = card.querySelector('.launch-time')?.textContent || 'TBD';
+      const status = card.querySelector('.launch-status')?.textContent || 'Unknown';
+      const agencyLogo = card.querySelector('.agency-logo')?.src || '';
+      const missionPatch = card.querySelector('.mission-patch')?.src || '';
+      
+      // Extract additional data from data attributes or generate realistic data
+      return {
+        name: missionName,
+        subtitle: generateMissionSubtitle(missionName),
+        agency: agencyName,
+        agencyLogo: agencyLogo,
+        missionPatch: missionPatch,
+        launchDate: launchDate,
+        launchTime: launchTime,
+        status: status,
+        objectives: generateMissionObjectives(missionName),
+        rocket: generateRocketData(missionName),
+        timeline: generateMissionTimeline(missionName),
+        stats: generateMissionStats(missionName),
+        media: generateMissionMedia(missionName)
+      };
+    }
+
+    function populateMissionModal(data) {
+      // Header section
+      document.getElementById('modal-mission-name').textContent = data.name;
+      document.getElementById('modal-mission-subtitle').textContent = data.subtitle;
+      document.getElementById('modal-agency-name').textContent = data.agency;
+      
+      // Set images with fallbacks
+      const missionPatch = document.getElementById('modal-mission-patch');
+      const agencyLogo = document.getElementById('modal-agency-logo');
+      
+      if (data.missionPatch) {
+        missionPatch.src = data.missionPatch;
+        missionPatch.style.display = 'block';
+        missionPatch.parentElement.querySelector('.patch-placeholder').style.display = 'none';
+      } else {
+        missionPatch.style.display = 'none';
+        missionPatch.parentElement.querySelector('.patch-placeholder').style.display = 'flex';
+      }
+      
+      if (data.agencyLogo) {
+        agencyLogo.src = data.agencyLogo;
+      }
+      
+      // Overview tab
+      document.getElementById('modal-mission-objectives').textContent = data.objectives;
+      
+      // Stats
+      document.getElementById('modal-mission-cost').textContent = data.stats.cost;
+      document.getElementById('modal-mission-duration').textContent = data.stats.duration;
+      document.getElementById('modal-payload-mass').textContent = data.stats.payloadMass;
+      document.getElementById('modal-success-rate').textContent = data.stats.successRate;
+      
+      // Rocket tab
+      document.getElementById('modal-rocket-name').textContent = data.rocket.name;
+      populateRocketSpecs(data.rocket.specs);
+      
+      // Timeline tab
+      populateTimeline(data.timeline);
+      
+      // Media tab
+      populateMediaGallery(data.media);
+      
+      // Update action buttons
+      updateModalActions(data);
+    }
+
+    function generateMissionSubtitle(missionName) {
+      const subtitles = {
+        'Starship IFT-6': 'Integrated Flight Test - Advancing Human Spaceflight',
+        'Falcon 9': 'Reliable Workhorse - Commercial Satellite Deployment',
+        'Artemis II': 'Return to the Moon - Crewed Lunar Flyby Mission',
+        'Europa Clipper': 'Exploring Jupiter\'s Icy Moon for Signs of Life',
+        'JWST': 'Next Generation Space Telescope - Unlocking Cosmic Mysteries'
+      };
+      
+      return subtitles[missionName] || 'Advanced Space Mission - Pushing the Boundaries of Exploration';
+    }
+
+    function generateMissionObjectives(missionName) {
+      const objectives = {
+        'Starship IFT-6': 'Demonstrate in-flight engine relight, test heat shield performance during reentry, validate landing procedures for future crewed missions, and advance propellant transfer capabilities.',
+        'Falcon 9': 'Deploy commercial satellites to their designated orbits, demonstrate continued reliability of reusable rocket technology, and maintain SpaceX\'s industry-leading launch cadence.',
+        'Artemis II': 'Conduct the first crewed lunar flyby since Apollo 17, test life support systems in deep space, validate Orion spacecraft performance, and prepare for future lunar surface missions.',
+        'Europa Clipper': 'Study Europa\'s subsurface ocean, analyze the moon\'s ice shell and geology, search for signs of habitability, and assess the potential for life in Jupiter\'s system.',
+        'JWST': 'Observe the most distant galaxies in the universe, study exoplanet atmospheres, investigate star and planet formation, and revolutionize our understanding of cosmic evolution.'
+      };
+      
+      return objectives[missionName] || 'Advance scientific knowledge and technological capabilities through innovative space exploration, contributing to humanity\'s understanding of the universe and our place within it.';
+    }
+
+    function generateRocketData(missionName) {
+      const rockets = {
+        'Starship IFT-6': {
+          name: 'Starship Super Heavy',
+          specs: {
+            'Height': '120 m (394 ft)',
+            'Diameter': '9 m (30 ft)',
+            'Mass': '5,000,000 kg',
+            'Stages': '2 (Super Heavy + Starship)',
+            'Engines': '33 Raptor (1st stage), 6 Raptor (2nd stage)',
+            'Payload to LEO': '100,000+ kg',
+            'Payload to Mars': '100,000+ kg',
+            'First Flight': '2023',
+            'Reusable': 'Fully Reusable',
+            'Fuel': 'Liquid Methane + Liquid Oxygen'
+          }
+        },
+        'Falcon 9': {
+          name: 'Falcon 9 Block 5',
+          specs: {
+            'Height': '70 m (230 ft)',
+            'Diameter': '3.7 m (12 ft)',
+            'Mass': '549,054 kg',
+            'Stages': '2',
+            'Engines': '9 Merlin 1D (1st stage), 1 Merlin 1D Vacuum (2nd stage)',
+            'Payload to LEO': '22,800 kg',
+            'Payload to GTO': '8,300 kg',
+            'First Flight': '2018 (Block 5)',
+            'Success Rate': '98.9%',
+            'Reusable': 'First Stage',
+            'Fuel': 'RP-1 + Liquid Oxygen'
+          }
+        }
+      };
+      
+      return rockets[missionName] || {
+        name: 'Advanced Launch Vehicle',
+        specs: {
+          'Height': '65 m (213 ft)',
+          'Diameter': '4.0 m (13 ft)',
+          'Mass': '450,000 kg',
+          'Stages': '2',
+          'Engines': 'Multiple High-Performance Engines',
+          'Payload to LEO': '15,000 kg',
+          'Payload to GTO': '6,000 kg',
+          'First Flight': '2024',
+          'Success Rate': '95%+',
+          'Reusable': 'Partially Reusable'
+        }
+      };
+    }
+
+    function generateMissionTimeline(missionName) {
+      return [
+        { time: 'T-24:00:00', event: 'Final Launch Preparations Begin', status: 'completed' },
+        { time: 'T-04:00:00', event: 'Propellant Loading Starts', status: 'completed' },
+        { time: 'T-00:35:00', event: 'Launch Director Go/No-Go Poll', status: 'active' },
+        { time: 'T-00:10:00', event: 'Final Automated Checks', status: 'pending' },
+        { time: 'T-00:00:00', event: 'LIFTOFF!', status: 'pending' },
+        { time: 'T+00:02:30', event: 'Max Q (Maximum Aerodynamic Pressure)', status: 'pending' },
+        { time: 'T+00:08:00', event: 'First Stage Separation', status: 'pending' },
+        { time: 'T+00:09:00', event: 'Second Stage Engine Ignition', status: 'pending' },
+        { time: 'T+00:45:00', event: 'Payload Deployment', status: 'pending' }
+      ];
+    }
+
+    function generateMissionStats(missionName) {
+      const stats = {
+        'Starship IFT-6': {
+          cost: '$3B+',
+          duration: '90 min',
+          payloadMass: '0 kg (Test)',
+          successRate: '40%'
+        },
+        'Falcon 9': {
+          cost: '$67M',
+          duration: '15 min',
+          payloadMass: '15,600 kg',
+          successRate: '98.9%'
+        }
+      };
+      
+      return stats[missionName] || {
+        cost: '$150M',
+        duration: '45 min',
+        payloadMass: '8,500 kg',
+        successRate: '95%'
+      };
+    }
+
+    function generateMissionMedia(missionName) {
+      return {
+        images: [
+          { url: 'https://via.placeholder.com/300x200/0033A0/FFFFFF?text=Launch+Pad', caption: 'Launch Pad Preparation' },
+          { url: 'https://via.placeholder.com/300x200/FF4444/FFFFFF?text=Rocket+Assembly', caption: 'Rocket Assembly' },
+          { url: 'https://via.placeholder.com/300x200/00AA44/FFFFFF?text=Payload+Integration', caption: 'Payload Integration' }
+        ],
+        videos: [
+          { url: '#', title: 'Mission Overview Video' },
+          { url: '#', title: 'Rocket Assembly Timelapse' }
+        ],
+        links: [
+          { url: '#', title: 'Official Mission Page', icon: '🌐' },
+          { url: '#', title: 'Live Stream', icon: '📺' },
+          { url: '#', title: 'Mission Press Kit', icon: '📄' }
+        ]
+      };
+    }
+
+    function populateRocketSpecs(specs) {
+      const table = document.querySelector('#modal-rocket-specs tbody');
+      table.innerHTML = '';
+      
+      Object.entries(specs).forEach(([key, value]) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${key}</td><td>${value}</td>`;
+        table.appendChild(row);
+      });
+    }
+
+    function populateTimeline(timeline) {
+      const container = document.getElementById('modal-timeline');
+      container.innerHTML = '<h3>Mission Timeline</h3>';
+      
+      timeline.forEach(item => {
+        const timelineItem = document.createElement('div');
+        timelineItem.className = `timeline-item ${item.status}`;
+        timelineItem.innerHTML = `
+          <div class="timeline-content">
+            <h4>${item.event}</h4>
+            <p class="timeline-time">${item.time}</p>
+          </div>
+        `;
+        container.appendChild(timelineItem);
+      });
+    }
+
+    function populateMediaGallery(media) {
+      const gallery = document.getElementById('modal-media-gallery');
+      gallery.innerHTML = `
+        <h3>Mission Media</h3>
+        <div class="media-grid">
+          ${media.images.map(img => `
+            <div class="media-item">
+              <img src="${img.url}" alt="${img.caption}" loading="lazy">
+              <div class="media-caption">${img.caption}</div>
+            </div>
+          `).join('')}
+        </div>
+        <div class="media-links">
+          <h4>External Links</h4>
+          <div class="link-grid">
+            ${media.links.map(link => `
+              <a href="${link.url}" class="media-link" target="_blank">
+                <span class="link-icon">${link.icon}</span>
+                <span class="link-title">${link.title}</span>
+              </a>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function updateModalActions(data) {
+      const primaryAction = document.getElementById('modal-primary-action');
+      const streamAction = document.getElementById('modal-stream-action');
+      const shareAction = document.getElementById('modal-share-action');
+      
+      // Update based on mission status
+      if (data.status === 'Live') {
+        primaryAction.innerHTML = '🔴 Watch Live';
+        primaryAction.onclick = () => watchLiveLaunch(data);
+      } else {
+        primaryAction.innerHTML = '🔔 Set Launch Alert';
+        primaryAction.onclick = () => setLaunchNotification(data);
+      }
+      
+      streamAction.onclick = () => openLiveStream(data);
+      shareAction.onclick = () => shareMissionModal(data);
+    }
+
+    function switchModalTab(tabName) {
+      // Hide all tab contents
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Remove active class from all tab buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Show selected tab content
+      document.getElementById(`${tabName}-tab`).classList.add('active');
+      
+      // Add active class to selected tab button
+      document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+    }
+
+    function closeMissionModal() {
+      const modal = document.getElementById('mission-modal');
+      modal.classList.remove('visible');
+      document.body.style.overflow = '';
+      
+      // Stop any running countdowns
+      if (window.modalCountdownInterval) {
+        clearInterval(window.modalCountdownInterval);
+      }
+    }
+
+    function startModalCountdown(launchTime) {
+      // Clear any existing countdown
+      if (window.modalCountdownInterval) {
+        clearInterval(window.modalCountdownInterval);
+      }
+      
+      // Parse launch time (assuming format like "Dec 15, 2024 10:30 AM EST")
+      const targetDate = new Date(launchTime).getTime();
+      
+      if (isNaN(targetDate)) {
+        // If we can't parse the date, show placeholder
+        updateModalCountdownDisplay('--', '--', '--', '--');
+        return;
+      }
+      
+      window.modalCountdownInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+        
+        if (distance < 0) {
+          updateModalCountdownDisplay('00', '00', '00', '00');
+          clearInterval(window.modalCountdownInterval);
+          return;
+        }
+        
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        updateModalCountdownDisplay(
+          days.toString().padStart(2, '0'),
+          hours.toString().padStart(2, '0'),
+          minutes.toString().padStart(2, '0'),
+          seconds.toString().padStart(2, '0')
+        );
+      }, 1000);
+    }
+
+    function updateModalCountdownDisplay(days, hours, minutes, seconds) {
+      const countdowns = ['modal-countdown', 'modal-footer-countdown'];
+      
+      countdowns.forEach(countdownId => {
+        const countdown = document.getElementById(countdownId);
+        if (countdown) {
+          const timeUnits = countdown.querySelectorAll('.time-unit .number');
+          if (timeUnits.length >= 4) {
+            timeUnits[0].textContent = days;
+            timeUnits[1].textContent = hours;
+            timeUnits[2].textContent = minutes;
+            timeUnits[3].textContent = seconds;
+          }
+        }
+      });
+    }
+
+    // Modal Action Functions
+    function watchLiveLaunch(data) {
+      showNotification(`Opening live stream for ${data.name}! 🚀`, 'success');
+      // In a real implementation, this would open the live stream
+      window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank');
+    }
+
+    function setLaunchNotification(data) {
+      showNotification(`Launch alert set for ${data.name}! 🔔`, 'success');
+      // In a real implementation, this would set up browser notifications
+    }
+
+    function openLiveStream(data) {
+      showNotification(`Opening live stream for ${data.name}! 📺`, 'info');
+      // In a real implementation, this would open the appropriate live stream
+    }
+
+    function shareMissionModal(data) {
+      if (navigator.share) {
+        navigator.share({
+          title: `${data.name} - BlueandCosmos`,
+          text: `Check out this space mission: ${data.name}`,
+          url: window.location.href
+        });
+      } else {
+        navigator.clipboard.writeText(`${data.name} - ${window.location.href}`);
+        showNotification('Mission link copied to clipboard! 📋', 'success');
+      }
+    }
+
+    function downloadMissionData(data) {
+      showNotification(`Downloading mission data for ${data.name}! 💾`, 'info');
+      // In a real implementation, this would generate and download mission data
+    }
+
+    // Close modal when clicking outside
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal-overlay')) {
+        closeMissionModal();
+      }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && document.getElementById('mission-modal').classList.contains('visible')) {
+        closeMissionModal();
+      }
+    });
 
     function setNotification(button) {
       const card = button.closest('.launch-card');

@@ -3012,9 +3012,17 @@
     }
 
     /* Core Web Vitals Status Colors */
-    .cwv-good { color: #28a745; }
-    .cwv-needs-improvement { color: #ffc107; }
-    .cwv-poor { color: #dc3545; }
+    .cwv-good {
+      color: #28a745;
+    }
+
+    .cwv-needs-improvement {
+      color: #ffc107;
+    }
+
+    .cwv-poor {
+      color: #dc3545;
+    }
 
     /* Bundle optimization indicators */
     .webp-support .image-card img {
@@ -3027,14 +3035,24 @@
     }
 
     .slow-connection .loading-skeleton {
-      animation-duration: 2s; /* Slower animation for slow connections */
+      animation-duration: 2s;
+      /* Slower animation for slow connections */
     }
 
     /* Performance budget exceeded animation */
     @keyframes budgetExceeded {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); background-color: rgba(220, 53, 69, 0.1); }
-      100% { transform: scale(1); }
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+        background-color: rgba(220, 53, 69, 0.1);
+      }
+
+      100% {
+        transform: scale(1);
+      }
     }
 
     .budget-exceeded {
@@ -3059,13 +3077,11 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: repeating-linear-gradient(
-        90deg,
-        transparent,
-        transparent 8px,
-        rgba(255, 255, 255, 0.1) 8px,
-        rgba(255, 255, 255, 0.1) 9px
-      );
+      background: repeating-linear-gradient(90deg,
+          transparent,
+          transparent 8px,
+          rgba(255, 255, 255, 0.1) 8px,
+          rgba(255, 255, 255, 0.1) 9px);
     }
 
     /* Performance monitoring help text */
@@ -7448,7 +7464,7 @@
         init() {
           this.setupTestEnvironment();
           this.registerTests();
-          
+
           // Auto-run tests in development mode
           if (this.isDevelopmentMode()) {
             console.log('🧪 Running automated tests...');
@@ -7457,9 +7473,9 @@
         },
 
         isDevelopmentMode() {
-          return window.location.hostname === 'localhost' || 
-                 window.location.hostname === '127.0.0.1' ||
-                 window.location.search.includes('test=true');
+          return window.location.hostname === 'localhost' ||
+            window.location.hostname === '127.0.0.1' ||
+            window.location.search.includes('test=true');
         },
 
         setupTestEnvironment() {
@@ -7559,40 +7575,40 @@
           this.addTest('Image Data Manager - Parse NASA Image', this.testParseNASAImage);
           this.addTest('Image Data Manager - Categorize Images', this.testCategorizeImages);
           this.addTest('Image Data Manager - Cache Management', this.testCacheManagement);
-          
+
           // Filter and Search Tests
           this.addTest('Filter System - Category Filtering', this.testCategoryFiltering);
           this.addTest('Search System - Text Search', this.testTextSearch);
           this.addTest('Filter System - Multiple Filters', this.testMultipleFilters);
-          
+
           // Modal Tests
           this.addTest('Modal System - Open and Close', this.testModalOpenClose);
           this.addTest('Modal System - Navigation', this.testModalNavigation);
           this.addTest('Modal System - Keyboard Controls', this.testModalKeyboard);
-          
+
           // Performance Tests
           this.addTest('Performance - Image Loading', this.testImageLoadingPerformance);
           this.addTest('Performance - Memory Usage', this.testMemoryUsage);
           this.addTest('Performance - Scroll Performance', this.testScrollPerformance);
-          
+
           // Error Handling Tests
           this.addTest('Error Handling - API Failures', this.testAPIErrorHandling);
           this.addTest('Error Handling - Network Issues', this.testNetworkErrorHandling);
           this.addTest('Error Handling - Image Load Failures', this.testImageErrorHandling);
-          
+
           // Social Sharing Tests
           this.addTest('Social Sharing - Share Data Generation', this.testShareDataGeneration);
           this.addTest('Social Sharing - Platform Integration', this.testPlatformIntegration);
-          
+
           // Accessibility Tests
           this.addTest('Accessibility - Keyboard Navigation', this.testKeyboardNavigation);
           this.addTest('Accessibility - Screen Reader Support', this.testScreenReaderSupport);
           this.addTest('Accessibility - Focus Management', this.testFocusManagement);
-          
+
           // Mobile Tests
           this.addTest('Mobile - Touch Gestures', this.testTouchGestures);
           this.addTest('Mobile - Responsive Layout', this.testResponsiveLayout);
-          
+
           // Integration Tests
           this.addTest('Integration - Full User Journey', this.testFullUserJourney);
           this.addTest('Integration - Auto-refresh Cycle', this.testAutoRefreshCycle);
@@ -7605,18 +7621,18 @@
         async runAllTests() {
           console.log('🚀 Starting comprehensive test suite...');
           this.results = { passed: 0, failed: 0, total: 0, details: [] };
-          
+
           for (const test of this.tests) {
             await this.runTest(test);
           }
-          
+
           this.displayResults();
         },
 
         async runTest(test) {
           this.results.total++;
           const startTime = performance.now();
-          
+
           try {
             await test.testFunction();
             const duration = performance.now() - startTime;
@@ -7644,7 +7660,7 @@
         // Unit Tests
         async testParseNASAImage() {
           if (!window.imageDataManager) throw new Error('ImageDataManager not available');
-          
+
           const mockNASAItem = {
             data: [{
               nasa_id: 'test123',
@@ -7656,13 +7672,13 @@
             }],
             links: [{ rel: 'preview', href: 'https://test.com/image.jpg' }]
           };
-          
+
           const result = imageDataManager.parseNASAImage(mockNASAItem);
-          
+
           if (!result.id || !result.title || !result.source) {
             throw new Error('Parsed image missing required fields');
           }
-          
+
           if (result.source !== 'nasa') {
             throw new Error('Source not set correctly');
           }
@@ -7670,14 +7686,14 @@
 
         async testCategorizeImages() {
           if (!window.imageDataManager) throw new Error('ImageDataManager not available');
-          
+
           const testCases = [
             { title: 'Mars Rover Perseverance', expected: 'missions' },
             { title: 'Hubble Deep Space Image', expected: 'deep-space' },
             { title: 'Earth from ISS', expected: 'iss' },
             { title: 'Jupiter Great Red Spot', expected: 'planets' }
           ];
-          
+
           testCases.forEach(testCase => {
             const result = imageDataManager.categorizeNASAImage({ title: testCase.title });
             if (result !== testCase.expected) {
@@ -7688,25 +7704,25 @@
 
         async testCacheManagement() {
           if (!window.imageDataManager) throw new Error('ImageDataManager not available');
-          
+
           const testKey = 'test_cache_key';
           const testData = { test: 'data' };
-          
+
           // Test cache set
           imageDataManager.setCache(testKey, testData);
-          
+
           // Test cache get
           const retrieved = imageDataManager.getFromCache(testKey);
           if (!retrieved || retrieved.test !== 'data') {
             throw new Error('Cache set/get failed');
           }
-          
+
           // Test cache expiry (simulate old timestamp)
           imageDataManager.cache.set(testKey, {
             data: testData,
             timestamp: Date.now() - (10 * 60 * 1000) // 10 minutes ago
           });
-          
+
           const expired = imageDataManager.getFromCache(testKey);
           if (expired) {
             throw new Error('Cache expiry not working');
@@ -7717,12 +7733,12 @@
         async testCategoryFiltering() {
           // Wait for gallery to be initialized
           await this.testUtils.waitFor(() => document.querySelector('.image-gallery'));
-          
+
           const filterBtn = document.querySelector('[data-filter="missions"]');
           if (!filterBtn) throw new Error('Filter button not found');
-          
+
           this.testUtils.simulateClick(filterBtn);
-          
+
           // Check if filter was applied
           if (!filterBtn.classList.contains('active')) {
             throw new Error('Filter button not activated');
@@ -7732,14 +7748,14 @@
         async testTextSearch() {
           const searchInput = document.getElementById('search-input');
           if (!searchInput) throw new Error('Search input not found');
-          
+
           // Simulate search input
           searchInput.value = 'mars';
           searchInput.dispatchEvent(new Event('input', { bubbles: true }));
-          
+
           // Wait for search to process
           await new Promise(resolve => setTimeout(resolve, 100));
-          
+
           // Check if search was applied (currentSearch should be set)
           if (typeof currentSearch === 'undefined') {
             throw new Error('Search functionality not working');
@@ -7750,14 +7766,14 @@
           // Test combining category and source filters
           const categoryBtn = document.querySelector('[data-filter="missions"]');
           const sourceBtn = document.querySelector('[data-source="nasa"]');
-          
+
           if (!categoryBtn || !sourceBtn) {
             throw new Error('Filter buttons not found');
           }
-          
+
           this.testUtils.simulateClick(categoryBtn);
           this.testUtils.simulateClick(sourceBtn);
-          
+
           // Both filters should be active
           if (!categoryBtn.classList.contains('active') || !sourceBtn.classList.contains('active')) {
             throw new Error('Multiple filters not working');
@@ -7769,15 +7785,15 @@
           const modal = document.getElementById('image-modal');
           const expandBtn = document.querySelector('.expand-btn');
           const closeBtn = document.querySelector('.modal-close');
-          
+
           if (!modal || !expandBtn || !closeBtn) {
             throw new Error('Modal elements not found');
           }
-          
+
           // Test open
           this.testUtils.simulateClick(expandBtn);
           await this.testUtils.waitFor(() => modal.classList.contains('active'));
-          
+
           // Test close
           this.testUtils.simulateClick(closeBtn);
           await this.testUtils.waitFor(() => !modal.classList.contains('active'));
@@ -7787,35 +7803,35 @@
           const modal = document.getElementById('image-modal');
           const prevBtn = document.querySelector('.prev-btn');
           const nextBtn = document.querySelector('.next-btn');
-          
+
           if (!modal || !prevBtn || !nextBtn) {
             throw new Error('Modal navigation elements not found');
           }
-          
+
           // Open modal first
           const expandBtn = document.querySelector('.expand-btn');
           this.testUtils.simulateClick(expandBtn);
           await this.testUtils.waitFor(() => modal.classList.contains('active'));
-          
+
           // Test navigation
           const initialImageId = modal.dataset.currentImageId;
           this.testUtils.simulateClick(nextBtn);
-          
+
           // Wait for navigation to complete
           await new Promise(resolve => setTimeout(resolve, 100));
-          
+
           // Check if image changed (in a real scenario)
           // This is a basic test - in practice we'd check if the image actually changed
         },
 
         async testModalKeyboard() {
           const modal = document.getElementById('image-modal');
-          
+
           // Open modal
           const expandBtn = document.querySelector('.expand-btn');
           this.testUtils.simulateClick(expandBtn);
           await this.testUtils.waitFor(() => modal.classList.contains('active'));
-          
+
           // Test escape key
           this.testUtils.simulateKeyPress(document, 'Escape');
           await this.testUtils.waitFor(() => !modal.classList.contains('active'));
@@ -7826,14 +7842,14 @@
           if (!window.performanceMonitor) {
             throw new Error('Performance monitor not available');
           }
-          
+
           const avgLoadTime = performanceMonitor.getAverageLoadTime();
           const successRate = performanceMonitor.getLoadSuccessRate();
-          
+
           if (avgLoadTime > 10000) { // 10 seconds threshold
             throw new Error(`Image loading too slow: ${avgLoadTime}ms average`);
           }
-          
+
           if (successRate < 80) { // 80% success rate threshold
             throw new Error(`Image loading success rate too low: ${successRate}%`);
           }
@@ -7844,10 +7860,10 @@
             console.log('⚠️ Memory API not available, skipping memory test');
             return;
           }
-          
+
           const memory = performance.memory;
           const memoryUsage = memory.usedJSHeapSize / memory.jsHeapSizeLimit;
-          
+
           if (memoryUsage > 0.8) { // 80% memory usage threshold
             throw new Error(`Memory usage too high: ${Math.round(memoryUsage * 100)}%`);
           }
@@ -7856,17 +7872,17 @@
         async testScrollPerformance() {
           const gallery = document.querySelector('.image-gallery');
           if (!gallery) throw new Error('Gallery not found');
-          
+
           const startTime = performance.now();
-          
+
           // Simulate scroll
           gallery.scrollTop = 100;
-          
+
           // Wait for scroll to complete
           await new Promise(resolve => setTimeout(resolve, 100));
-          
+
           const scrollTime = performance.now() - startTime;
-          
+
           if (scrollTime > 100) { // 100ms threshold for scroll response
             throw new Error(`Scroll performance too slow: ${scrollTime}ms`);
           }
@@ -7877,20 +7893,20 @@
           if (!window.livestreamErrorManager) {
             throw new Error('Error manager not available');
           }
-          
+
           // Simulate API error
           const originalFetch = window.fetch;
           window.fetch = () => Promise.reject(new Error('Test API error'));
-          
+
           try {
             await imageDataManager.fetchNASAImages();
           } catch (error) {
             // Expected to fail
           }
-          
+
           // Restore fetch
           window.fetch = originalFetch;
-          
+
           // Check if error was handled
           const errorStats = livestreamErrorManager.getErrorStats();
           if (errorStats.totalErrors === 0) {
@@ -7902,32 +7918,32 @@
           if (!window.livestreamErrorManager) {
             throw new Error('Error manager not available');
           }
-          
+
           // Simulate network offline
           const originalOnline = navigator.onLine;
           Object.defineProperty(navigator, 'onLine', {
             writable: true,
             value: false
           });
-          
+
           // Trigger offline event
           window.dispatchEvent(new Event('offline'));
-          
+
           // Wait for offline handling
           await new Promise(resolve => setTimeout(resolve, 100));
-          
+
           // Check for offline indicator
           const offlineIndicator = document.getElementById('offline-indicator');
           if (!offlineIndicator) {
             throw new Error('Offline indicator not shown');
           }
-          
+
           // Restore online status
           Object.defineProperty(navigator, 'onLine', {
             writable: true,
             value: originalOnline
           });
-          
+
           window.dispatchEvent(new Event('online'));
         },
 
@@ -7937,20 +7953,20 @@
             'src': 'https://invalid-url.com/nonexistent.jpg',
             'data-source': 'nasa'
           });
-          
+
           document.body.appendChild(testImg);
-          
+
           // Trigger error event
           testImg.dispatchEvent(new Event('error'));
-          
+
           // Wait for error handling
           await new Promise(resolve => setTimeout(resolve, 100));
-          
+
           // Check if fallback was applied
           if (!testImg.src.includes('placeholder')) {
             throw new Error('Image error fallback not applied');
           }
-          
+
           // Cleanup
           document.body.removeChild(testImg);
         },
@@ -7960,13 +7976,13 @@
           if (!window.livestreamSocialManager) {
             throw new Error('Social manager not available');
           }
-          
+
           const shareData = livestreamSocialManager.prepareShareData(this.mockData.sampleImage);
-          
+
           if (!shareData.title || !shareData.url || !shareData.hashtags) {
             throw new Error('Share data generation incomplete');
           }
-          
+
           if (!shareData.hashtags.includes('Space')) {
             throw new Error('Hashtag generation not working');
           }
@@ -7976,13 +7992,13 @@
           if (!window.livestreamSocialManager) {
             throw new Error('Social manager not available');
           }
-          
+
           const platforms = Object.keys(livestreamSocialManager.platforms);
-          
+
           if (platforms.length < 5) {
             throw new Error('Insufficient social platforms configured');
           }
-          
+
           // Test platform configuration
           const twitter = livestreamSocialManager.platforms.twitter;
           if (!twitter.urlTemplate || !twitter.maxLength) {
@@ -7994,13 +8010,13 @@
         async testKeyboardNavigation() {
           const filterBtns = document.querySelectorAll('.filter-btn');
           if (filterBtns.length === 0) throw new Error('Filter buttons not found');
-          
+
           // Test tab navigation
           filterBtns[0].focus();
-          
+
           // Test enter key activation
           this.testUtils.simulateKeyPress(filterBtns[0], 'Enter');
-          
+
           if (!filterBtns[0].classList.contains('active')) {
             throw new Error('Keyboard activation not working');
           }
@@ -8009,12 +8025,12 @@
         async testScreenReaderSupport() {
           const modal = document.getElementById('image-modal');
           if (!modal) throw new Error('Modal not found');
-          
+
           // Check ARIA attributes
           if (!modal.hasAttribute('aria-hidden')) {
             throw new Error('Modal missing aria-hidden attribute');
           }
-          
+
           if (!modal.hasAttribute('role')) {
             throw new Error('Modal missing role attribute');
           }
@@ -8023,14 +8039,14 @@
         async testFocusManagement() {
           const modal = document.getElementById('image-modal');
           const closeBtn = document.querySelector('.modal-close');
-          
+
           if (!modal || !closeBtn) throw new Error('Modal elements not found');
-          
+
           // Open modal
           const expandBtn = document.querySelector('.expand-btn');
           this.testUtils.simulateClick(expandBtn);
           await this.testUtils.waitFor(() => modal.classList.contains('active'));
-          
+
           // Check if focus moved to close button
           if (document.activeElement !== closeBtn) {
             console.log('⚠️ Focus management could be improved');
@@ -8043,11 +8059,11 @@
             console.log('⚠️ Mobile gesture manager not available, skipping touch test');
             return;
           }
-          
+
           // This is a basic test - full touch testing would require more complex simulation
           const gallery = document.querySelector('.image-gallery');
           if (!gallery) throw new Error('Gallery not found');
-          
+
           // Check if touch event listeners are attached
           // In a real test, we'd simulate touch events
         },
@@ -8055,25 +8071,25 @@
         async testResponsiveLayout() {
           const gallery = document.querySelector('.image-gallery');
           if (!gallery) throw new Error('Gallery not found');
-          
+
           // Test different viewport sizes
           const originalWidth = window.innerWidth;
-          
+
           // Simulate mobile viewport
           Object.defineProperty(window, 'innerWidth', {
             writable: true,
             configurable: true,
             value: 375
           });
-          
+
           window.dispatchEvent(new Event('resize'));
-          
+
           // Wait for layout adjustment
           await new Promise(resolve => setTimeout(resolve, 100));
-          
+
           // Check if mobile layout is applied
           const computedStyle = getComputedStyle(gallery);
-          
+
           // Restore original width
           Object.defineProperty(window, 'innerWidth', {
             writable: true,
@@ -8085,27 +8101,27 @@
         // Integration Tests
         async testFullUserJourney() {
           // Test complete user flow: load page -> filter -> open modal -> share
-          
+
           // 1. Wait for page load
           await this.testUtils.waitFor(() => document.querySelector('.image-gallery'));
-          
+
           // 2. Apply filter
           const filterBtn = document.querySelector('[data-filter="missions"]');
           if (filterBtn) this.testUtils.simulateClick(filterBtn);
-          
+
           // 3. Open modal
           const expandBtn = document.querySelector('.expand-btn');
           if (expandBtn) {
             this.testUtils.simulateClick(expandBtn);
             await this.testUtils.waitFor(() => document.getElementById('image-modal').classList.contains('active'));
           }
-          
+
           // 4. Test share (if available)
           const shareBtn = document.getElementById('modal-share');
           if (shareBtn) {
             this.testUtils.simulateClick(shareBtn);
           }
-          
+
           // Journey completed successfully if no errors thrown
         },
 
@@ -8113,14 +8129,14 @@
           if (!window.autoRefreshManager) {
             throw new Error('Auto-refresh manager not available');
           }
-          
+
           // Test refresh functionality
           const initialInterval = autoRefreshManager.currentInterval;
-          
+
           if (!initialInterval || initialInterval <= 0) {
             throw new Error('Auto-refresh not properly configured');
           }
-          
+
           // Test manual refresh
           try {
             await autoRefreshManager.performAutoRefresh();
@@ -8132,13 +8148,13 @@
 
         displayResults() {
           const passRate = Math.round((this.results.passed / this.results.total) * 100);
-          
+
           console.log('\n🧪 Test Suite Results:');
           console.log(`✅ Passed: ${this.results.passed}`);
           console.log(`❌ Failed: ${this.results.failed}`);
           console.log(`📊 Total: ${this.results.total}`);
           console.log(`📈 Pass Rate: ${passRate}%`);
-          
+
           if (this.results.failed > 0) {
             console.log('\n❌ Failed Tests:');
             this.results.details
@@ -8147,7 +8163,7 @@
                 console.log(`  • ${test.name}: ${test.error}`);
               });
           }
-          
+
           // Show test results in UI if in development mode
           if (this.isDevelopmentMode()) {
             this.showTestResultsUI();
@@ -8171,9 +8187,9 @@
             max-width: 300px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
           `;
-          
+
           const passRate = Math.round((this.results.passed / this.results.total) * 100);
-          
+
           resultsDiv.innerHTML = `
             <div style="font-weight: bold; margin-bottom: 0.5em;">🧪 Test Results</div>
             <div>✅ Passed: ${this.results.passed}</div>
@@ -8190,9 +8206,9 @@
               font-size: 1.2em;
             ">×</button>
           `;
-          
+
           document.body.appendChild(resultsDiv);
-          
+
           // Auto-hide after 10 seconds
           setTimeout(() => {
             if (resultsDiv.parentNode) {
@@ -8304,20 +8320,20 @@
 
         trackPageLoad() {
           const startTime = performance.now();
-          
+
           window.addEventListener('load', () => {
             const loadTime = performance.now() - startTime;
             this.metrics.pageLoadTime = loadTime;
             this.checkBudget('pageLoadTime', loadTime);
-            
+
             // Track resource loading
             const resources = performance.getEntriesByType('resource');
             let totalSize = 0;
-            
+
             resources.forEach(resource => {
               const size = resource.transferSize || 0;
               totalSize += size;
-              
+
               this.metrics.networkRequests.push({
                 name: resource.name,
                 duration: resource.responseEnd - resource.requestStart,
@@ -8326,7 +8342,7 @@
                 timestamp: Date.now()
               });
             });
-            
+
             this.metrics.bundleSize = totalSize;
             this.checkBudget('bundleSize', totalSize);
           });
@@ -8341,16 +8357,16 @@
                 limit: performance.memory.jsHeapSizeLimit,
                 timestamp: Date.now()
               };
-              
+
               this.metrics.memoryUsage.push(memInfo);
               this.checkBudget('memoryUsage', memInfo.used);
-              
+
               // Keep only last 100 entries
               if (this.metrics.memoryUsage.length > 100) {
                 this.metrics.memoryUsage = this.metrics.memoryUsage.slice(-100);
               }
             };
-            
+
             trackMemory();
             setInterval(trackMemory, 30000); // Every 30 seconds
           }
@@ -8365,20 +8381,20 @@
               const response = await originalFetch(...args);
               const endTime = performance.now();
               const duration = endTime - startTime;
-              
+
               this.metrics.apiResponseTimes.push({
                 url: args[0],
                 duration: duration,
                 status: response.status,
                 timestamp: Date.now()
               });
-              
+
               this.checkBudget('apiResponseTime', duration);
               return response;
             } catch (error) {
               const endTime = performance.now();
               const duration = endTime - startTime;
-              
+
               this.metrics.apiResponseTimes.push({
                 url: args[0],
                 duration: duration,
@@ -8386,7 +8402,7 @@
                 error: error.message,
                 timestamp: Date.now()
               });
-              
+
               this.metrics.errorCount++;
               throw error;
             }
@@ -8402,7 +8418,7 @@
               timestamp: Date.now(),
               ...data
             });
-            
+
             // Keep only last 1000 interactions
             if (this.metrics.userInteractions.length > 1000) {
               this.metrics.userInteractions = this.metrics.userInteractions.slice(-1000);
@@ -8421,7 +8437,7 @@
               const imageCard = e.target.closest('.image-card');
               const imageId = imageCard.dataset.imageId;
               const category = imageCard.dataset.category;
-              
+
               this.trackEvent('image_interaction', {
                 imageId,
                 category,
@@ -8437,7 +8453,7 @@
                 filter: e.target.dataset.filter,
                 active: e.target.classList.contains('active')
               });
-              
+
               this.trackEvent('filter_usage', {
                 filter: e.target.dataset.filter,
                 active: e.target.classList.contains('active')
@@ -8467,7 +8483,7 @@
                   query: e.target.value,
                   length: e.target.value.length
                 });
-                
+
                 this.trackEvent('search_query', {
                   query: e.target.value,
                   length: e.target.value.length
@@ -8486,7 +8502,7 @@
                 scrollY: window.scrollY,
                 scrollPercent: scrollPercent
               });
-              
+
               // Track engagement milestones
               if (scrollPercent >= 25 && !this.scrollMilestones?.['25']) {
                 this.trackEvent('engagement_milestone', { milestone: '25_percent_scroll' });
@@ -8556,7 +8572,7 @@
           const preloadCriticalResources = () => {
             const criticalImages = document.querySelectorAll('.image-card img[data-src]');
             const visibleImages = Array.from(criticalImages).slice(0, 6); // First 6 images
-            
+
             visibleImages.forEach(img => {
               const link = document.createElement('link');
               link.rel = 'preload';
@@ -8571,7 +8587,7 @@
 
         trackError(type, message, details = {}) {
           console.error(`Performance Analytics - ${type} error:`, message, details);
-          
+
           this.sendAnalytics('error', {
             type,
             message,
@@ -8587,7 +8603,7 @@
           if (budget && value > budget) {
             console.warn(`Performance budget exceeded for ${metric}: ${value} > ${budget}`);
             this.showPerformanceWarning(metric, value, budget);
-            
+
             this.trackEvent('performance_budget_exceeded', {
               metric,
               value,
@@ -8607,9 +8623,9 @@
               ${metric}: ${Math.round(value)}${metric.includes('Time') ? 'ms' : metric === 'memoryUsage' ? 'B' : metric === 'bundleSize' ? 'B' : ''}<br>
               Budget: ${budget}${metric.includes('Time') ? 'ms' : metric === 'memoryUsage' ? 'B' : metric === 'bundleSize' ? 'B' : ''}
             `;
-            
+
             document.body.appendChild(warning);
-            
+
             setTimeout(() => {
               warning.remove();
             }, 8000);
@@ -8617,15 +8633,15 @@
         },
 
         getMetricsSummary() {
-          const avgImageLoadTime = this.metrics.imageLoadTimes.length > 0 
-            ? this.metrics.imageLoadTimes.reduce((sum, item) => sum + item.loadTime, 0) / this.metrics.imageLoadTimes.length 
+          const avgImageLoadTime = this.metrics.imageLoadTimes.length > 0
+            ? this.metrics.imageLoadTimes.reduce((sum, item) => sum + item.loadTime, 0) / this.metrics.imageLoadTimes.length
             : 0;
-            
+
           const avgApiResponseTime = this.metrics.apiResponseTimes.length > 0
             ? this.metrics.apiResponseTimes.reduce((sum, item) => sum + item.duration, 0) / this.metrics.apiResponseTimes.length
             : 0;
 
-          const currentMemory = this.metrics.memoryUsage.length > 0 
+          const currentMemory = this.metrics.memoryUsage.length > 0
             ? this.metrics.memoryUsage[this.metrics.memoryUsage.length - 1]
             : null;
 
@@ -8679,7 +8695,7 @@
           });
 
           return Object.entries(counts)
-            .sort(([,a], [,b]) => b - a)
+            .sort(([, a], [, b]) => b - a)
             .slice(0, 10)
             .map(([item, count]) => ({ item, count }));
         },
@@ -8706,12 +8722,12 @@
           if (window.location.hostname === 'localhost' || window.location.search.includes('dev=true')) {
             const stored = JSON.parse(localStorage.getItem('livestream_analytics') || '[]');
             stored.push(analyticsData);
-            
+
             // Keep only last 1000 events
             if (stored.length > 1000) {
               stored.splice(0, stored.length - 1000);
             }
-            
+
             localStorage.setItem('livestream_analytics', JSON.stringify(stored));
             console.log('📊 Analytics Event:', eventType, data);
           }
@@ -8779,7 +8795,7 @@
             const updateDashboard = () => {
               const metrics = this.getMetricsSummary();
               const vitalsStatus = this.getCoreWebVitalsStatus(metrics.coreWebVitals);
-              
+
               dashboard.innerHTML = `
                 <div style="margin-bottom: 0.8em; font-weight: bold; color: #00ff00;">📊 Performance Dashboard</div>
                 
@@ -8905,13 +8921,13 @@
       // Show development mode indicators
       if (window.location.hostname === 'localhost' || window.location.search.includes('dev=true')) {
         document.body.setAttribute('data-dev-mode', 'true');
-        
+
         // Add performance help indicator
         const perfHelp = document.createElement('div');
         perfHelp.className = 'perf-help';
         perfHelp.innerHTML = '📊 Press Ctrl+Shift+P for Performance Dashboard';
         document.body.appendChild(perfHelp);
-        
+
         // Hide after 10 seconds
         setTimeout(() => {
           perfHelp.style.opacity = '0';
@@ -8923,7 +8939,7 @@
       const integrationTest = {
         async runFullIntegrationTest() {
           console.log('🚀 Running Full Integration Test Suite...');
-          
+
           const results = {
             navigation: await this.testNavigation(),
             apiIntegration: await this.testAPIIntegration(),
@@ -8932,12 +8948,12 @@
             accessibility: await this.testAccessibility(),
             mobileResponsiveness: await this.testMobileResponsiveness()
           };
-          
+
           const overallSuccess = Object.values(results).every(result => result.success);
-          
+
           console.log('📊 Integration Test Results:', results);
           console.log(overallSuccess ? '✅ All integration tests passed!' : '❌ Some integration tests failed');
-          
+
           return { success: overallSuccess, results };
         },
 
@@ -8946,7 +8962,7 @@
             // Test navigation highlighting
             const livestreamDropdown = document.querySelector('[data-menu="livestream"]');
             const activeLink = document.querySelector('a[href="livestream-images.html"].clicked');
-            
+
             return {
               success: !!(livestreamDropdown && activeLink),
               details: {
@@ -8962,7 +8978,7 @@
         async testAPIIntegration() {
           try {
             const apiTests = [];
-            
+
             // Test NASA API
             try {
               const nasaResponse = await fetch('https://images-api.nasa.gov/search?q=mars&media_type=image&page_size=1');
@@ -8970,7 +8986,7 @@
             } catch (error) {
               apiTests.push({ api: 'NASA', success: false, error: error.message });
             }
-            
+
             // Test SpaceX API
             try {
               const spacexResponse = await fetch('https://api.spacexdata.com/v4/launches/latest');
@@ -8978,9 +8994,9 @@
             } catch (error) {
               apiTests.push({ api: 'SpaceX', success: false, error: error.message });
             }
-            
+
             const allAPIsWorking = apiTests.every(test => test.success);
-            
+
             return {
               success: allAPIsWorking,
               details: apiTests
@@ -8993,37 +9009,37 @@
         async testUserJourney() {
           try {
             const journeyTests = [];
-            
+
             // Test filter functionality
             const filterButtons = document.querySelectorAll('.filter-btn');
-            journeyTests.push({ 
-              test: 'Filter buttons exist', 
-              success: filterButtons.length >= 6 
+            journeyTests.push({
+              test: 'Filter buttons exist',
+              success: filterButtons.length >= 6
             });
-            
+
             // Test search input
             const searchInput = document.getElementById('search-input');
-            journeyTests.push({ 
-              test: 'Search input exists', 
-              success: !!searchInput 
+            journeyTests.push({
+              test: 'Search input exists',
+              success: !!searchInput
             });
-            
+
             // Test modal structure
             const modal = document.getElementById('image-modal');
-            journeyTests.push({ 
-              test: 'Modal exists', 
-              success: !!modal 
+            journeyTests.push({
+              test: 'Modal exists',
+              success: !!modal
             });
-            
+
             // Test image gallery
             const gallery = document.getElementById('image-gallery');
-            journeyTests.push({ 
-              test: 'Image gallery exists', 
-              success: !!gallery 
+            journeyTests.push({
+              test: 'Image gallery exists',
+              success: !!gallery
             });
-            
+
             const allJourneyTestsPass = journeyTests.every(test => test.success);
-            
+
             return {
               success: allJourneyTestsPass,
               details: journeyTests
@@ -9036,33 +9052,33 @@
         async testPerformance() {
           try {
             const performanceTests = [];
-            
+
             // Test performance analytics availability
             performanceTests.push({
               test: 'Performance analytics initialized',
               success: !!window.performanceAnalytics
             });
-            
+
             // Test performance monitor
             performanceTests.push({
               test: 'Performance monitor initialized',
               success: !!window.performanceMonitor
             });
-            
+
             // Test lazy loading support
             performanceTests.push({
               test: 'Intersection Observer supported',
               success: 'IntersectionObserver' in window
             });
-            
+
             // Test memory monitoring
             performanceTests.push({
               test: 'Memory monitoring available',
               success: 'memory' in performance
             });
-            
+
             const allPerformanceTestsPass = performanceTests.every(test => test.success);
-            
+
             return {
               success: allPerformanceTestsPass,
               details: performanceTests
@@ -9075,14 +9091,14 @@
         async testAccessibility() {
           try {
             const accessibilityTests = [];
-            
+
             // Test ARIA labels
             const modalWithAria = document.querySelector('#image-modal[aria-labelledby]');
             accessibilityTests.push({
               test: 'Modal has ARIA labels',
               success: !!modalWithAria
             });
-            
+
             // Test keyboard navigation elements
             const focusableElements = document.querySelectorAll(
               'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
@@ -9091,16 +9107,16 @@
               test: 'Focusable elements exist',
               success: focusableElements.length > 0
             });
-            
+
             // Test semantic HTML
             const mainElement = document.querySelector('main');
             accessibilityTests.push({
               test: 'Semantic main element exists',
               success: !!mainElement
             });
-            
+
             const allAccessibilityTestsPass = accessibilityTests.every(test => test.success);
-            
+
             return {
               success: allAccessibilityTestsPass,
               details: accessibilityTests
@@ -9113,14 +9129,14 @@
         async testMobileResponsiveness() {
           try {
             const responsiveTests = [];
-            
+
             // Test viewport meta tag
             const viewportMeta = document.querySelector('meta[name="viewport"]');
             responsiveTests.push({
               test: 'Viewport meta tag exists',
               success: !!viewportMeta
             });
-            
+
             // Test responsive grid
             const gallery = document.getElementById('image-gallery');
             const galleryStyles = gallery ? window.getComputedStyle(gallery) : null;
@@ -9128,15 +9144,15 @@
               test: 'Gallery uses CSS Grid',
               success: galleryStyles && galleryStyles.display === 'grid'
             });
-            
+
             // Test touch support detection
             responsiveTests.push({
               test: 'Touch support detected',
               success: 'ontouchstart' in window || navigator.maxTouchPoints > 0
             });
-            
+
             const allResponsiveTestsPass = responsiveTests.every(test => test.success);
-            
+
             return {
               success: allResponsiveTestsPass,
               details: responsiveTests
