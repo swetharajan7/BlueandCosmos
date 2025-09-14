@@ -17,7 +17,7 @@
       --text-light: #cce0ff;
       --dark-bg: #121212;
       --dark-accent: #001f5b;
-      
+
       /* Theme-aware custom properties */
       --image-overlay-bg: rgba(0, 0, 0, 0.6);
       --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -2156,8 +2156,15 @@
 
     /* Dark mode animations */
     @keyframes darkModeGlow {
-      0%, 100% { box-shadow: 0 0 5px rgba(102, 179, 255, 0.3); }
-      50% { box-shadow: 0 0 20px rgba(102, 179, 255, 0.5); }
+
+      0%,
+      100% {
+        box-shadow: 0 0 5px rgba(102, 179, 255, 0.3);
+      }
+
+      50% {
+        box-shadow: 0 0 20px rgba(102, 179, 255, 0.5);
+      }
     }
 
     body.dark .image-card:hover {
@@ -2169,6 +2176,160 @@
       body.dark .image-card:hover {
         animation: none;
       }
+    }
+
+    /* Error Handling UI Styles */
+    .user-error {
+      font-family: 'Work Sans', sans-serif;
+      backdrop-filter: blur(10px);
+    }
+
+    .error-content {
+      position: relative;
+      padding-right: 2em;
+    }
+
+    .error-title {
+      font-weight: bold;
+      font-size: 1em;
+      margin-bottom: 0.5em;
+    }
+
+    .error-message {
+      font-size: 0.9em;
+      line-height: 1.4;
+      opacity: 0.9;
+    }
+
+    .error-close {
+      position: absolute;
+      top: -0.5em;
+      right: -0.5em;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      color: inherit;
+      cursor: pointer;
+      font-size: 1.2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease;
+    }
+
+    .error-close:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .image-placeholder {
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .image-placeholder:hover {
+      background: #e9ecef;
+    }
+
+    body.dark .image-placeholder {
+      background: #2a2a2a;
+      color: #aaa;
+    }
+
+    body.dark .image-placeholder:hover {
+      background: #333;
+    }
+
+    .placeholder-icon {
+      font-size: 2em;
+      margin-bottom: 0.5em;
+      opacity: 0.7;
+    }
+
+    .placeholder-text {
+      font-size: 0.85em;
+      opacity: 0.8;
+    }
+
+    .error-fallback {
+      opacity: 0.7;
+      filter: grayscale(0.5);
+      border: 2px dashed #dc3545;
+    }
+
+    /* Error animations */
+    @keyframes slideInDown {
+      from {
+        transform: translateX(-50%) translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideOutUp {
+      from {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(-50%) translateY(-100%);
+        opacity: 0;
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideOutRight {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+    }
+
+    /* Error state improvements */
+    .image-card.error-state {
+      border-color: #dc3545;
+      background: rgba(220, 53, 69, 0.05);
+    }
+
+    body.dark .image-card.error-state {
+      border-color: #ff6b9d;
+      background: rgba(255, 107, 157, 0.1);
+    }
+
+    /* Retry button styling */
+    .retry-btn {
+      background: var(--highlight);
+      color: white;
+      border: none;
+      padding: 0.5em 1em;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8em;
+      margin-top: 0.5em;
+      transition: all 0.2s ease;
+    }
+
+    .retry-btn:hover {
+      background: #e91e63;
+      transform: translateY(-1px);
     }
 
     .image-container {
@@ -3204,6 +3365,16 @@
 
         } catch (error) {
           console.error('NASA API error:', error);
+          
+          // Report error to error manager
+          if (window.livestreamErrorManager) {
+            livestreamErrorManager.reportError(
+              'NASA API Error',
+              'Unable to load fresh NASA images. Using cached content.',
+              'warning'
+            );
+          }
+          
           return this.getNASAFallback();
         }
       }
@@ -3319,6 +3490,16 @@
           return images;
         } catch (error) {
           console.error('ESA content error:', error);
+          
+          // Report error to error manager
+          if (window.livestreamErrorManager) {
+            livestreamErrorManager.reportError(
+              'ESA Content Error',
+              'Unable to load ESA images. Using cached content.',
+              'warning'
+            );
+          }
+          
           return this.getESAFallback();
         }
       }
@@ -3434,6 +3615,16 @@
 
         } catch (error) {
           console.error('SpaceX API error:', error);
+          
+          // Report error to error manager
+          if (window.livestreamErrorManager) {
+            livestreamErrorManager.reportError(
+              'SpaceX API Error',
+              'Unable to load SpaceX launch data. Using cached content.',
+              'warning'
+            );
+          }
+          
           return this.getSpaceXFallback();
         }
       }
@@ -3505,6 +3696,16 @@
           return images;
         } catch (error) {
           console.error('ISS content error:', error);
+          
+          // Report error to error manager
+          if (window.livestreamErrorManager) {
+            livestreamErrorManager.reportError(
+              'ISS Content Error',
+              'Unable to load ISS images. Using cached content.',
+              'warning'
+            );
+          }
+          
           return this.getISSFallback();
         }
       }
@@ -4760,6 +4961,15 @@
 
           showAutoRefreshStatus('Refresh failed - check connection', 'error');
 
+          // Report to error manager
+          if (window.livestreamErrorManager) {
+            livestreamErrorManager.reportError(
+              'Refresh Failed',
+              'Unable to refresh gallery content. Please check your internet connection.',
+              'error'
+            );
+          }
+
           throw error; // Re-throw for auto-refresh manager
 
         } finally {
@@ -5792,13 +6002,13 @@
             // Override the existing theme toggle to include livestream-specific enhancements
             const originalToggle = themeToggle.onclick;
             themeToggle.onclick = null;
-            
+
             themeToggle.addEventListener('click', () => {
               document.body.classList.toggle('dark');
               const isDark = document.body.classList.contains('dark');
               themeToggle.textContent = isDark ? '☀️' : '🌙';
               localStorage.setItem('theme', isDark ? 'dark' : 'light');
-              
+
               // Apply livestream-specific theme enhancements
               this.applyThemeEnhancements(isDark);
               this.updateImageContrast(isDark);
@@ -5810,7 +6020,7 @@
           const savedTheme = localStorage.getItem('theme');
           const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
           const shouldBeDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
-          
+
           if (shouldBeDark) {
             document.body.classList.add('dark');
             if (themeToggle) themeToggle.textContent = '☀️';
@@ -5821,7 +6031,7 @@
         applyThemeEnhancements(isDark) {
           // Update CSS custom properties for smooth transitions
           const root = document.documentElement;
-          
+
           if (isDark) {
             root.style.setProperty('--image-overlay-bg', 'rgba(0, 0, 0, 0.8)');
             root.style.setProperty('--card-shadow', '0 4px 12px rgba(0, 0, 0, 0.4)');
@@ -5842,10 +6052,10 @@
 
           // Update modal backdrop
           this.updateModalBackdrop(isDark);
-          
+
           // Update search suggestions theme
           this.updateSearchTheme(isDark);
-          
+
           // Update auto-refresh status theme
           this.updateStatusTheme(isDark);
         },
@@ -5908,7 +6118,7 @@
             }
           `;
           document.head.appendChild(style);
-          
+
           // Remove transitions after theme change is complete
           setTimeout(() => {
             style.remove();
@@ -5930,9 +6140,9 @@
             z-index: 9999;
             transition: opacity 0.15s ease;
           `;
-          
+
           document.body.appendChild(overlay);
-          
+
           requestAnimationFrame(() => {
             overlay.style.opacity = '0.3';
             setTimeout(() => {
@@ -5953,12 +6163,12 @@
             if (!savedTheme) {
               const shouldBeDark = e.matches;
               document.body.classList.toggle('dark', shouldBeDark);
-              
+
               const themeToggle = document.getElementById('themeToggle');
               if (themeToggle) {
                 themeToggle.textContent = shouldBeDark ? '☀️' : '🌙';
               }
-              
+
               this.applyThemeEnhancements(shouldBeDark);
               this.animateThemeTransition();
             }
@@ -5969,12 +6179,12 @@
         setTheme(theme) {
           const isDark = theme === 'dark';
           document.body.classList.toggle('dark', isDark);
-          
+
           const themeToggle = document.getElementById('themeToggle');
           if (themeToggle) {
             themeToggle.textContent = isDark ? '☀️' : '🌙';
           }
-          
+
           localStorage.setItem('theme', theme);
           this.applyThemeEnhancements(isDark);
           this.animateThemeTransition();
@@ -5991,6 +6201,459 @@
 
       // Make theme manager globally available
       window.livestreamThemeManager = themeManager;
+
+      // Comprehensive Error Handling System
+      const errorManager = {
+        errorCounts: {},
+        maxRetries: 3,
+        retryDelays: [1000, 3000, 5000], // Progressive delays
+        
+        init() {
+          this.setupGlobalErrorHandling();
+          this.setupNetworkErrorHandling();
+          this.setupImageErrorHandling();
+          this.setupAPIErrorHandling();
+        },
+
+        setupGlobalErrorHandling() {
+          // Catch unhandled JavaScript errors
+          window.addEventListener('error', (event) => {
+            this.handleJavaScriptError(event.error, event.filename, event.lineno);
+          });
+
+          // Catch unhandled promise rejections
+          window.addEventListener('unhandledrejection', (event) => {
+            this.handlePromiseRejection(event.reason);
+            event.preventDefault(); // Prevent console error
+          });
+
+          // Monitor performance and memory issues
+          if ('performance' in window && 'memory' in performance) {
+            setInterval(() => {
+              this.checkPerformanceIssues();
+            }, 30000); // Check every 30 seconds
+          }
+        },
+
+        setupNetworkErrorHandling() {
+          // Monitor network connectivity
+          window.addEventListener('online', () => {
+            this.handleNetworkRestore();
+          });
+
+          window.addEventListener('offline', () => {
+            this.handleNetworkLoss();
+          });
+
+          // Monitor connection quality
+          if ('connection' in navigator) {
+            navigator.connection.addEventListener('change', () => {
+              this.handleConnectionChange();
+            });
+          }
+        },
+
+        setupImageErrorHandling() {
+          // Global image error handler
+          document.addEventListener('error', (event) => {
+            if (event.target.tagName === 'IMG') {
+              this.handleImageError(event.target);
+            }
+          }, true);
+        },
+
+        setupAPIErrorHandling() {
+          // Enhance fetch to include error handling
+          const originalFetch = window.fetch;
+          window.fetch = async (...args) => {
+            try {
+              const response = await originalFetch(...args);
+              if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+              }
+              return response;
+            } catch (error) {
+              return this.handleFetchError(error, args[0]);
+            }
+          };
+        },
+
+        handleJavaScriptError(error, filename, lineno) {
+          console.error('JavaScript Error:', error, 'at', filename, 'line', lineno);
+          
+          const errorKey = `js_${error.message}`;
+          this.incrementErrorCount(errorKey);
+          
+          if (this.errorCounts[errorKey] <= 2) {
+            this.showUserFriendlyError(
+              'Something went wrong',
+              'We encountered a technical issue. The page will try to recover automatically.',
+              'warning'
+            );
+          }
+
+          // Attempt recovery for common errors
+          if (error.message.includes('Cannot read property')) {
+            this.attemptDOMRecovery();
+          }
+        },
+
+        handlePromiseRejection(reason) {
+          console.error('Unhandled Promise Rejection:', reason);
+          
+          const errorKey = `promise_${reason.message || reason}`;
+          this.incrementErrorCount(errorKey);
+          
+          if (this.errorCounts[errorKey] <= 2) {
+            this.showUserFriendlyError(
+              'Connection Issue',
+              'We\'re having trouble loading some content. Please check your internet connection.',
+              'error'
+            );
+          }
+        },
+
+        async handleFetchError(error, url) {
+          console.error('Fetch Error:', error, 'for URL:', url);
+          
+          const errorKey = `fetch_${url}`;
+          this.incrementErrorCount(errorKey);
+          
+          // Determine error type and show appropriate message
+          if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+            this.showUserFriendlyError(
+              'Network Error',
+              'Unable to connect to the server. Please check your internet connection and try again.',
+              'error'
+            );
+          } else if (error.message.includes('404')) {
+            this.showUserFriendlyError(
+              'Content Not Found',
+              'The requested content is no longer available.',
+              'warning'
+            );
+          } else if (error.message.includes('500')) {
+            this.showUserFriendlyError(
+              'Server Error',
+              'The server is experiencing issues. We\'ll try again automatically.',
+              'error'
+            );
+          }
+
+          // Attempt retry for recoverable errors
+          if (this.shouldRetry(errorKey)) {
+            return this.retryFetch(url, errorKey);
+          }
+
+          throw error;
+        },
+
+        handleImageError(img) {
+          const errorKey = `image_${img.src}`;
+          this.incrementErrorCount(errorKey);
+          
+          // Try fallback image
+          const fallbackUrl = this.getImageFallback(img.dataset.source || 'nasa');
+          
+          if (img.src !== fallbackUrl) {
+            img.src = fallbackUrl;
+            img.alt = 'Image unavailable - ' + (img.alt || 'Space image');
+            img.classList.add('error-fallback');
+          } else {
+            // Even fallback failed, show placeholder
+            this.replaceWithPlaceholder(img);
+          }
+        },
+
+        handleNetworkLoss() {
+          this.showUserFriendlyError(
+            'Connection Lost',
+            'You\'re currently offline. Some features may not work until your connection is restored.',
+            'warning',
+            0 // Don't auto-hide
+          );
+          
+          // Disable auto-refresh
+          if (window.autoRefreshManager) {
+            autoRefreshManager.disable();
+          }
+          
+          // Show offline indicator
+          this.showOfflineIndicator();
+        },
+
+        handleNetworkRestore() {
+          this.hideError();
+          this.hideOfflineIndicator();
+          
+          this.showUserFriendlyError(
+            'Connection Restored',
+            'You\'re back online! Refreshing content...',
+            'success'
+          );
+          
+          // Re-enable auto-refresh
+          if (window.autoRefreshManager) {
+            autoRefreshManager.enable();
+            setTimeout(() => autoRefreshManager.forceRefresh(), 1000);
+          }
+        },
+
+        handleConnectionChange() {
+          if ('connection' in navigator) {
+            const connection = navigator.connection;
+            const effectiveType = connection.effectiveType;
+            
+            if (effectiveType === 'slow-2g' || effectiveType === '2g') {
+              this.showUserFriendlyError(
+                'Slow Connection',
+                'Your connection is slow. We\'ve optimized the experience for better performance.',
+                'info'
+              );
+            }
+          }
+        },
+
+        checkPerformanceIssues() {
+          if ('memory' in performance) {
+            const memory = performance.memory;
+            const memoryUsage = memory.usedJSHeapSize / memory.jsHeapSizeLimit;
+            
+            if (memoryUsage > 0.9) {
+              this.showUserFriendlyError(
+                'Performance Warning',
+                'The page is using a lot of memory. Consider refreshing for better performance.',
+                'warning'
+              );
+              
+              // Trigger cleanup
+              this.performMemoryCleanup();
+            }
+          }
+        },
+
+        shouldRetry(errorKey) {
+          return this.errorCounts[errorKey] <= this.maxRetries;
+        },
+
+        async retryFetch(url, errorKey) {
+          const retryCount = this.errorCounts[errorKey] - 1;
+          const delay = this.retryDelays[Math.min(retryCount, this.retryDelays.length - 1)];
+          
+          this.showUserFriendlyError(
+            'Retrying...',
+            `Attempting to reconnect (${retryCount + 1}/${this.maxRetries})`,
+            'info'
+          );
+          
+          await new Promise(resolve => setTimeout(resolve, delay));
+          
+          try {
+            return await fetch(url);
+          } catch (error) {
+            this.incrementErrorCount(errorKey);
+            throw error;
+          }
+        },
+
+        attemptDOMRecovery() {
+          // Try to recover from DOM-related errors
+          try {
+            // Reinitialize critical components
+            if (typeof initializeLazyLoading === 'function') {
+              initializeLazyLoading();
+            }
+            
+            // Reapply event listeners
+            this.reattachEventListeners();
+            
+          } catch (recoveryError) {
+            console.error('Recovery attempt failed:', recoveryError);
+          }
+        },
+
+        reattachEventListeners() {
+          // Reattach critical event listeners
+          const refreshBtn = document.querySelector('.refresh-btn');
+          if (refreshBtn && !refreshBtn.hasAttribute('data-listeners-attached')) {
+            refreshBtn.addEventListener('click', () => {
+              if (window.autoRefreshManager) {
+                autoRefreshManager.forceRefresh();
+              }
+            });
+            refreshBtn.setAttribute('data-listeners-attached', 'true');
+          }
+        },
+
+        performMemoryCleanup() {
+          // Clear image caches
+          if (window.imageDataManager && imageDataManager.cache) {
+            const cacheSize = imageDataManager.cache.size;
+            if (cacheSize > 20) {
+              // Clear oldest entries
+              const entries = Array.from(imageDataManager.cache.entries());
+              entries.slice(0, Math.floor(cacheSize / 2)).forEach(([key]) => {
+                imageDataManager.cache.delete(key);
+              });
+            }
+          }
+          
+          // Clear performance monitor data
+          if (window.performanceMonitor) {
+            performanceMonitor.imageLoadTimes = performanceMonitor.imageLoadTimes.slice(-50);
+          }
+        },
+
+        replaceWithPlaceholder(img) {
+          const placeholder = document.createElement('div');
+          placeholder.className = 'image-placeholder';
+          placeholder.innerHTML = `
+            <div class="placeholder-icon">🚀</div>
+            <div class="placeholder-text">Image unavailable</div>
+          `;
+          placeholder.style.cssText = `
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #f0f0f0;
+            color: #666;
+            font-size: 0.9em;
+            height: 100%;
+            min-height: 200px;
+          `;
+          
+          img.parentNode.replaceChild(placeholder, img);
+        },
+
+        getImageFallback(source) {
+          const fallbacks = {
+            nasa: 'https://via.placeholder.com/400x225/0033a0/ffffff?text=NASA+Image+Unavailable',
+            spacex: 'https://via.placeholder.com/400x225/005288/ffffff?text=SpaceX+Image+Unavailable',
+            esa: 'https://via.placeholder.com/400x225/6f42c1/ffffff?text=ESA+Image+Unavailable',
+            iss: 'https://via.placeholder.com/400x225/28a745/ffffff?text=ISS+Image+Unavailable'
+          };
+          return fallbacks[source] || fallbacks.nasa;
+        },
+
+        showOfflineIndicator() {
+          let indicator = document.getElementById('offline-indicator');
+          if (!indicator) {
+            indicator = document.createElement('div');
+            indicator.id = 'offline-indicator';
+            indicator.innerHTML = '📡 Offline';
+            indicator.style.cssText = `
+              position: fixed;
+              top: 80px;
+              right: 2em;
+              background: #dc3545;
+              color: white;
+              padding: 0.5em 1em;
+              border-radius: 20px;
+              font-size: 0.8em;
+              z-index: 10001;
+              animation: slideInRight 0.3s ease;
+            `;
+            document.body.appendChild(indicator);
+          }
+        },
+
+        hideOfflineIndicator() {
+          const indicator = document.getElementById('offline-indicator');
+          if (indicator) {
+            indicator.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => {
+              if (indicator.parentNode) {
+                indicator.parentNode.removeChild(indicator);
+              }
+            }, 300);
+          }
+        },
+
+        showUserFriendlyError(title, message, type = 'error', autoHide = 5000) {
+          // Remove existing error
+          this.hideError();
+          
+          const errorElement = document.createElement('div');
+          errorElement.id = 'user-error-message';
+          errorElement.className = `user-error ${type}`;
+          
+          const colors = {
+            error: { bg: '#dc3545', border: '#c82333' },
+            warning: { bg: '#ffc107', border: '#e0a800', color: '#000' },
+            success: { bg: '#28a745', border: '#1e7e34' },
+            info: { bg: '#17a2b8', border: '#138496' }
+          };
+          
+          const color = colors[type] || colors.error;
+          
+          errorElement.innerHTML = `
+            <div class="error-content">
+              <div class="error-title">${title}</div>
+              <div class="error-message">${message}</div>
+              <button class="error-close" onclick="this.parentElement.parentElement.remove()">×</button>
+            </div>
+          `;
+          
+          errorElement.style.cssText = `
+            position: fixed;
+            top: 2em;
+            left: 50%;
+            transform: translateX(-50%);
+            background: ${color.bg};
+            color: ${color.color || '#fff'};
+            border: 2px solid ${color.border};
+            border-radius: 8px;
+            padding: 1em;
+            max-width: 400px;
+            z-index: 10002;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            animation: slideInDown 0.3s ease;
+          `;
+          
+          document.body.appendChild(errorElement);
+          
+          if (autoHide > 0) {
+            setTimeout(() => this.hideError(), autoHide);
+          }
+        },
+
+        hideError() {
+          const errorElement = document.getElementById('user-error-message');
+          if (errorElement) {
+            errorElement.style.animation = 'slideOutUp 0.3s ease';
+            setTimeout(() => {
+              if (errorElement.parentNode) {
+                errorElement.parentNode.removeChild(errorElement);
+              }
+            }, 300);
+          }
+        },
+
+        incrementErrorCount(key) {
+          this.errorCounts[key] = (this.errorCounts[key] || 0) + 1;
+        },
+
+        // Public API for manual error reporting
+        reportError(title, message, type = 'error') {
+          this.showUserFriendlyError(title, message, type);
+        },
+
+        // Get error statistics
+        getErrorStats() {
+          return {
+            totalErrors: Object.values(this.errorCounts).reduce((sum, count) => sum + count, 0),
+            errorTypes: Object.keys(this.errorCounts).length,
+            errorCounts: { ...this.errorCounts }
+          };
+        }
+      };
+
+      // Initialize error handling
+      errorManager.init();
+
+      // Make error manager globally available
+      window.livestreamErrorManager = errorManager;
 
       // Cleanup on page unload
       window.addEventListener('beforeunload', cleanupResources);
