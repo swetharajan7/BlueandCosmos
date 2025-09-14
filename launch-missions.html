@@ -1003,6 +1003,114 @@
       border-color: var(--text-light);
     }
 
+    /* Countdown Urgency Levels */
+    .urgency-normal .countdown-section {
+      border-color: rgba(0, 51, 160, 0.2);
+      background: var(--countdown-bg);
+    }
+
+    .urgency-warning .countdown-section {
+      border-color: rgba(255, 170, 0, 0.4);
+      background: rgba(255, 170, 0, 0.1);
+      animation: warningPulse 3s infinite;
+    }
+
+    .urgency-critical .countdown-section {
+      border-color: rgba(255, 68, 68, 0.6);
+      background: rgba(255, 68, 68, 0.15);
+      animation: criticalPulse 1s infinite;
+    }
+
+    @keyframes warningPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 170, 0, 0.4); }
+      50% { box-shadow: 0 0 0 8px rgba(255, 170, 0, 0.1); }
+    }
+
+    @keyframes criticalPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.6); }
+      50% { box-shadow: 0 0 0 12px rgba(255, 68, 68, 0.2); }
+    }
+
+    /* Enhanced countdown number animations */
+    .countdown-display .time-unit .number {
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .countdown-display .time-unit .number:hover {
+      transform: scale(1.05);
+    }
+
+    /* Urgency-based card styling */
+    .urgency-warning {
+      border-color: rgba(255, 170, 0, 0.3);
+    }
+
+    .urgency-critical {
+      border-color: rgba(255, 68, 68, 0.4);
+      animation: cardCriticalPulse 2s infinite;
+    }
+
+    @keyframes cardCriticalPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+
+    /* Precision indicators */
+    .countdown-timer[data-precision="approximate"]::after {
+      content: "~";
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      font-size: 0.8em;
+      color: var(--launch-delayed);
+    }
+
+    .countdown-timer[data-precision="tbd"]::after {
+      content: "TBD";
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      font-size: 0.6em;
+      background: var(--launch-delayed);
+      color: white;
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+    }
+
+    /* Live countdown special styling */
+    .status-live + * .countdown-display .time-unit {
+      background: linear-gradient(135deg, rgba(255, 68, 68, 0.2), rgba(255, 68, 68, 0.1));
+      border: 1px solid rgba(255, 68, 68, 0.3);
+    }
+
+    .status-live + * .countdown-display .time-unit .number {
+      color: var(--launch-live);
+      font-weight: bold;
+      animation: liveNumberPulse 1s infinite;
+    }
+
+    @keyframes liveNumberPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    /* Milestone notification styling */
+    .milestone-notification {
+      position: fixed;
+      top: 140px;
+      right: 20px;
+      background: var(--launch-live);
+      color: white;
+      padding: 1em 1.5em;
+      border-radius: 8px;
+      font-size: 0.9em;
+      font-weight: bold;
+      z-index: 10002;
+      animation: slideInRight 0.3s ease;
+      box-shadow: 0 4px 12px rgba(255, 68, 68, 0.3);
+    }
+
     /* Loading Skeleton Animations */
     .loading-skeleton {
       background: linear-gradient(90deg, 
@@ -1551,27 +1659,27 @@
         </div>
 
         <div class="countdown-section">
-          <div class="countdown-timer" data-launch-time="2024-10-14T16:06:00Z">
+          <div class="countdown-timer" data-launch-time="2024-12-25T16:06:00Z" data-precision="exact">
             <div class="countdown-display">
               <span class="time-unit">
-                <span class="number">02</span>
+                <span class="number">--</span>
                 <span class="label">Days</span>
               </span>
               <span class="time-unit">
-                <span class="number">14</span>
+                <span class="number">--</span>
                 <span class="label">Hours</span>
               </span>
               <span class="time-unit">
-                <span class="number">32</span>
+                <span class="number">--</span>
                 <span class="label">Min</span>
               </span>
               <span class="time-unit">
-                <span class="number">45</span>
+                <span class="number">--</span>
                 <span class="label">Sec</span>
               </span>
             </div>
             <div class="countdown-progress">
-              <div class="progress-bar" style="width: 75%"></div>
+              <div class="progress-bar" style="width: 0%"></div>
             </div>
           </div>
         </div>
@@ -1618,27 +1726,27 @@
         </div>
 
         <div class="countdown-section">
-          <div class="countdown-timer" data-launch-time="2024-11-15T15:00:00Z">
+          <div class="countdown-timer" data-launch-time="2025-02-15T15:00:00Z" data-precision="approximate">
             <div class="countdown-display">
               <span class="time-unit">
-                <span class="number">34</span>
+                <span class="number">--</span>
                 <span class="label">Days</span>
               </span>
               <span class="time-unit">
-                <span class="number">08</span>
+                <span class="number">--</span>
                 <span class="label">Hours</span>
               </span>
               <span class="time-unit">
-                <span class="number">22</span>
+                <span class="number">--</span>
                 <span class="label">Min</span>
               </span>
               <span class="time-unit">
-                <span class="number">15</span>
+                <span class="number">--</span>
                 <span class="label">Sec</span>
               </span>
             </div>
             <div class="countdown-progress">
-              <div class="progress-bar" style="width: 45%"></div>
+              <div class="progress-bar" style="width: 0%"></div>
             </div>
           </div>
         </div>
@@ -1752,27 +1860,27 @@
         </div>
 
         <div class="countdown-section">
-          <div class="countdown-timer" data-launch-time="2024-12-15T14:30:00Z">
+          <div class="countdown-timer" data-launch-time="2025-01-15T14:30:00Z" data-precision="exact">
             <div class="countdown-display">
               <span class="time-unit">
-                <span class="number">64</span>
+                <span class="number">--</span>
                 <span class="label">Days</span>
               </span>
               <span class="time-unit">
-                <span class="number">18</span>
+                <span class="number">--</span>
                 <span class="label">Hours</span>
               </span>
               <span class="time-unit">
-                <span class="number">45</span>
+                <span class="number">--</span>
                 <span class="label">Min</span>
               </span>
               <span class="time-unit">
-                <span class="number">30</span>
+                <span class="number">--</span>
                 <span class="label">Sec</span>
               </span>
             </div>
             <div class="countdown-progress">
-              <div class="progress-bar" style="width: 25%"></div>
+              <div class="progress-bar" style="width: 0%"></div>
             </div>
           </div>
         </div>
@@ -2184,45 +2292,369 @@
         });
       });
 
-      // Animate countdown timers
+      // Initialize countdown system (handled by CountdownManager)
+      // Legacy support for animateCountdowns function
       animateCountdowns();
-      
-      // Update countdowns every second
-      setInterval(animateCountdowns, 1000);
     }
 
-    // Countdown Animation
-    function animateCountdowns() {
-      const countdownTimers = document.querySelectorAll('.countdown-timer[data-launch-time]');
-      countdownTimers.forEach(timer => {
-        const launchTime = new Date(timer.dataset.launchTime);
-        const now = new Date();
-        const timeDiff = launchTime - now;
+    // Advanced Countdown Manager System
+    class CountdownManager {
+      constructor() {
+        this.countdowns = new Map();
+        this.isRunning = false;
+        this.intervalId = null;
+        this.syncOffset = 0; // Time synchronization offset
+        this.lastSyncTime = 0;
+        this.urgencyThresholds = {
+          critical: 60 * 60 * 1000, // 1 hour
+          warning: 24 * 60 * 60 * 1000, // 24 hours
+          normal: 7 * 24 * 60 * 60 * 1000 // 7 days
+        };
+      }
+
+      init() {
+        this.syncTime();
+        this.registerCountdowns();
+        this.start();
         
-        if (timeDiff > 0) {
-          const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-          const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-          const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+        // Re-sync time every 5 minutes
+        setInterval(() => this.syncTime(), 5 * 60 * 1000);
+      }
+
+      async syncTime() {
+        try {
+          const startTime = performance.now();
+          const response = await fetch('https://worldtimeapi.org/api/timezone/UTC');
+          const endTime = performance.now();
           
-          const timeUnits = timer.querySelectorAll('.time-unit .number');
-          if (timeUnits.length >= 4) {
-            timeUnits[0].textContent = days.toString().padStart(2, '0');
-            timeUnits[1].textContent = hours.toString().padStart(2, '0');
-            timeUnits[2].textContent = minutes.toString().padStart(2, '0');
-            timeUnits[3].textContent = seconds.toString().padStart(2, '0');
+          if (response.ok) {
+            const data = await response.json();
+            const serverTime = new Date(data.utc_datetime);
+            const networkDelay = (endTime - startTime) / 2;
+            const localTime = new Date();
+            
+            this.syncOffset = serverTime.getTime() + networkDelay - localTime.getTime();
+            this.lastSyncTime = Date.now();
+            
+            console.log(`⏰ Time synchronized. Offset: ${this.syncOffset}ms`);
           }
+        } catch (error) {
+          console.warn('Time sync failed, using local time:', error);
+          this.syncOffset = 0;
+        }
+      }
+
+      getCurrentTime() {
+        return new Date(Date.now() + this.syncOffset);
+      }
+
+      registerCountdowns() {
+        const countdownTimers = document.querySelectorAll('.countdown-timer[data-launch-time]');
+        countdownTimers.forEach((timer, index) => {
+          const launchTime = new Date(timer.dataset.launchTime);
+          const countdownId = `countdown-${index}`;
           
-          // Update progress bar
-          const progressBar = timer.querySelector('.progress-bar');
-          if (progressBar) {
-            const totalTime = 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
-            const elapsed = totalTime - timeDiff;
-            const progress = Math.max(0, Math.min(100, (elapsed / totalTime) * 100));
-            progressBar.style.width = `${progress}%`;
+          this.countdowns.set(countdownId, {
+            element: timer,
+            launchTime: launchTime,
+            lastUpdate: 0,
+            urgencyLevel: 'normal',
+            milestones: new Set(),
+            precision: timer.dataset.precision || 'exact'
+          });
+        });
+
+        // Register main dashboard countdown
+        const mainCountdown = document.getElementById('next-countdown');
+        if (mainCountdown) {
+          // Find the next upcoming launch
+          const nextLaunch = this.getNextLaunch();
+          if (nextLaunch) {
+            this.countdowns.set('main-countdown', {
+              element: mainCountdown,
+              launchTime: nextLaunch.launchTime,
+              lastUpdate: 0,
+              urgencyLevel: 'normal',
+              milestones: new Set(),
+              precision: 'exact'
+            });
           }
         }
-      });
+      }
+
+      getNextLaunch() {
+        const now = this.getCurrentTime();
+        let nextLaunch = null;
+        let minTimeDiff = Infinity;
+
+        this.countdowns.forEach(countdown => {
+          const timeDiff = countdown.launchTime - now;
+          if (timeDiff > 0 && timeDiff < minTimeDiff) {
+            minTimeDiff = timeDiff;
+            nextLaunch = countdown;
+          }
+        });
+
+        return nextLaunch;
+      }
+
+      start() {
+        if (this.isRunning) return;
+        
+        this.isRunning = true;
+        this.intervalId = setInterval(() => {
+          this.updateAllCountdowns();
+        }, 100); // Update every 100ms for smooth animations
+      }
+
+      stop() {
+        if (this.intervalId) {
+          clearInterval(this.intervalId);
+          this.intervalId = null;
+        }
+        this.isRunning = false;
+      }
+
+      updateAllCountdowns() {
+        const now = this.getCurrentTime();
+        
+        this.countdowns.forEach((countdown, id) => {
+          this.updateCountdown(countdown, now);
+        });
+      }
+
+      updateCountdown(countdown, now) {
+        const timeDiff = countdown.launchTime - now;
+        const element = countdown.element;
+        
+        if (timeDiff <= 0) {
+          this.handleLaunchComplete(countdown);
+          return;
+        }
+
+        // Calculate time units
+        const timeUnits = this.calculateTimeUnits(timeDiff);
+        
+        // Update urgency level
+        const newUrgencyLevel = this.getUrgencyLevel(timeDiff);
+        if (newUrgencyLevel !== countdown.urgencyLevel) {
+          countdown.urgencyLevel = newUrgencyLevel;
+          this.applyUrgencyStyles(element, newUrgencyLevel);
+        }
+
+        // Update display
+        this.updateCountdownDisplay(element, timeUnits, countdown.precision);
+        
+        // Update progress bar
+        this.updateProgressBar(element, timeDiff);
+        
+        // Check milestones
+        this.checkMilestones(countdown, timeDiff);
+        
+        countdown.lastUpdate = now.getTime();
+      }
+
+      calculateTimeUnits(timeDiff) {
+        const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+        const milliseconds = Math.floor(timeDiff % 1000);
+
+        return { days, hours, minutes, seconds, milliseconds };
+      }
+
+      updateCountdownDisplay(element, timeUnits, precision) {
+        const timeElements = element.querySelectorAll('.time-unit .number');
+        
+        if (timeElements.length >= 4) {
+          // Animate number changes
+          this.animateNumberChange(timeElements[0], timeUnits.days.toString().padStart(2, '0'));
+          this.animateNumberChange(timeElements[1], timeUnits.hours.toString().padStart(2, '0'));
+          this.animateNumberChange(timeElements[2], timeUnits.minutes.toString().padStart(2, '0'));
+          
+          if (precision === 'exact' && timeUnits.days === 0 && timeUnits.hours === 0) {
+            // Show milliseconds for final minute
+            if (timeUnits.minutes === 0) {
+              this.animateNumberChange(timeElements[3], `${timeUnits.seconds}.${Math.floor(timeUnits.milliseconds / 100)}`);
+            } else {
+              this.animateNumberChange(timeElements[3], timeUnits.seconds.toString().padStart(2, '0'));
+            }
+          } else {
+            this.animateNumberChange(timeElements[3], timeUnits.seconds.toString().padStart(2, '0'));
+          }
+        }
+      }
+
+      animateNumberChange(element, newValue) {
+        if (element.textContent !== newValue) {
+          element.style.transform = 'scale(1.1)';
+          element.style.color = 'var(--highlight)';
+          
+          setTimeout(() => {
+            element.textContent = newValue;
+            element.style.transform = '';
+            element.style.color = '';
+          }, 50);
+        }
+      }
+
+      updateProgressBar(element, timeDiff) {
+        const progressBar = element.querySelector('.progress-bar');
+        if (!progressBar) return;
+
+        // Calculate progress based on different time ranges
+        let totalTime, progress;
+        
+        if (timeDiff > 30 * 24 * 60 * 60 * 1000) { // > 30 days
+          totalTime = 90 * 24 * 60 * 60 * 1000; // 90 days
+        } else if (timeDiff > 7 * 24 * 60 * 60 * 1000) { // > 7 days
+          totalTime = 30 * 24 * 60 * 60 * 1000; // 30 days
+        } else if (timeDiff > 24 * 60 * 60 * 1000) { // > 1 day
+          totalTime = 7 * 24 * 60 * 60 * 1000; // 7 days
+        } else {
+          totalTime = 24 * 60 * 60 * 1000; // 24 hours
+        }
+
+        const elapsed = totalTime - timeDiff;
+        progress = Math.max(0, Math.min(100, (elapsed / totalTime) * 100));
+        
+        progressBar.style.width = `${progress}%`;
+        
+        // Update progress bar color based on urgency
+        const urgencyLevel = this.getUrgencyLevel(timeDiff);
+        if (urgencyLevel === 'critical') {
+          progressBar.style.background = 'linear-gradient(90deg, var(--launch-failure), var(--launch-live))';
+        } else if (urgencyLevel === 'warning') {
+          progressBar.style.background = 'linear-gradient(90deg, var(--launch-delayed), var(--launch-upcoming))';
+        } else {
+          progressBar.style.background = 'linear-gradient(90deg, var(--launch-upcoming), var(--accent))';
+        }
+      }
+
+      getUrgencyLevel(timeDiff) {
+        if (timeDiff <= this.urgencyThresholds.critical) return 'critical';
+        if (timeDiff <= this.urgencyThresholds.warning) return 'warning';
+        return 'normal';
+      }
+
+      applyUrgencyStyles(element, urgencyLevel) {
+        const card = element.closest('.launch-card');
+        if (!card) return;
+
+        // Remove existing urgency classes
+        card.classList.remove('urgency-normal', 'urgency-warning', 'urgency-critical');
+        
+        // Add new urgency class
+        card.classList.add(`urgency-${urgencyLevel}`);
+
+        // Update countdown section styling
+        const countdownSection = element.closest('.countdown-section');
+        if (countdownSection) {
+          countdownSection.classList.remove('urgency-normal', 'urgency-warning', 'urgency-critical');
+          countdownSection.classList.add(`urgency-${urgencyLevel}`);
+        }
+      }
+
+      checkMilestones(countdown, timeDiff) {
+        const milestones = [
+          { time: 24 * 60 * 60 * 1000, message: '24 hours until launch!' },
+          { time: 60 * 60 * 1000, message: '1 hour until launch!' },
+          { time: 10 * 60 * 1000, message: '10 minutes until launch!' },
+          { time: 60 * 1000, message: '1 minute until launch!' },
+          { time: 10 * 1000, message: '10 seconds until launch!' }
+        ];
+
+        milestones.forEach(milestone => {
+          const milestoneKey = `milestone-${milestone.time}`;
+          
+          if (timeDiff <= milestone.time && !countdown.milestones.has(milestoneKey)) {
+            countdown.milestones.add(milestoneKey);
+            this.showMilestoneNotification(milestone.message);
+          }
+        });
+      }
+
+      showMilestoneNotification(message) {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+          position: fixed;
+          top: 140px;
+          right: 20px;
+          background: var(--launch-live);
+          color: white;
+          padding: 1em 1.5em;
+          border-radius: 8px;
+          font-size: 0.9em;
+          font-weight: bold;
+          z-index: 10002;
+          animation: slideInRight 0.3s ease;
+          box-shadow: 0 4px 12px rgba(255, 68, 68, 0.3);
+        `;
+        notification.textContent = `🚀 ${message}`;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+          notification.style.animation = 'slideOutRight 0.3s ease';
+          setTimeout(() => notification.remove(), 300);
+        }, 5000);
+      }
+
+      handleLaunchComplete(countdown) {
+        const element = countdown.element;
+        const timeElements = element.querySelectorAll('.time-unit .number');
+        
+        if (timeElements.length >= 4) {
+          timeElements[0].textContent = 'LAUNCH';
+          timeElements[1].textContent = 'COMPLETE';
+          timeElements[2].textContent = '🚀';
+          timeElements[3].textContent = '✓';
+        }
+
+        // Update progress bar to 100%
+        const progressBar = element.querySelector('.progress-bar');
+        if (progressBar) {
+          progressBar.style.width = '100%';
+          progressBar.style.background = 'var(--launch-success)';
+        }
+
+        // Show launch complete notification
+        this.showMilestoneNotification('Launch Complete! 🎉');
+      }
+
+      // Public API
+      addCountdown(launchTime, element, options = {}) {
+        const countdownId = `custom-${Date.now()}`;
+        this.countdowns.set(countdownId, {
+          element: element,
+          launchTime: new Date(launchTime),
+          lastUpdate: 0,
+          urgencyLevel: 'normal',
+          milestones: new Set(),
+          precision: options.precision || 'exact'
+        });
+        return countdownId;
+      }
+
+      removeCountdown(countdownId) {
+        this.countdowns.delete(countdownId);
+      }
+
+      getCountdownInfo(countdownId) {
+        return this.countdowns.get(countdownId);
+      }
+    }
+
+    // Initialize global countdown manager
+    const countdownManager = new CountdownManager();
+
+    // Legacy function for compatibility
+    function animateCountdowns() {
+      // This function is now handled by CountdownManager
+      if (!window.countdownManagerInitialized) {
+        countdownManager.init();
+        window.countdownManagerInitialized = true;
+      }
     }
 
     // Modal Functions (Placeholder)
@@ -2369,11 +2801,16 @@
       // Launch Card Interactions
       initializeLaunchCards();
       
-      // Simulate loading completion after 3 seconds
+      // Initialize Advanced Countdown System
       setTimeout(() => {
-        console.log('🚀 Launch Cards Ready - Interactive components loaded!');
+        countdownManager.init();
+        window.countdownManagerInitialized = true;
+        console.log('⏰ Advanced Countdown System Initialized');
         
-        // Add a subtle notification that cards are ready
+        // Make countdown manager globally available
+        window.countdownManager = countdownManager;
+        
+        // Show initialization notification
         const notification = document.createElement('div');
         notification.style.cssText = `
           position: fixed;
@@ -2387,14 +2824,14 @@
           z-index: 10000;
           animation: slideInRight 0.3s ease;
         `;
-        notification.textContent = '🚀 Launch Cards Ready!';
+        notification.textContent = '⏰ Real-Time Countdowns Active!';
         document.body.appendChild(notification);
         
         setTimeout(() => {
           notification.style.animation = 'slideOutRight 0.3s ease';
           setTimeout(() => notification.remove(), 300);
-        }, 3000);
-      }, 2000);
+        }, 4000);
+      }, 1000);
     });
   </script>
 </body>
