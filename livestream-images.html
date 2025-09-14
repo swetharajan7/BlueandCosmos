@@ -1770,6 +1770,163 @@
       .loading-spinner {
         animation: none !important;
       }
+
+      .mobile-optimized .image-card {
+        transform: none !important;
+      }
+    }
+
+    /* Mobile-specific optimizations */
+    .mobile-optimized {
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .mobile-optimized .image-card {
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+
+    /* Touch-friendly improvements */
+    @media (max-width: 768px) {
+      .overlay-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 1.3em;
+      }
+
+      .nav-btn {
+        width: 56px;
+        height: 56px;
+        font-size: 1.6em;
+      }
+
+      .modal-close {
+        width: 48px;
+        height: 48px;
+        font-size: 1.6em;
+      }
+
+      /* Improve touch scrolling */
+      .image-gallery {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+      }
+
+      /* Mobile image optimizations */
+      .image-container img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+      }
+
+      /* Mobile modal optimizations */
+      .modal-content {
+        margin: 0.5em;
+        max-height: calc(100vh - 1em);
+      }
+
+      .modal-info {
+        padding: 1em;
+        font-size: 0.9em;
+      }
+
+      .modal-title {
+        font-size: 1.2em;
+      }
+
+      .modal-actions {
+        gap: 0.5em;
+      }
+
+      .action-btn {
+        min-height: 48px;
+        font-size: 0.85em;
+      }
+
+      .social-btn {
+        min-height: 44px;
+        padding: 0.7em;
+      }
+
+      /* Mobile performance optimizations */
+      .image-card:hover {
+        transform: none; /* Disable hover effects on mobile */
+      }
+
+      .image-container:hover img {
+        transform: none;
+      }
+
+      /* Mobile-specific animations */
+      .image-card {
+        transition: opacity 0.2s ease;
+      }
+
+      /* Optimize for mobile bandwidth */
+      @media (max-width: 480px) and (max-resolution: 150dpi) {
+        .image-container img {
+          max-width: 100%;
+          height: auto;
+        }
+      }
+    }
+
+    /* Landscape mobile optimizations */
+    @media (max-width: 768px) and (orientation: landscape) {
+      .modal-content {
+        grid-template-columns: 1.5fr 1fr;
+        max-height: 95vh;
+      }
+
+      .modal-info {
+        font-size: 0.8em;
+      }
+
+      .controls-bar {
+        padding: 0.8em;
+      }
+
+      .filter-controls {
+        gap: 0.3em;
+      }
+    }
+
+    /* Very small screens */
+    @media (max-width: 320px) {
+      .livestream-container {
+        padding: 0.5em;
+      }
+
+      .controls-bar {
+        padding: 0.8em;
+      }
+
+      .filter-btn {
+        font-size: 0.75em;
+        padding: 0.5em 0.8em;
+      }
+
+      .search-input {
+        font-size: 14px;
+        padding: 0.7em 2.5em 0.7em 0.8em;
+      }
+
+      .image-info {
+        padding: 0.6em;
+      }
+
+      .image-title {
+        font-size: 0.9em;
+      }
+
+      .image-description {
+        font-size: 0.8em;
+        -webkit-line-clamp: 2;
+      }
     }
 
     /* Responsive breakpoints */
@@ -2133,20 +2290,102 @@
       }
     }
 
+    /* Enhanced Mobile Optimizations */
     @media (max-width: 768px) {
-      .controls-bar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 1.5em;
+      .livestream-container {
+        padding: 1em;
       }
 
+      .controls-bar {
+        padding: 1em;
+        gap: 1em;
+      }
+
+      /* Mobile search optimization */
+      .search-container {
+        max-width: 100%;
+      }
+
+      .search-input {
+        font-size: 16px; /* Prevents zoom on iOS */
+        padding: 0.9em 3em 0.9em 1em;
+      }
+
+      .search-suggestions {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-radius: 16px 16px 0 0;
+        max-height: 50vh;
+        overflow-y: auto;
+      }
+
+      /* Mobile filter controls */
       .filter-controls {
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 0.5em;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      .filter-controls::-webkit-scrollbar {
+        display: none;
+      }
+
+      .filter-btn {
+        flex-shrink: 0;
+        font-size: 0.85em;
+        padding: 0.6em 1em;
+      }
+
+      /* Mobile advanced filters */
+      .advanced-filters {
+        padding: 0.8em;
+      }
+
+      .source-filters,
+      .date-filters {
+        gap: 0.2em;
+      }
+
+      .source-filter-btn,
+      .date-filter-btn {
+        font-size: 0.75em;
+        padding: 0.5em 0.7em;
+      }
+
+      /* Mobile view controls */
+      .view-and-options {
+        flex-direction: column;
+        gap: 0.8em;
+      }
+
+      .filter-options {
         justify-content: center;
       }
 
-      .view-controls,
       .refresh-indicator {
         align-self: center;
+      }
+
+      .auto-refresh-controls {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3em;
+        text-align: center;
+      }
+
+      /* Mobile sort options */
+      .sort-buttons {
+        gap: 0.3em;
+      }
+
+      .sort-btn {
+        font-size: 0.8em;
+        padding: 0.4em 0.8em;
       }
     }
 
@@ -2253,7 +2492,8 @@
     <section class="controls-bar">
       <div class="search-section">
         <div class="search-container">
-          <input type="text" class="search-input" id="search-input" placeholder="Search space images..." autocomplete="off">
+          <input type="text" class="search-input" id="search-input" placeholder="Search space images..."
+            autocomplete="off">
           <button class="search-clear" id="search-clear" title="Clear search" style="display: none;">×</button>
           <div class="search-icon">🔍</div>
         </div>
@@ -2271,7 +2511,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="filter-controls">
         <button class="filter-btn active" data-filter="all">All</button>
         <button class="filter-btn" data-filter="missions">Missions</button>
@@ -2280,7 +2520,7 @@
         <button class="filter-btn" data-filter="planets">Planets</button>
         <button class="filter-btn" data-filter="iss">ISS</button>
       </div>
-      
+
       <div class="advanced-filters" id="advanced-filters" style="display: none;">
         <div class="filter-group">
           <label>Source:</label>
@@ -2292,7 +2532,7 @@
             <button class="source-filter-btn" data-source="iss">ISS</button>
           </div>
         </div>
-        
+
         <div class="filter-group">
           <label>Date Range:</label>
           <div class="date-filters">
@@ -2303,18 +2543,18 @@
           </div>
         </div>
       </div>
-      
+
       <div class="view-and-options">
         <div class="view-controls">
           <button class="view-btn active" data-view="grid" title="Grid View">⊞</button>
           <button class="view-btn" data-view="list" title="List View">☰</button>
         </div>
-        
+
         <div class="filter-options">
           <button class="options-btn" id="advanced-toggle" title="Advanced Filters">⚙️</button>
           <button class="options-btn" id="sort-toggle" title="Sort Options">↕️</button>
         </div>
-        
+
         <div class="refresh-indicator">
           <div class="auto-refresh-controls">
             <span class="last-updated">Updated: <time id="last-refresh">just now</time></span>
@@ -2326,7 +2566,7 @@
         </div>
       </div>
     </section>
-    
+
     <!-- Sort Options -->
     <div class="sort-options" id="sort-options" style="display: none;">
       <div class="sort-group">
@@ -4096,7 +4336,7 @@
       function filterImages(category = currentFilter) {
         currentFilter = category;
         applyAllFilters();
-        
+
         // Update active filter button
         filterBtns.forEach(btn => {
           btn.classList.toggle('active', btn.dataset.filter === category);
@@ -4107,10 +4347,10 @@
       function applyAllFilters() {
         const cards = Array.from(gallery.querySelectorAll('.image-card'));
         let visibleCount = 0;
-        
+
         cards.forEach(card => {
           const shouldShow = passesAllFilters(card);
-          
+
           if (shouldShow) {
             card.style.display = 'block';
             card.style.animation = 'fadeIn 0.3s ease-in-out';
@@ -4119,10 +4359,10 @@
             card.style.display = 'none';
           }
         });
-        
+
         // Sort visible cards
         sortVisibleCards();
-        
+
         // Update results count
         updateResultsCount(visibleCount, cards.length);
       }
@@ -4132,41 +4372,41 @@
         const cardCategory = card.dataset.category;
         const cardSource = card.dataset.source;
         const cardImageId = card.dataset.imageId;
-        
+
         // Find image data for this card
         const imageData = currentImageData.find(img => img.id === cardImageId);
         if (!imageData) return false;
-        
+
         // Category filter
         if (currentFilter !== 'all' && cardCategory !== currentFilter) {
           return false;
         }
-        
+
         // Source filter
         if (currentSourceFilter !== 'all' && cardSource !== currentSourceFilter) {
           return false;
         }
-        
+
         // Date filter
         if (!passesDateFilter(imageData)) {
           return false;
         }
-        
+
         // Search filter
         if (currentSearch && !passesSearchFilter(imageData)) {
           return false;
         }
-        
+
         return true;
       }
 
       // Check if image passes date filter
       function passesDateFilter(imageData) {
         if (currentDateFilter === 'all') return true;
-        
+
         const imageDate = new Date(imageData.timestamp);
         const now = new Date();
-        
+
         switch (currentDateFilter) {
           case 'today':
             return imageDate.toDateString() === now.toDateString();
@@ -4184,7 +4424,7 @@
       // Check if image passes search filter
       function passesSearchFilter(imageData) {
         if (!currentSearch) return true;
-        
+
         const searchTerm = currentSearch.toLowerCase();
         const searchableText = [
           imageData.title,
@@ -4196,20 +4436,20 @@
           imageData.metadata?.location || '',
           ...(imageData.metadata?.keywords || [])
         ].join(' ').toLowerCase();
-        
+
         return searchableText.includes(searchTerm);
       }
 
       // Sort visible cards
       function sortVisibleCards() {
         const visibleCards = Array.from(gallery.querySelectorAll('.image-card[style*="block"]'));
-        
+
         visibleCards.sort((a, b) => {
           const aData = currentImageData.find(img => img.id === a.dataset.imageId);
           const bData = currentImageData.find(img => img.id === b.dataset.imageId);
-          
+
           if (!aData || !bData) return 0;
-          
+
           switch (currentSort) {
             case 'date-desc':
               return new Date(bData.timestamp) - new Date(aData.timestamp);
@@ -4223,7 +4463,7 @@
               return 0;
           }
         });
-        
+
         // Reorder DOM elements
         visibleCards.forEach(card => {
           gallery.appendChild(card);
@@ -4239,13 +4479,13 @@
           countElement.className = 'results-count';
           gallery.parentNode.insertBefore(countElement, gallery);
         }
-        
+
         if (visible === total) {
           countElement.textContent = `Showing all ${total} images`;
         } else {
           countElement.textContent = `Showing ${visible} of ${total} images`;
         }
-        
+
         countElement.style.cssText = `
           text-align: center;
           margin-bottom: 1em;
@@ -4421,18 +4661,41 @@
 
       // Optimize image URLs based on screen size and connection
       function getOptimizedImageUrl(thumbnailUrl, fullUrl) {
+        // Check for mobile device
+        const isMobile = window.innerWidth <= 768;
+        
         // Check for high DPI displays
         const isHighDPI = window.devicePixelRatio > 1.5;
-
+        
         // Check connection speed (if available)
         const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
         const isSlowConnection = connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g');
-
-        // Use full resolution for high DPI displays unless connection is slow
+        
+        // Mobile-specific optimizations
+        if (isMobile) {
+          // Always use thumbnails on slow connections
+          if (isSlowConnection) {
+            return thumbnailUrl;
+          }
+          
+          // Use thumbnails on small screens even with fast connection
+          if (window.innerWidth <= 480) {
+            return thumbnailUrl;
+          }
+          
+          // Use full resolution only for high DPI mobile displays with good connection
+          if (isHighDPI && !isSlowConnection && fullUrl && fullUrl !== thumbnailUrl) {
+            return fullUrl;
+          }
+          
+          return thumbnailUrl;
+        }
+        
+        // Desktop behavior (existing logic)
         if (isHighDPI && !isSlowConnection && fullUrl && fullUrl !== thumbnailUrl) {
           return fullUrl;
         }
-
+        
         return thumbnailUrl;
       }
 
@@ -4612,7 +4875,7 @@
         currentSearch = e.target.value.trim();
         searchClear.style.display = currentSearch ? 'block' : 'none';
         applyAllFilters();
-        
+
         // Hide suggestions when typing
         if (currentSearch) {
           searchSuggestions.style.display = 'none';
@@ -5045,6 +5308,276 @@
 
       // Initialize auto-refresh system
       autoRefreshManager.init();
+
+      // Mobile Touch Gesture System
+      const mobileGestureManager = {
+        startX: 0,
+        startY: 0,
+        currentX: 0,
+        currentY: 0,
+        isDragging: false,
+        isModalOpen: false,
+        
+        init() {
+          if ('ontouchstart' in window) {
+            this.setupTouchEvents();
+            this.setupPullToRefresh();
+            this.optimizeForMobile();
+          }
+        },
+        
+        setupTouchEvents() {
+          // Gallery swipe navigation
+          gallery.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: false });
+          gallery.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
+          gallery.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: false });
+          
+          // Modal swipe navigation
+          const modal = document.getElementById('image-modal');
+          modal.addEventListener('touchstart', this.handleModalTouchStart.bind(this), { passive: false });
+          modal.addEventListener('touchmove', this.handleModalTouchMove.bind(this), { passive: false });
+          modal.addEventListener('touchend', this.handleModalTouchEnd.bind(this), { passive: false });
+        },
+        
+        handleTouchStart(e) {
+          this.startX = e.touches[0].clientX;
+          this.startY = e.touches[0].clientY;
+          this.isDragging = false;
+        },
+        
+        handleTouchMove(e) {
+          if (!this.startX || !this.startY) return;
+          
+          this.currentX = e.touches[0].clientX;
+          this.currentY = e.touches[0].clientY;
+          
+          const diffX = Math.abs(this.currentX - this.startX);
+          const diffY = Math.abs(this.currentY - this.startY);
+          
+          // Detect horizontal swipe
+          if (diffX > diffY && diffX > 50) {
+            this.isDragging = true;
+            e.preventDefault(); // Prevent scrolling
+          }
+        },
+        
+        handleTouchEnd(e) {
+          if (!this.isDragging) return;
+          
+          const diffX = this.currentX - this.startX;
+          const threshold = 100;
+          
+          if (Math.abs(diffX) > threshold) {
+            if (diffX > 0) {
+              // Swipe right - previous filter
+              this.navigateFilter('previous');
+            } else {
+              // Swipe left - next filter
+              this.navigateFilter('next');
+            }
+          }
+          
+          this.resetTouch();
+        },
+        
+        handleModalTouchStart(e) {
+          if (!document.getElementById('image-modal').classList.contains('active')) return;
+          
+          this.isModalOpen = true;
+          this.startX = e.touches[0].clientX;
+          this.startY = e.touches[0].clientY;
+        },
+        
+        handleModalTouchMove(e) {
+          if (!this.isModalOpen) return;
+          
+          this.currentX = e.touches[0].clientX;
+          this.currentY = e.touches[0].clientY;
+          
+          const diffX = Math.abs(this.currentX - this.startX);
+          const diffY = Math.abs(this.currentY - this.startY);
+          
+          if (diffX > diffY && diffX > 30) {
+            e.preventDefault();
+          }
+        },
+        
+        handleModalTouchEnd(e) {
+          if (!this.isModalOpen) return;
+          
+          const diffX = this.currentX - this.startX;
+          const diffY = this.currentY - this.startY;
+          const threshold = 80;
+          
+          if (Math.abs(diffX) > threshold && Math.abs(diffX) > Math.abs(diffY)) {
+            if (diffX > 0) {
+              // Swipe right - previous image
+              document.querySelector('.prev-btn').click();
+            } else {
+              // Swipe left - next image
+              document.querySelector('.next-btn').click();
+            }
+          } else if (diffY > threshold && Math.abs(diffY) > Math.abs(diffX)) {
+            // Swipe down - close modal
+            document.querySelector('.modal-close').click();
+          }
+          
+          this.resetTouch();
+        },
+        
+        navigateFilter(direction) {
+          const filterBtns = Array.from(document.querySelectorAll('.filter-btn'));
+          const activeBtn = filterBtns.find(btn => btn.classList.contains('active'));
+          const currentIndex = filterBtns.indexOf(activeBtn);
+          
+          let newIndex;
+          if (direction === 'next') {
+            newIndex = (currentIndex + 1) % filterBtns.length;
+          } else {
+            newIndex = currentIndex === 0 ? filterBtns.length - 1 : currentIndex - 1;
+          }
+          
+          filterBtns[newIndex].click();
+          this.showSwipeHint(direction);
+        },
+        
+        showSwipeHint(direction) {
+          const hint = document.createElement('div');
+          hint.className = 'swipe-hint';
+          hint.textContent = direction === 'next' ? 'Next Filter →' : '← Previous Filter';
+          hint.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 1em 2em;
+            border-radius: 8px;
+            z-index: 10000;
+            font-size: 0.9em;
+            pointer-events: none;
+          `;
+          
+          document.body.appendChild(hint);
+          setTimeout(() => {
+            document.body.removeChild(hint);
+          }, 1500);
+        },
+        
+        setupPullToRefresh() {
+          let startY = 0;
+          let pullDistance = 0;
+          const threshold = 100;
+          
+          document.addEventListener('touchstart', (e) => {
+            if (window.scrollY === 0) {
+              startY = e.touches[0].clientY;
+            }
+          }, { passive: true });
+          
+          document.addEventListener('touchmove', (e) => {
+            if (startY && window.scrollY === 0) {
+              pullDistance = e.touches[0].clientY - startY;
+              
+              if (pullDistance > 0) {
+                this.updatePullIndicator(pullDistance, threshold);
+              }
+            }
+          }, { passive: true });
+          
+          document.addEventListener('touchend', () => {
+            if (pullDistance > threshold) {
+              autoRefreshManager.forceRefresh();
+              showAutoRefreshStatus('Pull to refresh triggered', 'success');
+            }
+            
+            this.hidePullIndicator();
+            startY = 0;
+            pullDistance = 0;
+          }, { passive: true });
+        },
+        
+        updatePullIndicator(distance, threshold) {
+          let indicator = document.getElementById('pull-indicator');
+          if (!indicator) {
+            indicator = document.createElement('div');
+            indicator.id = 'pull-indicator';
+            indicator.innerHTML = '↓ Pull to refresh';
+            indicator.style.cssText = `
+              position: fixed;
+              top: 0;
+              left: 50%;
+              transform: translateX(-50%);
+              background: var(--accent);
+              color: white;
+              padding: 0.5em 1em;
+              border-radius: 0 0 8px 8px;
+              z-index: 9999;
+              font-size: 0.8em;
+              transition: all 0.2s ease;
+            `;
+            document.body.appendChild(indicator);
+          }
+          
+          const progress = Math.min(distance / threshold, 1);
+          indicator.style.opacity = progress;
+          indicator.style.transform = `translateX(-50%) translateY(${-20 + (progress * 20)}px)`;
+          
+          if (progress >= 1) {
+            indicator.innerHTML = '↑ Release to refresh';
+            indicator.style.background = 'var(--highlight)';
+          } else {
+            indicator.innerHTML = '↓ Pull to refresh';
+            indicator.style.background = 'var(--accent)';
+          }
+        },
+        
+        hidePullIndicator() {
+          const indicator = document.getElementById('pull-indicator');
+          if (indicator) {
+            indicator.style.opacity = '0';
+            setTimeout(() => {
+              if (indicator.parentNode) {
+                indicator.parentNode.removeChild(indicator);
+              }
+            }, 200);
+          }
+        },
+        
+        optimizeForMobile() {
+          // Optimize touch targets
+          const touchTargets = document.querySelectorAll('button, .image-card, .filter-btn');
+          touchTargets.forEach(target => {
+            const rect = target.getBoundingClientRect();
+            if (rect.height < 44) {
+              target.style.minHeight = '44px';
+            }
+          });
+          
+          // Add mobile-specific classes
+          document.body.classList.add('mobile-optimized');
+          
+          // Optimize scroll performance
+          document.addEventListener('touchmove', (e) => {
+            if (e.target.closest('.image-gallery')) {
+              e.target.style.webkitOverflowScrolling = 'touch';
+            }
+          }, { passive: true });
+        },
+        
+        resetTouch() {
+          this.startX = 0;
+          this.startY = 0;
+          this.currentX = 0;
+          this.currentY = 0;
+          this.isDragging = false;
+          this.isModalOpen = false;
+        }
+      };
+      
+      // Initialize mobile gestures
+      mobileGestureManager.init();
 
       // Cleanup on page unload
       window.addEventListener('beforeunload', cleanupResources);
