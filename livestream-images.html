@@ -602,6 +602,344 @@
       opacity: 1;
     }
 
+    /* Modal System Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      padding: 2em;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background: #fff;
+      border-radius: 16px;
+      max-width: 90vw;
+      max-height: 90vh;
+      width: 1200px;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: scale(1);
+    }
+
+    body.dark .modal-content {
+      background: #1a1a1a;
+      color: #fff;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1em;
+      right: 1em;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 1.5em;
+      cursor: pointer;
+      z-index: 10001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close:hover,
+    .modal-close:focus {
+      background: rgba(0, 0, 0, 0.9);
+      transform: scale(1.1);
+    }
+
+    .modal-image-container {
+      position: relative;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
+    }
+
+    .modal-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1em;
+      color: white;
+      font-size: 0.9em;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top: 3px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .modal-navigation {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      transform: translateY(-50%);
+      display: flex;
+      justify-content: space-between;
+      padding: 0 1em;
+      pointer-events: none;
+    }
+
+    .nav-btn {
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.5em;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-btn:hover,
+    .nav-btn:focus {
+      background: rgba(0, 0, 0, 0.9);
+      transform: scale(1.1);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .modal-info {
+      padding: 2em;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5em;
+    }
+
+    .modal-title {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin: 0;
+      line-height: 1.3;
+      color: #333;
+    }
+
+    body.dark .modal-title {
+      color: #fff;
+    }
+
+    .modal-description {
+      font-size: 1em;
+      line-height: 1.6;
+      color: #666;
+      margin: 0;
+    }
+
+    body.dark .modal-description {
+      color: #ccc;
+    }
+
+    .modal-meta {
+      border-top: 1px solid #eee;
+      padding-top: 1.5em;
+    }
+
+    body.dark .modal-meta {
+      border-top-color: #333;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1em;
+      margin-bottom: 1em;
+    }
+
+    .meta-item {
+      font-size: 0.9em;
+    }
+
+    .meta-item strong {
+      color: #333;
+      display: block;
+      margin-bottom: 0.2em;
+    }
+
+    body.dark .meta-item strong {
+      color: #fff;
+    }
+
+    .meta-item span,
+    .meta-item time {
+      color: #666;
+    }
+
+    body.dark .meta-item span,
+    body.dark .meta-item time {
+      color: #aaa;
+    }
+
+    .modal-attribution {
+      font-size: 0.8em;
+      color: #888;
+      font-style: italic;
+      padding: 0.5em;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 6px;
+      border-left: 3px solid var(--accent);
+    }
+
+    body.dark .modal-attribution {
+      background: rgba(255, 255, 255, 0.05);
+      color: #aaa;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 0.8em;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.8em 1.2em;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      font-size: 0.9em;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      flex: 1;
+      justify-content: center;
+      min-width: 120px;
+    }
+
+    .action-btn:hover,
+    .action-btn:focus {
+      background: var(--flag-blue);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 51, 160, 0.3);
+    }
+
+    .share-btn {
+      background: var(--highlight);
+    }
+
+    .share-btn:hover {
+      background: #e91e63;
+    }
+
+    .download-btn {
+      background: #28a745;
+    }
+
+    .download-btn:hover {
+      background: #218838;
+    }
+
+    /* Mobile responsive modal */
+    @media (max-width: 768px) {
+      .modal-overlay {
+        padding: 1em;
+      }
+
+      .modal-content {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr auto;
+        max-height: 95vh;
+        width: 100%;
+      }
+
+      .modal-info {
+        padding: 1.5em;
+        max-height: 40vh;
+      }
+
+      .meta-grid {
+        grid-template-columns: 1fr;
+        gap: 0.8em;
+      }
+
+      .modal-actions {
+        flex-direction: column;
+      }
+
+      .action-btn {
+        flex: none;
+      }
+
+      .nav-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.2em;
+      }
+    }
+
+    /* Accessibility improvements */
+    @media (prefers-reduced-motion: reduce) {
+      .modal-overlay,
+      .modal-content,
+      .modal-image,
+      .nav-btn,
+      .action-btn {
+        transition: none !important;
+      }
+
+      .loading-spinner {
+        animation: none !important;
+      }
+    }
+
     /* Responsive breakpoints */
     @media (max-width: 1200px) {
       .image-gallery {
@@ -1254,6 +1592,68 @@
       </article>
     </section>
   </main>
+
+  <!-- Image Modal -->
+  <div class="modal-overlay" id="image-modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal-content">
+      <button class="modal-close" title="Close Modal" aria-label="Close">&times;</button>
+      
+      <div class="modal-image-container">
+        <img class="modal-image" src="" alt="" id="modal-image">
+        <div class="modal-navigation">
+          <button class="nav-btn prev-btn" title="Previous Image" aria-label="Previous Image">‹</button>
+          <button class="nav-btn next-btn" title="Next Image" aria-label="Next Image">›</button>
+        </div>
+        <div class="modal-loading">
+          <div class="loading-spinner"></div>
+          <span>Loading high-resolution image...</span>
+        </div>
+      </div>
+      
+      <div class="modal-info">
+        <h2 class="modal-title" id="modal-title"></h2>
+        <p class="modal-description"></p>
+        
+        <div class="modal-meta">
+          <div class="meta-grid">
+            <div class="meta-item">
+              <strong>Source:</strong> 
+              <span class="modal-source"></span>
+            </div>
+            <div class="meta-item">
+              <strong>Date:</strong> 
+              <time class="modal-date"></time>
+            </div>
+            <div class="meta-item">
+              <strong>Category:</strong> 
+              <span class="modal-category"></span>
+            </div>
+            <div class="meta-item modal-mission" style="display: none;">
+              <strong>Mission:</strong> 
+              <span class="modal-mission-name"></span>
+            </div>
+          </div>
+          
+          <div class="modal-attribution"></div>
+        </div>
+        
+        <div class="modal-actions">
+          <button class="action-btn share-btn" id="modal-share">
+            <span class="btn-icon">📤</span>
+            <span class="btn-text">Share</span>
+          </button>
+          <a class="action-btn source-btn" href="#" target="_blank" rel="noopener" id="modal-source-link">
+            <span class="btn-icon">🔗</span>
+            <span class="btn-text">View Source</span>
+          </a>
+          <button class="action-btn download-btn" id="modal-download">
+            <span class="btn-icon">⬇️</span>
+            <span class="btn-text">Download</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <footer>
     <div style="flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:0.5em;">
@@ -2157,43 +2557,304 @@
       document.getElementById("moon-context").textContent=`${now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} • New York City, NY`;
     })();
 
-    // Image Card Interactions
-    (function initImageCards(){
-      // Handle expand button clicks
+    // Enhanced Image Modal System
+    (function initImageModal(){
+      const modal = document.getElementById('image-modal');
+      const modalImage = document.getElementById('modal-image');
+      const modalTitle = document.querySelector('.modal-title');
+      const modalDescription = document.querySelector('.modal-description');
+      const modalSource = document.querySelector('.modal-source');
+      const modalDate = document.querySelector('.modal-date');
+      const modalCategory = document.querySelector('.modal-category');
+      const modalMission = document.querySelector('.modal-mission');
+      const modalMissionName = document.querySelector('.modal-mission-name');
+      const modalAttribution = document.querySelector('.modal-attribution');
+      const modalSourceLink = document.getElementById('modal-source-link');
+      const modalLoading = document.querySelector('.modal-loading');
+      
+      const closeBtn = document.querySelector('.modal-close');
+      const prevBtn = document.querySelector('.prev-btn');
+      const nextBtn = document.querySelector('.next-btn');
+      const shareBtn = document.getElementById('modal-share');
+      const downloadBtn = document.getElementById('modal-download');
+      
+      let currentImageIndex = 0;
+      let filteredImages = [];
+
+      // Open modal with image data
+      function openModal(imageId) {
+        const imageData = currentImageData.find(img => img.id === imageId);
+        if (!imageData) return;
+
+        // Get current filtered images for navigation
+        filteredImages = getCurrentFilteredImages();
+        currentImageIndex = filteredImages.findIndex(img => img.id === imageId);
+
+        // Show modal
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        modal.setAttribute('aria-hidden', 'false');
+
+        // Load image data
+        loadModalImage(imageData);
+        
+        // Update navigation buttons
+        updateNavigationButtons();
+        
+        // Focus management
+        closeBtn.focus();
+      }
+
+      // Load image and metadata into modal
+      function loadModalImage(imageData) {
+        // Show loading state
+        modalLoading.style.display = 'flex';
+        modalImage.style.opacity = '0';
+
+        // Load high-resolution image
+        const highResImage = new Image();
+        
+        highResImage.onload = function() {
+          modalImage.src = imageData.imageUrl;
+          modalImage.alt = imageData.title;
+          modalLoading.style.display = 'none';
+          modalImage.style.opacity = '1';
+        };
+
+        highResImage.onerror = function() {
+          modalImage.src = imageData.thumbnailUrl;
+          modalImage.alt = imageData.title;
+          modalLoading.style.display = 'none';
+          modalImage.style.opacity = '1';
+        };
+
+        // Start loading
+        highResImage.src = imageData.imageUrl;
+
+        // Update metadata
+        modalTitle.textContent = imageData.title;
+        modalDescription.textContent = imageData.description;
+        modalSource.textContent = imageData.source.toUpperCase();
+        modalDate.textContent = formatModalDate(imageData.timestamp);
+        modalDate.setAttribute('datetime', imageData.timestamp.toISOString());
+        modalCategory.textContent = formatCategory(imageData.category);
+
+        // Update mission info if available
+        if (imageData.metadata?.mission) {
+          modalMission.style.display = 'block';
+          modalMissionName.textContent = imageData.metadata.mission;
+        } else {
+          modalMission.style.display = 'none';
+        }
+
+        // Update attribution
+        const attribution = imageData.metadata?.attribution || `${imageData.source.toUpperCase()}`;
+        modalAttribution.textContent = attribution;
+
+        // Update source link
+        modalSourceLink.href = imageData.sourceUrl;
+
+        // Store current image data for actions
+        modal.dataset.currentImageId = imageData.id;
+      }
+
+      // Get currently filtered images
+      function getCurrentFilteredImages() {
+        const activeFilter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+        if (activeFilter === 'all') {
+          return currentImageData;
+        }
+        return currentImageData.filter(img => img.category === activeFilter);
+      }
+
+      // Update navigation button states
+      function updateNavigationButtons() {
+        prevBtn.disabled = currentImageIndex <= 0;
+        nextBtn.disabled = currentImageIndex >= filteredImages.length - 1;
+      }
+
+      // Navigate to previous image
+      function navigatePrevious() {
+        if (currentImageIndex > 0) {
+          currentImageIndex--;
+          const imageData = filteredImages[currentImageIndex];
+          loadModalImage(imageData);
+          updateNavigationButtons();
+        }
+      }
+
+      // Navigate to next image
+      function navigateNext() {
+        if (currentImageIndex < filteredImages.length - 1) {
+          currentImageIndex++;
+          const imageData = filteredImages[currentImageIndex];
+          loadModalImage(imageData);
+          updateNavigationButtons();
+        }
+      }
+
+      // Close modal
+      function closeModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        modal.setAttribute('aria-hidden', 'true');
+        
+        // Clear image source to save memory
+        setTimeout(() => {
+          modalImage.src = '';
+        }, 300);
+      }
+
+      // Format date for modal display
+      function formatModalDate(timestamp) {
+        return new Date(timestamp).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      }
+
+      // Format category for display
+      function formatCategory(category) {
+        const categoryMap = {
+          'missions': 'Space Missions',
+          'deep-space': 'Deep Space',
+          'earth': 'Earth Observation',
+          'planets': 'Planetary Science',
+          'iss': 'International Space Station'
+        };
+        return categoryMap[category] || category;
+      }
+
+      // Share functionality
+      function shareImage() {
+        const imageId = modal.dataset.currentImageId;
+        const imageData = currentImageData.find(img => img.id === imageId);
+        if (!imageData) return;
+
+        const shareData = {
+          title: imageData.title,
+          text: `Check out this amazing space image: ${imageData.title}`,
+          url: `${window.location.href}#image-${imageId}`
+        };
+
+        if (navigator.share) {
+          navigator.share(shareData);
+        } else {
+          // Fallback: copy to clipboard
+          const shareText = `${shareData.title}\n${shareData.text}\n${shareData.url}`;
+          navigator.clipboard.writeText(shareText).then(() => {
+            showToast('Link copied to clipboard!');
+          }).catch(() => {
+            // Final fallback: show share text
+            prompt('Copy this link to share:', shareData.url);
+          });
+        }
+      }
+
+      // Download functionality
+      function downloadImage() {
+        const imageId = modal.dataset.currentImageId;
+        const imageData = currentImageData.find(img => img.id === imageId);
+        if (!imageData) return;
+
+        const link = document.createElement('a');
+        link.href = imageData.imageUrl;
+        link.download = `${imageData.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.jpg`;
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      // Show toast notification
+      function showToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'toast-notification';
+        toast.textContent = message;
+        toast.style.cssText = `
+          position: fixed;
+          bottom: 2em;
+          left: 50%;
+          transform: translateX(-50%);
+          background: rgba(0, 0, 0, 0.8);
+          color: white;
+          padding: 1em 2em;
+          border-radius: 8px;
+          z-index: 10002;
+          font-size: 0.9em;
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+          document.body.removeChild(toast);
+        }, 3000);
+      }
+
+      // Event listeners
       document.addEventListener('click', function(e) {
+        // Handle expand button clicks
         if (e.target.classList.contains('expand-btn')) {
-          const card = e.target.closest('.image-card');
-          const img = card.querySelector('img');
-          const title = card.querySelector('.image-title').textContent;
-          
-          // For now, just show an alert - will be replaced with modal in later tasks
-          alert(`Opening full-size view for: ${title}`);
+          e.preventDefault();
+          const imageId = e.target.dataset.imageId;
+          openModal(imageId);
         }
         
-        // Handle share button clicks
-        if (e.target.classList.contains('share-btn')) {
-          const card = e.target.closest('.image-card');
-          const title = card.querySelector('.image-title').textContent;
-          
-          // Simple share functionality
-          if (navigator.share) {
-            navigator.share({
-              title: title,
-              text: `Check out this amazing space image: ${title}`,
+        // Handle gallery share button clicks
+        if (e.target.classList.contains('share-btn') && !e.target.id) {
+          e.preventDefault();
+          const imageId = e.target.dataset.imageId;
+          const imageData = currentImageData.find(img => img.id === imageId);
+          if (imageData) {
+            const shareData = {
+              title: imageData.title,
+              text: `Check out this space image: ${imageData.title}`,
               url: window.location.href
-            });
-          } else {
-            // Fallback for browsers without Web Share API
-            const url = window.location.href;
-            navigator.clipboard.writeText(`${title} - ${url}`).then(() => {
-              alert('Link copied to clipboard!');
-            });
+            };
+            
+            if (navigator.share) {
+              navigator.share(shareData);
+            } else {
+              navigator.clipboard.writeText(`${shareData.title} - ${shareData.url}`).then(() => {
+                showToast('Link copied to clipboard!');
+              });
+            }
           }
         }
       });
 
-      // Add keyboard navigation for accessibility
+      // Modal event listeners
+      closeBtn.addEventListener('click', closeModal);
+      prevBtn.addEventListener('click', navigatePrevious);
+      nextBtn.addEventListener('click', navigateNext);
+      shareBtn.addEventListener('click', shareImage);
+      downloadBtn.addEventListener('click', downloadImage);
+
+      // Close modal when clicking overlay
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+
+      // Keyboard navigation
       document.addEventListener('keydown', function(e) {
+        if (modal.classList.contains('active')) {
+          switch(e.key) {
+            case 'Escape':
+              closeModal();
+              break;
+            case 'ArrowLeft':
+              navigatePrevious();
+              break;
+            case 'ArrowRight':
+              navigateNext();
+              break;
+          }
+        }
+        
+        // Handle expand/share button keyboard activation
         if (e.key === 'Enter' || e.key === ' ') {
           if (e.target.classList.contains('expand-btn') || e.target.classList.contains('share-btn')) {
             e.preventDefault();
@@ -2201,26 +2862,6 @@
           }
         }
       });
-
-      // Lazy loading fallback for older browsers
-      if ('IntersectionObserver' in window) {
-        const imageObserver = new IntersectionObserver((entries, observer) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              const img = entry.target;
-              if (img.dataset.src) {
-                img.src = img.dataset.src;
-                img.removeAttribute('data-src');
-                observer.unobserve(img);
-              }
-            }
-          });
-        });
-
-        document.querySelectorAll('img[data-src]').forEach(img => {
-          imageObserver.observe(img);
-        });
-      }
     })();
 
     // Filter and Controls Functionality
