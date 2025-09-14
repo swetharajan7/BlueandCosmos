@@ -1,1 +1,1 @@
-
+🌌 BlueandCosmos is an AI-powered educational portal that brings space learning to life. 🚀 Students can explore interactive lessons, real-time news, and a vibrant community where they share insights and mentor each other. ✨ Built with Kiro’s vibe coding, specs, and hooks, the platform balances structure with creativity, delivering a seamless, cosmic learning experience. 🌍 It’s your one-stop universe for space exploration, collaboration, and discovery.
