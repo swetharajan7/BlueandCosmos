@@ -3735,6 +3735,456 @@
       color: white;
     }
 
+    /* Social Sharing Functionality Styles */
+    .sharing-modal-overlay,
+    .qr-modal-overlay,
+    .schedule-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 10004;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2em;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .sharing-modal,
+    .qr-modal,
+    .schedule-modal {
+      background: var(--text-white);
+      border-radius: 16px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 90vh;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: slideInUp 0.4s ease;
+    }
+
+    body.dark .sharing-modal,
+    body.dark .qr-modal,
+    body.dark .schedule-modal {
+      background: var(--dark-bg);
+      color: var(--text-white);
+    }
+
+    .sharing-header,
+    .qr-header,
+    .schedule-header {
+      padding: 1.5em 2em;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--flag-blue) 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sharing-header h3,
+    .qr-header h3,
+    .schedule-header h3 {
+      margin: 0;
+      font-size: 1.3em;
+    }
+
+    .sharing-close,
+    .qr-close,
+    .schedule-close {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      font-size: 1.3em;
+      cursor: pointer;
+      padding: 0.3em;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .sharing-close:hover,
+    .qr-close:hover,
+    .schedule-close:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    .sharing-content,
+    .qr-content,
+    .schedule-content {
+      padding: 2em;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    .mission-preview {
+      display: flex;
+      align-items: center;
+      gap: 1.5em;
+      padding: 1.5em;
+      background: rgba(0, 51, 160, 0.05);
+      border-radius: 12px;
+      margin-bottom: 2em;
+    }
+
+    body.dark .mission-preview {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .preview-patch {
+      flex-shrink: 0;
+    }
+
+    .preview-patch img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .patch-placeholder {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(0, 51, 160, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2em;
+    }
+
+    body.dark .patch-placeholder {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .preview-info h4 {
+      color: var(--accent);
+      margin-bottom: 0.5em;
+      font-size: 1.3em;
+    }
+
+    body.dark .preview-info h4 {
+      color: var(--text-light);
+    }
+
+    .preview-countdown {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      margin-top: 1em;
+      font-weight: bold;
+      color: var(--highlight);
+    }
+
+    .countdown-label {
+      font-size: 1.1em;
+    }
+
+    .countdown-time {
+      font-family: 'Courier New', monospace;
+      font-size: 1.2em;
+    }
+
+    .share-content-preview {
+      margin-bottom: 2em;
+    }
+
+    .share-content-preview h4 {
+      color: var(--accent);
+      margin-bottom: 1em;
+    }
+
+    body.dark .share-content-preview h4 {
+      color: var(--text-light);
+    }
+
+    .content-preview {
+      background: rgba(0, 51, 160, 0.05);
+      padding: 1.5em;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 51, 160, 0.1);
+    }
+
+    body.dark .content-preview {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .preview-title {
+      font-weight: bold;
+      font-size: 1.1em;
+      margin-bottom: 0.5em;
+      color: var(--accent);
+    }
+
+    body.dark .preview-title {
+      color: var(--text-light);
+    }
+
+    .preview-description {
+      margin-bottom: 1em;
+      line-height: 1.4;
+    }
+
+    .preview-url {
+      font-size: 0.9em;
+      opacity: 0.7;
+      font-family: monospace;
+    }
+
+    .sharing-options h4,
+    .sharing-tools h4,
+    .advanced-sharing h4 {
+      color: var(--accent);
+      margin-bottom: 1em;
+    }
+
+    body.dark .sharing-options h4,
+    body.dark .sharing-tools h4,
+    body.dark .advanced-sharing h4 {
+      color: var(--text-light);
+    }
+
+    .social-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.8em;
+      margin-bottom: 2em;
+    }
+
+    .social-btn {
+      padding: 0.8em 1em;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9em;
+    }
+
+    .social-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .tool-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.8em;
+      margin-bottom: 2em;
+    }
+
+    .tool-btn {
+      padding: 0.8em 1em;
+      background: rgba(0, 51, 160, 0.1);
+      border: 1px solid rgba(0, 51, 160, 0.2);
+      border-radius: 8px;
+      color: var(--accent);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tool-btn:hover {
+      background: rgba(0, 51, 160, 0.2);
+      transform: translateY(-2px);
+    }
+
+    body.dark .tool-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: var(--text-light);
+    }
+
+    body.dark .tool-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .custom-content {
+      background: rgba(0, 51, 160, 0.05);
+      padding: 1.5em;
+      border-radius: 8px;
+    }
+
+    body.dark .custom-content {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .input-group {
+      margin-bottom: 1em;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 0.5em;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    body.dark .input-group label {
+      color: var(--text-light);
+    }
+
+    .input-group textarea,
+    .input-group input {
+      width: 100%;
+      padding: 0.8em;
+      border: 1px solid rgba(0, 51, 160, 0.2);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.9em;
+      resize: vertical;
+    }
+
+    body.dark .input-group textarea,
+    body.dark .input-group input {
+      background: var(--dark-bg);
+      color: var(--text-white);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .update-btn,
+    .schedule-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.8em 1.5em;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .update-btn:hover,
+    .schedule-btn:hover {
+      background: var(--dark-accent);
+      transform: translateY(-2px);
+    }
+
+    /* QR Code Modal */
+    .qr-content {
+      text-align: center;
+    }
+
+    .qr-image {
+      max-width: 300px;
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 1em;
+    }
+
+    .download-qr {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.8em 1.5em;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .download-qr:hover {
+      background: var(--dark-accent);
+      transform: translateY(-2px);
+    }
+
+    /* Schedule Modal */
+    .schedule-options {
+      margin-bottom: 2em;
+    }
+
+    .option-group {
+      margin-bottom: 1em;
+    }
+
+    .option-group label {
+      display: flex;
+      align-items: center;
+      gap: 0.8em;
+      cursor: pointer;
+      padding: 0.8em;
+      border-radius: 6px;
+      transition: background 0.3s ease;
+    }
+
+    .option-group label:hover {
+      background: rgba(0, 51, 160, 0.05);
+    }
+
+    body.dark .option-group label:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .option-group input[type="radio"] {
+      accent-color: var(--accent);
+    }
+
+    .option-group input[type="datetime-local"] {
+      margin-left: 2em;
+      padding: 0.5em;
+      border: 1px solid rgba(0, 51, 160, 0.2);
+      border-radius: 4px;
+    }
+
+    body.dark .option-group input[type="datetime-local"] {
+      background: var(--dark-bg);
+      color: var(--text-white);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .platform-selection h4 {
+      color: var(--accent);
+      margin-bottom: 1em;
+    }
+
+    body.dark .platform-selection h4 {
+      color: var(--text-light);
+    }
+
+    .platform-checkboxes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.8em;
+      margin-bottom: 2em;
+    }
+
+    .platform-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 0.8em;
+      padding: 0.8em;
+      background: rgba(0, 51, 160, 0.05);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .platform-checkbox:hover {
+      background: rgba(0, 51, 160, 0.1);
+    }
+
+    body.dark .platform-checkbox {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    body.dark .platform-checkbox:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .platform-checkbox input[type="checkbox"] {
+      accent-color: var(--accent);
+    }
+
     /* Enhanced Mobile Modal Styles */
     @media (max-width: 768px) {
       .modal-content.large {
@@ -3955,6 +4405,44 @@
         margin-left: 0;
         margin-top: 0.5em;
         width: 100%;
+      }
+
+      /* Mobile Social Sharing */
+      .sharing-modal,
+      .qr-modal,
+      .schedule-modal {
+        max-width: none;
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+      }
+
+      .sharing-content,
+      .qr-content,
+      .schedule-content {
+        padding: 1.5em;
+      }
+
+      .mission-preview {
+        flex-direction: column;
+        text-align: center;
+        gap: 1em;
+      }
+
+      .social-buttons {
+        grid-template-columns: 1fr;
+      }
+
+      .tool-buttons {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .platform-checkboxes {
+        grid-template-columns: 1fr;
+      }
+
+      .qr-image {
+        max-width: 250px;
       }
     }
   </style>
@@ -9920,6 +10408,665 @@
 
     // Initialize historical data manager
     const historicalDataManager = new HistoricalDataManager();
+
+    // Social Sharing Functionality with Countdown Integration
+    class SocialSharingManager {
+      constructor() {
+        this.shareTemplates = new Map();
+        this.socialPlatforms = new Map();
+        this.init();
+      }
+
+      init() {
+        // Initialize social platforms
+        this.initializeSocialPlatforms();
+        
+        // Set up share templates
+        this.setupShareTemplates();
+        
+        // Add sharing capabilities to existing functions
+        this.enhanceExistingSharingFunctions();
+        
+        // Initialize Open Graph meta tags
+        this.initializeOpenGraphTags();
+      }
+
+      initializeSocialPlatforms() {
+        this.socialPlatforms.set('twitter', {
+          name: 'Twitter',
+          icon: '🐦',
+          color: '#1DA1F2',
+          baseUrl: 'https://twitter.com/intent/tweet',
+          params: ['text', 'url', 'hashtags']
+        });
+
+        this.socialPlatforms.set('facebook', {
+          name: 'Facebook',
+          icon: '📘',
+          color: '#4267B2',
+          baseUrl: 'https://www.facebook.com/sharer/sharer.php',
+          params: ['u', 'quote']
+        });
+
+        this.socialPlatforms.set('linkedin', {
+          name: 'LinkedIn',
+          icon: '💼',
+          color: '#0077B5',
+          baseUrl: 'https://www.linkedin.com/sharing/share-offsite/',
+          params: ['url', 'title', 'summary']
+        });
+
+        this.socialPlatforms.set('reddit', {
+          name: 'Reddit',
+          icon: '🤖',
+          color: '#FF4500',
+          baseUrl: 'https://reddit.com/submit',
+          params: ['url', 'title']
+        });
+
+        this.socialPlatforms.set('telegram', {
+          name: 'Telegram',
+          icon: '✈️',
+          color: '#0088CC',
+          baseUrl: 'https://t.me/share/url',
+          params: ['url', 'text']
+        });
+
+        this.socialPlatforms.set('whatsapp', {
+          name: 'WhatsApp',
+          icon: '💬',
+          color: '#25D366',
+          baseUrl: 'https://wa.me/',
+          params: ['text']
+        });
+
+        this.socialPlatforms.set('email', {
+          name: 'Email',
+          icon: '📧',
+          color: '#EA4335',
+          baseUrl: 'mailto:',
+          params: ['subject', 'body']
+        });
+      }
+
+      setupShareTemplates() {
+        this.shareTemplates.set('mission', {
+          title: '🚀 {missionName} Launch',
+          description: 'Don\'t miss the {missionName} launch by {agency}! {countdown}',
+          hashtags: ['SpaceLaunch', 'BlueandCosmos', 'Space'],
+          url: window.location.href
+        });
+
+        this.shareTemplates.set('live', {
+          title: '🔴 LIVE: {missionName}',
+          description: '{missionName} is launching RIGHT NOW! Watch the live coverage on BlueandCosmos 🚀',
+          hashtags: ['LiveLaunch', 'SpaceLaunch', 'BlueandCosmos'],
+          url: window.location.href
+        });
+
+        this.shareTemplates.set('success', {
+          title: '🎉 {missionName} Success!',
+          description: 'Amazing! {missionName} by {agency} was a complete success! 🚀✨',
+          hashtags: ['LaunchSuccess', 'SpaceExploration', 'BlueandCosmos'],
+          url: window.location.href
+        });
+
+        this.shareTemplates.set('countdown', {
+          title: '⏰ {missionName} Countdown',
+          description: 'T-{timeRemaining} until {missionName} launches! Set your reminders 🚀',
+          hashtags: ['LaunchCountdown', 'SpaceLaunch', 'BlueandCosmos'],
+          url: window.location.href
+        });
+      }
+
+      showSharingModal(missionData, shareType = 'mission') {
+        const modal = this.createSharingModal(missionData, shareType);
+        document.body.appendChild(modal);
+        
+        // Generate share content
+        this.generateShareContent(missionData, shareType);
+      }
+
+      createSharingModal(missionData, shareType) {
+        const overlay = document.createElement('div');
+        overlay.className = 'sharing-modal-overlay';
+        overlay.innerHTML = `
+          <div class="sharing-modal">
+            <div class="sharing-header">
+              <h3>📤 Share ${missionData.name}</h3>
+              <button class="sharing-close" onclick="this.closest('.sharing-modal-overlay').remove()">&times;</button>
+            </div>
+            
+            <div class="sharing-content">
+              <div class="mission-preview">
+                <div class="preview-patch">
+                  ${missionData.missionPatch ? 
+                    `<img src="${missionData.missionPatch}" alt="Mission Patch">` : 
+                    '<div class="patch-placeholder">🚀</div>'
+                  }
+                </div>
+                <div class="preview-info">
+                  <h4>${missionData.name}</h4>
+                  <p>${missionData.agency} • ${missionData.launchDate}</p>
+                  <div class="preview-countdown" id="share-countdown">
+                    <span class="countdown-label">T-</span>
+                    <span class="countdown-time" id="share-countdown-time">Loading...</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="share-content-preview">
+                <h4>Share Preview</h4>
+                <div class="content-preview" id="content-preview">
+                  <div class="preview-title" id="preview-title">Loading...</div>
+                  <div class="preview-description" id="preview-description">Loading...</div>
+                  <div class="preview-url">${window.location.href}</div>
+                </div>
+              </div>
+
+              <div class="sharing-options">
+                <h4>Share on Social Media</h4>
+                <div class="social-buttons" id="social-buttons">
+                  <!-- Social buttons will be populated here -->
+                </div>
+              </div>
+
+              <div class="sharing-tools">
+                <h4>Sharing Tools</h4>
+                <div class="tool-buttons">
+                  <button class="tool-btn" onclick="socialSharingManager.copyShareLink('${missionData.name}')">
+                    📋 Copy Link
+                  </button>
+                  <button class="tool-btn" onclick="socialSharingManager.generateQRCode('${missionData.name}')">
+                    📱 QR Code
+                  </button>
+                  <button class="tool-btn" onclick="socialSharingManager.downloadShareImage('${missionData.name}')">
+                    🖼️ Share Image
+                  </button>
+                  <button class="tool-btn" onclick="socialSharingManager.scheduleShare('${missionData.name}')">
+                    ⏰ Schedule Share
+                  </button>
+                </div>
+              </div>
+
+              <div class="advanced-sharing">
+                <h4>Customize Share Content</h4>
+                <div class="custom-content">
+                  <div class="input-group">
+                    <label>Custom Message:</label>
+                    <textarea id="custom-message" placeholder="Add your own message..." rows="3"></textarea>
+                  </div>
+                  <div class="input-group">
+                    <label>Hashtags:</label>
+                    <input type="text" id="custom-hashtags" placeholder="#SpaceLaunch #BlueandCosmos">
+                  </div>
+                  <button class="update-btn" onclick="socialSharingManager.updateShareContent()">
+                    Update Preview
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        return overlay;
+      }
+
+      generateShareContent(missionData, shareType) {
+        const template = this.shareTemplates.get(shareType);
+        const countdown = this.generateCountdownText(missionData.launchDate, missionData.launchTime);
+        
+        // Replace template variables
+        let title = template.title
+          .replace('{missionName}', missionData.name)
+          .replace('{agency}', missionData.agency);
+        
+        let description = template.description
+          .replace('{missionName}', missionData.name)
+          .replace('{agency}', missionData.agency)
+          .replace('{countdown}', countdown.text)
+          .replace('{timeRemaining}', countdown.remaining);
+        
+        // Update preview
+        document.getElementById('preview-title').textContent = title;
+        document.getElementById('preview-description').textContent = description;
+        
+        // Update countdown display
+        this.updateShareCountdown(missionData.launchDate, missionData.launchTime);
+        
+        // Generate social buttons
+        this.generateSocialButtons(title, description, template.hashtags);
+        
+        // Store current share data
+        this.currentShareData = {
+          title,
+          description,
+          hashtags: template.hashtags,
+          url: template.url,
+          missionData
+        };
+      }
+
+      generateCountdownText(launchDate, launchTime) {
+        try {
+          const targetDate = new Date(`${launchDate} ${launchTime}`).getTime();
+          const now = new Date().getTime();
+          const distance = targetDate - now;
+          
+          if (distance < 0) {
+            return { text: 'Launch has occurred!', remaining: '0' };
+          }
+          
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          
+          if (days > 0) {
+            return { 
+              text: `Launch in ${days} days, ${hours} hours!`,
+              remaining: `${days}d ${hours}h`
+            };
+          } else if (hours > 0) {
+            return { 
+              text: `Launch in ${hours} hours, ${minutes} minutes!`,
+              remaining: `${hours}h ${minutes}m`
+            };
+          } else {
+            return { 
+              text: `Launch in ${minutes} minutes!`,
+              remaining: `${minutes}m`
+            };
+          }
+        } catch (error) {
+          return { text: 'Launch coming soon!', remaining: 'Soon' };
+        }
+      }
+
+      updateShareCountdown(launchDate, launchTime) {
+        const countdownElement = document.getElementById('share-countdown-time');
+        if (!countdownElement) return;
+        
+        const updateCountdown = () => {
+          const countdown = this.generateCountdownText(launchDate, launchTime);
+          countdownElement.textContent = countdown.remaining;
+        };
+        
+        updateCountdown();
+        
+        // Update every second
+        const interval = setInterval(() => {
+          updateCountdown();
+          
+          // Stop if modal is closed
+          if (!document.querySelector('.sharing-modal-overlay')) {
+            clearInterval(interval);
+          }
+        }, 1000);
+      }
+
+      generateSocialButtons(title, description, hashtags) {
+        const container = document.getElementById('social-buttons');
+        if (!container) return;
+        
+        container.innerHTML = '';
+        
+        this.socialPlatforms.forEach((platform, key) => {
+          const button = document.createElement('button');
+          button.className = 'social-btn';
+          button.style.backgroundColor = platform.color;
+          button.innerHTML = `${platform.icon} ${platform.name}`;
+          button.onclick = () => this.shareOnPlatform(key, title, description, hashtags);
+          
+          container.appendChild(button);
+        });
+      }
+
+      shareOnPlatform(platformKey, title, description, hashtags) {
+        const platform = this.socialPlatforms.get(platformKey);
+        if (!platform) return;
+        
+        let shareUrl = platform.baseUrl;
+        const params = new URLSearchParams();
+        
+        switch (platformKey) {
+          case 'twitter':
+            params.append('text', `${title}\n\n${description}`);
+            params.append('url', this.currentShareData.url);
+            params.append('hashtags', hashtags.join(','));
+            break;
+            
+          case 'facebook':
+            params.append('u', this.currentShareData.url);
+            params.append('quote', `${title}\n\n${description}`);
+            break;
+            
+          case 'linkedin':
+            params.append('url', this.currentShareData.url);
+            params.append('title', title);
+            params.append('summary', description);
+            break;
+            
+          case 'reddit':
+            params.append('url', this.currentShareData.url);
+            params.append('title', title);
+            break;
+            
+          case 'telegram':
+            params.append('url', this.currentShareData.url);
+            params.append('text', `${title}\n\n${description}`);
+            break;
+            
+          case 'whatsapp':
+            shareUrl += `?text=${encodeURIComponent(`${title}\n\n${description}\n\n${this.currentShareData.url}`)}`;
+            break;
+            
+          case 'email':
+            shareUrl += `?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(`${description}\n\n${this.currentShareData.url}`)}`;
+            break;
+        }
+        
+        if (platformKey !== 'whatsapp' && platformKey !== 'email') {
+          shareUrl += '?' + params.toString();
+        }
+        
+        // Open share window
+        if (platformKey === 'email') {
+          window.location.href = shareUrl;
+        } else {
+          window.open(shareUrl, '_blank', 'width=600,height=400,scrollbars=yes,resizable=yes');
+        }
+        
+        // Track sharing event
+        this.trackSharingEvent(platformKey, this.currentShareData.missionData.name);
+      }
+
+      copyShareLink(missionName) {
+        const shareText = `${this.currentShareData.title}\n\n${this.currentShareData.description}\n\n${this.currentShareData.url}`;
+        
+        navigator.clipboard.writeText(shareText).then(() => {
+          showNotification('Share content copied to clipboard! 📋', 'success');
+        }).catch(() => {
+          // Fallback for older browsers
+          const textArea = document.createElement('textarea');
+          textArea.value = shareText;
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+          showNotification('Share content copied to clipboard! 📋', 'success');
+        });
+      }
+
+      generateQRCode(missionName) {
+        // Simple QR code generation (in production, use a proper QR library)
+        const qrData = encodeURIComponent(this.currentShareData.url);
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${qrData}`;
+        
+        const qrModal = document.createElement('div');
+        qrModal.className = 'qr-modal-overlay';
+        qrModal.innerHTML = `
+          <div class="qr-modal">
+            <div class="qr-header">
+              <h3>📱 QR Code for ${missionName}</h3>
+              <button class="qr-close" onclick="this.closest('.qr-modal-overlay').remove()">&times;</button>
+            </div>
+            <div class="qr-content">
+              <img src="${qrUrl}" alt="QR Code" class="qr-image">
+              <p>Scan this QR code to share the mission</p>
+              <button class="download-qr" onclick="socialSharingManager.downloadQRCode('${qrUrl}', '${missionName}')">
+                💾 Download QR Code
+              </button>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(qrModal);
+      }
+
+      downloadQRCode(qrUrl, missionName) {
+        const link = document.createElement('a');
+        link.href = qrUrl;
+        link.download = `${missionName}-QR-Code.png`;
+        link.click();
+        
+        showNotification('QR Code downloaded! 📱', 'success');
+      }
+
+      downloadShareImage(missionName) {
+        // Generate a shareable image with mission details
+        const canvas = document.createElement('canvas');
+        canvas.width = 1200;
+        canvas.height = 630; // Optimal for social media
+        const ctx = canvas.getContext('2d');
+        
+        // Background gradient
+        const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+        gradient.addColorStop(0, '#0033A0');
+        gradient.addColorStop(1, '#001F5C');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Mission title
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 48px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(this.currentShareData.missionData.name, canvas.width / 2, 200);
+        
+        // Agency and date
+        ctx.font = '32px Arial';
+        ctx.fillText(`${this.currentShareData.missionData.agency} • ${this.currentShareData.missionData.launchDate}`, canvas.width / 2, 260);
+        
+        // Countdown
+        const countdown = this.generateCountdownText(
+          this.currentShareData.missionData.launchDate,
+          this.currentShareData.missionData.launchTime
+        );
+        ctx.font = 'bold 36px Arial';
+        ctx.fillStyle = '#FFD700';
+        ctx.fillText(`T-${countdown.remaining}`, canvas.width / 2, 350);
+        
+        // BlueandCosmos branding
+        ctx.fillStyle = 'white';
+        ctx.font = '24px Arial';
+        ctx.fillText('BlueandCosmos.com', canvas.width / 2, 550);
+        
+        // Download the image
+        canvas.toBlob((blob) => {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `${missionName}-Share-Image.png`;
+          link.click();
+          URL.revokeObjectURL(url);
+          
+          showNotification('Share image downloaded! 🖼️', 'success');
+        });
+      }
+
+      scheduleShare(missionName) {
+        const scheduleModal = document.createElement('div');
+        scheduleModal.className = 'schedule-modal-overlay';
+        scheduleModal.innerHTML = `
+          <div class="schedule-modal">
+            <div class="schedule-header">
+              <h3>⏰ Schedule Share for ${missionName}</h3>
+              <button class="schedule-close" onclick="this.closest('.schedule-modal-overlay').remove()">&times;</button>
+            </div>
+            <div class="schedule-content">
+              <div class="schedule-options">
+                <div class="option-group">
+                  <label>
+                    <input type="radio" name="schedule-time" value="1hour" checked>
+                    1 hour before launch
+                  </label>
+                </div>
+                <div class="option-group">
+                  <label>
+                    <input type="radio" name="schedule-time" value="30min">
+                    30 minutes before launch
+                  </label>
+                </div>
+                <div class="option-group">
+                  <label>
+                    <input type="radio" name="schedule-time" value="launch">
+                    At launch time
+                  </label>
+                </div>
+                <div class="option-group">
+                  <label>
+                    <input type="radio" name="schedule-time" value="custom">
+                    Custom time:
+                  </label>
+                  <input type="datetime-local" id="custom-schedule-time">
+                </div>
+              </div>
+              <div class="platform-selection">
+                <h4>Select Platforms:</h4>
+                <div class="platform-checkboxes" id="schedule-platforms">
+                  <!-- Platform checkboxes will be populated -->
+                </div>
+              </div>
+              <button class="schedule-btn" onclick="socialSharingManager.confirmScheduleShare('${missionName}')">
+                📅 Schedule Share
+              </button>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(scheduleModal);
+        
+        // Populate platform checkboxes
+        const platformContainer = scheduleModal.querySelector('#schedule-platforms');
+        this.socialPlatforms.forEach((platform, key) => {
+          const checkbox = document.createElement('label');
+          checkbox.className = 'platform-checkbox';
+          checkbox.innerHTML = `
+            <input type="checkbox" value="${key}">
+            ${platform.icon} ${platform.name}
+          `;
+          platformContainer.appendChild(checkbox);
+        });
+      }
+
+      confirmScheduleShare(missionName) {
+        const selectedTime = document.querySelector('input[name="schedule-time"]:checked').value;
+        const selectedPlatforms = Array.from(document.querySelectorAll('#schedule-platforms input:checked'))
+          .map(cb => cb.value);
+        
+        if (selectedPlatforms.length === 0) {
+          showNotification('Please select at least one platform', 'warning');
+          return;
+        }
+        
+        // In a real implementation, this would schedule the shares
+        showNotification(`Share scheduled for ${selectedPlatforms.length} platform(s)! ⏰`, 'success');
+        document.querySelector('.schedule-modal-overlay').remove();
+      }
+
+      updateShareContent() {
+        const customMessage = document.getElementById('custom-message').value;
+        const customHashtags = document.getElementById('custom-hashtags').value;
+        
+        if (customMessage) {
+          this.currentShareData.description = customMessage;
+          document.getElementById('preview-description').textContent = customMessage;
+        }
+        
+        if (customHashtags) {
+          this.currentShareData.hashtags = customHashtags.split(' ').map(tag => tag.replace('#', ''));
+        }
+        
+        // Regenerate social buttons with updated content
+        this.generateSocialButtons(
+          this.currentShareData.title,
+          this.currentShareData.description,
+          this.currentShareData.hashtags
+        );
+        
+        showNotification('Share content updated! 📝', 'success');
+      }
+
+      trackSharingEvent(platform, missionName) {
+        // Analytics tracking for sharing events
+        console.log(`Share event: ${platform} - ${missionName}`);
+        
+        // In production, this would send to analytics service
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'share', {
+            method: platform,
+            content_type: 'mission',
+            item_id: missionName
+          });
+        }
+      }
+
+      enhanceExistingSharingFunctions() {
+        // Override the existing shareLaunch function
+        window.originalShareLaunch = window.shareLaunch;
+        
+        window.shareLaunch = (button) => {
+          const card = button.closest('.launch-card');
+          const missionData = extractMissionData(card);
+          
+          // Add visual feedback
+          button.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            button.style.transform = '';
+          }, 150);
+          
+          // Show comprehensive sharing modal
+          this.showSharingModal(missionData, 'mission');
+        };
+        
+        // Add sharing to modal actions
+        window.shareMissionModal = (data) => {
+          this.showSharingModal(data || window.currentMissionData, 'mission');
+        };
+      }
+
+      initializeOpenGraphTags() {
+        // Add Open Graph meta tags for better social sharing
+        const metaTags = [
+          { property: 'og:site_name', content: 'BlueandCosmos' },
+          { property: 'og:type', content: 'website' },
+          { property: 'og:title', content: '🚀 Launch Missions - BlueandCosmos' },
+          { property: 'og:description', content: 'Track upcoming space launches with real-time countdowns, mission details, and live updates.' },
+          { property: 'og:url', content: window.location.href },
+          { property: 'og:image', content: window.location.origin + '/favicon.ico' },
+          { name: 'twitter:card', content: 'summary_large_image' },
+          { name: 'twitter:site', content: '@BlueandCosmos' },
+          { name: 'twitter:creator', content: '@BlueandCosmos' }
+        ];
+        
+        metaTags.forEach(tag => {
+          const meta = document.createElement('meta');
+          if (tag.property) meta.setAttribute('property', tag.property);
+          if (tag.name) meta.setAttribute('name', tag.name);
+          meta.setAttribute('content', tag.content);
+          document.head.appendChild(meta);
+        });
+      }
+
+      // Quick share functions for different contexts
+      quickShareMission(missionData) {
+        this.showSharingModal(missionData, 'mission');
+      }
+
+      quickShareLive(missionData) {
+        this.showSharingModal(missionData, 'live');
+      }
+
+      quickShareSuccess(missionData) {
+        this.showSharingModal(missionData, 'success');
+      }
+
+      quickShareCountdown(missionData) {
+        this.showSharingModal(missionData, 'countdown');
+      }
+    }
+
+    // Initialize social sharing manager
+    const socialSharingManager = new SocialSharingManager();
 
     // Enhanced setNotification function
     function setNotification(button) {
