@@ -850,6 +850,37 @@
       color: white;
     }
 
+    .status-preparing,
+    .preparing {
+      background: #666;
+      color: white;
+    }
+
+    .status-fueling,
+    .fueling {
+      background: #ff9500;
+      color: white;
+    }
+
+    .status-go,
+    .go {
+      background: #00aa44;
+      color: white;
+      animation: pulse 2s infinite;
+    }
+
+    .status-scrubbed,
+    .scrubbed {
+      background: var(--launch-failure);
+      color: white;
+    }
+
+    .status-unknown,
+    .unknown {
+      background: #999;
+      color: white;
+    }
+
     .status-failure {
       background: var(--launch-failure);
       color: white;
@@ -7823,6 +7854,723 @@
     document.addEventListener('DOMContentLoaded', () => {
       setTimeout(updateNotificationCount, 1000);
     });
+
+    // Real-Time Launch Status Updates and Live Tracking System
+    class LiveTrackingManager {
+      constructor() {
+        this.websocket = null;
+        this.reconnectAttempts = 0;
+        this.maxReconnectAttempts = 5;
+        this.reconnectDelay = 1000;
+        this.isConnected = false;
+        this.trackingData = new Map();
+        this.statusUpdateCallbacks = new Set();
+        this.telemetryCallbacks = new Set();
+        this.init();
+      }
+
+      init() {
+        // Initialize with simulated WebSocket for demo purposes
+        this.initializeSimulatedTracking();
+        
+        // Start periodic status updates
+        this.startStatusUpdates();
+        
+        // Initialize live tracking UI
+        this.initializeLiveTrackingUI();
+      }
+
+      // Simulated WebSocket connection for demo purposes
+      initializeSimulatedTracking() {
+        console.log('Initializing simulated live tracking...');
+        
+        // Simulate connection success
+        setTimeout(() => {
+          this.isConnected = true;
+          this.onConnectionEstablished();
+        }, 1000);
+
+        // Simulate periodic status updates
+        setInterval(() => {
+          if (this.isConnected) {
+            this.simulateStatusUpdate();
+          }
+        }, 5000);
+
+        // Simulate telemetry data during active launches
+        setInterval(() => {
+          if (this.isConnected && this.hasActiveLaunches()) {
+            this.simulateTelemetryUpdate();
+          }
+        }, 1000);
+      }
+
+      // Real WebSocket implementation (for production)
+      connectWebSocket() {
+        try {
+          // In production, this would connect to actual launch tracking APIs
+          this.websocket = new WebSocket('wss://api.spacexdata.com/v4/launches/stream');
+          
+          this.websocket.onopen = () => {
+            console.log('WebSocket connected');
+            this.isConnected = true;
+            this.reconnectAttempts = 0;
+            this.onConnectionEstablished();
+          };
+
+          this.websocket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            this.handleRealTimeUpdate(data);
+          };
+
+          this.websocket.onclose = () => {
+            console.log('WebSocket disconnected');
+            this.isConnected = false;
+            this.attemptReconnect();
+          };
+
+          this.websocket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+            this.isConnected = false;
+          };
+
+        } catch (error) {
+          console.error('Failed to establish WebSocket connection:', error);
+          this.initializeSimulatedTracking();
+        }
+      }
+
+      attemptReconnect() {
+        if (this.reconnectAttempts < this.maxReconnectAttempts) {
+          this.reconnectAttempts++;
+          console.log(`Attempting to reconnect... (${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
+          
+          setTimeout(() => {
+            this.connectWebSocket();
+          }, this.reconnectDelay * this.reconnectAttempts);
+        } else {
+          console.log('Max reconnection attempts reached. Falling back to simulated tracking.');
+          this.initializeSimulatedTracking();
+        }
+      }
+
+      onConnectionEstablished() {
+        this.updateConnectionStatus(true);
+        showNotification('🔴 Live tracking connected!', 'success');
+      }
+
+      handleRealTimeUpdate(data) {
+        switch (data.type) {
+          case 'status_update':
+            this.handleStatusUpdate(data);
+            break;
+          case 'telemetry':
+            this.handleTelemetryUpdate(data);
+            break;
+          case 'milestone':
+            this.handleMilestoneUpdate(data);
+            break;
+          default:
+            console.log('Unknown update type:', data.type);
+        }
+      }
+
+      handleStatusUpdate(data) {
+        const { missionId, status, timestamp, details } = data;
+        
+        // Update tracking data
+        if (!this.trackingData.has(missionId)) {
+          this.trackingData.set(missionId, {});
+        }
+        
+        const missionData = this.trackingData.get(missionId);
+        missionData.status = status;
+        missionData.lastUpdate = timestamp;
+        missionData.details = details;
+        
+        // Notify callbacks
+        this.statusUpdateCallbacks.forEach(callback => {
+          callback(missionId, status, details);
+        });
+        
+        // Update UI
+        this.updateMissionStatusInUI(missionId, status, details);
+        
+        // Show notification for significant status changes
+        if (this.isSignificantStatusChange(status)) {
+          this.showStatusNotification(missionId, status, details);
+        }
+      }
+
+      handleTelemetryUpdate(data) {
+        const { missionId, telemetry, timestamp } = data;
+        
+        // Update tracking data
+        if (!this.trackingData.has(missionId)) {
+          this.trackingData.set(missionId, {});
+        }
+        
+        const missionData = this.trackingData.get(missionId);
+        missionData.telemetry = telemetry;
+        missionData.telemetryTimestamp = timestamp;
+        
+        // Notify callbacks
+        this.telemetryCallbacks.forEach(callback => {
+          callback(missionId, telemetry);
+        });
+        
+        // Update live tracking display
+        this.updateTelemetryDisplay(missionId, telemetry);
+      }
+
+      handleMilestoneUpdate(data) {
+        const { missionId, milestone, timestamp, success } = data;
+        
+        // Add to mission timeline
+        this.addMilestoneToTimeline(missionId, milestone, timestamp, success);
+        
+        // Show milestone notification
+        this.showMilestoneNotification(missionId, milestone, success);
+      }
+
+      // Simulated data generation for demo
+      simulateStatusUpdate() {
+        const missions = ['Starship IFT-6', 'Falcon 9', 'Artemis II'];
+        const statuses = ['Preparing', 'Fueling', 'Go for Launch', 'Live', 'Success', 'Delayed'];
+        
+        const missionId = missions[Math.floor(Math.random() * missions.length)];
+        const status = statuses[Math.floor(Math.random() * statuses.length)];
+        const details = this.generateStatusDetails(status);
+        
+        this.handleStatusUpdate({
+          missionId,
+          status,
+          timestamp: Date.now(),
+          details
+        });
+      }
+
+      simulateTelemetryUpdate() {
+        const missions = ['Starship IFT-6', 'Falcon 9'];
+        const missionId = missions[Math.floor(Math.random() * missions.length)];
+        
+        const telemetry = {
+          altitude: Math.floor(Math.random() * 100) + 'km',
+          velocity: Math.floor(Math.random() * 8000) + 'm/s',
+          downrange: Math.floor(Math.random() * 500) + 'km',
+          stage: Math.random() > 0.5 ? 'First Stage' : 'Second Stage',
+          engineStatus: Math.random() > 0.8 ? 'Nominal' : 'All Engines Running',
+          trajectory: 'Nominal'
+        };
+        
+        this.handleTelemetryUpdate({
+          missionId,
+          telemetry,
+          timestamp: Date.now()
+        });
+      }
+
+      generateStatusDetails(status) {
+        const details = {
+          'Preparing': 'Final pre-launch checks in progress',
+          'Fueling': 'Propellant loading underway',
+          'Go for Launch': 'All systems go, launch director approval received',
+          'Live': 'Vehicle has lifted off, tracking nominal',
+          'Success': 'Mission objectives achieved successfully',
+          'Delayed': 'Launch delayed due to weather/technical issues'
+        };
+        
+        return details[status] || 'Status update received';
+      }
+
+      isSignificantStatusChange(status) {
+        return ['Go for Launch', 'Live', 'Success', 'Delayed', 'Scrubbed'].includes(status);
+      }
+
+      showStatusNotification(missionId, status, details) {
+        const title = `🚀 ${missionId} Status Update`;
+        const message = `Status: ${status} - ${details}`;
+        
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification(title, {
+            body: message,
+            icon: '/favicon.ico',
+            tag: `status-${missionId}`,
+            requireInteraction: status === 'Live'
+          });
+        }
+        
+        // Also show in-app notification
+        const statusEmoji = this.getStatusEmoji(status);
+        showNotification(`${statusEmoji} ${missionId}: ${status}`, this.getStatusType(status));
+      }
+
+      showMilestoneNotification(missionId, milestone, success) {
+        const emoji = success ? '✅' : '❌';
+        const message = `${emoji} ${missionId}: ${milestone}`;
+        showNotification(message, success ? 'success' : 'warning');
+      }
+
+      getStatusEmoji(status) {
+        const emojis = {
+          'Preparing': '🔧',
+          'Fueling': '⛽',
+          'Go for Launch': '🟢',
+          'Live': '🔴',
+          'Success': '🎉',
+          'Delayed': '⏰',
+          'Scrubbed': '❌'
+        };
+        return emojis[status] || '📡';
+      }
+
+      getStatusType(status) {
+        const types = {
+          'Success': 'success',
+          'Live': 'info',
+          'Delayed': 'warning',
+          'Scrubbed': 'error'
+        };
+        return types[status] || 'info';
+      }
+
+      updateMissionStatusInUI(missionId, status, details) {
+        // Find mission cards and update their status
+        const cards = document.querySelectorAll('.launch-card');
+        cards.forEach(card => {
+          const cardMissionName = card.querySelector('.mission-name')?.textContent;
+          if (cardMissionName === missionId) {
+            const statusElement = card.querySelector('.launch-status');
+            if (statusElement) {
+              statusElement.textContent = status;
+              statusElement.className = `launch-status ${this.getStatusClass(status)}`;
+            }
+            
+            // Add live indicator for active launches
+            if (status === 'Live') {
+              this.addLiveIndicator(card);
+            } else {
+              this.removeLiveIndicator(card);
+            }
+            
+            // Update card with pulsing animation for live missions
+            if (status === 'Live') {
+              card.style.animation = 'pulse 2s infinite';
+              card.style.border = '2px solid var(--launch-live)';
+            } else {
+              card.style.animation = '';
+              card.style.border = '';
+            }
+          }
+        });
+      }
+
+      getStatusClass(status) {
+        const classes = {
+          'Preparing': 'preparing',
+          'Fueling': 'fueling',
+          'Go for Launch': 'go',
+          'Live': 'live',
+          'Success': 'success',
+          'Delayed': 'delayed',
+          'Scrubbed': 'scrubbed'
+        };
+        return classes[status] || 'unknown';
+      }
+
+      addLiveIndicator(card) {
+        if (!card.querySelector('.live-indicator-badge')) {
+          const indicator = document.createElement('div');
+          indicator.className = 'live-indicator-badge';
+          indicator.innerHTML = '🔴 LIVE';
+          card.appendChild(indicator);
+        }
+      }
+
+      removeLiveIndicator(card) {
+        const indicator = card.querySelector('.live-indicator-badge');
+        if (indicator) {
+          indicator.remove();
+        }
+      }
+
+      updateTelemetryDisplay(missionId, telemetry) {
+        // Update telemetry in modal if open for this mission
+        const modal = document.getElementById('mission-modal');
+        if (modal && modal.classList.contains('visible')) {
+          const modalTitle = modal.querySelector('.modal-mission-name')?.textContent;
+          if (modalTitle === missionId) {
+            this.updateModalTelemetry(telemetry);
+          }
+        }
+        
+        // Update live tracking panel if visible
+        this.updateLiveTrackingPanel(missionId, telemetry);
+      }
+
+      updateModalTelemetry(telemetry) {
+        // Add telemetry tab if it doesn't exist
+        this.ensureTelemetryTab();
+        
+        // Update telemetry data
+        const telemetryContainer = document.getElementById('telemetry-data');
+        if (telemetryContainer) {
+          telemetryContainer.innerHTML = `
+            <div class="telemetry-grid">
+              ${Object.entries(telemetry).map(([key, value]) => `
+                <div class="telemetry-item">
+                  <div class="telemetry-label">${this.formatTelemetryLabel(key)}</div>
+                  <div class="telemetry-value">${value}</div>
+                </div>
+              `).join('')}
+            </div>
+            <div class="telemetry-timestamp">
+              Last Update: ${new Date().toLocaleTimeString()}
+            </div>
+          `;
+        }
+      }
+
+      ensureTelemetryTab() {
+        // Check if telemetry tab exists, if not add it
+        const tabs = document.querySelector('.modal-tabs');
+        if (tabs && !tabs.querySelector('[data-tab="telemetry"]')) {
+          const telemetryTab = document.createElement('button');
+          telemetryTab.className = 'tab-btn';
+          telemetryTab.setAttribute('data-tab', 'telemetry');
+          telemetryTab.onclick = () => switchModalTab('telemetry');
+          telemetryTab.textContent = 'Live Data';
+          tabs.appendChild(telemetryTab);
+          
+          // Add telemetry tab content
+          const modalBody = document.querySelector('.modal-body');
+          const telemetryContent = document.createElement('div');
+          telemetryContent.className = 'tab-content';
+          telemetryContent.id = 'telemetry-tab';
+          telemetryContent.innerHTML = `
+            <div class="telemetry-section">
+              <h3>🔴 Live Telemetry Data</h3>
+              <div id="telemetry-data">
+                <div class="telemetry-loading">Waiting for telemetry data...</div>
+              </div>
+            </div>
+          `;
+          modalBody.appendChild(telemetryContent);
+        }
+      }
+
+      formatTelemetryLabel(key) {
+        const labels = {
+          'altitude': 'Altitude',
+          'velocity': 'Velocity',
+          'downrange': 'Downrange Distance',
+          'stage': 'Current Stage',
+          'engineStatus': 'Engine Status',
+          'trajectory': 'Trajectory'
+        };
+        return labels[key] || key.charAt(0).toUpperCase() + key.slice(1);
+      }
+
+      updateLiveTrackingPanel(missionId, telemetry) {
+        let panel = document.getElementById('live-tracking-panel');
+        if (!panel) {
+          panel = this.createLiveTrackingPanel();
+          document.body.appendChild(panel);
+        }
+        
+        // Update panel content
+        panel.querySelector('.tracking-mission-name').textContent = missionId;
+        panel.querySelector('.tracking-telemetry').innerHTML = `
+          <div class="telemetry-compact">
+            <span class="telemetry-item">Alt: ${telemetry.altitude}</span>
+            <span class="telemetry-item">Vel: ${telemetry.velocity}</span>
+            <span class="telemetry-item">Stage: ${telemetry.stage}</span>
+          </div>
+        `;
+        
+        // Show panel
+        panel.classList.add('visible');
+      }
+
+      createLiveTrackingPanel() {
+        const panel = document.createElement('div');
+        panel.id = 'live-tracking-panel';
+        panel.className = 'live-tracking-panel';
+        panel.innerHTML = `
+          <div class="tracking-header">
+            <span class="tracking-indicator">🔴 LIVE</span>
+            <span class="tracking-mission-name">Mission Name</span>
+            <button class="tracking-close" onclick="liveTrackingManager.hideLiveTrackingPanel()">&times;</button>
+          </div>
+          <div class="tracking-content">
+            <div class="tracking-telemetry"></div>
+          </div>
+        `;
+        return panel;
+      }
+
+      hideLiveTrackingPanel() {
+        const panel = document.getElementById('live-tracking-panel');
+        if (panel) {
+          panel.classList.remove('visible');
+        }
+      }
+
+      addMilestoneToTimeline(missionId, milestone, timestamp, success) {
+        // Add milestone to modal timeline if open
+        const modal = document.getElementById('mission-modal');
+        if (modal && modal.classList.contains('visible')) {
+          const modalTitle = modal.querySelector('.modal-mission-name')?.textContent;
+          if (modalTitle === missionId) {
+            this.addMilestoneToModalTimeline(milestone, timestamp, success);
+          }
+        }
+      }
+
+      addMilestoneToModalTimeline(milestone, timestamp, success) {
+        const timelineContainer = document.getElementById('timeline-container');
+        if (timelineContainer) {
+          const milestoneElement = document.createElement('div');
+          milestoneElement.className = `timeline-item ${success ? 'completed' : 'failed'} live-milestone`;
+          milestoneElement.innerHTML = `
+            <div class="timeline-content">
+              <h4>${milestone}</h4>
+              <p class="timeline-time">${new Date(timestamp).toLocaleTimeString()}</p>
+              <span class="milestone-status">${success ? '✅ Success' : '❌ Failed'}</span>
+            </div>
+          `;
+          
+          // Add to top of timeline
+          timelineContainer.insertBefore(milestoneElement, timelineContainer.firstChild);
+          
+          // Animate in
+          setTimeout(() => {
+            milestoneElement.style.animation = 'slideInLeft 0.5s ease';
+          }, 100);
+        }
+      }
+
+      hasActiveLaunches() {
+        // Check if any missions are currently live
+        return Array.from(this.trackingData.values()).some(data => data.status === 'Live');
+      }
+
+      startStatusUpdates() {
+        // Periodic status checks every 30 seconds
+        setInterval(() => {
+          this.checkForStatusUpdates();
+        }, 30000);
+      }
+
+      checkForStatusUpdates() {
+        // In production, this would poll APIs for status updates
+        console.log('Checking for status updates...');
+      }
+
+      updateConnectionStatus(connected) {
+        const indicator = document.querySelector('.live-indicator .status-dot');
+        if (indicator) {
+          indicator.className = `status-dot ${connected ? 'live' : 'offline'}`;
+        }
+        
+        const statusText = document.querySelector('.live-indicator .status-text');
+        if (statusText) {
+          statusText.textContent = connected ? 'Live Launch Tracking' : 'Tracking Offline';
+        }
+      }
+
+      initializeLiveTrackingUI() {
+        // Add live tracking styles if not already present
+        this.addLiveTrackingStyles();
+      }
+
+      addLiveTrackingStyles() {
+        if (document.getElementById('live-tracking-styles')) return;
+        
+        const style = document.createElement('style');
+        style.id = 'live-tracking-styles';
+        style.textContent = `
+          .live-indicator-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--launch-live);
+            color: white;
+            padding: 0.3em 0.8em;
+            border-radius: 12px;
+            font-size: 0.7em;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+            z-index: 10;
+          }
+          
+          .live-tracking-panel {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--text-white);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            border: 2px solid var(--launch-live);
+            min-width: 300px;
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+          }
+          
+          .live-tracking-panel.visible {
+            transform: translateY(0);
+            opacity: 1;
+          }
+          
+          body.dark .live-tracking-panel {
+            background: var(--dark-bg);
+            color: var(--text-white);
+          }
+          
+          .tracking-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1em;
+            background: var(--launch-live);
+            color: white;
+            border-radius: 10px 10px 0 0;
+          }
+          
+          .tracking-indicator {
+            font-weight: bold;
+            animation: pulse 2s infinite;
+          }
+          
+          .tracking-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            padding: 0.2em;
+          }
+          
+          .tracking-content {
+            padding: 1em;
+          }
+          
+          .telemetry-compact {
+            display: flex;
+            gap: 1em;
+            flex-wrap: wrap;
+          }
+          
+          .telemetry-compact .telemetry-item {
+            background: rgba(0, 51, 160, 0.1);
+            padding: 0.5em;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-weight: 600;
+          }
+          
+          body.dark .telemetry-compact .telemetry-item {
+            background: rgba(255, 255, 255, 0.1);
+          }
+          
+          .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1em;
+            margin-bottom: 1em;
+          }
+          
+          .telemetry-item {
+            background: rgba(0, 51, 160, 0.05);
+            padding: 1em;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 51, 160, 0.1);
+          }
+          
+          body.dark .telemetry-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+          }
+          
+          .telemetry-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 0.3em;
+          }
+          
+          .telemetry-value {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--accent);
+          }
+          
+          body.dark .telemetry-value {
+            color: var(--text-light);
+          }
+          
+          .telemetry-timestamp {
+            text-align: center;
+            font-size: 0.8em;
+            opacity: 0.7;
+            margin-top: 1em;
+          }
+          
+          .live-milestone {
+            border-left-color: var(--launch-live);
+            animation: slideInLeft 0.5s ease;
+          }
+          
+          .milestone-status {
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-top: 0.5em;
+            display: block;
+          }
+          
+          @keyframes slideInLeft {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+          }
+          
+          @media (max-width: 768px) {
+            .live-tracking-panel {
+              bottom: 10px;
+              right: 10px;
+              left: 10px;
+              min-width: auto;
+            }
+            
+            .telemetry-compact {
+              justify-content: center;
+            }
+          }
+        `;
+        
+        document.head.appendChild(style);
+      }
+
+      // Public API methods
+      onStatusUpdate(callback) {
+        this.statusUpdateCallbacks.add(callback);
+      }
+
+      onTelemetryUpdate(callback) {
+        this.telemetryCallbacks.add(callback);
+      }
+
+      getMissionStatus(missionId) {
+        return this.trackingData.get(missionId)?.status || 'Unknown';
+      }
+
+      getMissionTelemetry(missionId) {
+        return this.trackingData.get(missionId)?.telemetry || null;
+      }
+    }
+
+    // Initialize live tracking manager
+    const liveTrackingManager = new LiveTrackingManager();
 
     // Enhanced setNotification function
     function setNotification(button) {
