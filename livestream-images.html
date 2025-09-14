@@ -416,6 +416,40 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* Loading message styles */
+    .loading-message {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4em 2em;
+      font-size: 1.1em;
+      color: #666;
+      background: linear-gradient(135deg, rgba(0, 51, 160, 0.05), rgba(255, 64, 129, 0.05));
+      border-radius: 12px;
+      border: 2px dashed rgba(0, 51, 160, 0.2);
+    }
+
+    body.dark .loading-message {
+      color: #ccc;
+      background: linear-gradient(135deg, rgba(0, 31, 91, 0.2), rgba(255, 64, 129, 0.1));
+      border-color: rgba(0, 31, 91, 0.3);
+    }
+
+    /* Error message styles */
+    .error-message {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 2em;
+      background: rgba(255, 64, 129, 0.1);
+      border: 2px dashed var(--highlight);
+      border-radius: 12px;
+      color: #d63384;
+    }
+
+    body.dark .error-message {
+      background: rgba(255, 64, 129, 0.2);
+      color: #ff6b9d;
+    }
+
     /* Responsive breakpoints */
     @media (max-width: 1200px) {
       .image-gallery {
@@ -1097,6 +1131,407 @@
 
   <script src="maximus.js"></script>
   <script>
+    // Image Data Management System
+    class ImageDataManager {
+      constructor() {
+        this.cache = new Map();
+        this.cacheExpiry = 5 * 60 * 1000; // 5 minutes
+        this.retryAttempts = 3;
+        this.retryDelay = 1000; // 1 second
+      }
+
+      // Main method to fetch all images from multiple sources
+      async fetchAllImages() {
+        const sources = [
+          this.fetchNASAImages(),
+          this.fetchESAImages(),
+          this.fetchSpaceXImages(),
+          this.fetchISSImages(),
+          this.fetchAPOD()
+        ];
+
+        try {
+          const results = await Promise.allSettled(sources);
+          const allImages = [];
+
+          results.forEach((result, index) => {
+            if (result.status === 'fulfilled' && result.value) {
+              if (Array.isArray(result.value)) {
+                allImages.push(...result.value);
+              } else {
+                allImages.push(result.value);
+              }
+            } else {
+              console.warn(`Source ${index} failed:`, result.reason);
+            }
+          });
+
+          return this.combineAndSort(allImages);
+        } catch (error) {
+          console.error('Error fetching images:', error);
+          return this.getFallbackImages();
+        }
+      }
+
+      // NASA Image and Video Library API
+      async fetchNASAImages() {
+        const cacheKey = 'nasa_images';
+        const cached = this.getFromCache(cacheKey);
+        if (cached) return cached;
+
+        try {
+          // Using NASA's Image and Video Library API
+          const response = await this.fetchWithRetry(
+            'https://images-api.nasa.gov/search?q=space&media_type=image&page_size=20'
+          );
+          
+          if (!response.ok) throw new Error(`NASA API error: ${response.status}`);
+          
+          const data = await response.json();
+          const images = data.collection.items.map(item => this.parseNASAImage(item));
+          
+          this.setCache(cacheKey, images);
+          return images;
+        } catch (error) {
+          console.error('NASA API error:', error);
+          return this.getNASAFallback();
+        }
+      }
+
+      // Parse NASA API response to our SpaceImage format
+      parseNASAImage(item) {
+        const data = item.data[0];
+        const links = item.links || [];
+        const imageLink = links.find(link => link.rel === 'preview');
+        
+        return {
+          id: `nasa_${data.nasa_id}`,
+          title: data.title || 'NASA Image',
+          description: data.description || 'Image from NASA',
+          imageUrl: imageLink ? imageLink.href : this.getPlaceholderImage(),
+          thumbnailUrl: imageLink ? imageLink.href : this.getPlaceholderImage(),
+          source: 'nasa',
+          category: this.categorizeNASAImage(data),
+          timestamp: new Date(data.date_created || Date.now()),
+          sourceUrl: `https://images.nasa.gov/details-${data.nasa_id}`,
+          metadata: {
+            photographer: data.photographer,
+            center: data.center,
+            keywords: data.keywords
+          }
+        };
+      }
+
+      // Categorize NASA images based on content
+      categorizeNASAImage(data) {
+        const title = (data.title || '').toLowerCase();
+        const description = (data.description || '').toLowerCase();
+        const keywords = (data.keywords || []).join(' ').toLowerCase();
+        const content = `${title} ${description} ${keywords}`;
+
+        if (content.includes('mars') || content.includes('rover') || content.includes('mission')) {
+          return 'missions';
+        } else if (content.includes('earth') || content.includes('planet earth')) {
+          return 'earth';
+        } else if (content.includes('jupiter') || content.includes('saturn') || content.includes('planet')) {
+          return 'planets';
+        } else if (content.includes('nebula') || content.includes('galaxy') || content.includes('star')) {
+          return 'deep-space';
+        } else if (content.includes('iss') || content.includes('space station')) {
+          return 'iss';
+        }
+        return 'missions'; // default
+      }
+
+      // ESA Images (European Space Agency)
+      async fetchESAImages() {
+        const cacheKey = 'esa_images';
+        const cached = this.getFromCache(cacheKey);
+        if (cached) return cached;
+
+        // ESA doesn't have a public API, so we'll use curated content
+        const images = this.getESAFallback();
+        this.setCache(cacheKey, images);
+        return images;
+      }
+
+      // SpaceX API
+      async fetchSpaceXImages() {
+        const cacheKey = 'spacex_images';
+        const cached = this.getFromCache(cacheKey);
+        if (cached) return cached;
+
+        try {
+          const response = await this.fetchWithRetry('https://api.spacexdata.com/v4/launches/latest');
+          
+          if (!response.ok) throw new Error(`SpaceX API error: ${response.status}`);
+          
+          const launch = await response.json();
+          const images = this.parseSpaceXLaunch(launch);
+          
+          this.setCache(cacheKey, images);
+          return images;
+        } catch (error) {
+          console.error('SpaceX API error:', error);
+          return this.getSpaceXFallback();
+        }
+      }
+
+      // Parse SpaceX launch data
+      parseSpaceXLaunch(launch) {
+        const images = [];
+        
+        if (launch.links && launch.links.flickr && launch.links.flickr.original) {
+          launch.links.flickr.original.forEach((imageUrl, index) => {
+            images.push({
+              id: `spacex_${launch.id}_${index}`,
+              title: `${launch.name} Launch`,
+              description: launch.details || `SpaceX ${launch.name} mission launch`,
+              imageUrl: imageUrl,
+              thumbnailUrl: imageUrl,
+              source: 'spacex',
+              category: 'missions',
+              timestamp: new Date(launch.date_utc),
+              sourceUrl: launch.links.webcast || 'https://www.spacex.com',
+              metadata: {
+                mission: launch.name,
+                rocket: launch.rocket,
+                success: launch.success
+              }
+            });
+          });
+        }
+        
+        return images.length > 0 ? images : this.getSpaceXFallback();
+      }
+
+      // ISS Images (simulated real-time feed)
+      async fetchISSImages() {
+        const cacheKey = 'iss_images';
+        const cached = this.getFromCache(cacheKey);
+        if (cached) return cached;
+
+        // ISS doesn't have a direct API for images, using curated content
+        const images = this.getISSFallback();
+        this.setCache(cacheKey, images);
+        return images;
+      }
+
+      // NASA Astronomy Picture of the Day
+      async fetchAPOD() {
+        const cacheKey = 'nasa_apod';
+        const cached = this.getFromCache(cacheKey);
+        if (cached) return cached;
+
+        try {
+          const response = await this.fetchWithRetry(
+            'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY'
+          );
+          
+          if (!response.ok) throw new Error(`APOD API error: ${response.status}`);
+          
+          const data = await response.json();
+          
+          if (data.media_type === 'image') {
+            const image = {
+              id: `apod_${data.date}`,
+              title: data.title,
+              description: data.explanation,
+              imageUrl: data.hdurl || data.url,
+              thumbnailUrl: data.url,
+              source: 'nasa',
+              category: 'deep-space',
+              timestamp: new Date(data.date),
+              sourceUrl: 'https://apod.nasa.gov/apod/',
+              metadata: {
+                copyright: data.copyright,
+                type: 'APOD'
+              }
+            };
+            
+            this.setCache(cacheKey, [image]);
+            return [image];
+          }
+        } catch (error) {
+          console.error('APOD API error:', error);
+        }
+        
+        return [];
+      }
+
+      // Combine and sort images from all sources
+      combineAndSort(imageArrays) {
+        const allImages = imageArrays.flat();
+        
+        // Remove duplicates based on title similarity
+        const uniqueImages = this.removeDuplicates(allImages);
+        
+        // Sort by timestamp (newest first)
+        return uniqueImages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      }
+
+      // Remove duplicate images
+      removeDuplicates(images) {
+        const seen = new Set();
+        return images.filter(image => {
+          const key = image.title.toLowerCase().replace(/[^a-z0-9]/g, '');
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+      }
+
+      // Filter images by category
+      filterByCategory(images, category) {
+        if (category === 'all') return images;
+        return images.filter(image => image.category === category);
+      }
+
+      // Fetch with retry logic
+      async fetchWithRetry(url, attempts = this.retryAttempts) {
+        for (let i = 0; i < attempts; i++) {
+          try {
+            const response = await fetch(url);
+            if (response.ok) return response;
+            throw new Error(`HTTP ${response.status}`);
+          } catch (error) {
+            if (i === attempts - 1) throw error;
+            await this.delay(this.retryDelay * Math.pow(2, i)); // Exponential backoff
+          }
+        }
+      }
+
+      // Utility methods
+      delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      getFromCache(key) {
+        const cached = this.cache.get(key);
+        if (cached && Date.now() - cached.timestamp < this.cacheExpiry) {
+          return cached.data;
+        }
+        return null;
+      }
+
+      setCache(key, data) {
+        this.cache.set(key, {
+          data: data,
+          timestamp: Date.now()
+        });
+      }
+
+      getPlaceholderImage() {
+        return 'https://via.placeholder.com/400x225/0033a0/ffffff?text=Space+Image';
+      }
+
+      // Fallback data when APIs are unavailable
+      getFallbackImages() {
+        return [
+          ...this.getNASAFallback(),
+          ...this.getESAFallback(),
+          ...this.getSpaceXFallback(),
+          ...this.getISSFallback()
+        ];
+      }
+
+      getNASAFallback() {
+        return [
+          {
+            id: 'nasa_fallback_1',
+            title: 'Perseverance Mars Rover Self-Portrait',
+            description: 'NASA\'s Perseverance rover took this selfie over a rock nicknamed "Rochette," on Sol 198.',
+            imageUrl: 'https://images-assets.nasa.gov/image/PIA24546/PIA24546~thumb.jpg',
+            thumbnailUrl: 'https://images-assets.nasa.gov/image/PIA24546/PIA24546~thumb.jpg',
+            source: 'nasa',
+            category: 'missions',
+            timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
+            sourceUrl: 'https://images.nasa.gov/',
+            metadata: { mission: 'Mars 2020' }
+          },
+          {
+            id: 'nasa_fallback_2',
+            title: 'Hubble Views the Crab Nebula',
+            description: 'This Hubble Space Telescope image shows the Crab Nebula, the result of a supernova explosion.',
+            imageUrl: 'https://images-assets.nasa.gov/image/PIA23122/PIA23122~thumb.jpg',
+            thumbnailUrl: 'https://images-assets.nasa.gov/image/PIA23122/PIA23122~thumb.jpg',
+            source: 'nasa',
+            category: 'deep-space',
+            timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000), // 4 hours ago
+            sourceUrl: 'https://images.nasa.gov/',
+            metadata: { telescope: 'Hubble' }
+          }
+        ];
+      }
+
+      getESAFallback() {
+        return [
+          {
+            id: 'esa_fallback_1',
+            title: 'Gaia\'s View of the Milky Way',
+            description: 'ESA\'s Gaia mission has created the most detailed map of our galaxy to date.',
+            imageUrl: 'https://via.placeholder.com/400x225/6f42c1/ffffff?text=ESA+Gaia',
+            thumbnailUrl: 'https://via.placeholder.com/400x225/6f42c1/ffffff?text=ESA+Gaia',
+            source: 'esa',
+            category: 'deep-space',
+            timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000), // 6 hours ago
+            sourceUrl: 'https://www.esa.int/',
+            metadata: { mission: 'Gaia' }
+          }
+        ];
+      }
+
+      getSpaceXFallback() {
+        return [
+          {
+            id: 'spacex_fallback_1',
+            title: 'Falcon 9 Launch',
+            description: 'A SpaceX Falcon 9 rocket launches carrying crew to the International Space Station.',
+            imageUrl: 'https://images-assets.nasa.gov/image/KSC-20200530-PH-SPX01_0005/KSC-20200530-PH-SPX01_0005~thumb.jpg',
+            thumbnailUrl: 'https://images-assets.nasa.gov/image/KSC-20200530-PH-SPX01_0005/KSC-20200530-PH-SPX01_0005~thumb.jpg',
+            source: 'spacex',
+            category: 'missions',
+            timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000), // 3 hours ago
+            sourceUrl: 'https://www.spacex.com/',
+            metadata: { rocket: 'Falcon 9' }
+          }
+        ];
+      }
+
+      getISSFallback() {
+        return [
+          {
+            id: 'iss_fallback_1',
+            title: 'Earth from the International Space Station',
+            description: 'A stunning view of Earth\'s curvature captured from the International Space Station.',
+            imageUrl: 'https://images-assets.nasa.gov/image/iss066e013602/iss066e013602~thumb.jpg',
+            thumbnailUrl: 'https://images-assets.nasa.gov/image/iss066e013602/iss066e013602~thumb.jpg',
+            source: 'iss',
+            category: 'earth',
+            timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000), // 1 hour ago
+            sourceUrl: 'https://www.nasa.gov/mission_pages/station/',
+            metadata: { location: 'ISS' }
+          },
+          {
+            id: 'iss_fallback_2',
+            title: 'Aurora from Space',
+            description: 'A spectacular aurora borealis captured from the International Space Station.',
+            imageUrl: 'https://images-assets.nasa.gov/image/iss066e054063/iss066e054063~thumb.jpg',
+            thumbnailUrl: 'https://images-assets.nasa.gov/image/iss066e054063/iss066e054063~thumb.jpg',
+            source: 'iss',
+            category: 'iss',
+            timestamp: new Date(Date.now() - 30 * 60 * 1000), // 30 minutes ago
+            sourceUrl: 'https://www.nasa.gov/mission_pages/station/',
+            metadata: { location: 'ISS', phenomenon: 'Aurora' }
+          }
+        ];
+      }
+    }
+
+    // Initialize the data manager
+    const imageDataManager = new ImageDataManager();
+  </script>
+  <script>
     (function initTheme(){
       const saved = localStorage.getItem("theme");
       if(saved==="dark"){document.body.classList.add("dark");document.getElementById("themeToggle").textContent="☀️";}
@@ -1254,12 +1689,16 @@
       }
 
       // Refresh functionality
-      function refreshGallery() {
+      async function refreshGallery() {
         refreshBtn.classList.add('spinning');
         
-        // Simulate refresh delay
-        setTimeout(() => {
-          refreshBtn.classList.remove('spinning');
+        try {
+          // Fetch fresh data from all sources
+          const images = await imageDataManager.fetchAllImages();
+          
+          // Update the gallery with new images
+          await updateGalleryWithImages(images);
+          
           updateLastRefreshTime();
           
           // Re-apply current filter to maintain state
@@ -1271,7 +1710,114 @@
           setTimeout(() => {
             refreshBtn.title = originalText;
           }, 2000);
-        }, 1000);
+          
+        } catch (error) {
+          console.error('Refresh failed:', error);
+          
+          // Show error feedback
+          const originalText = refreshBtn.title;
+          refreshBtn.title = 'Refresh failed - try again';
+          setTimeout(() => {
+            refreshBtn.title = originalText;
+          }, 3000);
+        } finally {
+          refreshBtn.classList.remove('spinning');
+        }
+      }
+
+      // Update gallery with new image data
+      async function updateGalleryWithImages(images) {
+        // Clear existing content
+        gallery.innerHTML = '';
+        
+        // Add loading indicator
+        gallery.innerHTML = '<div class="loading-message">Loading fresh space imagery...</div>';
+        
+        // Simulate loading delay for better UX
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // Clear loading message
+        gallery.innerHTML = '';
+        
+        // Create image cards from data
+        images.forEach(imageData => {
+          const card = createImageCard(imageData);
+          gallery.appendChild(card);
+        });
+        
+        // Reinitialize lazy loading for new images
+        initializeLazyLoading();
+      }
+
+      // Create an image card element from data
+      function createImageCard(imageData) {
+        const card = document.createElement('article');
+        card.className = 'image-card';
+        card.dataset.category = imageData.category;
+        card.dataset.source = imageData.source;
+        
+        const timeAgo = getTimeAgo(imageData.timestamp);
+        
+        card.innerHTML = `
+          <div class="image-container">
+            <img src="${imageData.thumbnailUrl}" 
+                 alt="${imageData.title}" 
+                 loading="lazy">
+            <div class="image-overlay">
+              <button class="overlay-btn expand-btn" title="View Full Size">🔍</button>
+              <button class="overlay-btn share-btn" title="Share Image">📤</button>
+            </div>
+          </div>
+          <div class="image-info">
+            <h3 class="image-title">${imageData.title}</h3>
+            <p class="image-description">${imageData.description}</p>
+            <div class="image-meta">
+              <span class="source">${imageData.source.toUpperCase()}</span>
+              <time class="timestamp">${timeAgo}</time>
+            </div>
+          </div>
+        `;
+        
+        return card;
+      }
+
+      // Calculate time ago string
+      function getTimeAgo(timestamp) {
+        const now = new Date();
+        const diff = now - new Date(timestamp);
+        const minutes = Math.floor(diff / (1000 * 60));
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        
+        if (minutes < 60) {
+          return minutes <= 1 ? 'just now' : `${minutes} minutes ago`;
+        } else if (hours < 24) {
+          return hours === 1 ? '1 hour ago' : `${hours} hours ago`;
+        } else {
+          return days === 1 ? '1 day ago' : `${days} days ago`;
+        }
+      }
+
+      // Initialize lazy loading for new images
+      function initializeLazyLoading() {
+        if ('IntersectionObserver' in window) {
+          const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                const img = entry.target;
+                if (img.dataset.src) {
+                  img.src = img.dataset.src;
+                  img.removeAttribute('data-src');
+                  observer.unobserve(img);
+                }
+              }
+            });
+          });
+
+          document.querySelectorAll('img[data-src]').forEach(img => {
+            imageObserver.observe(img);
+          });
+        }
       }
 
       // Update last refresh time
@@ -1314,6 +1860,30 @@
 
       // Initialize
       updateLastRefreshTime();
+      
+      // Load initial data
+      async function initializeGallery() {
+        try {
+          // Show loading state
+          gallery.innerHTML = '<div class="loading-message">Loading space imagery from NASA, ESA, SpaceX, and ISS...</div>';
+          
+          // Fetch initial data
+          const images = await imageDataManager.fetchAllImages();
+          
+          if (images.length > 0) {
+            await updateGalleryWithImages(images);
+          } else {
+            // Show error if no images loaded
+            gallery.innerHTML = '<div class="error-message">Unable to load images. Please check your connection and try refreshing.</div>';
+          }
+        } catch (error) {
+          console.error('Failed to initialize gallery:', error);
+          gallery.innerHTML = '<div class="error-message">Failed to load images. Please try refreshing the page.</div>';
+        }
+      }
+      
+      // Start initialization
+      initializeGallery();
       
       // Auto-refresh every 5 minutes
       setInterval(() => {
