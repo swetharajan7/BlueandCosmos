@@ -484,7 +484,7 @@
       border-top-color: #333;
     }
 
-    /* Enhanced NASA source styling */
+    /* Enhanced source styling for all agencies */
     [data-source="nasa"] .source {
       background: linear-gradient(135deg, var(--accent), #0066cc);
       box-shadow: 0 2px 4px rgba(0, 51, 160, 0.3);
@@ -492,6 +492,38 @@
 
     [data-source="nasa"].apod-image .source {
       background: linear-gradient(135deg, #ff6b35, #f7931e);
+    }
+
+    [data-source="spacex"] .source {
+      background: linear-gradient(135deg, #005288, #0074cc);
+      box-shadow: 0 2px 4px rgba(0, 82, 136, 0.3);
+    }
+
+    [data-source="esa"] .source {
+      background: linear-gradient(135deg, #6f42c1, #8e44ad);
+      box-shadow: 0 2px 4px rgba(111, 66, 193, 0.3);
+    }
+
+    [data-source="iss"] .source {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+    }
+
+    /* Agency-specific card enhancements */
+    [data-source="spacex"] {
+      border-left: 3px solid #005288;
+    }
+
+    [data-source="esa"] {
+      border-left: 3px solid #6f42c1;
+    }
+
+    [data-source="iss"] {
+      border-left: 3px solid #28a745;
+    }
+
+    [data-source="nasa"] {
+      border-left: 3px solid var(--accent);
     }
 
     /* Image loading error handling */
@@ -1379,78 +1411,300 @@
         return 'missions';
       }
 
-      // ESA Images (European Space Agency)
+      // Enhanced ESA Images (European Space Agency)
       async fetchESAImages() {
         const cacheKey = 'esa_images';
         const cached = this.getFromCache(cacheKey);
         if (cached) return cached;
 
-        // ESA doesn't have a public API, so we'll use curated content
-        const images = this.getESAFallback();
-        this.setCache(cacheKey, images);
-        return images;
+        try {
+          // ESA doesn't have a public API, but we can try their RSS feed
+          // For now, we'll use enhanced curated content with real ESA imagery
+          const images = this.getESAEnhancedContent();
+          this.setCache(cacheKey, images);
+          return images;
+        } catch (error) {
+          console.error('ESA content error:', error);
+          return this.getESAFallback();
+        }
       }
 
-      // SpaceX API
+      // Enhanced ESA content with real imagery
+      getESAEnhancedContent() {
+        const baseTime = Date.now();
+        
+        return [
+          {
+            id: 'esa_gaia_1',
+            title: 'Gaia\'s Stellar Census of the Milky Way',
+            description: 'ESA\'s Gaia mission has created the most detailed 3D map of our galaxy, revealing the positions and motions of nearly 2 billion stars.',
+            imageUrl: 'https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2022/06/gaia_s_stellar_motion_for_the_next_400_000_years/24302366-1-eng-GB/Gaia_s_stellar_motion_for_the_next_400_000_years_pillars.jpg',
+            thumbnailUrl: 'https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2022/06/gaia_s_stellar_motion_for_the_next_400_000_years/24302366-1-eng-GB/Gaia_s_stellar_motion_for_the_next_400_000_years_pillars.jpg',
+            source: 'esa',
+            category: 'deep-space',
+            timestamp: new Date(baseTime - 3 * 60 * 60 * 1000), // 3 hours ago
+            sourceUrl: 'https://www.esa.int/Science_Exploration/Space_Science/Gaia',
+            metadata: {
+              mission: 'Gaia',
+              type: 'Stellar Cartography',
+              attribution: 'ESA/Gaia/DPAC'
+            }
+          },
+          {
+            id: 'esa_jwst_1',
+            title: 'Webb Telescope - ESA Partnership',
+            description: 'The James Webb Space Telescope, a collaboration between NASA, ESA, and CSA, continues to revolutionize our understanding of the cosmos.',
+            imageUrl: 'https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2022/07/webb_s_first_deep_field/24317738-1-eng-GB/Webb_s_first_deep_field_pillars.jpg',
+            thumbnailUrl: 'https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2022/07/webb_s_first_deep_field/24317738-1-eng-GB/Webb_s_first_deep_field_pillars.jpg',
+            source: 'esa',
+            category: 'deep-space',
+            timestamp: new Date(baseTime - 5 * 60 * 60 * 1000), // 5 hours ago
+            sourceUrl: 'https://www.esa.int/Science_Exploration/Space_Science/Webb',
+            metadata: {
+              mission: 'James Webb Space Telescope',
+              type: 'Deep Field',
+              attribution: 'NASA/ESA/CSA/STScI'
+            }
+          },
+          {
+            id: 'esa_mars_1',
+            title: 'Mars Express - Red Planet Explorer',
+            description: 'ESA\'s Mars Express continues its mission to study the Red Planet, providing crucial data about Mars\' atmosphere and surface.',
+            imageUrl: 'https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2023/01/mars_express_image_of_mars/24675234-1-eng-GB/Mars_Express_image_of_Mars_pillars.jpg',
+            thumbnailUrl: 'https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2023/01/mars_express_image_of_mars/24675234-1-eng-GB/Mars_Express_image_of_Mars_pillars.jpg',
+            source: 'esa',
+            category: 'planets',
+            timestamp: new Date(baseTime - 7 * 60 * 60 * 1000), // 7 hours ago
+            sourceUrl: 'https://www.esa.int/Science_Exploration/Space_Science/Mars_Express',
+            metadata: {
+              mission: 'Mars Express',
+              type: 'Planetary Observation',
+              attribution: 'ESA/DLR/FU Berlin'
+            }
+          }
+        ];
+      }
+
+      // Enhanced SpaceX API Integration
       async fetchSpaceXImages() {
         const cacheKey = 'spacex_images';
         const cached = this.getFromCache(cacheKey);
         if (cached) return cached;
 
         try {
-          const response = await this.fetchWithRetry('https://api.spacexdata.com/v4/launches/latest');
+          // Fetch multiple recent launches for more content
+          const [latestResponse, recentResponse] = await Promise.all([
+            this.fetchWithRetry('https://api.spacexdata.com/v4/launches/latest'),
+            this.fetchWithRetry('https://api.spacexdata.com/v4/launches/query', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                query: {
+                  success: true,
+                  'links.flickr.original': { $ne: [] }
+                },
+                options: {
+                  limit: 5,
+                  sort: { date_utc: -1 },
+                  populate: ['rocket', 'payloads']
+                }
+              })
+            })
+          ]);
+
+          const allImages = [];
+
+          // Process latest launch
+          if (latestResponse.ok) {
+            const latestLaunch = await latestResponse.json();
+            const latestImages = this.parseSpaceXLaunch(latestLaunch);
+            allImages.push(...latestImages);
+          }
+
+          // Process recent launches
+          if (recentResponse.ok) {
+            const recentData = await recentResponse.json();
+            if (recentData.docs) {
+              recentData.docs.forEach(launch => {
+                const launchImages = this.parseSpaceXLaunch(launch);
+                allImages.push(...launchImages);
+              });
+            }
+          }
+
+          // Remove duplicates and limit results
+          const uniqueImages = this.removeDuplicates(allImages).slice(0, 8);
           
-          if (!response.ok) throw new Error(`SpaceX API error: ${response.status}`);
+          this.setCache(cacheKey, uniqueImages);
+          return uniqueImages.length > 0 ? uniqueImages : this.getSpaceXFallback();
           
-          const launch = await response.json();
-          const images = this.parseSpaceXLaunch(launch);
-          
-          this.setCache(cacheKey, images);
-          return images;
         } catch (error) {
           console.error('SpaceX API error:', error);
           return this.getSpaceXFallback();
         }
       }
 
-      // Parse SpaceX launch data
+      // Enhanced SpaceX launch data parsing
       parseSpaceXLaunch(launch) {
         const images = [];
         
-        if (launch.links && launch.links.flickr && launch.links.flickr.original) {
-          launch.links.flickr.original.forEach((imageUrl, index) => {
+        if (launch.links && launch.links.flickr && launch.links.flickr.original && launch.links.flickr.original.length > 0) {
+          const rocketName = launch.rocket?.name || 'Falcon 9';
+          const flightNumber = launch.flight_number || 'Unknown';
+          
+          // Limit to 3 images per launch to avoid overwhelming
+          const imageUrls = launch.links.flickr.original.slice(0, 3);
+          
+          imageUrls.forEach((imageUrl, index) => {
+            let description = launch.details || `SpaceX ${launch.name} mission launch`;
+            
+            // Enhance description with mission details
+            if (launch.payloads && launch.payloads.length > 0) {
+              const payloadNames = launch.payloads.map(p => p.name || 'payload').join(', ');
+              description += ` carrying ${payloadNames}`;
+            }
+            
+            // Truncate long descriptions
+            if (description.length > 200) {
+              description = description.substring(0, 200) + '...';
+            }
+
             images.push({
               id: `spacex_${launch.id}_${index}`,
-              title: `${launch.name} Launch`,
-              description: launch.details || `SpaceX ${launch.name} mission launch`,
+              title: `${launch.name} - Flight ${flightNumber}`,
+              description: description,
               imageUrl: imageUrl,
               thumbnailUrl: imageUrl,
               source: 'spacex',
               category: 'missions',
               timestamp: new Date(launch.date_utc),
-              sourceUrl: launch.links.webcast || 'https://www.spacex.com',
+              sourceUrl: launch.links.webcast || launch.links.wikipedia || 'https://www.spacex.com',
               metadata: {
                 mission: launch.name,
-                rocket: launch.rocket,
-                success: launch.success
+                rocket: rocketName,
+                success: launch.success,
+                flightNumber: flightNumber,
+                launchpad: launch.launchpad,
+                payloads: launch.payloads?.map(p => p.name).join(', ') || 'Unknown',
+                attribution: 'SpaceX'
               }
             });
           });
         }
         
-        return images.length > 0 ? images : this.getSpaceXFallback();
+        return images;
       }
 
-      // ISS Images (simulated real-time feed)
+      // Enhanced ISS Images (International Space Station)
       async fetchISSImages() {
         const cacheKey = 'iss_images';
         const cached = this.getFromCache(cacheKey);
         if (cached) return cached;
 
-        // ISS doesn't have a direct API for images, using curated content
-        const images = this.getISSFallback();
-        this.setCache(cacheKey, images);
-        return images;
+        try {
+          // Try to get ISS position for context
+          const issPosition = await this.getISSPosition();
+          
+          // Generate ISS content with current position context
+          const images = this.getISSEnhancedContent(issPosition);
+          this.setCache(cacheKey, images);
+          return images;
+        } catch (error) {
+          console.error('ISS content error:', error);
+          return this.getISSFallback();
+        }
+      }
+
+      // Get current ISS position
+      async getISSPosition() {
+        try {
+          const response = await this.fetchWithRetry('http://api.open-notify.org/iss-now.json');
+          if (response.ok) {
+            const data = await response.json();
+            return {
+              latitude: parseFloat(data.iss_position.latitude),
+              longitude: parseFloat(data.iss_position.longitude),
+              timestamp: data.timestamp
+            };
+          }
+        } catch (error) {
+          console.warn('ISS position API unavailable:', error);
+        }
+        return null;
+      }
+
+      // Enhanced ISS content with position context
+      getISSEnhancedContent(issPosition) {
+        const baseTime = Date.now();
+        const locationContext = issPosition ? 
+          `Currently over ${this.getLocationFromCoords(issPosition.latitude, issPosition.longitude)}` : 
+          'Orbiting Earth at 408 km altitude';
+
+        return [
+          {
+            id: 'iss_earth_1',
+            title: 'Earth from the International Space Station',
+            description: `A stunning view of Earth captured from the ISS. ${locationContext}. The station completes an orbit every 90 minutes, providing astronauts with breathtaking views of our planet.`,
+            imageUrl: 'https://images-assets.nasa.gov/image/iss066e013602/iss066e013602~thumb.jpg',
+            thumbnailUrl: 'https://images-assets.nasa.gov/image/iss066e013602/iss066e013602~thumb.jpg',
+            source: 'iss',
+            category: 'earth',
+            timestamp: new Date(baseTime - 45 * 60 * 1000), // 45 minutes ago
+            sourceUrl: 'https://www.nasa.gov/mission_pages/station/main/index.html',
+            metadata: {
+              location: 'ISS',
+              altitude: '408 km',
+              crew: 'Expedition 70',
+              attribution: 'NASA/ISS Expedition Crew',
+              coordinates: issPosition
+            }
+          },
+          {
+            id: 'iss_aurora_1',
+            title: 'Aurora Borealis from Space',
+            description: 'A spectacular aurora borealis captured from the International Space Station, showing the dancing lights of charged particles interacting with Earth\'s magnetic field.',
+            imageUrl: 'https://images-assets.nasa.gov/image/iss066e054063/iss066e054063~thumb.jpg',
+            thumbnailUrl: 'https://images-assets.nasa.gov/image/iss066e054063/iss066e054063~thumb.jpg',
+            source: 'iss',
+            category: 'iss',
+            timestamp: new Date(baseTime - 2 * 60 * 60 * 1000), // 2 hours ago
+            sourceUrl: 'https://www.nasa.gov/mission_pages/station/main/index.html',
+            metadata: {
+              location: 'ISS',
+              phenomenon: 'Aurora Borealis',
+              attribution: 'NASA/ISS Expedition Crew'
+            }
+          },
+          {
+            id: 'iss_spacewalk_1',
+            title: 'Spacewalk Outside the ISS',
+            description: 'Astronauts conducting a spacewalk (EVA) outside the International Space Station for maintenance and scientific experiments.',
+            imageUrl: 'https://images-assets.nasa.gov/image/iss067e000001/iss067e000001~thumb.jpg',
+            thumbnailUrl: 'https://images-assets.nasa.gov/image/iss067e000001/iss067e000001~thumb.jpg',
+            source: 'iss',
+            category: 'iss',
+            timestamp: new Date(baseTime - 4 * 60 * 60 * 1000), // 4 hours ago
+            sourceUrl: 'https://www.nasa.gov/mission_pages/station/main/index.html',
+            metadata: {
+              location: 'ISS',
+              activity: 'Spacewalk (EVA)',
+              attribution: 'NASA/ISS Expedition Crew'
+            }
+          }
+        ];
+      }
+
+      // Simple location approximation from coordinates
+      getLocationFromCoords(lat, lon) {
+        // Simplified location detection - in a real app, you'd use a geocoding service
+        if (lat > 60) return 'the Arctic region';
+        if (lat < -60) return 'Antarctica';
+        if (lat > 30 && lon > -30 && lon < 60) return 'Europe/Asia';
+        if (lat > 30 && lon > -130 && lon < -60) return 'North America';
+        if (lat < -30 && lon > 110 && lon < 180) return 'Australia/Oceania';
+        if (lat < 30 && lat > -30 && lon > -90 && lon < -30) return 'South America';
+        if (lat < 30 && lat > -30 && lon > -20 && lon < 50) return 'Africa';
+        return 'the Pacific Ocean';
       }
 
       // Enhanced NASA Astronomy Picture of the Day
@@ -1652,35 +1906,77 @@
       }
 
       getESAFallback() {
+        const baseTime = Date.now();
         return [
           {
             id: 'esa_fallback_1',
-            title: 'Gaia\'s View of the Milky Way',
-            description: 'ESA\'s Gaia mission has created the most detailed map of our galaxy to date.',
-            imageUrl: 'https://via.placeholder.com/400x225/6f42c1/ffffff?text=ESA+Gaia',
-            thumbnailUrl: 'https://via.placeholder.com/400x225/6f42c1/ffffff?text=ESA+Gaia',
+            title: 'Gaia\'s Stellar Census',
+            description: 'ESA\'s Gaia mission has created the most detailed 3D map of our galaxy, cataloging nearly 2 billion stars.',
+            imageUrl: 'https://via.placeholder.com/400x225/6f42c1/ffffff?text=ESA+Gaia+Mission',
+            thumbnailUrl: 'https://via.placeholder.com/400x225/6f42c1/ffffff?text=ESA+Gaia+Mission',
             source: 'esa',
             category: 'deep-space',
-            timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000), // 6 hours ago
+            timestamp: new Date(baseTime - 6 * 60 * 60 * 1000), // 6 hours ago
             sourceUrl: 'https://www.esa.int/',
-            metadata: { mission: 'Gaia' }
+            metadata: { 
+              mission: 'Gaia',
+              type: 'Stellar Cartography',
+              attribution: 'ESA/Gaia/DPAC'
+            }
+          },
+          {
+            id: 'esa_fallback_2',
+            title: 'BepiColombo Mercury Mission',
+            description: 'ESA\'s BepiColombo mission continues its journey to Mercury, studying the innermost planet of our solar system.',
+            imageUrl: 'https://via.placeholder.com/400x225/6f42c1/ffffff?text=ESA+BepiColombo',
+            thumbnailUrl: 'https://via.placeholder.com/400x225/6f42c1/ffffff?text=ESA+BepiColombo',
+            source: 'esa',
+            category: 'missions',
+            timestamp: new Date(baseTime - 8 * 60 * 60 * 1000), // 8 hours ago
+            sourceUrl: 'https://www.esa.int/',
+            metadata: { 
+              mission: 'BepiColombo',
+              target: 'Mercury',
+              attribution: 'ESA/JAXA'
+            }
           }
         ];
       }
 
       getSpaceXFallback() {
+        const baseTime = Date.now();
         return [
           {
             id: 'spacex_fallback_1',
-            title: 'Falcon 9 Launch',
-            description: 'A SpaceX Falcon 9 rocket launches carrying crew to the International Space Station.',
+            title: 'Falcon Heavy - Arabsat-6A Mission',
+            description: 'SpaceX Falcon Heavy rocket launches the Arabsat-6A communications satellite, demonstrating the power of reusable rocket technology.',
             imageUrl: 'https://images-assets.nasa.gov/image/KSC-20200530-PH-SPX01_0005/KSC-20200530-PH-SPX01_0005~thumb.jpg',
             thumbnailUrl: 'https://images-assets.nasa.gov/image/KSC-20200530-PH-SPX01_0005/KSC-20200530-PH-SPX01_0005~thumb.jpg',
             source: 'spacex',
             category: 'missions',
-            timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000), // 3 hours ago
+            timestamp: new Date(baseTime - 3 * 60 * 60 * 1000), // 3 hours ago
             sourceUrl: 'https://www.spacex.com/',
-            metadata: { rocket: 'Falcon 9' }
+            metadata: { 
+              rocket: 'Falcon Heavy',
+              mission: 'Arabsat-6A',
+              attribution: 'SpaceX'
+            }
+          },
+          {
+            id: 'spacex_fallback_2',
+            title: 'Starship Development Test',
+            description: 'SpaceX continues development of Starship, the next-generation spacecraft designed for missions to Mars and beyond.',
+            imageUrl: 'https://via.placeholder.com/400x225/005288/ffffff?text=SpaceX+Starship',
+            thumbnailUrl: 'https://via.placeholder.com/400x225/005288/ffffff?text=SpaceX+Starship',
+            source: 'spacex',
+            category: 'missions',
+            timestamp: new Date(baseTime - 6 * 60 * 60 * 1000), // 6 hours ago
+            sourceUrl: 'https://www.spacex.com/',
+            metadata: { 
+              rocket: 'Starship',
+              mission: 'Development Test',
+              attribution: 'SpaceX'
+            }
           }
         ];
       }
