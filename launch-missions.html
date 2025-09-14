@@ -11068,6 +11068,991 @@
     // Initialize social sharing manager
     const socialSharingManager = new SocialSharingManager();
 
+    // Mobile-Specific Optimizations and Touch Interactions
+    class MobileOptimizationManager {
+      constructor() {
+        this.isMobile = this.detectMobile();
+        this.touchStartX = 0;
+        this.touchStartY = 0;
+        this.touchEndX = 0;
+        this.touchEndY = 0;
+        this.swipeThreshold = 50;
+        this.tapTimeout = null;
+        this.longPressTimeout = null;
+        this.isLongPress = false;
+        this.init();
+      }
+
+      init() {
+        if (this.isMobile) {
+          this.initializeMobileOptimizations();
+          this.setupTouchGestures();
+          this.optimizeCountdownDisplay();
+          this.enhanceMobileNavigation();
+          this.setupMobilePerformanceOptimizations();
+          this.addMobileSpecificStyles();
+        }
+        
+        // Always setup responsive optimizations
+        this.setupResponsiveOptimizations();
+        this.optimizeViewportHandling();
+      }
+
+      detectMobile() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+               window.innerWidth <= 768 ||
+               ('ontouchstart' in window);
+      }
+
+      initializeMobileOptimizations() {
+        // Add mobile-specific meta tags
+        this.addMobileMetaTags();
+        
+        // Optimize touch targets
+        this.optimizeTouchTargets();
+        
+        // Setup mobile-specific event listeners
+        this.setupMobileEventListeners();
+        
+        // Initialize haptic feedback
+        this.initializeHapticFeedback();
+        
+        console.log('Mobile optimizations initialized');
+      }
+
+      addMobileMetaTags() {
+        const metaTags = [
+          { name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes' },
+          { name: 'mobile-web-app-capable', content: 'yes' },
+          { name: 'apple-mobile-web-app-capable', content: 'yes' },
+          { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+          { name: 'theme-color', content: '#0033A0' },
+          { name: 'msapplication-navbutton-color', content: '#0033A0' },
+          { name: 'apple-mobile-web-app-title', content: 'BlueandCosmos' }
+        ];
+
+        metaTags.forEach(tag => {
+          const existing = document.querySelector(`meta[name="${tag.name}"]`);
+          if (!existing) {
+            const meta = document.createElement('meta');
+            meta.name = tag.name;
+            meta.content = tag.content;
+            document.head.appendChild(meta);
+          }
+        });
+      }
+
+      optimizeTouchTargets() {
+        // Ensure all interactive elements meet minimum touch target size (44px)
+        const interactiveElements = document.querySelectorAll('button, .launch-card, .action-btn, .tab-btn');
+        
+        interactiveElements.forEach(element => {
+          const rect = element.getBoundingClientRect();
+          if (rect.height < 44) {
+            element.style.minHeight = '44px';
+            element.style.display = 'flex';
+            element.style.alignItems = 'center';
+            element.style.justifyContent = 'center';
+          }
+          
+          // Add touch-friendly padding
+          if (!element.style.padding) {
+            element.style.padding = '12px 16px';
+          }
+        });
+      }
+
+      setupTouchGestures() {
+        // Launch card swipe gestures
+        this.setupCardSwipeGestures();
+        
+        // Modal swipe navigation
+        this.setupModalSwipeNavigation();
+        
+        // Pull-to-refresh gesture
+        this.setupPullToRefresh();
+        
+        // Pinch-to-zoom for images
+        this.setupPinchToZoom();
+        
+        // Long press gestures
+        this.setupLongPressGestures();
+      }
+
+      setupCardSwipeGestures() {
+        const launchCards = document.querySelectorAll('.launch-card');
+        
+        launchCards.forEach(card => {
+          let startX, startY, currentX, currentY;
+          let isDragging = false;
+          
+          card.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            isDragging = false;
+            
+            // Add visual feedback
+            card.style.transition = 'none';
+            card.classList.add('touch-active');
+          }, { passive: true });
+          
+          card.addEventListener('touchmove', (e) => {
+            if (!startX || !startY) return;
+            
+            currentX = e.touches[0].clientX;
+            currentY = e.touches[0].clientY;
+            
+            const deltaX = currentX - startX;
+            const deltaY = currentY - startY;
+            
+            // Only handle horizontal swipes
+            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 10) {
+              isDragging = true;
+              e.preventDefault();
+              
+              // Apply transform for visual feedback
+              card.style.transform = `translateX(${deltaX * 0.3}px)`;
+              
+              // Show action hints
+              if (deltaX > 50) {
+                this.showSwipeHint(card, 'right', '📤 Share');
+              } else if (deltaX < -50) {
+                this.showSwipeHint(card, 'left', '🔔 Notify');
+              } else {
+                this.hideSwipeHint(card);
+              }
+            }
+          }, { passive: false });
+          
+          card.addEventListener('touchend', (e) => {
+            if (!startX || !startY) return;
+            
+            const deltaX = currentX - startX;
+            
+            // Reset visual state
+            card.style.transition = 'transform 0.3s ease';
+            card.style.transform = '';
+            card.classList.remove('touch-active');
+            this.hideSwipeHint(card);
+            
+            // Handle swipe actions
+            if (isDragging) {
+              if (deltaX > 100) {
+                // Right swipe - Share
+                this.handleCardSwipeRight(card);
+              } else if (deltaX < -100) {
+                // Left swipe - Set notification
+                this.handleCardSwipeLeft(card);
+              }
+            }
+            
+            // Reset values
+            startX = startY = currentX = currentY = null;
+            isDragging = false;
+          }, { passive: true });
+        });
+      }
+
+      showSwipeHint(card, direction, text) {
+        let hint = card.querySelector('.swipe-hint');
+        if (!hint) {
+          hint = document.createElement('div');
+          hint.className = 'swipe-hint';
+          card.appendChild(hint);
+        }
+        
+        hint.textContent = text;
+        hint.className = `swipe-hint ${direction}`;
+        hint.style.opacity = '1';
+      }
+
+      hideSwipeHint(card) {
+        const hint = card.querySelector('.swipe-hint');
+        if (hint) {
+          hint.style.opacity = '0';
+        }
+      }
+
+      handleCardSwipeRight(card) {
+        // Trigger share functionality
+        const shareButton = card.querySelector('.action-btn[onclick*="shareLaunch"]');
+        if (shareButton) {
+          this.triggerHapticFeedback('light');
+          shareButton.click();
+        }
+      }
+
+      handleCardSwipeLeft(card) {
+        // Trigger notification functionality
+        const notifyButton = card.querySelector('.action-btn[onclick*="setNotification"]');
+        if (notifyButton) {
+          this.triggerHapticFeedback('light');
+          notifyButton.click();
+        }
+      }
+
+      setupModalSwipeNavigation() {
+        const modal = document.getElementById('mission-modal');
+        if (!modal) return;
+        
+        let startX, currentX;
+        let isDragging = false;
+        
+        modal.addEventListener('touchstart', (e) => {
+          if (e.target.closest('.modal-tabs')) {
+            startX = e.touches[0].clientX;
+            isDragging = false;
+          }
+        }, { passive: true });
+        
+        modal.addEventListener('touchmove', (e) => {
+          if (!startX) return;
+          
+          currentX = e.touches[0].clientX;
+          const deltaX = currentX - startX;
+          
+          if (Math.abs(deltaX) > 20) {
+            isDragging = true;
+          }
+        }, { passive: true });
+        
+        modal.addEventListener('touchend', (e) => {
+          if (!startX || !isDragging) return;
+          
+          const deltaX = currentX - startX;
+          
+          if (Math.abs(deltaX) > 50) {
+            const activeTab = modal.querySelector('.tab-btn.active');
+            const tabs = Array.from(modal.querySelectorAll('.tab-btn'));
+            const currentIndex = tabs.indexOf(activeTab);
+            
+            if (deltaX > 0 && currentIndex > 0) {
+              // Swipe right - previous tab
+              tabs[currentIndex - 1].click();
+              this.triggerHapticFeedback('light');
+            } else if (deltaX < 0 && currentIndex < tabs.length - 1) {
+              // Swipe left - next tab
+              tabs[currentIndex + 1].click();
+              this.triggerHapticFeedback('light');
+            }
+          }
+          
+          startX = currentX = null;
+          isDragging = false;
+        }, { passive: true });
+      }
+
+      setupPullToRefresh() {
+        let startY, currentY;
+        let isPulling = false;
+        let pullDistance = 0;
+        const threshold = 100;
+        
+        document.addEventListener('touchstart', (e) => {
+          if (window.scrollY === 0) {
+            startY = e.touches[0].clientY;
+          }
+        }, { passive: true });
+        
+        document.addEventListener('touchmove', (e) => {
+          if (!startY || window.scrollY > 0) return;
+          
+          currentY = e.touches[0].clientY;
+          pullDistance = currentY - startY;
+          
+          if (pullDistance > 0) {
+            isPulling = true;
+            
+            // Show pull indicator
+            this.showPullIndicator(Math.min(pullDistance / threshold, 1));
+            
+            if (pullDistance > threshold) {
+              e.preventDefault();
+            }
+          }
+        }, { passive: false });
+        
+        document.addEventListener('touchend', (e) => {
+          if (isPulling && pullDistance > threshold) {
+            this.triggerRefresh();
+          }
+          
+          this.hidePullIndicator();
+          startY = currentY = null;
+          isPulling = false;
+          pullDistance = 0;
+        }, { passive: true });
+      }
+
+      showPullIndicator(progress) {
+        let indicator = document.getElementById('pull-indicator');
+        if (!indicator) {
+          indicator = document.createElement('div');
+          indicator.id = 'pull-indicator';
+          indicator.className = 'pull-indicator';
+          indicator.innerHTML = '<div class="pull-icon">↓</div><div class="pull-text">Pull to refresh</div>';
+          document.body.insertBefore(indicator, document.body.firstChild);
+        }
+        
+        indicator.style.transform = `translateY(${progress * 60 - 60}px)`;
+        indicator.style.opacity = progress;
+        
+        if (progress >= 1) {
+          indicator.querySelector('.pull-text').textContent = 'Release to refresh';
+          indicator.querySelector('.pull-icon').style.transform = 'rotate(180deg)';
+        } else {
+          indicator.querySelector('.pull-text').textContent = 'Pull to refresh';
+          indicator.querySelector('.pull-icon').style.transform = 'rotate(0deg)';
+        }
+      }
+
+      hidePullIndicator() {
+        const indicator = document.getElementById('pull-indicator');
+        if (indicator) {
+          indicator.style.transform = 'translateY(-60px)';
+          indicator.style.opacity = '0';
+        }
+      }
+
+      triggerRefresh() {
+        this.triggerHapticFeedback('medium');
+        showNotification('🔄 Refreshing launch data...', 'info');
+        
+        // Simulate refresh
+        setTimeout(() => {
+          showNotification('✅ Launch data updated!', 'success');
+        }, 1500);
+      }
+
+      setupLongPressGestures() {
+        const launchCards = document.querySelectorAll('.launch-card');
+        
+        launchCards.forEach(card => {
+          card.addEventListener('touchstart', (e) => {
+            this.isLongPress = false;
+            this.longPressTimeout = setTimeout(() => {
+              this.isLongPress = true;
+              this.handleLongPress(card);
+            }, 500);
+          }, { passive: true });
+          
+          card.addEventListener('touchend', (e) => {
+            clearTimeout(this.longPressTimeout);
+            if (!this.isLongPress) {
+              // Handle regular tap
+              this.handleTap(card, e);
+            }
+          }, { passive: true });
+          
+          card.addEventListener('touchmove', (e) => {
+            clearTimeout(this.longPressTimeout);
+          }, { passive: true });
+        });
+      }
+
+      handleLongPress(card) {
+        this.triggerHapticFeedback('heavy');
+        
+        // Show context menu
+        this.showContextMenu(card);
+      }
+
+      handleTap(card, e) {
+        // Double-tap detection
+        if (this.tapTimeout) {
+          clearTimeout(this.tapTimeout);
+          this.tapTimeout = null;
+          this.handleDoubleTap(card);
+        } else {
+          this.tapTimeout = setTimeout(() => {
+            this.handleSingleTap(card, e);
+            this.tapTimeout = null;
+          }, 300);
+        }
+      }
+
+      handleSingleTap(card, e) {
+        // Default card tap behavior
+        const detailsButton = card.querySelector('.action-btn[onclick*="openMissionModal"]');
+        if (detailsButton && !e.target.closest('.action-btn')) {
+          detailsButton.click();
+        }
+      }
+
+      handleDoubleTap(card) {
+        this.triggerHapticFeedback('light');
+        
+        // Quick share on double-tap
+        const shareButton = card.querySelector('.action-btn[onclick*="shareLaunch"]');
+        if (shareButton) {
+          shareButton.click();
+        }
+      }
+
+      showContextMenu(card) {
+        const missionName = card.querySelector('.mission-name')?.textContent || 'Mission';
+        
+        const contextMenu = document.createElement('div');
+        contextMenu.className = 'context-menu-overlay';
+        contextMenu.innerHTML = `
+          <div class="context-menu">
+            <div class="context-header">
+              <h4>${missionName}</h4>
+              <button class="context-close" onclick="this.closest('.context-menu-overlay').remove()">&times;</button>
+            </div>
+            <div class="context-actions">
+              <button class="context-action" onclick="this.closest('.context-menu-overlay').remove(); ${card.querySelector('.action-btn[onclick*="openMissionModal"]')?.getAttribute('onclick') || ''}">
+                🚀 View Details
+              </button>
+              <button class="context-action" onclick="this.closest('.context-menu-overlay').remove(); ${card.querySelector('.action-btn[onclick*="setNotification"]')?.getAttribute('onclick') || ''}">
+                🔔 Set Alert
+              </button>
+              <button class="context-action" onclick="this.closest('.context-menu-overlay').remove(); ${card.querySelector('.action-btn[onclick*="shareLaunch"]')?.getAttribute('onclick') || ''}">
+                📤 Share Mission
+              </button>
+              <button class="context-action" onclick="this.closest('.context-menu-overlay').remove(); mobileOptimizationManager.addToHomeScreen('${missionName}')">
+                📱 Add to Home Screen
+              </button>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(contextMenu);
+        
+        // Auto-close after 5 seconds
+        setTimeout(() => {
+          if (contextMenu.parentNode) {
+            contextMenu.remove();
+          }
+        }, 5000);
+      }
+
+      optimizeCountdownDisplay() {
+        // Enhance countdown readability on mobile
+        const countdowns = document.querySelectorAll('.countdown-display, .next-countdown');
+        
+        countdowns.forEach(countdown => {
+          countdown.classList.add('mobile-optimized');
+          
+          // Increase font size for mobile
+          const timeUnits = countdown.querySelectorAll('.time-unit');
+          timeUnits.forEach(unit => {
+            const number = unit.querySelector('.number');
+            const label = unit.querySelector('.label');
+            
+            if (number) {
+              number.style.fontSize = this.isMobile ? '1.8em' : '1.5em';
+              number.style.fontWeight = 'bold';
+              number.style.fontFamily = '"Courier New", monospace';
+            }
+            
+            if (label) {
+              label.style.fontSize = this.isMobile ? '0.9em' : '0.8em';
+              label.style.fontWeight = '600';
+            }
+          });
+        });
+      }
+
+      enhanceMobileNavigation() {
+        // Add mobile-specific navigation enhancements
+        this.addMobileNavigationGestures();
+        this.optimizeModalNavigation();
+        this.enhanceScrolling();
+      }
+
+      addMobileNavigationGestures() {
+        // Edge swipe for navigation
+        let edgeSwipeStartX = 0;
+        
+        document.addEventListener('touchstart', (e) => {
+          edgeSwipeStartX = e.touches[0].clientX;
+        }, { passive: true });
+        
+        document.addEventListener('touchmove', (e) => {
+          const currentX = e.touches[0].clientX;
+          const deltaX = currentX - edgeSwipeStartX;
+          
+          // Left edge swipe to go back
+          if (edgeSwipeStartX < 20 && deltaX > 100) {
+            if (document.querySelector('.modal-overlay.visible')) {
+              // Close modal
+              const closeButton = document.querySelector('.modal-close, .dashboard-close, .sharing-close');
+              if (closeButton) {
+                closeButton.click();
+              }
+            }
+          }
+        }, { passive: true });
+      }
+
+      optimizeModalNavigation() {
+        // Add swipe indicators to modals
+        const modals = document.querySelectorAll('.modal-content, .statistics-dashboard, .sharing-modal');
+        
+        modals.forEach(modal => {
+          if (!modal.querySelector('.swipe-indicator')) {
+            const indicator = document.createElement('div');
+            indicator.className = 'swipe-indicator';
+            indicator.innerHTML = '⟵ Swipe between tabs ⟶';
+            
+            const tabs = modal.querySelector('.modal-tabs, .dashboard-tabs');
+            if (tabs) {
+              tabs.appendChild(indicator);
+            }
+          }
+        });
+      }
+
+      enhanceScrolling() {
+        // Smooth scrolling for mobile
+        document.documentElement.style.scrollBehavior = 'smooth';
+        
+        // Optimize scroll performance
+        let ticking = false;
+        
+        document.addEventListener('scroll', () => {
+          if (!ticking) {
+            requestAnimationFrame(() => {
+              this.handleScroll();
+              ticking = false;
+            });
+            ticking = true;
+          }
+        }, { passive: true });
+      }
+
+      handleScroll() {
+        // Hide/show navigation on scroll
+        const header = document.querySelector('.dashboard-header');
+        if (header && this.isMobile) {
+          const scrollY = window.scrollY;
+          
+          if (scrollY > 100) {
+            header.style.transform = 'translateY(-20px)';
+            header.style.opacity = '0.9';
+          } else {
+            header.style.transform = 'translateY(0)';
+            header.style.opacity = '1';
+          }
+        }
+      }
+
+      setupMobilePerformanceOptimizations() {
+        // Lazy load images
+        this.setupLazyLoading();
+        
+        // Optimize animations
+        this.optimizeAnimations();
+        
+        // Reduce motion for accessibility
+        this.setupReducedMotion();
+      }
+
+      setupLazyLoading() {
+        if ('IntersectionObserver' in window) {
+          const imageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                const img = entry.target;
+                if (img.dataset.src) {
+                  img.src = img.dataset.src;
+                  img.removeAttribute('data-src');
+                  imageObserver.unobserve(img);
+                }
+              }
+            });
+          });
+          
+          document.querySelectorAll('img[data-src]').forEach(img => {
+            imageObserver.observe(img);
+          });
+        }
+      }
+
+      optimizeAnimations() {
+        // Reduce animations on slower devices
+        if (this.isSlowDevice()) {
+          document.documentElement.classList.add('reduce-animations');
+        }
+      }
+
+      isSlowDevice() {
+        // Simple device performance detection
+        return navigator.hardwareConcurrency < 4 || 
+               /Android.*Chrome\/[.0-9]*/.test(navigator.userAgent);
+      }
+
+      setupReducedMotion() {
+        // Respect user's motion preferences
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          document.documentElement.classList.add('reduce-motion');
+        }
+      }
+
+      triggerHapticFeedback(intensity = 'light') {
+        if ('vibrate' in navigator) {
+          const patterns = {
+            light: [10],
+            medium: [20],
+            heavy: [30]
+          };
+          
+          navigator.vibrate(patterns[intensity] || patterns.light);
+        }
+      }
+
+      addToHomeScreen(missionName) {
+        if ('serviceWorker' in navigator) {
+          showNotification('📱 Add BlueandCosmos to your home screen for quick access!', 'info');
+        } else {
+          showNotification('Use your browser\'s "Add to Home Screen" option!', 'info');
+        }
+      }
+
+      setupResponsiveOptimizations() {
+        // Dynamic viewport adjustments
+        this.handleViewportChanges();
+        
+        // Orientation change handling
+        this.handleOrientationChange();
+        
+        // Keyboard handling for mobile
+        this.handleMobileKeyboard();
+      }
+
+      handleViewportChanges() {
+        window.addEventListener('resize', () => {
+          // Update mobile detection on resize
+          this.isMobile = this.detectMobile();
+          
+          // Adjust layouts
+          this.adjustLayoutForViewport();
+        });
+      }
+
+      handleOrientationChange() {
+        window.addEventListener('orientationchange', () => {
+          setTimeout(() => {
+            // Recalculate layouts after orientation change
+            this.adjustLayoutForViewport();
+            
+            // Fix viewport height issues on mobile
+            this.fixViewportHeight();
+          }, 100);
+        });
+      }
+
+      adjustLayoutForViewport() {
+        const cards = document.querySelectorAll('.launch-card');
+        const isLandscape = window.innerWidth > window.innerHeight;
+        
+        if (this.isMobile && isLandscape) {
+          // Optimize for landscape mobile
+          cards.forEach(card => {
+            card.classList.add('landscape-mode');
+          });
+        } else {
+          cards.forEach(card => {
+            card.classList.remove('landscape-mode');
+          });
+        }
+      }
+
+      fixViewportHeight() {
+        // Fix 100vh issues on mobile browsers
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      }
+
+      handleMobileKeyboard() {
+        // Handle virtual keyboard appearance
+        let initialViewportHeight = window.innerHeight;
+        
+        window.addEventListener('resize', () => {
+          const currentHeight = window.innerHeight;
+          const heightDifference = initialViewportHeight - currentHeight;
+          
+          if (heightDifference > 150) {
+            // Keyboard is likely open
+            document.body.classList.add('keyboard-open');
+          } else {
+            document.body.classList.remove('keyboard-open');
+          }
+        });
+      }
+
+      optimizeViewportHandling() {
+        // Initial viewport setup
+        this.fixViewportHeight();
+        
+        // Prevent zoom on input focus
+        const inputs = document.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+          input.addEventListener('focus', () => {
+            if (this.isMobile) {
+              const viewport = document.querySelector('meta[name="viewport"]');
+              if (viewport) {
+                viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+              }
+            }
+          });
+          
+          input.addEventListener('blur', () => {
+            if (this.isMobile) {
+              const viewport = document.querySelector('meta[name="viewport"]');
+              if (viewport) {
+                viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes';
+              }
+            }
+          });
+        });
+      }
+
+      addMobileSpecificStyles() {
+        if (document.getElementById('mobile-optimization-styles')) return;
+        
+        const style = document.createElement('style');
+        style.id = 'mobile-optimization-styles';
+        style.textContent = `
+          /* Mobile-Specific Optimizations */
+          .touch-active {
+            transform: scale(0.98);
+            opacity: 0.9;
+          }
+          
+          .swipe-hint {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 51, 160, 0.9);
+            color: white;
+            padding: 0.5em 1em;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+            pointer-events: none;
+          }
+          
+          .swipe-hint.left {
+            left: 10px;
+          }
+          
+          .swipe-hint.right {
+            right: 10px;
+          }
+          
+          .pull-indicator {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%) translateY(-60px);
+            background: var(--accent);
+            color: white;
+            padding: 1em 2em;
+            border-radius: 0 0 20px 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            opacity: 0;
+          }
+          
+          .pull-icon {
+            font-size: 1.2em;
+            transition: transform 0.3s ease;
+          }
+          
+          .context-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10005;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+          }
+          
+          .context-menu {
+            background: var(--text-white);
+            border-radius: 16px;
+            padding: 1.5em;
+            max-width: 300px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+          }
+          
+          body.dark .context-menu {
+            background: var(--dark-bg);
+            color: var(--text-white);
+          }
+          
+          .context-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1em;
+            padding-bottom: 0.5em;
+            border-bottom: 1px solid rgba(0, 51, 160, 0.1);
+          }
+          
+          body.dark .context-header {
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+          }
+          
+          .context-header h4 {
+            margin: 0;
+            color: var(--accent);
+          }
+          
+          body.dark .context-header h4 {
+            color: var(--text-light);
+          }
+          
+          .context-close {
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            padding: 0.2em;
+            color: var(--text-dark);
+          }
+          
+          body.dark .context-close {
+            color: var(--text-light);
+          }
+          
+          .context-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+          }
+          
+          .context-action {
+            background: rgba(0, 51, 160, 0.1);
+            border: none;
+            padding: 1em;
+            border-radius: 8px;
+            color: var(--accent);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+          }
+          
+          .context-action:hover {
+            background: rgba(0, 51, 160, 0.2);
+            transform: translateY(-2px);
+          }
+          
+          body.dark .context-action {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+          }
+          
+          body.dark .context-action:hover {
+            background: rgba(255, 255, 255, 0.2);
+          }
+          
+          .swipe-indicator {
+            text-align: center;
+            font-size: 0.8em;
+            opacity: 0.7;
+            padding: 0.5em;
+            color: var(--accent);
+          }
+          
+          body.dark .swipe-indicator {
+            color: var(--text-light);
+          }
+          
+          .landscape-mode {
+            flex-direction: row;
+            align-items: center;
+          }
+          
+          .landscape-mode .mission-info {
+            flex: 1;
+          }
+          
+          .landscape-mode .countdown-display {
+            flex-shrink: 0;
+          }
+          
+          .keyboard-open .modal-overlay {
+            align-items: flex-start;
+            padding-top: 2em;
+          }
+          
+          .reduce-animations * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+          }
+          
+          .reduce-motion * {
+            animation: none !important;
+            transition: none !important;
+          }
+          
+          /* Mobile countdown optimizations */
+          .mobile-optimized .time-unit {
+            min-width: 60px;
+            padding: 0.8em 0.5em;
+          }
+          
+          .mobile-optimized .number {
+            display: block;
+            line-height: 1;
+            margin-bottom: 0.2em;
+          }
+          
+          .mobile-optimized .label {
+            display: block;
+            line-height: 1;
+          }
+          
+          /* Touch target optimizations */
+          @media (max-width: 768px) {
+            .action-btn {
+              min-height: 44px;
+              min-width: 44px;
+              padding: 12px 16px;
+            }
+            
+            .tab-btn {
+              min-height: 44px;
+              padding: 12px 16px;
+            }
+            
+            .launch-card {
+              min-height: 120px;
+              padding: 16px;
+            }
+          }
+          
+          /* Viewport height fix */
+          .modal-overlay {
+            height: 100vh;
+            height: calc(var(--vh, 1vh) * 100);
+          }
+        `;
+        
+        document.head.appendChild(style);
+      }
+    }
+
+    // Initialize mobile optimization manager
+    const mobileOptimizationManager = new MobileOptimizationManager();
+
     // Enhanced setNotification function
     function setNotification(button) {
       const card = button.closest('.launch-card');
