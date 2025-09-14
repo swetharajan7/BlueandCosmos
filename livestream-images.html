@@ -289,9 +289,29 @@
       backdrop-filter: blur(10px);
     }
 
-    .overlay-btn:hover {
+    .overlay-btn:hover,
+    .overlay-btn:focus {
       background: #fff;
       transform: scale(1.1);
+      outline: 2px solid var(--highlight);
+      outline-offset: 2px;
+    }
+
+    .overlay-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Improve image loading states */
+    .image-container img {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .image-container img[data-src] {
+      opacity: 0.7;
+    }
+
+    .image-container img:not([data-src]) {
+      opacity: 1;
     }
 
     .image-info {
@@ -342,13 +362,30 @@
     }
 
     .source {
-      background: var(--accent);
       color: white;
       padding: 0.2em 0.6em;
       border-radius: 12px;
       font-weight: 500;
       text-transform: uppercase;
       font-size: 0.75em;
+    }
+
+    /* Source-specific colors */
+    .source:contains("NASA"),
+    [data-source="nasa"] .source {
+      background: var(--accent);
+    }
+
+    [data-source="spacex"] .source {
+      background: #005288;
+    }
+
+    [data-source="iss"] .source {
+      background: #28a745;
+    }
+
+    [data-source="esa"] .source {
+      background: #6f42c1;
     }
 
     .timestamp {
@@ -597,115 +634,163 @@
 
     <!-- Image Gallery Grid -->
     <section class="image-gallery" id="image-gallery">
-      <!-- Loading skeleton cards to demonstrate layout -->
-      <article class="skeleton-card">
-        <div class="skeleton skeleton-image"></div>
-        <div class="skeleton-content">
-          <div class="skeleton skeleton-title"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton-meta">
-            <div class="skeleton skeleton-source"></div>
-            <div class="skeleton skeleton-timestamp"></div>
+      <!-- Sample Image Cards with Real Space Imagery -->
+      <article class="image-card" data-category="missions" data-source="nasa">
+        <div class="image-container">
+          <img src="https://images-assets.nasa.gov/image/PIA24546/PIA24546~thumb.jpg" 
+               alt="Perseverance Mars Rover Self-Portrait" 
+               loading="lazy">
+          <div class="image-overlay">
+            <button class="overlay-btn expand-btn" title="View Full Size">🔍</button>
+            <button class="overlay-btn share-btn" title="Share Image">📤</button>
+          </div>
+        </div>
+        <div class="image-info">
+          <h3 class="image-title">Perseverance Mars Rover Self-Portrait</h3>
+          <p class="image-description">NASA's Perseverance rover took this selfie over a rock nicknamed "Rochette," on Sol 198 (September 10, 2021). The rover is preparing to take its first sample from this rock.</p>
+          <div class="image-meta">
+            <span class="source">NASA</span>
+            <time class="timestamp">2 hours ago</time>
           </div>
         </div>
       </article>
 
-      <article class="skeleton-card">
-        <div class="skeleton skeleton-image"></div>
-        <div class="skeleton-content">
-          <div class="skeleton skeleton-title"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton-meta">
-            <div class="skeleton skeleton-source"></div>
-            <div class="skeleton skeleton-timestamp"></div>
+      <article class="image-card" data-category="deep-space" data-source="nasa">
+        <div class="image-container">
+          <img src="https://images-assets.nasa.gov/image/PIA23122/PIA23122~thumb.jpg" 
+               alt="Hubble Views the Crab Nebula" 
+               loading="lazy">
+          <div class="image-overlay">
+            <button class="overlay-btn expand-btn" title="View Full Size">🔍</button>
+            <button class="overlay-btn share-btn" title="Share Image">📤</button>
+          </div>
+        </div>
+        <div class="image-info">
+          <h3 class="image-title">Hubble Views the Crab Nebula</h3>
+          <p class="image-description">This Hubble Space Telescope image shows the Crab Nebula, the result of a supernova explosion that was observed by Chinese astronomers in 1054 AD.</p>
+          <div class="image-meta">
+            <span class="source">NASA</span>
+            <time class="timestamp">4 hours ago</time>
           </div>
         </div>
       </article>
 
-      <article class="skeleton-card">
-        <div class="skeleton skeleton-image"></div>
-        <div class="skeleton-content">
-          <div class="skeleton skeleton-title"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton-meta">
-            <div class="skeleton skeleton-source"></div>
-            <div class="skeleton skeleton-timestamp"></div>
+      <article class="image-card" data-category="earth" data-source="iss">
+        <div class="image-container">
+          <img src="https://images-assets.nasa.gov/image/iss066e013602/iss066e013602~thumb.jpg" 
+               alt="Earth from the International Space Station" 
+               loading="lazy">
+          <div class="image-overlay">
+            <button class="overlay-btn expand-btn" title="View Full Size">🔍</button>
+            <button class="overlay-btn share-btn" title="Share Image">📤</button>
+          </div>
+        </div>
+        <div class="image-info">
+          <h3 class="image-title">Earth from the International Space Station</h3>
+          <p class="image-description">A stunning view of Earth's curvature and atmosphere captured from the International Space Station, showing the thin blue line of our planet's protective atmosphere.</p>
+          <div class="image-meta">
+            <span class="source">ISS</span>
+            <time class="timestamp">1 hour ago</time>
           </div>
         </div>
       </article>
 
-      <article class="skeleton-card">
-        <div class="skeleton skeleton-image"></div>
-        <div class="skeleton-content">
-          <div class="skeleton skeleton-title"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton-meta">
-            <div class="skeleton skeleton-source"></div>
-            <div class="skeleton skeleton-timestamp"></div>
+      <article class="image-card" data-category="planets" data-source="nasa">
+        <div class="image-container">
+          <img src="https://images-assets.nasa.gov/image/PIA21773/PIA21773~thumb.jpg" 
+               alt="Jupiter's Great Red Spot" 
+               loading="lazy">
+          <div class="image-overlay">
+            <button class="overlay-btn expand-btn" title="View Full Size">🔍</button>
+            <button class="overlay-btn share-btn" title="Share Image">📤</button>
+          </div>
+        </div>
+        <div class="image-info">
+          <h3 class="image-title">Jupiter's Great Red Spot</h3>
+          <p class="image-description">This enhanced-color image of Jupiter's Great Red Spot was created by citizen scientist Gerald Eichstädt using data from Juno's JunoCam imager.</p>
+          <div class="image-meta">
+            <span class="source">NASA</span>
+            <time class="timestamp">6 hours ago</time>
           </div>
         </div>
       </article>
 
-      <article class="skeleton-card">
-        <div class="skeleton skeleton-image"></div>
-        <div class="skeleton-content">
-          <div class="skeleton skeleton-title"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton-meta">
-            <div class="skeleton skeleton-source"></div>
-            <div class="skeleton skeleton-timestamp"></div>
+      <article class="image-card" data-category="missions" data-source="spacex">
+        <div class="image-container">
+          <img src="https://images-assets.nasa.gov/image/KSC-20200530-PH-SPX01_0005/KSC-20200530-PH-SPX01_0005~thumb.jpg" 
+               alt="SpaceX Falcon 9 Launch" 
+               loading="lazy">
+          <div class="image-overlay">
+            <button class="overlay-btn expand-btn" title="View Full Size">🔍</button>
+            <button class="overlay-btn share-btn" title="Share Image">📤</button>
+          </div>
+        </div>
+        <div class="image-info">
+          <h3 class="image-title">SpaceX Falcon 9 Launch</h3>
+          <p class="image-description">A SpaceX Falcon 9 rocket carrying NASA astronauts Doug Hurley and Bob Behnken in the Crew Dragon spacecraft lifts off from Launch Complex 39A.</p>
+          <div class="image-meta">
+            <span class="source">SPACEX</span>
+            <time class="timestamp">3 hours ago</time>
           </div>
         </div>
       </article>
 
-      <article class="skeleton-card">
-        <div class="skeleton skeleton-image"></div>
-        <div class="skeleton-content">
-          <div class="skeleton skeleton-title"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton-meta">
-            <div class="skeleton skeleton-source"></div>
-            <div class="skeleton skeleton-timestamp"></div>
+      <article class="image-card" data-category="deep-space" data-source="nasa">
+        <div class="image-container">
+          <img src="https://images-assets.nasa.gov/image/PIA24825/PIA24825~thumb.jpg" 
+               alt="Webb's First Deep Field" 
+               loading="lazy">
+          <div class="image-overlay">
+            <button class="overlay-btn expand-btn" title="View Full Size">🔍</button>
+            <button class="overlay-btn share-btn" title="Share Image">📤</button>
+          </div>
+        </div>
+        <div class="image-info">
+          <h3 class="image-title">Webb's First Deep Field</h3>
+          <p class="image-description">NASA's James Webb Space Telescope has delivered the deepest and sharpest infrared image of the distant universe so far, showing galaxy cluster SMACS 0723.</p>
+          <div class="image-meta">
+            <span class="source">NASA</span>
+            <time class="timestamp">5 hours ago</time>
           </div>
         </div>
       </article>
 
-      <article class="skeleton-card">
-        <div class="skeleton skeleton-image"></div>
-        <div class="skeleton-content">
-          <div class="skeleton skeleton-title"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton-meta">
-            <div class="skeleton skeleton-source"></div>
-            <div class="skeleton skeleton-timestamp"></div>
+      <article class="image-card" data-category="planets" data-source="nasa">
+        <div class="image-container">
+          <img src="https://images-assets.nasa.gov/image/PIA23791/PIA23791~thumb.jpg" 
+               alt="Saturn's Rings in Infrared" 
+               loading="lazy">
+          <div class="image-overlay">
+            <button class="overlay-btn expand-btn" title="View Full Size">🔍</button>
+            <button class="overlay-btn share-btn" title="Share Image">📤</button>
+          </div>
+        </div>
+        <div class="image-info">
+          <h3 class="image-title">Saturn's Rings in Infrared</h3>
+          <p class="image-description">This infrared image from NASA's Cassini spacecraft shows Saturn's rings in exquisite detail, revealing the complex structure and composition of the ring system.</p>
+          <div class="image-meta">
+            <span class="source">NASA</span>
+            <time class="timestamp">8 hours ago</time>
           </div>
         </div>
       </article>
 
-      <article class="skeleton-card">
-        <div class="skeleton skeleton-image"></div>
-        <div class="skeleton-content">
-          <div class="skeleton skeleton-title"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton skeleton-description"></div>
-          <div class="skeleton-meta">
-            <div class="skeleton skeleton-source"></div>
-            <div class="skeleton skeleton-timestamp"></div>
+      <article class="image-card" data-category="iss" data-source="iss">
+        <div class="image-container">
+          <img src="https://images-assets.nasa.gov/image/iss066e054063/iss066e054063~thumb.jpg" 
+               alt="Aurora from Space" 
+               loading="lazy">
+          <div class="image-overlay">
+            <button class="overlay-btn expand-btn" title="View Full Size">🔍</button>
+            <button class="overlay-btn share-btn" title="Share Image">📤</button>
+          </div>
+        </div>
+        <div class="image-info">
+          <h3 class="image-title">Aurora from Space</h3>
+          <p class="image-description">A spectacular aurora borealis captured from the International Space Station, showing the dancing lights of charged particles interacting with Earth's magnetic field.</p>
+          <div class="image-meta">
+            <span class="source">ISS</span>
+            <time class="timestamp">30 minutes ago</time>
           </div>
         </div>
       </article>
@@ -777,6 +862,72 @@
       document.getElementById("moon-display").textContent=data.emoji;
       document.querySelector(".moon-label").textContent=data.name;
       document.getElementById("moon-context").textContent=`${now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} • New York City, NY`;
+    })();
+
+    // Image Card Interactions
+    (function initImageCards(){
+      // Handle expand button clicks
+      document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('expand-btn')) {
+          const card = e.target.closest('.image-card');
+          const img = card.querySelector('img');
+          const title = card.querySelector('.image-title').textContent;
+          
+          // For now, just show an alert - will be replaced with modal in later tasks
+          alert(`Opening full-size view for: ${title}`);
+        }
+        
+        // Handle share button clicks
+        if (e.target.classList.contains('share-btn')) {
+          const card = e.target.closest('.image-card');
+          const title = card.querySelector('.image-title').textContent;
+          
+          // Simple share functionality
+          if (navigator.share) {
+            navigator.share({
+              title: title,
+              text: `Check out this amazing space image: ${title}`,
+              url: window.location.href
+            });
+          } else {
+            // Fallback for browsers without Web Share API
+            const url = window.location.href;
+            navigator.clipboard.writeText(`${title} - ${url}`).then(() => {
+              alert('Link copied to clipboard!');
+            });
+          }
+        }
+      });
+
+      // Add keyboard navigation for accessibility
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          if (e.target.classList.contains('expand-btn') || e.target.classList.contains('share-btn')) {
+            e.preventDefault();
+            e.target.click();
+          }
+        }
+      });
+
+      // Lazy loading fallback for older browsers
+      if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              if (img.dataset.src) {
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src');
+                observer.unobserve(img);
+              }
+            }
+          });
+        });
+
+        document.querySelectorAll('img[data-src]').forEach(img => {
+          imageObserver.observe(img);
+        });
+      }
     })();
   </script>
 </body>
