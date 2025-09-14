@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,7 +18,12 @@
       --dark-bg: #121212;
       --dark-accent: #001f5b;
     }
-    html, body { height: 100%; }
+
+    html,
+    body {
+      height: 100%;
+    }
+
     body {
       margin: 0;
       font-family: 'Work Sans', sans-serif;
@@ -27,9 +33,20 @@
       flex-direction: column;
       min-height: 100vh;
     }
-    body.dark { background-color: var(--dark-bg); color: var(--text-white); }
-    main { flex: 1 0 auto; }
-    :focus-visible { outline: 2px dashed var(--highlight); outline-offset: 2px; }
+
+    body.dark {
+      background-color: var(--dark-bg);
+      color: var(--text-white);
+    }
+
+    main {
+      flex: 1 0 auto;
+    }
+
+    :focus-visible {
+      outline: 2px dashed var(--highlight);
+      outline-offset: 2px;
+    }
 
     header {
       background: var(--accent);
@@ -43,112 +60,301 @@
       top: 0;
       z-index: 1000;
     }
-    .logo-link { display: flex; align-items: center; text-decoration: none; color: inherit; }
-    .logo-area { display: flex; align-items: center; gap: 0.4em; }
-    .logo-area img { height: 50px; width: 50px; margin: 0; padding: 0; background-color: transparent; display: block; }
-    .logo-text { display: flex; flex-direction: column; line-height: 1.2; margin-left: -4px; }
-    .logo-text .title { font-size: 1.4em; font-weight: bold; color: #fff; margin: 0; }
-    .logo-text .tagline { font-size: 0.85em; color: var(--text-light); margin: 0; }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
+    }
+
+    .logo-area img {
+      height: 50px;
+      width: 50px;
+      margin: 0;
+      padding: 0;
+      background-color: transparent;
+      display: block;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+      margin-left: -4px;
+    }
+
+    .logo-text .title {
+      font-size: 1.4em;
+      font-weight: bold;
+      color: #fff;
+      margin: 0;
+    }
+
+    .logo-text .tagline {
+      font-size: 0.85em;
+      color: var(--text-light);
+      margin: 0;
+    }
 
     .nav-right {
-      display: flex; align-items: center; justify-content: flex-end; gap: 1.2em;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 1.2em;
     }
-    .nav-right > * { display: inline-flex; align-items: center; }
+
+    .nav-right>* {
+      display: inline-flex;
+      align-items: center;
+    }
 
     .moon-widget {
-      display: flex; align-items: center; gap: 0.6em; justify-self: center;
-      min-width: 220px; user-select: none; text-decoration: none; color: inherit;
+      display: flex;
+      align-items: center;
+      gap: 0.6em;
+      justify-self: center;
+      min-width: 220px;
+      user-select: none;
+      text-decoration: none;
+      color: inherit;
     }
-    .moon-icon { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
-    .moon-info { display: flex; flex-direction: column; gap: 0.1em; }
-    .moon-label { color: var(--text-light); font-size: 0.95em; white-space: nowrap; font-weight: 500; }
-    .moon-context { color: var(--text-light); font-size: 0.75em; opacity: 0.8; white-space: nowrap; }
-    body.dark .moon-label, body.dark .moon-context { color: #e0ecff; }
-    @media (max-width: 900px) { .moon-widget { display: none; } }
 
-    .mars-widget {
-      display: flex; align-items: center; gap: 0.6em; justify-self: center;
-      user-select: none; text-decoration: none; color: inherit;
-      transition: transform 0.2s ease;
+    .moon-icon {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
     }
-    .mars-label {
-      color: var(--text-light); 
-      font-size: 0.95em; 
-      font-weight: 600; 
+
+    .moon-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1em;
+    }
+
+    .moon-label {
+      color: var(--text-light);
+      font-size: 0.95em;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+
+    .moon-context {
+      color: var(--text-light);
+      font-size: 0.75em;
+      opacity: 0.8;
       white-space: nowrap;
     }
-    body.dark .mars-label { color: #e0ecff; }
-    .mars-widget:hover { transform: scale(1.05); }
-    .mars-icon { 
-      width: 32px; height: 32px; border-radius: 50%; 
+
+    body.dark .moon-label,
+    body.dark .moon-context {
+      color: #e0ecff;
+    }
+
+    @media (max-width: 900px) {
+      .moon-widget {
+        display: none;
+      }
+    }
+
+    .mars-widget {
+      display: flex;
+      align-items: center;
+      gap: 0.6em;
+      justify-self: center;
+      user-select: none;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s ease;
+    }
+
+    .mars-label {
+      color: var(--text-light);
+      font-size: 0.95em;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    body.dark .mars-label {
+      color: #e0ecff;
+    }
+
+    .mars-widget:hover {
+      transform: scale(1.05);
+    }
+
+    .mars-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
       background-image: url('https://photojournal.jpl.nasa.gov/jpeg/PIA00407.jpg');
       background-size: cover;
       background-position: center;
-      display: flex; align-items: center; justify-content: center; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
       box-shadow: 0 2px 8px rgba(205, 92, 92, 0.4);
       border: 2px solid rgba(205, 92, 92, 0.3);
     }
-    @media (max-width: 1100px) { .mars-widget { display: none; } }
 
-    nav { display: contents; }
-    .dropdown { position: relative; }
-    .dropbtn {
-      background: none; border: none; font-size: 1em; color: #fff;
-      cursor: pointer; padding: 0.4em 0; position: relative;
-      text-decoration: none; display: inline-block;
+    @media (max-width: 1100px) {
+      .mars-widget {
+        display: none;
+      }
     }
-    .dropbtn:hover, .dropbtn:focus { color: var(--highlight); }
+
+    nav {
+      display: contents;
+    }
+
+    .dropdown {
+      position: relative;
+    }
+
+    .dropbtn {
+      background: none;
+      border: none;
+      font-size: 1em;
+      color: #fff;
+      cursor: pointer;
+      padding: 0.4em 0;
+      position: relative;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .dropbtn:hover,
+    .dropbtn:focus {
+      color: var(--highlight);
+    }
+
     .dropbtn::after {
-      content: ""; position: absolute; left: 0; bottom: -2px;
-      width: 0; height: 2px; background: var(--highlight);
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 0;
+      height: 2px;
+      background: var(--highlight);
       transition: width 0.25s ease-in-out;
     }
-    .dropdown:hover > .dropbtn::after,
+
+    .dropdown:hover>.dropbtn::after,
     .dropbtn:focus::after,
-    .dropdown.open > .dropbtn::after { width: 100%; }
-    .dropdown-content {
-      display: none; position: absolute; top: calc(100% + 0.6em); left: 0;
-      background: var(--accent); min-width: 220px;
-      flex-direction: column; box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-      z-index: 1001; padding: 0.3em 0; border-radius: 6px;
+    .dropdown.open>.dropbtn::after {
+      width: 100%;
     }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: calc(100% + 0.6em);
+      left: 0;
+      background: var(--accent);
+      min-width: 220px;
+      flex-direction: column;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      z-index: 1001;
+      padding: 0.3em 0;
+      border-radius: 6px;
+    }
+
     .dropdown:hover .dropdown-content,
     .dropdown:focus-within .dropdown-content,
-    .dropdown.open .dropdown-content { display: flex; }
+    .dropdown.open .dropdown-content {
+      display: flex;
+    }
+
     .dropdown-content a {
-      color: var(--text-light); text-decoration: none;
-      padding: 0.8em 1em; position: relative;
+      color: var(--text-light);
+      text-decoration: none;
+      padding: 0.8em 1em;
+      position: relative;
       transition: color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
     }
+
     .dropdown-content a:hover,
     .dropdown-content a:focus,
     .dropdown-content a.clicked {
-      background-color: var(--flag-blue); color: #fff !important; transform: translateX(5px);
+      background-color: var(--flag-blue);
+      color: #fff !important;
+      transform: translateX(5px);
     }
+
     .dropdown-content a::after {
-      content: ""; position: absolute; left: 1em; bottom: 6px;
-      width: 0; height: 2px; background: var(--highlight);
+      content: "";
+      position: absolute;
+      left: 1em;
+      bottom: 6px;
+      width: 0;
+      height: 2px;
+      background: var(--highlight);
       transition: width 0.25s ease;
     }
+
     .dropdown-content a:hover::after,
     .dropdown-content a:focus::after,
-    .dropdown-content a.clicked::after { width: calc(100% - 2em); }
-    body.dark .dropdown-content a { color: #d9e6ff; }
+    .dropdown-content a.clicked::after {
+      width: calc(100% - 2em);
+    }
 
-    .nav-link { color: #fff; text-decoration: none; position: relative; padding-bottom: 2px; }
-    .nav-link:hover { color: var(--highlight); }
+    body.dark .dropdown-content a {
+      color: #d9e6ff;
+    }
+
+    .nav-link {
+      color: #fff;
+      text-decoration: none;
+      position: relative;
+      padding-bottom: 2px;
+    }
+
+    .nav-link:hover {
+      color: var(--highlight);
+    }
+
     .nav-link::after {
-      content: ""; position: absolute; left: 0; bottom: -2px;
-      width: 0; height: 2px; background: var(--highlight);
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 0;
+      height: 2px;
+      background: var(--highlight);
       transition: width 0.25s ease-in-out;
     }
-    .nav-link:hover::after { width: 100%; }
 
-    .toggle-theme { cursor: pointer; font-size: 1.5em; line-height: 1; user-select: none; }
+    .nav-link:hover::after {
+      width: 100%;
+    }
 
-    body.dark header, body.dark footer { background-color: var(--dark-accent); }
-    body.dark .dropbtn, body.dark .nav-link { color: #e6f0ff; }
+    .toggle-theme {
+      cursor: pointer;
+      font-size: 1.5em;
+      line-height: 1;
+      user-select: none;
+    }
+
+    body.dark header,
+    body.dark footer {
+      background-color: var(--dark-accent);
+    }
+
+    body.dark .dropbtn,
+    body.dark .nav-link {
+      color: #e6f0ff;
+    }
 
     /* Livestream-specific styles */
     .livestream-container {
@@ -182,23 +388,341 @@
       color: #cce0ff;
     }
 
-    /* Controls Bar Styles */
+    /* Enhanced Controls Bar Styles */
     .controls-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       margin-bottom: 2em;
       padding: 1.5em;
       background: rgba(0, 51, 160, 0.05);
       border-radius: 12px;
       border: 1px solid rgba(0, 51, 160, 0.1);
-      flex-wrap: wrap;
-      gap: 1em;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5em;
     }
 
     body.dark .controls-bar {
       background: rgba(0, 31, 91, 0.2);
       border-color: rgba(0, 31, 91, 0.3);
+    }
+
+    /* Search Section */
+    .search-section {
+      position: relative;
+    }
+
+    .search-container {
+      position: relative;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.8em 3em 0.8em 1em;
+      border: 2px solid #ddd;
+      border-radius: 25px;
+      font-size: 1em;
+      background: white;
+      transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 51, 160, 0.1);
+    }
+
+    body.dark .search-input {
+      background: #2a2a2a;
+      border-color: #444;
+      color: white;
+    }
+
+    body.dark .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 51, 160, 0.2);
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 1em;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #666;
+      pointer-events: none;
+    }
+
+    .search-clear {
+      position: absolute;
+      right: 2.5em;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 1.2em;
+      color: #666;
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.2s ease;
+    }
+
+    .search-clear:hover {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    body.dark .search-clear:hover {
+      background: #444;
+      color: #fff;
+    }
+
+    /* Search Suggestions */
+    .search-suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      margin-top: 0.5em;
+      padding: 1em;
+    }
+
+    body.dark .search-suggestions {
+      background: #2a2a2a;
+      border-color: #444;
+    }
+
+    .suggestion-category h4 {
+      margin: 0 0 0.8em 0;
+      font-size: 0.9em;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    body.dark .suggestion-category h4 {
+      color: #aaa;
+    }
+
+    .quick-searches {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5em;
+    }
+
+    .suggestion-btn {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 15px;
+      padding: 0.4em 0.8em;
+      font-size: 0.85em;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .suggestion-btn:hover {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    body.dark .suggestion-btn {
+      background: #343a40;
+      border-color: #495057;
+      color: #fff;
+    }
+
+    /* Filter Controls Row */
+    .filter-controls {
+      display: flex;
+      gap: 0.5em;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* Advanced Filters */
+    .advanced-filters {
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 8px;
+      padding: 1em;
+      border-left: 3px solid var(--accent);
+    }
+
+    body.dark .advanced-filters {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .filter-group {
+      margin-bottom: 1em;
+    }
+
+    .filter-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .filter-group label {
+      display: block;
+      font-size: 0.9em;
+      font-weight: 500;
+      margin-bottom: 0.5em;
+      color: #333;
+    }
+
+    body.dark .filter-group label {
+      color: #fff;
+    }
+
+    .source-filters,
+    .date-filters {
+      display: flex;
+      gap: 0.3em;
+      flex-wrap: wrap;
+    }
+
+    .source-filter-btn,
+    .date-filter-btn {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 0.4em 0.8em;
+      font-size: 0.8em;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .source-filter-btn:hover,
+    .date-filter-btn:hover {
+      background: #f8f9fa;
+    }
+
+    .source-filter-btn.active,
+    .date-filter-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    body.dark .source-filter-btn,
+    body.dark .date-filter-btn {
+      background: #343a40;
+      border-color: #495057;
+      color: #fff;
+    }
+
+    body.dark .source-filter-btn:hover,
+    body.dark .date-filter-btn:hover {
+      background: #495057;
+    }
+
+    /* View and Options Row */
+    .view-and-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1em;
+    }
+
+    .filter-options {
+      display: flex;
+      gap: 0.5em;
+    }
+
+    .options-btn {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1em;
+      transition: all 0.2s ease;
+    }
+
+    .options-btn:hover,
+    .options-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    body.dark .options-btn {
+      background: #343a40;
+      border-color: #495057;
+      color: #fff;
+    }
+
+    /* Sort Options */
+    .sort-options {
+      background: rgba(0, 51, 160, 0.05);
+      border-radius: 8px;
+      padding: 1em;
+      margin-bottom: 1em;
+      border-left: 3px solid var(--highlight);
+    }
+
+    body.dark .sort-options {
+      background: rgba(0, 31, 91, 0.2);
+    }
+
+    .sort-group label {
+      display: block;
+      font-size: 0.9em;
+      font-weight: 500;
+      margin-bottom: 0.5em;
+      color: #333;
+    }
+
+    body.dark .sort-group label {
+      color: #fff;
+    }
+
+    .sort-buttons {
+      display: flex;
+      gap: 0.5em;
+      flex-wrap: wrap;
+    }
+
+    .sort-btn {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 0.5em 1em;
+      font-size: 0.85em;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sort-btn:hover {
+      background: #f8f9fa;
+    }
+
+    .sort-btn.active {
+      background: var(--highlight);
+      color: white;
+      border-color: var(--highlight);
+    }
+
+    body.dark .sort-btn {
+      background: #343a40;
+      border-color: #495057;
+      color: #fff;
+    }
+
+    body.dark .sort-btn:hover {
+      background: #495057;
     }
 
     .filter-controls {
@@ -349,8 +873,13 @@
     }
 
     @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     /* Auto-refresh status indicator */
@@ -389,6 +918,7 @@
         transform: translateY(100%);
         opacity: 0;
       }
+
       to {
         transform: translateY(0);
         opacity: 1;
@@ -500,7 +1030,7 @@
         grid-template-columns: 1fr;
         gap: 1em;
       }
-      
+
       .image-gallery.list-view .image-info {
         padding: 1em;
       }
@@ -508,8 +1038,15 @@
 
     /* Fade in animation */
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* Loading message styles */
@@ -651,14 +1188,20 @@
     }
 
     @keyframes shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
+      0% {
+        background-position: 200% 0;
+      }
+
+      100% {
+        background-position: -200% 0;
+      }
     }
 
     /* Performance optimizations */
     .image-card {
       contain: layout style paint;
-      transform: translateZ(0); /* Force hardware acceleration */
+      transform: translateZ(0);
+      /* Force hardware acceleration */
     }
 
     .image-container {
@@ -668,20 +1211,22 @@
 
     /* Reduce motion for users who prefer it */
     @media (prefers-reduced-motion: reduce) {
+
       .image-container img,
       .image-card,
       .overlay-btn {
         transition: none !important;
         animation: none !important;
       }
-      
+
       .skeleton {
         animation: none !important;
       }
     }
 
     /* Optimize for high DPI displays */
-    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    @media (-webkit-min-device-pixel-ratio: 2),
+    (min-resolution: 192dpi) {
       .image-container img {
         image-rendering: -webkit-optimize-contrast;
         image-rendering: crisp-edges;
@@ -1213,6 +1758,7 @@
 
     /* Accessibility improvements */
     @media (prefers-reduced-motion: reduce) {
+
       .modal-overlay,
       .modal-content,
       .modal-image,
@@ -1444,6 +1990,7 @@
       0% {
         background-position: 200% 0;
       }
+
       100% {
         background-position: -200% 0;
       }
@@ -1543,18 +2090,25 @@
       text-align: center;
       gap: 1em;
     }
-    footer a { color: #fff; text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
+
+    footer a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
 
     @media (max-width: 768px) {
       .livestream-container {
         padding: 1em;
       }
-      
+
       .page-title {
         font-size: 2em;
       }
-      
+
       .page-subtitle {
         font-size: 1em;
       }
@@ -1631,7 +2185,8 @@
   <header>
     <a href="index.html" class="logo-link" aria-label="BlueandCosmos Home">
       <div class="logo-area">
-        <img src="https://cdn.jsdelivr.net/gh/swetharajan7/blueandcosmos/assets/logo-transparent.png" alt="BlueandCosmos Logo" />
+        <img src="https://cdn.jsdelivr.net/gh/swetharajan7/blueandcosmos/assets/logo-transparent.png"
+          alt="BlueandCosmos Logo" />
         <div class="logo-text">
           <div class="title">BlueandCosmos</div>
           <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
@@ -1696,6 +2251,27 @@
 
     <!-- Controls Bar -->
     <section class="controls-bar">
+      <div class="search-section">
+        <div class="search-container">
+          <input type="text" class="search-input" id="search-input" placeholder="Search space images..." autocomplete="off">
+          <button class="search-clear" id="search-clear" title="Clear search" style="display: none;">×</button>
+          <div class="search-icon">🔍</div>
+        </div>
+        <div class="search-suggestions" id="search-suggestions" style="display: none;">
+          <div class="suggestion-category">
+            <h4>Quick Searches</h4>
+            <div class="quick-searches">
+              <button class="suggestion-btn" data-search="mars rover">Mars Rover</button>
+              <button class="suggestion-btn" data-search="hubble telescope">Hubble</button>
+              <button class="suggestion-btn" data-search="earth from space">Earth from Space</button>
+              <button class="suggestion-btn" data-search="nebula">Nebula</button>
+              <button class="suggestion-btn" data-search="jupiter">Jupiter</button>
+              <button class="suggestion-btn" data-search="aurora">Aurora</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       <div class="filter-controls">
         <button class="filter-btn active" data-filter="all">All</button>
         <button class="filter-btn" data-filter="missions">Missions</button>
@@ -1704,29 +2280,73 @@
         <button class="filter-btn" data-filter="planets">Planets</button>
         <button class="filter-btn" data-filter="iss">ISS</button>
       </div>
-      <div class="view-controls">
-        <button class="view-btn active" data-view="grid" title="Grid View">⊞</button>
-        <button class="view-btn" data-view="list" title="List View">☰</button>
-      </div>
-      <div class="refresh-indicator">
-        <div class="auto-refresh-controls">
-          <span class="last-updated">Updated: <time id="last-refresh">just now</time></span>
-          <button class="auto-refresh-toggle enabled" id="auto-refresh-toggle" title="Toggle Auto-refresh">
-            Auto
-          </button>
+      
+      <div class="advanced-filters" id="advanced-filters" style="display: none;">
+        <div class="filter-group">
+          <label>Source:</label>
+          <div class="source-filters">
+            <button class="source-filter-btn active" data-source="all">All</button>
+            <button class="source-filter-btn" data-source="nasa">NASA</button>
+            <button class="source-filter-btn" data-source="spacex">SpaceX</button>
+            <button class="source-filter-btn" data-source="esa">ESA</button>
+            <button class="source-filter-btn" data-source="iss">ISS</button>
+          </div>
         </div>
-        <button class="refresh-btn" title="Refresh Now">🔄</button>
+        
+        <div class="filter-group">
+          <label>Date Range:</label>
+          <div class="date-filters">
+            <button class="date-filter-btn active" data-range="all">All Time</button>
+            <button class="date-filter-btn" data-range="today">Today</button>
+            <button class="date-filter-btn" data-range="week">This Week</button>
+            <button class="date-filter-btn" data-range="month">This Month</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="view-and-options">
+        <div class="view-controls">
+          <button class="view-btn active" data-view="grid" title="Grid View">⊞</button>
+          <button class="view-btn" data-view="list" title="List View">☰</button>
+        </div>
+        
+        <div class="filter-options">
+          <button class="options-btn" id="advanced-toggle" title="Advanced Filters">⚙️</button>
+          <button class="options-btn" id="sort-toggle" title="Sort Options">↕️</button>
+        </div>
+        
+        <div class="refresh-indicator">
+          <div class="auto-refresh-controls">
+            <span class="last-updated">Updated: <time id="last-refresh">just now</time></span>
+            <button class="auto-refresh-toggle enabled" id="auto-refresh-toggle" title="Toggle Auto-refresh">
+              Auto
+            </button>
+          </div>
+          <button class="refresh-btn" title="Refresh Now">🔄</button>
+        </div>
       </div>
     </section>
+    
+    <!-- Sort Options -->
+    <div class="sort-options" id="sort-options" style="display: none;">
+      <div class="sort-group">
+        <label>Sort by:</label>
+        <div class="sort-buttons">
+          <button class="sort-btn active" data-sort="date-desc">Newest First</button>
+          <button class="sort-btn" data-sort="date-asc">Oldest First</button>
+          <button class="sort-btn" data-sort="title-asc">Title A-Z</button>
+          <button class="sort-btn" data-sort="source-asc">Source</button>
+        </div>
+      </div>
+    </div>
 
     <!-- Image Gallery Grid -->
     <section class="image-gallery" id="image-gallery">
       <!-- Sample Image Cards with Real Space Imagery -->
       <article class="image-card" data-category="missions" data-source="nasa">
         <div class="image-container">
-          <img src="https://images-assets.nasa.gov/image/PIA24546/PIA24546~thumb.jpg" 
-               alt="Perseverance Mars Rover Self-Portrait" 
-               loading="lazy">
+          <img src="https://images-assets.nasa.gov/image/PIA24546/PIA24546~thumb.jpg"
+            alt="Perseverance Mars Rover Self-Portrait" loading="lazy">
           <div class="image-overlay">
             <button class="overlay-btn expand-btn" title="View Full Size">🔍</button>
             <button class="overlay-btn share-btn" title="Share Image">📤</button>
@@ -1734,7 +2354,8 @@
         </div>
         <div class="image-info">
           <h3 class="image-title">Perseverance Mars Rover Self-Portrait</h3>
-          <p class="image-description">NASA's Perseverance rover took this selfie over a rock nicknamed "Rochette," on Sol 198 (September 10, 2021). The rover is preparing to take its first sample from this rock.</p>
+          <p class="image-description">NASA's Perseverance rover took this selfie over a rock nicknamed "Rochette," on
+            Sol 198 (September 10, 2021). The rover is preparing to take its first sample from this rock.</p>
           <div class="image-meta">
             <span class="source">NASA</span>
             <time class="timestamp">2 hours ago</time>
@@ -1744,9 +2365,8 @@
 
       <article class="image-card" data-category="deep-space" data-source="nasa">
         <div class="image-container">
-          <img src="https://images-assets.nasa.gov/image/PIA23122/PIA23122~thumb.jpg" 
-               alt="Hubble Views the Crab Nebula" 
-               loading="lazy">
+          <img src="https://images-assets.nasa.gov/image/PIA23122/PIA23122~thumb.jpg" alt="Hubble Views the Crab Nebula"
+            loading="lazy">
           <div class="image-overlay">
             <button class="overlay-btn expand-btn" title="View Full Size">🔍</button>
             <button class="overlay-btn share-btn" title="Share Image">📤</button>
@@ -1754,7 +2374,8 @@
         </div>
         <div class="image-info">
           <h3 class="image-title">Hubble Views the Crab Nebula</h3>
-          <p class="image-description">This Hubble Space Telescope image shows the Crab Nebula, the result of a supernova explosion that was observed by Chinese astronomers in 1054 AD.</p>
+          <p class="image-description">This Hubble Space Telescope image shows the Crab Nebula, the result of a
+            supernova explosion that was observed by Chinese astronomers in 1054 AD.</p>
           <div class="image-meta">
             <span class="source">NASA</span>
             <time class="timestamp">4 hours ago</time>
@@ -1764,9 +2385,8 @@
 
       <article class="image-card" data-category="earth" data-source="iss">
         <div class="image-container">
-          <img src="https://images-assets.nasa.gov/image/iss066e013602/iss066e013602~thumb.jpg" 
-               alt="Earth from the International Space Station" 
-               loading="lazy">
+          <img src="https://images-assets.nasa.gov/image/iss066e013602/iss066e013602~thumb.jpg"
+            alt="Earth from the International Space Station" loading="lazy">
           <div class="image-overlay">
             <button class="overlay-btn expand-btn" title="View Full Size">🔍</button>
             <button class="overlay-btn share-btn" title="Share Image">📤</button>
@@ -1774,7 +2394,8 @@
         </div>
         <div class="image-info">
           <h3 class="image-title">Earth from the International Space Station</h3>
-          <p class="image-description">A stunning view of Earth's curvature and atmosphere captured from the International Space Station, showing the thin blue line of our planet's protective atmosphere.</p>
+          <p class="image-description">A stunning view of Earth's curvature and atmosphere captured from the
+            International Space Station, showing the thin blue line of our planet's protective atmosphere.</p>
           <div class="image-meta">
             <span class="source">ISS</span>
             <time class="timestamp">1 hour ago</time>
@@ -1784,9 +2405,8 @@
 
       <article class="image-card" data-category="planets" data-source="nasa">
         <div class="image-container">
-          <img src="https://images-assets.nasa.gov/image/PIA21773/PIA21773~thumb.jpg" 
-               alt="Jupiter's Great Red Spot" 
-               loading="lazy">
+          <img src="https://images-assets.nasa.gov/image/PIA21773/PIA21773~thumb.jpg" alt="Jupiter's Great Red Spot"
+            loading="lazy">
           <div class="image-overlay">
             <button class="overlay-btn expand-btn" title="View Full Size">🔍</button>
             <button class="overlay-btn share-btn" title="Share Image">📤</button>
@@ -1794,7 +2414,8 @@
         </div>
         <div class="image-info">
           <h3 class="image-title">Jupiter's Great Red Spot</h3>
-          <p class="image-description">This enhanced-color image of Jupiter's Great Red Spot was created by citizen scientist Gerald Eichstädt using data from Juno's JunoCam imager.</p>
+          <p class="image-description">This enhanced-color image of Jupiter's Great Red Spot was created by citizen
+            scientist Gerald Eichstädt using data from Juno's JunoCam imager.</p>
           <div class="image-meta">
             <span class="source">NASA</span>
             <time class="timestamp">6 hours ago</time>
@@ -1804,9 +2425,9 @@
 
       <article class="image-card" data-category="missions" data-source="spacex">
         <div class="image-container">
-          <img src="https://images-assets.nasa.gov/image/KSC-20200530-PH-SPX01_0005/KSC-20200530-PH-SPX01_0005~thumb.jpg" 
-               alt="SpaceX Falcon 9 Launch" 
-               loading="lazy">
+          <img
+            src="https://images-assets.nasa.gov/image/KSC-20200530-PH-SPX01_0005/KSC-20200530-PH-SPX01_0005~thumb.jpg"
+            alt="SpaceX Falcon 9 Launch" loading="lazy">
           <div class="image-overlay">
             <button class="overlay-btn expand-btn" title="View Full Size">🔍</button>
             <button class="overlay-btn share-btn" title="Share Image">📤</button>
@@ -1814,7 +2435,8 @@
         </div>
         <div class="image-info">
           <h3 class="image-title">SpaceX Falcon 9 Launch</h3>
-          <p class="image-description">A SpaceX Falcon 9 rocket carrying NASA astronauts Doug Hurley and Bob Behnken in the Crew Dragon spacecraft lifts off from Launch Complex 39A.</p>
+          <p class="image-description">A SpaceX Falcon 9 rocket carrying NASA astronauts Doug Hurley and Bob Behnken in
+            the Crew Dragon spacecraft lifts off from Launch Complex 39A.</p>
           <div class="image-meta">
             <span class="source">SPACEX</span>
             <time class="timestamp">3 hours ago</time>
@@ -1824,9 +2446,8 @@
 
       <article class="image-card" data-category="deep-space" data-source="nasa">
         <div class="image-container">
-          <img src="https://images-assets.nasa.gov/image/PIA24825/PIA24825~thumb.jpg" 
-               alt="Webb's First Deep Field" 
-               loading="lazy">
+          <img src="https://images-assets.nasa.gov/image/PIA24825/PIA24825~thumb.jpg" alt="Webb's First Deep Field"
+            loading="lazy">
           <div class="image-overlay">
             <button class="overlay-btn expand-btn" title="View Full Size">🔍</button>
             <button class="overlay-btn share-btn" title="Share Image">📤</button>
@@ -1834,7 +2455,8 @@
         </div>
         <div class="image-info">
           <h3 class="image-title">Webb's First Deep Field</h3>
-          <p class="image-description">NASA's James Webb Space Telescope has delivered the deepest and sharpest infrared image of the distant universe so far, showing galaxy cluster SMACS 0723.</p>
+          <p class="image-description">NASA's James Webb Space Telescope has delivered the deepest and sharpest infrared
+            image of the distant universe so far, showing galaxy cluster SMACS 0723.</p>
           <div class="image-meta">
             <span class="source">NASA</span>
             <time class="timestamp">5 hours ago</time>
@@ -1844,9 +2466,8 @@
 
       <article class="image-card" data-category="planets" data-source="nasa">
         <div class="image-container">
-          <img src="https://images-assets.nasa.gov/image/PIA23791/PIA23791~thumb.jpg" 
-               alt="Saturn's Rings in Infrared" 
-               loading="lazy">
+          <img src="https://images-assets.nasa.gov/image/PIA23791/PIA23791~thumb.jpg" alt="Saturn's Rings in Infrared"
+            loading="lazy">
           <div class="image-overlay">
             <button class="overlay-btn expand-btn" title="View Full Size">🔍</button>
             <button class="overlay-btn share-btn" title="Share Image">📤</button>
@@ -1854,7 +2475,8 @@
         </div>
         <div class="image-info">
           <h3 class="image-title">Saturn's Rings in Infrared</h3>
-          <p class="image-description">This infrared image from NASA's Cassini spacecraft shows Saturn's rings in exquisite detail, revealing the complex structure and composition of the ring system.</p>
+          <p class="image-description">This infrared image from NASA's Cassini spacecraft shows Saturn's rings in
+            exquisite detail, revealing the complex structure and composition of the ring system.</p>
           <div class="image-meta">
             <span class="source">NASA</span>
             <time class="timestamp">8 hours ago</time>
@@ -1864,9 +2486,8 @@
 
       <article class="image-card" data-category="iss" data-source="iss">
         <div class="image-container">
-          <img src="https://images-assets.nasa.gov/image/iss066e054063/iss066e054063~thumb.jpg" 
-               alt="Aurora from Space" 
-               loading="lazy">
+          <img src="https://images-assets.nasa.gov/image/iss066e054063/iss066e054063~thumb.jpg" alt="Aurora from Space"
+            loading="lazy">
           <div class="image-overlay">
             <button class="overlay-btn expand-btn" title="View Full Size">🔍</button>
             <button class="overlay-btn share-btn" title="Share Image">📤</button>
@@ -1874,7 +2495,8 @@
         </div>
         <div class="image-info">
           <h3 class="image-title">Aurora from Space</h3>
-          <p class="image-description">A spectacular aurora borealis captured from the International Space Station, showing the dancing lights of charged particles interacting with Earth's magnetic field.</p>
+          <p class="image-description">A spectacular aurora borealis captured from the International Space Station,
+            showing the dancing lights of charged particles interacting with Earth's magnetic field.</p>
           <div class="image-meta">
             <span class="source">ISS</span>
             <time class="timestamp">30 minutes ago</time>
@@ -1888,7 +2510,7 @@
   <div class="modal-overlay" id="image-modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
     <div class="modal-content">
       <button class="modal-close" title="Close Modal" aria-label="Close">&times;</button>
-      
+
       <div class="modal-image-container">
         <img class="modal-image" src="" alt="" id="modal-image">
         <div class="modal-navigation">
@@ -1900,65 +2522,65 @@
           <span>Loading high-resolution image...</span>
         </div>
       </div>
-      
+
       <div class="modal-info">
         <h2 class="modal-title" id="modal-title"></h2>
         <p class="modal-description"></p>
-        
+
         <div class="modal-meta">
           <div class="meta-grid">
             <div class="meta-item">
-              <strong>Source:</strong> 
+              <strong>Source:</strong>
               <span class="modal-source"></span>
             </div>
             <div class="meta-item">
-              <strong>Date:</strong> 
+              <strong>Date:</strong>
               <time class="modal-date"></time>
             </div>
             <div class="meta-item">
-              <strong>Category:</strong> 
+              <strong>Category:</strong>
               <span class="modal-category"></span>
             </div>
             <div class="meta-item modal-mission" style="display: none;">
-              <strong>Mission:</strong> 
+              <strong>Mission:</strong>
               <span class="modal-mission-name"></span>
             </div>
             <div class="meta-item modal-instrument" style="display: none;">
-              <strong>Instrument:</strong> 
+              <strong>Instrument:</strong>
               <span class="modal-instrument-name"></span>
             </div>
             <div class="meta-item modal-location" style="display: none;">
-              <strong>Location:</strong> 
+              <strong>Location:</strong>
               <span class="modal-location-name"></span>
             </div>
           </div>
-          
+
           <div class="modal-technical-info" style="display: none;">
             <h4>Technical Details</h4>
             <div class="technical-grid">
               <div class="tech-item modal-resolution" style="display: none;">
-                <strong>Resolution:</strong> 
+                <strong>Resolution:</strong>
                 <span class="modal-resolution-value"></span>
               </div>
               <div class="tech-item modal-coordinates" style="display: none;">
-                <strong>Coordinates:</strong> 
+                <strong>Coordinates:</strong>
                 <span class="modal-coordinates-value"></span>
               </div>
               <div class="tech-item modal-altitude" style="display: none;">
-                <strong>Altitude:</strong> 
+                <strong>Altitude:</strong>
                 <span class="modal-altitude-value"></span>
               </div>
             </div>
           </div>
-          
+
           <div class="modal-keywords" style="display: none;">
             <h4>Keywords</h4>
             <div class="keywords-container"></div>
           </div>
-          
+
           <div class="modal-attribution"></div>
         </div>
-        
+
         <div class="modal-actions">
           <div class="primary-actions">
             <button class="action-btn share-btn" id="modal-share">
@@ -1974,7 +2596,7 @@
               <span class="btn-text">Download</span>
             </button>
           </div>
-          
+
           <div class="secondary-actions">
             <button class="action-btn-small favorite-btn" id="modal-favorite" title="Add to Favorites">
               <span class="btn-icon">❤️</span>
@@ -1986,7 +2608,7 @@
               <span class="btn-icon">ℹ️</span>
             </button>
           </div>
-          
+
           <div class="social-share-expanded" id="social-share-menu" style="display: none;">
             <h4>Share on Social Media</h4>
             <div class="social-buttons">
@@ -2020,8 +2642,10 @@
 
   <footer>
     <div style="flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:0.5em;">
-      <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play Store" style="height:40px;"></a>
-      <a href="#"><img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Store" style="height:40px;"></a>
+      <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+          alt="Google Play Store" style="height:40px;"></a>
+      <a href="#"><img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+          alt="Apple Store" style="height:40px;"></a>
     </div>
 
     <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0.5em;">
@@ -2036,10 +2660,18 @@
     <div style="flex:1;display:flex;flex-direction:column;align-items:flex-end;gap:0.5em;">
       <div style="font-weight:bold;">Let's Connect!</div>
       <div style="display:flex;gap:0.5em;">
-        <a href="https://twitter.com/blueandcosmos" target="_blank" rel="noopener"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X" style="height:24px;filter:invert(1);"></a>
-        <a href="https://instagram.com/blueandcosmos" target="_blank" rel="noopener"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" style="height:24px;filter:invert(1);"></a>
-        <a href="https://tiktok.com/@blueandcosmos" target="_blank" rel="noopener"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok" style="height:24px;filter:invert(1);"></a>
-        <a href="https://youtube.com/@blueandcosmos" target="_blank" rel="noopener"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube" style="height:24px;filter:invert(1);"></a>
+        <a href="https://twitter.com/blueandcosmos" target="_blank" rel="noopener"><img
+            src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X"
+            style="height:24px;filter:invert(1);"></a>
+        <a href="https://instagram.com/blueandcosmos" target="_blank" rel="noopener"><img
+            src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram"
+            style="height:24px;filter:invert(1);"></a>
+        <a href="https://tiktok.com/@blueandcosmos" target="_blank" rel="noopener"><img
+            src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok"
+            style="height:24px;filter:invert(1);"></a>
+        <a href="https://youtube.com/@blueandcosmos" target="_blank" rel="noopener"><img
+            src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube"
+            style="height:24px;filter:invert(1);"></a>
       </div>
     </div>
   </footer>
@@ -2106,20 +2738,20 @@
           ];
 
           const allImages = [];
-          
+
           for (const query of queries) {
             try {
               const response = await this.fetchWithRetry(
                 `https://images-api.nasa.gov/search?q=${encodeURIComponent(query)}&media_type=image&page_size=5&year_start=2020`
               );
-              
+
               if (response.ok) {
                 const data = await response.json();
                 const images = data.collection.items
                   .filter(item => item.links && item.links.length > 0)
                   .map(item => this.parseNASAImage(item))
                   .filter(img => img.imageUrl && !img.imageUrl.includes('placeholder'));
-                
+
                 allImages.push(...images);
               }
             } catch (queryError) {
@@ -2129,10 +2761,10 @@
 
           // Remove duplicates and limit results
           const uniqueImages = this.removeDuplicates(allImages).slice(0, 15);
-          
+
           this.setCache(cacheKey, uniqueImages);
           return uniqueImages.length > 0 ? uniqueImages : this.getNASAFallback();
-          
+
         } catch (error) {
           console.error('NASA API error:', error);
           return this.getNASAFallback();
@@ -2144,13 +2776,13 @@
         const data = item.data[0];
         const links = item.links || [];
         const imageLink = links.find(link => link.rel === 'preview') || links[0];
-        
+
         // Clean and truncate description
         let description = data.description || 'Image from NASA';
         if (description.length > 200) {
           description = description.substring(0, 200) + '...';
         }
-        
+
         // Clean title
         let title = data.title || 'NASA Image';
         if (title.length > 80) {
@@ -2183,15 +2815,15 @@
       // Generate proper NASA attribution
       getNASAAttribution(data) {
         let attribution = 'NASA';
-        
+
         if (data.center) {
           attribution += `/${data.center}`;
         }
-        
+
         if (data.photographer) {
           attribution += ` - ${data.photographer}`;
         }
-        
+
         return attribution;
       }
 
@@ -2257,7 +2889,7 @@
       // Enhanced ESA content with real imagery
       getESAEnhancedContent() {
         const baseTime = Date.now();
-        
+
         return [
           {
             id: 'esa_gaia_1',
@@ -2359,10 +2991,10 @@
 
           // Remove duplicates and limit results
           const uniqueImages = this.removeDuplicates(allImages).slice(0, 8);
-          
+
           this.setCache(cacheKey, uniqueImages);
           return uniqueImages.length > 0 ? uniqueImages : this.getSpaceXFallback();
-          
+
         } catch (error) {
           console.error('SpaceX API error:', error);
           return this.getSpaceXFallback();
@@ -2372,23 +3004,23 @@
       // Enhanced SpaceX launch data parsing
       parseSpaceXLaunch(launch) {
         const images = [];
-        
+
         if (launch.links && launch.links.flickr && launch.links.flickr.original && launch.links.flickr.original.length > 0) {
           const rocketName = launch.rocket?.name || 'Falcon 9';
           const flightNumber = launch.flight_number || 'Unknown';
-          
+
           // Limit to 3 images per launch to avoid overwhelming
           const imageUrls = launch.links.flickr.original.slice(0, 3);
-          
+
           imageUrls.forEach((imageUrl, index) => {
             let description = launch.details || `SpaceX ${launch.name} mission launch`;
-            
+
             // Enhance description with mission details
             if (launch.payloads && launch.payloads.length > 0) {
               const payloadNames = launch.payloads.map(p => p.name || 'payload').join(', ');
               description += ` carrying ${payloadNames}`;
             }
-            
+
             // Truncate long descriptions
             if (description.length > 200) {
               description = description.substring(0, 200) + '...';
@@ -2416,7 +3048,7 @@
             });
           });
         }
-        
+
         return images;
       }
 
@@ -2429,7 +3061,7 @@
         try {
           // Try to get ISS position for context
           const issPosition = await this.getISSPosition();
-          
+
           // Generate ISS content with current position context
           const images = this.getISSEnhancedContent(issPosition);
           this.setCache(cacheKey, images);
@@ -2461,8 +3093,8 @@
       // Enhanced ISS content with position context
       getISSEnhancedContent(issPosition) {
         const baseTime = Date.now();
-        const locationContext = issPosition ? 
-          `Currently over ${this.getLocationFromCoords(issPosition.latitude, issPosition.longitude)}` : 
+        const locationContext = issPosition ?
+          `Currently over ${this.getLocationFromCoords(issPosition.latitude, issPosition.longitude)}` :
           'Orbiting Earth at 408 km altitude';
 
         return [
@@ -2542,7 +3174,7 @@
           // Fetch current APOD and recent ones for more content
           const today = new Date();
           const dates = [];
-          
+
           // Get last 5 days of APOD
           for (let i = 0; i < 5; i++) {
             const date = new Date(today);
@@ -2557,10 +3189,10 @@
               const response = await this.fetchWithRetry(
                 `https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=${date}`
               );
-              
+
               if (response.ok) {
                 const data = await response.json();
-                
+
                 if (data.media_type === 'image' && data.url) {
                   // Truncate long descriptions
                   let description = data.explanation || 'Astronomy Picture of the Day from NASA';
@@ -2586,7 +3218,7 @@
                       hdUrl: data.hdurl
                     }
                   };
-                  
+
                   apodImages.push(image);
                 }
               }
@@ -2594,10 +3226,10 @@
               console.warn(`APOD fetch failed for ${date}:`, dateError);
             }
           }
-          
+
           this.setCache(cacheKey, apodImages);
           return apodImages;
-          
+
         } catch (error) {
           console.error('APOD API error:', error);
           return this.getAPODFallback();
@@ -2628,10 +3260,10 @@
       // Combine and sort images from all sources
       combineAndSort(imageArrays) {
         const allImages = imageArrays.flat();
-        
+
         // Remove duplicates based on title similarity
         const uniqueImages = this.removeDuplicates(allImages);
-        
+
         // Sort by timestamp (newest first)
         return uniqueImages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
       }
@@ -2743,7 +3375,7 @@
             category: 'deep-space',
             timestamp: new Date(baseTime - 6 * 60 * 60 * 1000), // 6 hours ago
             sourceUrl: 'https://www.esa.int/',
-            metadata: { 
+            metadata: {
               mission: 'Gaia',
               type: 'Stellar Cartography',
               attribution: 'ESA/Gaia/DPAC'
@@ -2759,7 +3391,7 @@
             category: 'missions',
             timestamp: new Date(baseTime - 8 * 60 * 60 * 1000), // 8 hours ago
             sourceUrl: 'https://www.esa.int/',
-            metadata: { 
+            metadata: {
               mission: 'BepiColombo',
               target: 'Mercury',
               attribution: 'ESA/JAXA'
@@ -2781,7 +3413,7 @@
             category: 'missions',
             timestamp: new Date(baseTime - 3 * 60 * 60 * 1000), // 3 hours ago
             sourceUrl: 'https://www.spacex.com/',
-            metadata: { 
+            metadata: {
               rocket: 'Falcon Heavy',
               mission: 'Arabsat-6A',
               attribution: 'SpaceX'
@@ -2797,7 +3429,7 @@
             category: 'missions',
             timestamp: new Date(baseTime - 6 * 60 * 60 * 1000), // 6 hours ago
             sourceUrl: 'https://www.spacex.com/',
-            metadata: { 
+            metadata: {
               rocket: 'Starship',
               mission: 'Development Test',
               attribution: 'SpaceX'
@@ -2838,15 +3470,15 @@
 
     // Initialize the data manager
     const imageDataManager = new ImageDataManager();
-    
+
     // Global image data store for interaction handling
     let currentImageData = [];
-    
+
     // Performance monitoring
     const performanceMonitor = {
       startTime: Date.now(),
       imageLoadTimes: [],
-      
+
       recordImageLoad(startTime, endTime, success = true) {
         this.imageLoadTimes.push({
           duration: endTime - startTime,
@@ -2854,22 +3486,22 @@
           timestamp: Date.now()
         });
       },
-      
+
       getAverageLoadTime() {
         const successfulLoads = this.imageLoadTimes.filter(load => load.success);
         if (successfulLoads.length === 0) return 0;
-        
+
         const total = successfulLoads.reduce((sum, load) => sum + load.duration, 0);
         return Math.round(total / successfulLoads.length);
       },
-      
+
       getLoadSuccessRate() {
         if (this.imageLoadTimes.length === 0) return 100;
-        
+
         const successful = this.imageLoadTimes.filter(load => load.success).length;
         return Math.round((successful / this.imageLoadTimes.length) * 100);
       },
-      
+
       logPerformanceStats() {
         console.log('🚀 Performance Stats:', {
           averageImageLoadTime: `${this.getAverageLoadTime()}ms`,
@@ -2881,47 +3513,47 @@
     };
   </script>
   <script>
-    (function initTheme(){
+    (function initTheme() {
       const saved = localStorage.getItem("theme");
-      if(saved==="dark"){document.body.classList.add("dark");document.getElementById("themeToggle").textContent="☀️";}
-      document.getElementById("themeToggle").addEventListener("click",()=>{
+      if (saved === "dark") { document.body.classList.add("dark"); document.getElementById("themeToggle").textContent = "☀️"; }
+      document.getElementById("themeToggle").addEventListener("click", () => {
         document.body.classList.toggle("dark");
-        const isDark=document.body.classList.contains("dark");
-        document.getElementById("themeToggle").textContent=isDark?"☀️":"🌙";
-        localStorage.setItem("theme",isDark?"dark":"light");
+        const isDark = document.body.classList.contains("dark");
+        document.getElementById("themeToggle").textContent = isDark ? "☀️" : "🌙";
+        localStorage.setItem("theme", isDark ? "dark" : "light");
       });
     })();
 
-    (function stickyDropdowns(){
-      const OPEN="open";const DELAY=160;
-      document.querySelectorAll(".dropdown").forEach(dd=>{
-        let t=null;const btn=dd.querySelector(".dropbtn");const menu=dd.querySelector(".dropdown-content");
-        function open(){dd.classList.add(OPEN);btn?.setAttribute("aria-expanded","true");if(t){clearTimeout(t);t=null;}}
-        function close(){if(t)clearTimeout(t);t=setTimeout(()=>{dd.classList.remove(OPEN);btn?.setAttribute("aria-expanded","false");},DELAY);}
-        dd.addEventListener("pointerenter",open);dd.addEventListener("pointerleave",close);
-        btn?.addEventListener("focus",open);
-        menu?.addEventListener("focusout",e=>{if(!dd.contains(e.relatedTarget))close();});
-        menu?.querySelectorAll("a").forEach(a=>{a.addEventListener("click",()=>{menu.querySelectorAll("a").forEach(el=>el.classList.remove("clicked"));a.classList.add("clicked");dd.classList.remove(OPEN);btn?.setAttribute("aria-expanded","false");});});
+    (function stickyDropdowns() {
+      const OPEN = "open"; const DELAY = 160;
+      document.querySelectorAll(".dropdown").forEach(dd => {
+        let t = null; const btn = dd.querySelector(".dropbtn"); const menu = dd.querySelector(".dropdown-content");
+        function open() { dd.classList.add(OPEN); btn?.setAttribute("aria-expanded", "true"); if (t) { clearTimeout(t); t = null; } }
+        function close() { if (t) clearTimeout(t); t = setTimeout(() => { dd.classList.remove(OPEN); btn?.setAttribute("aria-expanded", "false"); }, DELAY); }
+        dd.addEventListener("pointerenter", open); dd.addEventListener("pointerleave", close);
+        btn?.addEventListener("focus", open);
+        menu?.addEventListener("focusout", e => { if (!dd.contains(e.relatedTarget)) close(); });
+        menu?.querySelectorAll("a").forEach(a => { a.addEventListener("click", () => { menu.querySelectorAll("a").forEach(el => el.classList.remove("clicked")); a.classList.add("clicked"); dd.classList.remove(OPEN); btn?.setAttribute("aria-expanded", "false"); }); });
       });
     })();
 
-    (function initMoonPhase(){
-      function getMoonPhase(){
-        const now=new Date();const m=now.getMonth()+1;const d=now.getDate();const y=now.getFullYear();
-        if(y===2025&&m===8){
-          if(d<=3)return 7;if(d<=6)return 0;if(d<=10)return 1;if(d<=13)return 2;if(d<=17)return 3;if(d<=20)return 4;if(d<=24)return 5;if(d<=27)return 6;return 7;
+    (function initMoonPhase() {
+      function getMoonPhase() {
+        const now = new Date(); const m = now.getMonth() + 1; const d = now.getDate(); const y = now.getFullYear();
+        if (y === 2025 && m === 8) {
+          if (d <= 3) return 7; if (d <= 6) return 0; if (d <= 10) return 1; if (d <= 13) return 2; if (d <= 17) return 3; if (d <= 20) return 4; if (d <= 24) return 5; if (d <= 27) return 6; return 7;
         }
-        const base=new Date(2024,7,4);const days=(now-base)/(1000*60*60*24);const cycle=days/29.53;return Math.floor((cycle-Math.floor(cycle))*8)%8;
+        const base = new Date(2024, 7, 4); const days = (now - base) / (1000 * 60 * 60 * 24); const cycle = days / 29.53; return Math.floor((cycle - Math.floor(cycle)) * 8) % 8;
       }
-      function info(p){return[{name:"New Moon",emoji:"🌑"},{name:"Waxing Crescent",emoji:"🌒"},{name:"First Quarter",emoji:"🌓"},{name:"Waxing Gibbous",emoji:"🌔"},{name:"Full Moon",emoji:"🌕"},{name:"Waning Gibbous",emoji:"🌖"},{name:"Last Quarter",emoji:"🌗"},{name:"Waning Crescent",emoji:"🌘"}][p];}
-      const phase=getMoonPhase(),data=info(phase),now=new Date();
-      document.getElementById("moon-display").textContent=data.emoji;
-      document.querySelector(".moon-label").textContent=data.name;
-      document.getElementById("moon-context").textContent=`${now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} • New York City, NY`;
+      function info(p) { return [{ name: "New Moon", emoji: "🌑" }, { name: "Waxing Crescent", emoji: "🌒" }, { name: "First Quarter", emoji: "🌓" }, { name: "Waxing Gibbous", emoji: "🌔" }, { name: "Full Moon", emoji: "🌕" }, { name: "Waning Gibbous", emoji: "🌖" }, { name: "Last Quarter", emoji: "🌗" }, { name: "Waning Crescent", emoji: "🌘" }][p]; }
+      const phase = getMoonPhase(), data = info(phase), now = new Date();
+      document.getElementById("moon-display").textContent = data.emoji;
+      document.querySelector(".moon-label").textContent = data.name;
+      document.getElementById("moon-context").textContent = `${now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} • New York City, NY`;
     })();
 
     // Enhanced Image Modal System
-    (function initImageModal(){
+    (function initImageModal() {
       const modal = document.getElementById('image-modal');
       const modalImage = document.getElementById('modal-image');
       const modalTitle = document.querySelector('.modal-title');
@@ -2947,7 +3579,7 @@
       const modalAttribution = document.querySelector('.modal-attribution');
       const modalSourceLink = document.getElementById('modal-source-link');
       const modalLoading = document.querySelector('.modal-loading');
-      
+
       const closeBtn = document.querySelector('.modal-close');
       const prevBtn = document.querySelector('.prev-btn');
       const nextBtn = document.querySelector('.next-btn');
@@ -2957,7 +3589,7 @@
       const fullscreenBtn = document.getElementById('modal-fullscreen');
       const infoToggleBtn = document.getElementById('modal-info-toggle');
       const socialShareMenu = document.getElementById('social-share-menu');
-      
+
       let currentImageIndex = 0;
       let filteredImages = [];
 
@@ -2977,10 +3609,10 @@
 
         // Load image data
         loadModalImage(imageData);
-        
+
         // Update navigation buttons
         updateNavigationButtons();
-        
+
         // Focus management
         closeBtn.focus();
       }
@@ -2993,15 +3625,15 @@
 
         // Load high-resolution image
         const highResImage = new Image();
-        
-        highResImage.onload = function() {
+
+        highResImage.onload = function () {
           modalImage.src = imageData.imageUrl;
           modalImage.alt = imageData.title;
           modalLoading.style.display = 'none';
           modalImage.style.opacity = '1';
         };
 
-        highResImage.onerror = function() {
+        highResImage.onerror = function () {
           modalImage.src = imageData.thumbnailUrl;
           modalImage.alt = imageData.title;
           modalLoading.style.display = 'none';
@@ -3103,7 +3735,7 @@
         modal.classList.remove('active');
         document.body.style.overflow = '';
         modal.setAttribute('aria-hidden', 'true');
-        
+
         // Clear image source to save memory
         setTimeout(() => {
           modalImage.src = '';
@@ -3213,7 +3845,7 @@
       // Update keywords display
       function updateKeywords(imageData) {
         keywordsContainer.innerHTML = '';
-        
+
         if (imageData.metadata?.keywords && imageData.metadata.keywords.length > 0) {
           imageData.metadata.keywords.forEach(keyword => {
             const tag = document.createElement('span');
@@ -3285,10 +3917,10 @@
 
         const url = `${window.location.href}#image-${imageId}`;
         const text = `Check out this amazing space image: ${imageData.title}`;
-        
+
         let shareUrl = '';
-        
-        switch(platform) {
+
+        switch (platform) {
           case 'twitter':
             shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
             break;
@@ -3304,7 +3936,7 @@
             });
             return;
         }
-        
+
         if (shareUrl) {
           window.open(shareUrl, '_blank', 'width=600,height=400');
         }
@@ -3320,10 +3952,10 @@
       function showAutoRefreshStatus(message, type = 'info') {
         const statusElement = document.getElementById('auto-refresh-status');
         const statusText = statusElement.querySelector('.status-text');
-        
+
         statusText.textContent = message;
         statusElement.className = `auto-refresh-status visible ${type}`;
-        
+
         // Auto-hide after 3 seconds
         setTimeout(() => {
           statusElement.classList.remove('visible');
@@ -3354,14 +3986,14 @@
       }
 
       // Event listeners
-      document.addEventListener('click', function(e) {
+      document.addEventListener('click', function (e) {
         // Handle expand button clicks
         if (e.target.classList.contains('expand-btn')) {
           e.preventDefault();
           const imageId = e.target.dataset.imageId;
           openModal(imageId);
         }
-        
+
         // Handle gallery share button clicks
         if (e.target.classList.contains('share-btn') && !e.target.id) {
           e.preventDefault();
@@ -3373,7 +4005,7 @@
               text: `Check out this space image: ${imageData.title}`,
               url: window.location.href
             };
-            
+
             if (navigator.share) {
               navigator.share(shareData);
             } else {
@@ -3391,7 +4023,7 @@
       nextBtn.addEventListener('click', navigateNext);
       shareBtn.addEventListener('click', toggleSocialShareMenu);
       downloadBtn.addEventListener('click', downloadImage);
-      favoriteBtn.addEventListener('click', function() {
+      favoriteBtn.addEventListener('click', function () {
         const imageId = modal.dataset.currentImageId;
         const favorites = getFavorites();
         if (favorites.includes(imageId)) {
@@ -3405,7 +4037,7 @@
       infoToggleBtn.addEventListener('click', toggleTechnicalInfo);
 
       // Social sharing event listeners
-      document.addEventListener('click', function(e) {
+      document.addEventListener('click', function (e) {
         if (e.target.closest('.social-btn')) {
           const platform = e.target.closest('.social-btn').dataset.platform;
           shareToSocial(platform);
@@ -3413,16 +4045,16 @@
       });
 
       // Close modal when clicking overlay
-      modal.addEventListener('click', function(e) {
+      modal.addEventListener('click', function (e) {
         if (e.target === modal) {
           closeModal();
         }
       });
 
       // Keyboard navigation
-      document.addEventListener('keydown', function(e) {
+      document.addEventListener('keydown', function (e) {
         if (modal.classList.contains('active')) {
-          switch(e.key) {
+          switch (e.key) {
             case 'Escape':
               closeModal();
               break;
@@ -3434,7 +4066,7 @@
               break;
           }
         }
-        
+
         // Handle expand/share button keyboard activation
         if (e.key === 'Enter' || e.key === ' ') {
           if (e.target.classList.contains('expand-btn') || e.target.classList.contains('share-btn')) {
@@ -3446,38 +4078,181 @@
     })();
 
     // Filter and Controls Functionality
-    (function initControls(){
+    (function initControls() {
       const gallery = document.getElementById('image-gallery');
       const filterBtns = document.querySelectorAll('.filter-btn');
       const viewBtns = document.querySelectorAll('.view-btn');
       const refreshBtn = document.querySelector('.refresh-btn');
       const lastRefreshTime = document.getElementById('last-refresh');
-      
+
       let currentFilter = 'all';
       let currentView = 'grid';
+      let currentSearch = '';
+      let currentSourceFilter = 'all';
+      let currentDateFilter = 'all';
+      let currentSort = 'date-desc';
 
-      // Filter functionality
-      function filterImages(category) {
-        const cards = gallery.querySelectorAll('.image-card');
+      // Enhanced filter functionality
+      function filterImages(category = currentFilter) {
+        currentFilter = category;
+        applyAllFilters();
         
-        cards.forEach(card => {
-          const cardCategory = card.dataset.category;
-          const shouldShow = category === 'all' || cardCategory === category;
-          
-          if (shouldShow) {
-            card.style.display = 'block';
-            card.style.animation = 'fadeIn 0.3s ease-in-out';
-          } else {
-            card.style.display = 'none';
-          }
-        });
-
         // Update active filter button
         filterBtns.forEach(btn => {
           btn.classList.toggle('active', btn.dataset.filter === category);
         });
+      }
 
-        currentFilter = category;
+      // Apply all active filters
+      function applyAllFilters() {
+        const cards = Array.from(gallery.querySelectorAll('.image-card'));
+        let visibleCount = 0;
+        
+        cards.forEach(card => {
+          const shouldShow = passesAllFilters(card);
+          
+          if (shouldShow) {
+            card.style.display = 'block';
+            card.style.animation = 'fadeIn 0.3s ease-in-out';
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+        
+        // Sort visible cards
+        sortVisibleCards();
+        
+        // Update results count
+        updateResultsCount(visibleCount, cards.length);
+      }
+
+      // Check if card passes all active filters
+      function passesAllFilters(card) {
+        const cardCategory = card.dataset.category;
+        const cardSource = card.dataset.source;
+        const cardImageId = card.dataset.imageId;
+        
+        // Find image data for this card
+        const imageData = currentImageData.find(img => img.id === cardImageId);
+        if (!imageData) return false;
+        
+        // Category filter
+        if (currentFilter !== 'all' && cardCategory !== currentFilter) {
+          return false;
+        }
+        
+        // Source filter
+        if (currentSourceFilter !== 'all' && cardSource !== currentSourceFilter) {
+          return false;
+        }
+        
+        // Date filter
+        if (!passesDateFilter(imageData)) {
+          return false;
+        }
+        
+        // Search filter
+        if (currentSearch && !passesSearchFilter(imageData)) {
+          return false;
+        }
+        
+        return true;
+      }
+
+      // Check if image passes date filter
+      function passesDateFilter(imageData) {
+        if (currentDateFilter === 'all') return true;
+        
+        const imageDate = new Date(imageData.timestamp);
+        const now = new Date();
+        
+        switch (currentDateFilter) {
+          case 'today':
+            return imageDate.toDateString() === now.toDateString();
+          case 'week':
+            const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            return imageDate >= weekAgo;
+          case 'month':
+            const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+            return imageDate >= monthAgo;
+          default:
+            return true;
+        }
+      }
+
+      // Check if image passes search filter
+      function passesSearchFilter(imageData) {
+        if (!currentSearch) return true;
+        
+        const searchTerm = currentSearch.toLowerCase();
+        const searchableText = [
+          imageData.title,
+          imageData.description,
+          imageData.source,
+          imageData.category,
+          imageData.metadata?.mission || '',
+          imageData.metadata?.instrument || '',
+          imageData.metadata?.location || '',
+          ...(imageData.metadata?.keywords || [])
+        ].join(' ').toLowerCase();
+        
+        return searchableText.includes(searchTerm);
+      }
+
+      // Sort visible cards
+      function sortVisibleCards() {
+        const visibleCards = Array.from(gallery.querySelectorAll('.image-card[style*="block"]'));
+        
+        visibleCards.sort((a, b) => {
+          const aData = currentImageData.find(img => img.id === a.dataset.imageId);
+          const bData = currentImageData.find(img => img.id === b.dataset.imageId);
+          
+          if (!aData || !bData) return 0;
+          
+          switch (currentSort) {
+            case 'date-desc':
+              return new Date(bData.timestamp) - new Date(aData.timestamp);
+            case 'date-asc':
+              return new Date(aData.timestamp) - new Date(bData.timestamp);
+            case 'title-asc':
+              return aData.title.localeCompare(bData.title);
+            case 'source-asc':
+              return aData.source.localeCompare(bData.source);
+            default:
+              return 0;
+          }
+        });
+        
+        // Reorder DOM elements
+        visibleCards.forEach(card => {
+          gallery.appendChild(card);
+        });
+      }
+
+      // Update results count display
+      function updateResultsCount(visible, total) {
+        let countElement = document.getElementById('results-count');
+        if (!countElement) {
+          countElement = document.createElement('div');
+          countElement.id = 'results-count';
+          countElement.className = 'results-count';
+          gallery.parentNode.insertBefore(countElement, gallery);
+        }
+        
+        if (visible === total) {
+          countElement.textContent = `Showing all ${total} images`;
+        } else {
+          countElement.textContent = `Showing ${visible} of ${total} images`;
+        }
+        
+        countElement.style.cssText = `
+          text-align: center;
+          margin-bottom: 1em;
+          font-size: 0.9em;
+          color: #666;
+          font-style: italic;
+        `;
       }
 
       // View switching functionality
@@ -3500,56 +4275,56 @@
       async function refreshGallery() {
         const startTime = performance.now();
         refreshBtn.classList.add('spinning');
-        
+
         try {
           // Fetch fresh data from all sources
           const images = await imageDataManager.fetchAllImages();
-          
+
           // Check if we got new content
-          const hasNewContent = images.length !== currentImageData.length || 
-                               images.some((img, index) => img.id !== currentImageData[index]?.id);
-          
+          const hasNewContent = images.length !== currentImageData.length ||
+            images.some((img, index) => img.id !== currentImageData[index]?.id);
+
           // Update the gallery with new images
           await updateGalleryWithImages(images);
-          
+
           updateLastRefreshTime();
-          
-          // Re-apply current filter to maintain state
-          filterImages(currentFilter);
-          
+
+          // Re-apply all filters to maintain state
+          applyAllFilters();
+
           const endTime = performance.now();
           const refreshTime = Math.round(endTime - startTime);
-          
+
           // Show success feedback
           const originalText = refreshBtn.title;
           refreshBtn.title = `Refreshed in ${refreshTime}ms`;
           setTimeout(() => {
             refreshBtn.title = originalText;
           }, 2000);
-          
+
           // Show status for auto-refresh
           if (hasNewContent) {
             showAutoRefreshStatus(`Gallery updated with fresh content (${refreshTime}ms)`, 'success');
           } else {
             showAutoRefreshStatus(`No new content available (${refreshTime}ms)`, 'info');
           }
-          
+
           return true; // Success
-          
+
         } catch (error) {
           console.error('Refresh failed:', error);
-          
+
           // Show error feedback
           const originalText = refreshBtn.title;
           refreshBtn.title = 'Refresh failed - try again';
           setTimeout(() => {
             refreshBtn.title = originalText;
           }, 3000);
-          
+
           showAutoRefreshStatus('Refresh failed - check connection', 'error');
-          
+
           throw error; // Re-throw for auto-refresh manager
-          
+
         } finally {
           refreshBtn.classList.remove('spinning');
         }
@@ -3559,33 +4334,33 @@
       async function updateGalleryWithImages(images) {
         // Store image data globally for interaction handling
         currentImageData = images;
-        
+
         // Clear existing content
         gallery.innerHTML = '';
-        
+
         // Add loading indicator
         gallery.innerHTML = '<div class="loading-message">Loading fresh space imagery...</div>';
-        
+
         // Simulate loading delay for better UX
         await new Promise(resolve => setTimeout(resolve, 500));
-        
+
         // Clear loading message
         gallery.innerHTML = '';
-        
+
         // Create image cards from data with performance optimization
         const fragment = document.createDocumentFragment();
-        
+
         images.forEach((imageData, index) => {
           const card = createImageCard(imageData, index);
           fragment.appendChild(card);
         });
-        
+
         // Batch DOM update for better performance
         gallery.appendChild(fragment);
-        
+
         // Reinitialize lazy loading for new images
         initializeLazyLoading();
-        
+
         // Log NASA API integration success
         const nasaImages = images.filter(img => img.source === 'nasa');
         console.log(`NASA API Integration: Loaded ${nasaImages.length} images from NASA sources`);
@@ -3598,23 +4373,23 @@
         card.dataset.category = imageData.category;
         card.dataset.source = imageData.source;
         card.dataset.imageId = imageData.id;
-        
+
         const timeAgo = getTimeAgo(imageData.timestamp);
         const attribution = imageData.metadata?.attribution || imageData.source.toUpperCase();
-        
+
         // Add NASA-specific styling for APOD images
         const isAPOD = imageData.metadata?.type === 'APOD';
         const apodClass = isAPOD ? ' apod-image' : '';
-        
+
         // Determine loading strategy based on position
         const isAboveFold = index < 4; // First 4 images are above fold
         const loadingStrategy = isAboveFold ? 'eager' : 'lazy';
         const priority = isAboveFold ? 'high' : 'low';
-        
+
         // Optimize image URLs for different screen sizes
         const optimizedImageUrl = getOptimizedImageUrl(imageData.thumbnailUrl, imageData.imageUrl);
         const fallbackUrl = getImageFallback(imageData.source);
-        
+
         card.innerHTML = `
           <div class="image-container${apodClass}">
             <img ${isAboveFold ? `src="${optimizedImageUrl}"` : `data-src="${optimizedImageUrl}"`}
@@ -3640,7 +4415,7 @@
             ${imageData.metadata?.copyright ? `<div class="image-attribution">© ${escapeHtml(imageData.metadata.copyright)}</div>` : ''}
           </div>
         `;
-        
+
         return card;
       }
 
@@ -3648,16 +4423,16 @@
       function getOptimizedImageUrl(thumbnailUrl, fullUrl) {
         // Check for high DPI displays
         const isHighDPI = window.devicePixelRatio > 1.5;
-        
+
         // Check connection speed (if available)
         const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
         const isSlowConnection = connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g');
-        
+
         // Use full resolution for high DPI displays unless connection is slow
         if (isHighDPI && !isSlowConnection && fullUrl && fullUrl !== thumbnailUrl) {
           return fullUrl;
         }
-        
+
         return thumbnailUrl;
       }
 
@@ -3675,7 +4450,7 @@
         const minutes = Math.floor(diff / (1000 * 60));
         const hours = Math.floor(diff / (1000 * 60 * 60));
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        
+
         if (minutes < 60) {
           return minutes <= 1 ? 'just now' : `${minutes} minutes ago`;
         } else if (hours < 24) {
@@ -3720,63 +4495,63 @@
       function loadImageWithOptimization(img, observer) {
         const originalSrc = img.dataset.src || img.src;
         const loadStartTime = performance.now();
-        
+
         // Create a new image element for preloading
         const imageLoader = new Image();
-        
+
         // Add loading state
         img.classList.add('loading');
-        
+
         // Set up performance monitoring
         const timeoutId = setTimeout(() => {
           console.warn('Image loading timeout:', originalSrc);
           performanceMonitor.recordImageLoad(loadStartTime, performance.now(), false);
         }, 10000); // 10 second timeout
-        
-        imageLoader.onload = function() {
+
+        imageLoader.onload = function () {
           clearTimeout(timeoutId);
           const loadEndTime = performance.now();
-          
+
           // Record successful load
           performanceMonitor.recordImageLoad(loadStartTime, loadEndTime, true);
-          
+
           // Image loaded successfully
           img.src = originalSrc;
           img.classList.remove('loading');
           img.classList.add('loaded');
-          
+
           // Remove data-src attribute
           if (img.dataset.src) {
             img.removeAttribute('data-src');
           }
-          
+
           // Stop observing this image
           observer.unobserve(img);
-          
+
           // Trigger fade-in animation with RAF for smooth performance
           requestAnimationFrame(() => {
             img.style.opacity = '1';
           });
         };
-        
-        imageLoader.onerror = function() {
+
+        imageLoader.onerror = function () {
           clearTimeout(timeoutId);
           const loadEndTime = performance.now();
-          
+
           // Record failed load
           performanceMonitor.recordImageLoad(loadStartTime, loadEndTime, false);
-          
+
           // Handle loading error
           img.classList.remove('loading');
           img.classList.add('error');
-          
+
           // Set fallback image
           img.src = getImageFallback(img.dataset.source || 'nasa');
           img.alt = 'Image unavailable - ' + (img.alt || 'Space image');
-          
+
           observer.unobserve(img);
         };
-        
+
         // Optimize loading based on connection
         if (navigator.connection) {
           const connection = navigator.connection;
@@ -3815,13 +4590,114 @@
       // Update last refresh time
       function updateLastRefreshTime() {
         const now = new Date();
-        const timeString = now.toLocaleTimeString('en-US', { 
-          hour: 'numeric', 
+        const timeString = now.toLocaleTimeString('en-US', {
+          hour: 'numeric',
           minute: '2-digit',
-          hour12: true 
+          hour12: true
         });
         lastRefreshTime.textContent = timeString;
       }
+
+      // Search functionality
+      const searchInput = document.getElementById('search-input');
+      const searchClear = document.getElementById('search-clear');
+      const searchSuggestions = document.getElementById('search-suggestions');
+      const advancedToggle = document.getElementById('advanced-toggle');
+      const sortToggle = document.getElementById('sort-toggle');
+      const advancedFilters = document.getElementById('advanced-filters');
+      const sortOptions = document.getElementById('sort-options');
+
+      // Search input handling
+      searchInput.addEventListener('input', (e) => {
+        currentSearch = e.target.value.trim();
+        searchClear.style.display = currentSearch ? 'block' : 'none';
+        applyAllFilters();
+        
+        // Hide suggestions when typing
+        if (currentSearch) {
+          searchSuggestions.style.display = 'none';
+        }
+      });
+
+      searchInput.addEventListener('focus', () => {
+        if (!currentSearch) {
+          searchSuggestions.style.display = 'block';
+        }
+      });
+
+      searchInput.addEventListener('blur', () => {
+        // Delay hiding to allow clicking suggestions
+        setTimeout(() => {
+          searchSuggestions.style.display = 'none';
+        }, 200);
+      });
+
+      searchClear.addEventListener('click', () => {
+        searchInput.value = '';
+        currentSearch = '';
+        searchClear.style.display = 'none';
+        applyAllFilters();
+        searchInput.focus();
+      });
+
+      // Search suggestions
+      document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('suggestion-btn')) {
+          const searchTerm = e.target.dataset.search;
+          searchInput.value = searchTerm;
+          currentSearch = searchTerm;
+          searchClear.style.display = 'block';
+          searchSuggestions.style.display = 'none';
+          applyAllFilters();
+        }
+      });
+
+      // Advanced filters toggle
+      advancedToggle.addEventListener('click', () => {
+        const isVisible = advancedFilters.style.display !== 'none';
+        advancedFilters.style.display = isVisible ? 'none' : 'block';
+        advancedToggle.classList.toggle('active', !isVisible);
+      });
+
+      // Sort options toggle
+      sortToggle.addEventListener('click', () => {
+        const isVisible = sortOptions.style.display !== 'none';
+        sortOptions.style.display = isVisible ? 'none' : 'block';
+        sortToggle.classList.toggle('active', !isVisible);
+      });
+
+      // Source filter buttons
+      document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('source-filter-btn')) {
+          currentSourceFilter = e.target.dataset.source;
+          document.querySelectorAll('.source-filter-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.source === currentSourceFilter);
+          });
+          applyAllFilters();
+        }
+      });
+
+      // Date filter buttons
+      document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('date-filter-btn')) {
+          currentDateFilter = e.target.dataset.range;
+          document.querySelectorAll('.date-filter-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.range === currentDateFilter);
+          });
+          applyAllFilters();
+        }
+      });
+
+      // Sort buttons
+      document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('sort-btn')) {
+          currentSort = e.target.dataset.sort;
+          document.querySelectorAll('.sort-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.sort === currentSort);
+          });
+          applyAllFilters();
+        }
+      });
 
       // Event listeners
       filterBtns.forEach(btn => {
@@ -3846,7 +4722,7 @@
         autoRefreshManager.toggle();
         autoRefreshToggle.classList.toggle('enabled', autoRefreshManager.isEnabled);
         autoRefreshToggle.textContent = autoRefreshManager.isEnabled ? 'Auto' : 'Manual';
-        
+
         showAutoRefreshStatus(
           autoRefreshManager.isEnabled ? 'Auto-refresh enabled' : 'Auto-refresh disabled',
           autoRefreshManager.isEnabled ? 'success' : 'error'
@@ -3856,9 +4732,9 @@
       // Keyboard navigation for controls
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
-          if (e.target.classList.contains('filter-btn') || 
-              e.target.classList.contains('view-btn') || 
-              e.target.classList.contains('refresh-btn')) {
+          if (e.target.classList.contains('filter-btn') ||
+            e.target.classList.contains('view-btn') ||
+            e.target.classList.contains('refresh-btn')) {
             e.preventDefault();
             e.target.click();
           }
@@ -3867,16 +4743,16 @@
 
       // Initialize
       updateLastRefreshTime();
-      
+
       // Load initial data
       async function initializeGallery() {
         try {
           // Show loading state
           gallery.innerHTML = '<div class="loading-message">Loading space imagery from NASA, ESA, SpaceX, and ISS...</div>';
-          
+
           // Fetch initial data
           const images = await imageDataManager.fetchAllImages();
-          
+
           if (images.length > 0) {
             await updateGalleryWithImages(images);
           } else {
@@ -3888,24 +4764,24 @@
           gallery.innerHTML = '<div class="error-message">Failed to load images. Please try refreshing the page.</div>';
         }
       }
-      
+
       // Memory management and cleanup
       function cleanupResources() {
         // Clean up intersection observer
         if (window.lazyImageObserver) {
           window.lazyImageObserver.disconnect();
         }
-        
+
         // Clear image cache periodically
         if (imageDataManager.cache.size > 50) {
           const oldestEntries = Array.from(imageDataManager.cache.entries())
             .sort((a, b) => a[1].timestamp - b[1].timestamp)
             .slice(0, 20);
-          
+
           oldestEntries.forEach(([key]) => {
             imageDataManager.cache.delete(key);
           });
-          
+
           console.log('🧹 Cleaned up old cache entries');
         }
       }
@@ -3922,7 +4798,7 @@
 
       // Start initialization
       initializeGallery();
-      
+
       // Enhanced Auto-Refresh System
       const autoRefreshManager = {
         interval: 5 * 60 * 1000, // 5 minutes default
@@ -3933,37 +4809,37 @@
         lastUserActivity: Date.now(),
         isEnabled: true,
         consecutiveFailures: 0,
-        
+
         init() {
           this.startAutoRefresh();
           this.setupActivityTracking();
           this.setupVisibilityTracking();
           this.setupNetworkTracking();
         },
-        
+
         startAutoRefresh() {
           this.stopAutoRefresh();
           this.intervalId = setInterval(() => {
             this.performAutoRefresh();
           }, this.currentInterval);
-          
+
           console.log(`🔄 Auto-refresh started: ${this.currentInterval / 1000}s interval`);
         },
-        
+
         stopAutoRefresh() {
           if (this.intervalId) {
             clearInterval(this.intervalId);
             this.intervalId = null;
           }
         },
-        
+
         async performAutoRefresh() {
           if (!this.shouldRefresh()) {
             return;
           }
-          
+
           console.log('🔄 Auto-refresh triggered');
-          
+
           try {
             await refreshGallery();
             this.onRefreshSuccess();
@@ -3971,26 +4847,26 @@
             this.onRefreshFailure(error);
           }
         },
-        
+
         shouldRefresh() {
           // Don't refresh if disabled
           if (!this.isEnabled) {
             console.log('⏸️ Auto-refresh disabled');
             return false;
           }
-          
+
           // Don't refresh if page is not visible
           if (document.visibilityState !== 'visible') {
             console.log('👁️ Page not visible, skipping refresh');
             return false;
           }
-          
+
           // Don't refresh if modal is open
           if (document.getElementById('image-modal').classList.contains('active')) {
             console.log('🖼️ Modal open, skipping refresh');
             return false;
           }
-          
+
           // Don't refresh if performance is poor
           const avgLoadTime = performanceMonitor.getAverageLoadTime();
           if (avgLoadTime > 5000) {
@@ -3998,78 +4874,78 @@
             this.adjustInterval('increase');
             return false;
           }
-          
+
           // Don't refresh if user was recently active
           const timeSinceActivity = Date.now() - this.lastUserActivity;
           if (timeSinceActivity < 30000) { // 30 seconds
             console.log('👆 Recent user activity, skipping refresh');
             return false;
           }
-          
+
           return true;
         },
-        
+
         onRefreshSuccess() {
           this.consecutiveFailures = 0;
-          
+
           // Improve interval if performance is good
           const avgLoadTime = performanceMonitor.getAverageLoadTime();
           if (avgLoadTime < 2000) {
             this.adjustInterval('decrease');
           }
-          
+
           this.updateRefreshIndicator('success');
         },
-        
+
         onRefreshFailure(error) {
           console.error('Auto-refresh failed:', error);
           this.consecutiveFailures++;
-          
+
           // Increase interval after failures
           if (this.consecutiveFailures >= 2) {
             this.adjustInterval('increase');
           }
-          
+
           // Disable after too many failures
           if (this.consecutiveFailures >= 5) {
             this.disable();
             showToast('Auto-refresh disabled due to repeated failures');
           }
-          
+
           this.updateRefreshIndicator('error');
         },
-        
+
         adjustInterval(direction) {
           const oldInterval = this.currentInterval;
-          
+
           if (direction === 'increase') {
             this.currentInterval = Math.min(this.currentInterval * 1.5, this.maxInterval);
           } else if (direction === 'decrease') {
             this.currentInterval = Math.max(this.currentInterval * 0.8, this.minInterval);
           }
-          
+
           if (this.currentInterval !== oldInterval) {
             console.log(`⏱️ Interval adjusted: ${oldInterval / 1000}s → ${this.currentInterval / 1000}s`);
             this.startAutoRefresh(); // Restart with new interval
           }
         },
-        
+
         setupActivityTracking() {
           const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
-          
+
           events.forEach(event => {
             document.addEventListener(event, () => {
               this.lastUserActivity = Date.now();
             }, { passive: true });
           });
         },
-        
+
         setupVisibilityTracking() {
           document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'visible') {
               console.log('👁️ Page visible, resuming auto-refresh');
               this.lastUserActivity = Date.now();
-              
+
               // Check if we should refresh immediately after becoming visible
               const timeSinceLastRefresh = Date.now() - this.getLastRefreshTime();
               if (timeSinceLastRefresh > this.currentInterval) {
@@ -4080,14 +4956,14 @@
             }
           });
         },
-        
+
         setupNetworkTracking() {
           if ('connection' in navigator) {
             const connection = navigator.connection;
-            
+
             const updateForConnection = () => {
               const effectiveType = connection.effectiveType;
-              
+
               if (effectiveType === 'slow-2g' || effectiveType === '2g') {
                 this.currentInterval = this.maxInterval;
                 console.log('📶 Slow connection detected, using maximum interval');
@@ -4095,41 +4971,41 @@
                 this.currentInterval = this.minInterval;
                 console.log('📶 Fast connection detected, using minimum interval');
               }
-              
+
               this.startAutoRefresh();
             };
-            
+
             connection.addEventListener('change', updateForConnection);
             updateForConnection(); // Initial setup
           }
         },
-        
+
         getLastRefreshTime() {
           const lastRefreshElement = document.getElementById('last-refresh');
           const lastRefreshText = lastRefreshElement?.textContent;
-          
+
           if (lastRefreshText && lastRefreshText !== '--' && lastRefreshText !== 'just now') {
             // Parse time from "3:45 PM" format
             const today = new Date();
             const [time, period] = lastRefreshText.split(' ');
             const [hours, minutes] = time.split(':').map(Number);
-            
+
             let hour24 = hours;
             if (period === 'PM' && hours !== 12) hour24 += 12;
             if (period === 'AM' && hours === 12) hour24 = 0;
-            
+
             const lastRefresh = new Date(today.getFullYear(), today.getMonth(), today.getDate(), hour24, minutes);
             return lastRefresh.getTime();
           }
-          
+
           return Date.now() - this.currentInterval; // Assume it's time to refresh
         },
-        
+
         updateRefreshIndicator(status) {
           const refreshBtn = document.querySelector('.refresh-btn');
-          
+
           refreshBtn.classList.remove('success', 'error');
-          
+
           if (status === 'success') {
             refreshBtn.classList.add('success');
             setTimeout(() => refreshBtn.classList.remove('success'), 2000);
@@ -4138,20 +5014,20 @@
             setTimeout(() => refreshBtn.classList.remove('error'), 3000);
           }
         },
-        
+
         enable() {
           this.isEnabled = true;
           this.consecutiveFailures = 0;
           this.startAutoRefresh();
           console.log('✅ Auto-refresh enabled');
         },
-        
+
         disable() {
           this.isEnabled = false;
           this.stopAutoRefresh();
           console.log('❌ Auto-refresh disabled');
         },
-        
+
         toggle() {
           if (this.isEnabled) {
             this.disable();
@@ -4159,20 +5035,20 @@
             this.enable();
           }
         },
-        
+
         forceRefresh() {
           console.log('🔄 Force refresh triggered');
           this.lastUserActivity = Date.now() - 60000; // Fake old activity
           this.performAutoRefresh();
         }
       };
-      
+
       // Initialize auto-refresh system
       autoRefreshManager.init();
 
       // Cleanup on page unload
       window.addEventListener('beforeunload', cleanupResources);
-      
+
       // Log initial performance after 5 seconds
       setTimeout(() => {
         performanceMonitor.logPerformanceStats();
@@ -4180,4 +5056,5 @@
     })();
   </script>
 </body>
+
 </html>
