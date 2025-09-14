@@ -16,7 +16,7 @@
   - Test layout responsiveness across different screen sizes and orientations
   - _Requirements: 4.1, 4.2, 4.4, 6.1_
 
-- [ ] 3. Build launch card component structure
+- [x] 3. Build launch card component structure
   - Create HTML template for individual launch cards with agency badges and status indicators
   - Implement countdown timer display with days, hours, minutes, seconds breakdown
   - Add mission information display (name, description, rocket, launch site, window)

@@ -679,6 +679,330 @@
       margin-bottom: 3em;
     }
 
+    /* Launch Card Component */
+    .launch-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 1.5em;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .launch-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 51, 160, 0.2);
+      border-color: rgba(0, 51, 160, 0.3);
+    }
+
+    body.dark .launch-card {
+      background: rgba(0, 0, 0, 0.2);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    body.dark .launch-card:hover {
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .launch-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1em;
+    }
+
+    .agency-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      padding: 0.4em 0.8em;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .agency-logo {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .agency-name {
+      font-size: 0.9em;
+      font-weight: 600;
+      color: var(--text-white);
+    }
+
+    body.dark .agency-name {
+      color: var(--text-light);
+    }
+
+    /* Agency-specific styling */
+    .agency-badge.spacex {
+      background: linear-gradient(135deg, var(--agency-spacex), #007bb8);
+    }
+
+    .agency-badge.nasa {
+      background: linear-gradient(135deg, var(--agency-nasa), #ff6b47);
+    }
+
+    .agency-badge.blue-origin {
+      background: linear-gradient(135deg, var(--agency-blue-origin), #4a5568);
+    }
+
+    .agency-badge.esa {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    }
+
+    .agency-badge.international {
+      background: linear-gradient(135deg, #059669, #10b981);
+    }
+
+    .launch-status {
+      padding: 0.3em 0.8em;
+      border-radius: 15px;
+      font-size: 0.8em;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-upcoming {
+      background: var(--launch-upcoming);
+      color: white;
+      animation: pulse 2s infinite;
+    }
+
+    .status-live {
+      background: var(--launch-live);
+      color: white;
+      animation: pulse 1s infinite;
+    }
+
+    .status-delayed {
+      background: var(--launch-delayed);
+      color: white;
+    }
+
+    .status-success {
+      background: var(--launch-success);
+      color: white;
+    }
+
+    .status-failure {
+      background: var(--launch-failure);
+      color: white;
+    }
+
+    .mission-info {
+      margin-bottom: 1.5em;
+    }
+
+    .mission-name {
+      font-size: 1.4em;
+      font-weight: bold;
+      margin-bottom: 0.5em;
+      color: var(--accent);
+      line-height: 1.3;
+    }
+
+    body.dark .mission-name {
+      color: var(--text-light);
+    }
+
+    .mission-description {
+      color: var(--text-light);
+      font-size: 0.95em;
+      line-height: 1.5;
+      margin-bottom: 1em;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    body.dark .mission-description {
+      color: #cce0ff;
+    }
+
+    .launch-details {
+      display: grid;
+      gap: 0.5em;
+      margin-bottom: 1.5em;
+    }
+
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.3em 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .detail-item:last-child {
+      border-bottom: none;
+    }
+
+    .detail-label {
+      font-size: 0.85em;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    .detail-value {
+      font-size: 0.85em;
+      color: var(--accent);
+      font-weight: 600;
+      text-align: right;
+    }
+
+    body.dark .detail-label {
+      color: #cce0ff;
+    }
+
+    body.dark .detail-value {
+      color: var(--text-light);
+    }
+
+    .countdown-section {
+      margin: 1.5em 0;
+      padding: 1em;
+      background: var(--countdown-bg);
+      border-radius: 12px;
+      border: 1px solid rgba(0, 51, 160, 0.2);
+    }
+
+    body.dark .countdown-section {
+      background: rgba(0, 51, 160, 0.15);
+      border-color: rgba(0, 51, 160, 0.3);
+    }
+
+    .countdown-timer {
+      text-align: center;
+    }
+
+    .countdown-display {
+      display: flex;
+      justify-content: center;
+      gap: 0.8em;
+      margin-bottom: 0.8em;
+    }
+
+    .countdown-display .time-unit {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.8em 0.6em;
+      border-radius: 8px;
+      min-width: 60px;
+      backdrop-filter: blur(10px);
+    }
+
+    .countdown-display .time-unit .number {
+      font-size: 1.8em;
+      font-weight: bold;
+      font-family: 'Courier New', monospace;
+      line-height: 1;
+      color: var(--countdown-text);
+    }
+
+    .countdown-display .time-unit .label {
+      font-size: 0.7em;
+      opacity: 0.8;
+      margin-top: 0.2em;
+      color: var(--text-light);
+    }
+
+    body.dark .countdown-display .time-unit .number {
+      color: var(--text-light);
+    }
+
+    body.dark .countdown-display .time-unit .label {
+      color: #cce0ff;
+    }
+
+    .countdown-progress {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--launch-upcoming), var(--accent));
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    .launch-actions {
+      display: flex;
+      gap: 0.8em;
+      margin-top: 1.5em;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 0.8em 1em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9em;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3em;
+    }
+
+    .action-btn.primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .action-btn.primary:hover {
+      background: var(--flag-blue);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 51, 160, 0.3);
+    }
+
+    .action-btn.secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--accent);
+      border: 1px solid rgba(0, 51, 160, 0.3);
+    }
+
+    .action-btn.secondary:hover {
+      background: rgba(0, 51, 160, 0.1);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    body.dark .action-btn.primary {
+      background: var(--dark-accent);
+    }
+
+    body.dark .action-btn.primary:hover {
+      background: var(--accent);
+    }
+
+    body.dark .action-btn.secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-light);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    body.dark .action-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--text-light);
+    }
+
     /* Loading Skeleton Animations */
     .loading-skeleton {
       background: linear-gradient(90deg, 
@@ -1192,84 +1516,407 @@
     </section>
 
     <section class="launch-grid" id="launch-grid">
-      <!-- Loading Skeleton Cards -->
-      <div class="skeleton-card">
-        <div class="skeleton-header">
-          <div class="loading-skeleton skeleton-agency"></div>
-          <div class="loading-skeleton skeleton-status"></div>
+      <!-- Launch Card 1: SpaceX Falcon Heavy -->
+      <article class="launch-card" data-agency="spacex" data-status="upcoming" data-launch-id="falcon-heavy-2024-001">
+        <div class="launch-header">
+          <div class="agency-badge spacex">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/spacex.svg" alt="SpaceX" class="agency-logo" style="filter: invert(1);">
+            <span class="agency-name">SpaceX</span>
+          </div>
+          <div class="launch-status status-upcoming">Upcoming</div>
         </div>
-        <div class="loading-skeleton skeleton-mission-name"></div>
-        <div class="loading-skeleton skeleton-description"></div>
-        <div class="loading-skeleton skeleton-description"></div>
-        <div class="skeleton-details">
-          <div class="loading-skeleton skeleton-detail"></div>
-          <div class="loading-skeleton skeleton-detail"></div>
-          <div class="loading-skeleton skeleton-detail"></div>
+        
+        <div class="mission-info">
+          <h3 class="mission-name">Falcon Heavy • Europa Clipper</h3>
+          <p class="mission-description">NASA's Europa Clipper mission to Jupiter's moon Europa to investigate its subsurface ocean and potential for life. This flagship mission will conduct detailed reconnaissance of Europa's ice shell and underlying ocean.</p>
+          
+          <div class="launch-details">
+            <div class="detail-item">
+              <span class="detail-label">Rocket:</span>
+              <span class="detail-value">Falcon Heavy</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Launch Site:</span>
+              <span class="detail-value">Kennedy Space Center LC-39A</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Launch Window:</span>
+              <span class="detail-value">October 14, 2024 • 12:06 PM EDT</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Payload Mass:</span>
+              <span class="detail-value">6,065 kg</span>
+            </div>
+          </div>
         </div>
-        <div class="skeleton-countdown">
-          <div class="loading-skeleton skeleton-time-unit"></div>
-          <div class="loading-skeleton skeleton-time-unit"></div>
-          <div class="loading-skeleton skeleton-time-unit"></div>
-          <div class="loading-skeleton skeleton-time-unit"></div>
-        </div>
-        <div class="skeleton-actions">
-          <div class="loading-skeleton skeleton-action"></div>
-          <div class="loading-skeleton skeleton-action"></div>
-          <div class="loading-skeleton skeleton-action"></div>
-        </div>
-      </div>
 
-      <div class="skeleton-card">
-        <div class="skeleton-header">
-          <div class="loading-skeleton skeleton-agency"></div>
-          <div class="loading-skeleton skeleton-status"></div>
+        <div class="countdown-section">
+          <div class="countdown-timer" data-launch-time="2024-10-14T16:06:00Z">
+            <div class="countdown-display">
+              <span class="time-unit">
+                <span class="number">02</span>
+                <span class="label">Days</span>
+              </span>
+              <span class="time-unit">
+                <span class="number">14</span>
+                <span class="label">Hours</span>
+              </span>
+              <span class="time-unit">
+                <span class="number">32</span>
+                <span class="label">Min</span>
+              </span>
+              <span class="time-unit">
+                <span class="number">45</span>
+                <span class="label">Sec</span>
+              </span>
+            </div>
+            <div class="countdown-progress">
+              <div class="progress-bar" style="width: 75%"></div>
+            </div>
+          </div>
         </div>
-        <div class="loading-skeleton skeleton-mission-name"></div>
-        <div class="loading-skeleton skeleton-description"></div>
-        <div class="loading-skeleton skeleton-description"></div>
-        <div class="skeleton-details">
-          <div class="loading-skeleton skeleton-detail"></div>
-          <div class="loading-skeleton skeleton-detail"></div>
-          <div class="loading-skeleton skeleton-detail"></div>
-        </div>
-        <div class="skeleton-countdown">
-          <div class="loading-skeleton skeleton-time-unit"></div>
-          <div class="loading-skeleton skeleton-time-unit"></div>
-          <div class="loading-skeleton skeleton-time-unit"></div>
-          <div class="loading-skeleton skeleton-time-unit"></div>
-        </div>
-        <div class="skeleton-actions">
-          <div class="loading-skeleton skeleton-action"></div>
-          <div class="loading-skeleton skeleton-action"></div>
-          <div class="loading-skeleton skeleton-action"></div>
-        </div>
-      </div>
 
-      <div class="skeleton-card">
-        <div class="skeleton-header">
-          <div class="loading-skeleton skeleton-agency"></div>
-          <div class="loading-skeleton skeleton-status"></div>
+        <div class="launch-actions">
+          <button class="action-btn primary" onclick="openMissionModal(this)">View Details</button>
+          <button class="action-btn secondary" onclick="setNotification(this)">🔔 Notify Me</button>
+          <button class="action-btn secondary" onclick="shareLaunch(this)">📤 Share</button>
         </div>
-        <div class="loading-skeleton skeleton-mission-name"></div>
-        <div class="loading-skeleton skeleton-description"></div>
-        <div class="loading-skeleton skeleton-description"></div>
-        <div class="skeleton-details">
-          <div class="loading-skeleton skeleton-detail"></div>
-          <div class="loading-skeleton skeleton-detail"></div>
-          <div class="loading-skeleton skeleton-detail"></div>
+      </article>
+
+      <!-- Launch Card 2: NASA Artemis -->
+      <article class="launch-card" data-agency="nasa" data-status="upcoming" data-launch-id="artemis-2-2024">
+        <div class="launch-header">
+          <div class="agency-badge nasa">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/nasa.svg" alt="NASA" class="agency-logo" style="filter: invert(1);">
+            <span class="agency-name">NASA</span>
+          </div>
+          <div class="launch-status status-upcoming">Upcoming</div>
         </div>
-        <div class="skeleton-countdown">
-          <div class="loading-skeleton skeleton-time-unit"></div>
-          <div class="loading-skeleton skeleton-time-unit"></div>
-          <div class="loading-skeleton skeleton-time-unit"></div>
-          <div class="loading-skeleton skeleton-time-unit"></div>
+        
+        <div class="mission-info">
+          <h3 class="mission-name">Artemis II • Lunar Flyby</h3>
+          <p class="mission-description">First crewed mission around the Moon since Apollo 17. Four astronauts will fly around the Moon on a 10-day mission to test systems and procedures for future lunar landings.</p>
+          
+          <div class="launch-details">
+            <div class="detail-item">
+              <span class="detail-label">Rocket:</span>
+              <span class="detail-value">Space Launch System (SLS)</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Launch Site:</span>
+              <span class="detail-value">Kennedy Space Center LC-39B</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Launch Window:</span>
+              <span class="detail-value">November 2024 • TBD</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Crew:</span>
+              <span class="detail-value">4 Astronauts</span>
+            </div>
+          </div>
         </div>
-        <div class="skeleton-actions">
-          <div class="loading-skeleton skeleton-action"></div>
-          <div class="loading-skeleton skeleton-action"></div>
-          <div class="loading-skeleton skeleton-action"></div>
+
+        <div class="countdown-section">
+          <div class="countdown-timer" data-launch-time="2024-11-15T15:00:00Z">
+            <div class="countdown-display">
+              <span class="time-unit">
+                <span class="number">34</span>
+                <span class="label">Days</span>
+              </span>
+              <span class="time-unit">
+                <span class="number">08</span>
+                <span class="label">Hours</span>
+              </span>
+              <span class="time-unit">
+                <span class="number">22</span>
+                <span class="label">Min</span>
+              </span>
+              <span class="time-unit">
+                <span class="number">15</span>
+                <span class="label">Sec</span>
+              </span>
+            </div>
+            <div class="countdown-progress">
+              <div class="progress-bar" style="width: 45%"></div>
+            </div>
+          </div>
         </div>
-      </div>
+
+        <div class="launch-actions">
+          <button class="action-btn primary" onclick="openMissionModal(this)">View Details</button>
+          <button class="action-btn secondary" onclick="setNotification(this)">🔔 Notify Me</button>
+          <button class="action-btn secondary" onclick="shareLaunch(this)">📤 Share</button>
+        </div>
+      </article>
+
+      <!-- Launch Card 3: Blue Origin New Shepard -->
+      <article class="launch-card" data-agency="blue-origin" data-status="live" data-launch-id="new-shepard-ns-27">
+        <div class="launch-header">
+          <div class="agency-badge blue-origin">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/blueorigin.svg" alt="Blue Origin" class="agency-logo" style="filter: invert(1);">
+            <span class="agency-name">Blue Origin</span>
+          </div>
+          <div class="launch-status status-live">Live Now</div>
+        </div>
+        
+        <div class="mission-info">
+          <h3 class="mission-name">New Shepard • NS-27</h3>
+          <p class="mission-description">Suborbital research mission carrying scientific payloads and experiments to the edge of space. This mission will test new technologies for future orbital flights.</p>
+          
+          <div class="launch-details">
+            <div class="detail-item">
+              <span class="detail-label">Rocket:</span>
+              <span class="detail-value">New Shepard</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Launch Site:</span>
+              <span class="detail-value">West Texas Facility</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Launch Time:</span>
+              <span class="detail-value">Today • 10:30 AM CDT</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Flight Duration:</span>
+              <span class="detail-value">~11 minutes</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="countdown-section">
+          <div class="countdown-timer">
+            <div class="countdown-display">
+              <span class="time-unit">
+                <span class="number" style="color: var(--launch-live);">LIVE</span>
+                <span class="label">Now</span>
+              </span>
+              <span class="time-unit">
+                <span class="number">T+</span>
+                <span class="label">03:45</span>
+              </span>
+              <span class="time-unit">
+                <span class="number">ALT</span>
+                <span class="label">85km</span>
+              </span>
+              <span class="time-unit">
+                <span class="number">VEL</span>
+                <span class="label">Mach 2.8</span>
+              </span>
+            </div>
+            <div class="countdown-progress">
+              <div class="progress-bar" style="width: 35%; background: var(--launch-live);"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="launch-actions">
+          <button class="action-btn primary" onclick="openMissionModal(this)">Watch Live</button>
+          <button class="action-btn secondary" onclick="setNotification(this)">📺 Stream</button>
+          <button class="action-btn secondary" onclick="shareLaunch(this)">📤 Share</button>
+        </div>
+      </article>
+
+      <!-- Launch Card 4: ESA Ariane 6 -->
+      <article class="launch-card" data-agency="esa" data-status="upcoming" data-launch-id="ariane-6-maiden-flight">
+        <div class="launch-header">
+          <div class="agency-badge esa">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/esa.svg" alt="ESA" class="agency-logo" style="filter: invert(1);">
+            <span class="agency-name">ESA</span>
+          </div>
+          <div class="launch-status status-upcoming">Upcoming</div>
+        </div>
+        
+        <div class="mission-info">
+          <h3 class="mission-name">Ariane 6 • Maiden Flight</h3>
+          <p class="mission-description">First flight of Europe's new Ariane 6 rocket, carrying multiple satellites and demonstrating the capabilities of ESA's next-generation launch vehicle.</p>
+          
+          <div class="launch-details">
+            <div class="detail-item">
+              <span class="detail-label">Rocket:</span>
+              <span class="detail-value">Ariane 6</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Launch Site:</span>
+              <span class="detail-value">Kourou, French Guiana</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Launch Window:</span>
+              <span class="detail-value">December 2024 • TBD</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Payload:</span>
+              <span class="detail-value">Multiple Satellites</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="countdown-section">
+          <div class="countdown-timer" data-launch-time="2024-12-15T14:30:00Z">
+            <div class="countdown-display">
+              <span class="time-unit">
+                <span class="number">64</span>
+                <span class="label">Days</span>
+              </span>
+              <span class="time-unit">
+                <span class="number">18</span>
+                <span class="label">Hours</span>
+              </span>
+              <span class="time-unit">
+                <span class="number">45</span>
+                <span class="label">Min</span>
+              </span>
+              <span class="time-unit">
+                <span class="number">30</span>
+                <span class="label">Sec</span>
+              </span>
+            </div>
+            <div class="countdown-progress">
+              <div class="progress-bar" style="width: 25%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="launch-actions">
+          <button class="action-btn primary" onclick="openMissionModal(this)">View Details</button>
+          <button class="action-btn secondary" onclick="setNotification(this)">🔔 Notify Me</button>
+          <button class="action-btn secondary" onclick="shareLaunch(this)">📤 Share</button>
+        </div>
+      </article>
+
+      <!-- Launch Card 5: SpaceX Starship -->
+      <article class="launch-card" data-agency="spacex" data-status="delayed" data-launch-id="starship-ift-5">
+        <div class="launch-header">
+          <div class="agency-badge spacex">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/spacex.svg" alt="SpaceX" class="agency-logo" style="filter: invert(1);">
+            <span class="agency-name">SpaceX</span>
+          </div>
+          <div class="launch-status status-delayed">Delayed</div>
+        </div>
+        
+        <div class="mission-info">
+          <h3 class="mission-name">Starship • IFT-5</h3>
+          <p class="mission-description">Fifth integrated flight test of Starship and Super Heavy booster. This test will demonstrate orbital refueling capabilities and advanced landing procedures.</p>
+          
+          <div class="launch-details">
+            <div class="detail-item">
+              <span class="detail-label">Rocket:</span>
+              <span class="detail-value">Starship + Super Heavy</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Launch Site:</span>
+              <span class="detail-value">Starbase, Texas</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Status:</span>
+              <span class="detail-value">Awaiting FAA Approval</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Mission Duration:</span>
+              <span class="detail-value">~90 minutes</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="countdown-section">
+          <div class="countdown-timer">
+            <div class="countdown-display">
+              <span class="time-unit">
+                <span class="number" style="color: var(--launch-delayed);">TBD</span>
+                <span class="label">Date</span>
+              </span>
+              <span class="time-unit">
+                <span class="number">FAA</span>
+                <span class="label">Pending</span>
+              </span>
+              <span class="time-unit">
+                <span class="number">ENV</span>
+                <span class="label">Review</span>
+              </span>
+              <span class="time-unit">
+                <span class="number">--</span>
+                <span class="label">--</span>
+              </span>
+            </div>
+            <div class="countdown-progress">
+              <div class="progress-bar" style="width: 10%; background: var(--launch-delayed);"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="launch-actions">
+          <button class="action-btn primary" onclick="openMissionModal(this)">View Details</button>
+          <button class="action-btn secondary" onclick="setNotification(this)">🔔 Updates</button>
+          <button class="action-btn secondary" onclick="shareLaunch(this)">📤 Share</button>
+        </div>
+      </article>
+
+      <!-- Launch Card 6: International Mission -->
+      <article class="launch-card" data-agency="international" data-status="success" data-launch-id="isro-chandrayaan-4">
+        <div class="launch-header">
+          <div class="agency-badge international">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/nasa.svg" alt="ISRO" class="agency-logo" style="filter: invert(1);">
+            <span class="agency-name">ISRO</span>
+          </div>
+          <div class="launch-status status-success">Success</div>
+        </div>
+        
+        <div class="mission-info">
+          <h3 class="mission-name">PSLV-C58 • Chandrayaan-4</h3>
+          <p class="mission-description">India's fourth lunar mission successfully launched, carrying advanced scientific instruments to study the Moon's south polar region and search for water ice deposits.</p>
+          
+          <div class="launch-details">
+            <div class="detail-item">
+              <span class="detail-label">Rocket:</span>
+              <span class="detail-value">PSLV-C58</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Launch Site:</span>
+              <span class="detail-value">Satish Dhawan Space Centre</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Launch Time:</span>
+              <span class="detail-value">September 28, 2024 • 14:30 IST</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Mission Status:</span>
+              <span class="detail-value">En Route to Moon</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="countdown-section">
+          <div class="countdown-timer">
+            <div class="countdown-display">
+              <span class="time-unit">
+                <span class="number" style="color: var(--launch-success);">✓</span>
+                <span class="label">Success</span>
+              </span>
+              <span class="time-unit">
+                <span class="number">16</span>
+                <span class="label">Days Ago</span>
+              </span>
+              <span class="time-unit">
+                <span class="number">MOON</span>
+                <span class="label">Bound</span>
+              </span>
+              <span class="time-unit">
+                <span class="number">45</span>
+                <span class="label">Days ETA</span>
+              </span>
+            </div>
+            <div class="countdown-progress">
+              <div class="progress-bar" style="width: 100%; background: var(--launch-success);"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="launch-actions">
+          <button class="action-btn primary" onclick="openMissionModal(this)">Mission Status</button>
+          <button class="action-btn secondary" onclick="setNotification(this)">📊 Tracking</button>
+          <button class="action-btn secondary" onclick="shareLaunch(this)">📤 Share</button>
+        </div>
+      </article>
     </section>
 
     <div class="placeholder-content">
@@ -1523,6 +2170,151 @@
       });
     }
 
+    // Launch Card Interactions
+    function initializeLaunchCards() {
+      // Add hover effects to launch cards
+      const launchCards = document.querySelectorAll('.launch-card');
+      launchCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-5px) scale(1.02)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+          this.style.transform = '';
+        });
+      });
+
+      // Animate countdown timers
+      animateCountdowns();
+      
+      // Update countdowns every second
+      setInterval(animateCountdowns, 1000);
+    }
+
+    // Countdown Animation
+    function animateCountdowns() {
+      const countdownTimers = document.querySelectorAll('.countdown-timer[data-launch-time]');
+      countdownTimers.forEach(timer => {
+        const launchTime = new Date(timer.dataset.launchTime);
+        const now = new Date();
+        const timeDiff = launchTime - now;
+        
+        if (timeDiff > 0) {
+          const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+          
+          const timeUnits = timer.querySelectorAll('.time-unit .number');
+          if (timeUnits.length >= 4) {
+            timeUnits[0].textContent = days.toString().padStart(2, '0');
+            timeUnits[1].textContent = hours.toString().padStart(2, '0');
+            timeUnits[2].textContent = minutes.toString().padStart(2, '0');
+            timeUnits[3].textContent = seconds.toString().padStart(2, '0');
+          }
+          
+          // Update progress bar
+          const progressBar = timer.querySelector('.progress-bar');
+          if (progressBar) {
+            const totalTime = 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
+            const elapsed = totalTime - timeDiff;
+            const progress = Math.max(0, Math.min(100, (elapsed / totalTime) * 100));
+            progressBar.style.width = `${progress}%`;
+          }
+        }
+      });
+    }
+
+    // Modal Functions (Placeholder)
+    function openMissionModal(button) {
+      const card = button.closest('.launch-card');
+      const missionName = card.querySelector('.mission-name').textContent;
+      
+      // Add visual feedback
+      button.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        button.style.transform = '';
+      }, 150);
+      
+      console.log(`Opening modal for: ${missionName}`);
+      
+      // Show temporary notification
+      showNotification(`Mission details for ${missionName} - Coming in Task 9!`, 'info');
+    }
+
+    function setNotification(button) {
+      const card = button.closest('.launch-card');
+      const missionName = card.querySelector('.mission-name').textContent;
+      
+      // Add visual feedback
+      button.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        button.style.transform = '';
+      }, 150);
+      
+      console.log(`Setting notification for: ${missionName}`);
+      showNotification(`Notification set for ${missionName}! 🔔`, 'success');
+    }
+
+    function shareLaunch(button) {
+      const card = button.closest('.launch-card');
+      const missionName = card.querySelector('.mission-name').textContent;
+      
+      // Add visual feedback
+      button.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        button.style.transform = '';
+      }, 150);
+      
+      console.log(`Sharing: ${missionName}`);
+      
+      // Simple share functionality
+      if (navigator.share) {
+        navigator.share({
+          title: `${missionName} - BlueandCosmos`,
+          text: `Check out this upcoming space launch: ${missionName}`,
+          url: window.location.href
+        });
+      } else {
+        // Fallback: copy to clipboard
+        navigator.clipboard.writeText(`${missionName} - ${window.location.href}`);
+        showNotification('Launch link copied to clipboard! 📋', 'success');
+      }
+    }
+
+    // Notification System
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      const colors = {
+        success: 'var(--launch-success)',
+        info: 'var(--accent)',
+        warning: 'var(--launch-delayed)',
+        error: 'var(--launch-failure)'
+      };
+      
+      notification.style.cssText = `
+        position: fixed;
+        top: 120px;
+        right: 20px;
+        background: ${colors[type] || colors.info};
+        color: white;
+        padding: 1em 1.5em;
+        border-radius: 8px;
+        font-size: 0.9em;
+        z-index: 10001;
+        animation: slideInRight 0.3s ease;
+        max-width: 300px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      `;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+
     // Responsive Layout Adjustments
     function handleResponsiveLayout() {
       function adjustLayout() {
@@ -1574,11 +2366,14 @@
       // Animate placeholder countdown every 5 seconds
       setInterval(animatePlaceholderCountdown, 5000);
       
+      // Launch Card Interactions
+      initializeLaunchCards();
+      
       // Simulate loading completion after 3 seconds
       setTimeout(() => {
-        console.log('🚀 Launch Dashboard Layout Complete - Ready for real data!');
+        console.log('🚀 Launch Cards Ready - Interactive components loaded!');
         
-        // Add a subtle notification that layout is ready
+        // Add a subtle notification that cards are ready
         const notification = document.createElement('div');
         notification.style.cssText = `
           position: fixed;
@@ -1592,14 +2387,14 @@
           z-index: 10000;
           animation: slideInRight 0.3s ease;
         `;
-        notification.textContent = '✅ Dashboard Layout Ready!';
+        notification.textContent = '🚀 Launch Cards Ready!';
         document.body.appendChild(notification);
         
         setTimeout(() => {
           notification.style.animation = 'slideOutRight 0.3s ease';
           setTimeout(() => notification.remove(), 300);
         }, 3000);
-      }, 3000);
+      }, 2000);
     });
   </script>
 </body>
