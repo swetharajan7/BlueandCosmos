@@ -2174,6 +2174,9 @@
           const filter = this.dataset.filter;
           console.log(`Filter selected: ${filter}`);
           
+          // Apply filter using data manager
+          applyFilter(filter);
+          
           // Add visual feedback
           this.style.transform = 'scale(0.95)';
           setTimeout(() => {
@@ -2211,29 +2214,34 @@
           const query = this.value.trim();
           if (query.length > 2) {
             console.log(`Searching for: ${query}`);
+            performSearch(query);
             // Add search visual feedback
             this.style.borderColor = 'var(--launch-success)';
             setTimeout(() => {
               this.style.borderColor = '';
             }, 300);
+          } else if (query.length === 0) {
+            // Reset to all launches when search is cleared
+            applyFilter('all');
           }
         });
 
         searchInput.addEventListener('keypress', function(e) {
           if (e.key === 'Enter') {
-            performSearch();
+            performSearchAction();
           }
         });
       }
 
       if (searchBtn) {
-        searchBtn.addEventListener('click', performSearch);
+        searchBtn.addEventListener('click', performSearchAction);
       }
 
-      function performSearch() {
+      function performSearchAction() {
         const query = searchInput.value.trim();
         if (query) {
           console.log(`Performing search for: ${query}`);
+          performSearch(query);
           // Add button animation
           searchBtn.style.transform = 'scale(0.9)';
           setTimeout(() => {
@@ -2648,6 +2656,439 @@
     // Initialize global countdown manager
     const countdownManager = new CountdownManager();
 
+    // Launch Data Management System
+    class LaunchDataManager {
+      constructor() {
+        this.launches = new Map();
+        this.cache = new Map();
+        this.lastUpdate = 0;
+        this.updateInterval = 5 * 60 * 1000; // 5 minutes
+        this.retryAttempts = 3;
+        this.retryDelay = 2000; // 2 seconds
+        this.apiEndpoints = {
+          spacex: 'https://api.spacexdata.com/v4/launches',
+          nasa: 'https://api.nasa.gov/planetary/apod',
+          launchLibrary: 'https://ll.thespacedevs.com/2.2.0/launch/upcoming/',
+          blueOrigin: null // No public API available
+        };
+        this.fallbackData = this.createFallbackData();
+      }
+
+      async init() {
+        console.log('🚀 Initializing Launch Data Manager...');
+        
+        // Load cached data first
+        this.loadFromCache();
+        
+        // Fetch fresh data
+        await this.fetchAllLaunches();
+        
+        // Set up periodic updates
+        this.startPeriodicUpdates();
+        
+        console.log('✅ Launch Data Manager initialized');
+      }
+
+      async fetchAllLaunches() {
+        const fetchPromises = [
+          this.fetchSpaceXLaunches(),
+          this.fetchLaunchLibraryData(),
+          this.fetchNASAData()
+        ];
+
+        try {
+          const results = await Promise.allSettled(fetchPromises);
+          
+          // Process results and handle failures gracefully
+          const allLaunches = [];
+          
+          results.forEach((result, index) => {
+            if (result.status === 'fulfilled' && result.value) {
+              allLaunches.push(...result.value);
+            } else {
+              const sources = ['SpaceX', 'Launch Library', 'NASA'];
+              console.warn(`Failed to fetch ${sources[index]} data:`, result.reason);
+            }
+          });
+
+          // Combine and process all launch data
+          const processedLaunches = this.combineAndSort(allLaunches);
+          
+          // Update internal storage
+          this.updateLaunchData(processedLaunches);
+          
+          // Cache the data
+          this.saveToCache(processedLaunches);
+          
+          this.lastUpdate = Date.now();
+          
+          return processedLaunches;
+          
+        } catch (error) {
+          console.error('Error fetching launch data:', error);
+          return this.getFallbackData();
+        }
+      }
+
+      async fetchSpaceXLaunches() {
+        try {
+          const response = await this.fetchWithRetry(`${this.apiEndpoints.spacex}/upcoming?limit=10`);
+          if (!response.ok) throw new Error(`SpaceX API error: ${response.status}`);
+          
+          const data = await response.json();
+          return this.parseSpaceXData(data);
+          
+        } catch (error) {
+          console.warn('SpaceX API unavailable, using fallback data');
+          return this.getSpaceXFallback();
+        }
+      }
+
+      async fetchLaunchLibraryData() {
+        try {
+          const response = await this.fetchWithRetry(`${this.apiEndpoints.launchLibrary}?limit=20`);
+          if (!response.ok) throw new Error(`Launch Library API error: ${response.status}`);
+          
+          const data = await response.json();
+          return this.parseLaunchLibraryData(data.results || []);
+          
+        } catch (error) {
+          console.warn('Launch Library API unavailable, using fallback data');
+          return this.getLaunchLibraryFallback();
+        }
+      }
+
+      async fetchNASAData() {
+        try {
+          // NASA doesn't have a direct launches API, so we'll create NASA-specific data
+          return this.getNASAFallback();
+          
+        } catch (error) {
+          console.warn('NASA data unavailable, using fallback');
+          return [];
+        }
+      }
+
+      async fetchWithRetry(url, options = {}, attempt = 1) {
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+          
+          const response = await fetch(url, {
+            ...options,
+            signal: controller.signal
+          });
+          
+          clearTimeout(timeoutId);
+          return response;
+          
+        } catch (error) {
+          if (attempt < this.retryAttempts) {
+            console.log(`Retry attempt ${attempt} for ${url}`);
+            await new Promise(resolve => setTimeout(resolve, this.retryDelay * attempt));
+            return this.fetchWithRetry(url, options, attempt + 1);
+          }
+          throw error;
+        }
+      }
+
+      parseSpaceXData(launches) {
+        return launches.map(launch => ({
+          id: `spacex-${launch.id}`,
+          name: launch.name,
+          description: launch.details || `SpaceX ${launch.name} mission`,
+          agency: 'spacex',
+          rocket: {
+            name: launch.rocket?.name || 'Falcon 9',
+            type: launch.rocket?.type || 'orbital',
+            reusable: true
+          },
+          payload: {
+            name: launch.payloads?.[0]?.name || 'Various Payloads',
+            type: launch.payloads?.[0]?.type || 'satellite',
+            mass: launch.payloads?.[0]?.mass_kg || 0
+          },
+          launchSite: {
+            name: launch.launchpad?.name || 'Kennedy Space Center',
+            location: launch.launchpad?.locality || 'Florida, USA'
+          },
+          schedule: {
+            launchTime: new Date(launch.date_utc),
+            precision: launch.date_precision || 'hour'
+          },
+          status: this.determineStatus(launch.date_utc, launch.success),
+          media: {
+            patch: launch.links?.patch?.small,
+            images: launch.links?.flickr?.original || [],
+            webcast: launch.links?.webcast
+          },
+          source: 'spacex-api',
+          lastUpdated: Date.now()
+        }));
+      }
+
+      parseLaunchLibraryData(launches) {
+        return launches.map(launch => ({
+          id: `ll-${launch.id}`,
+          name: launch.name,
+          description: launch.mission?.description || `${launch.launch_service_provider?.name} mission`,
+          agency: this.mapAgency(launch.launch_service_provider?.name),
+          rocket: {
+            name: launch.rocket?.configuration?.name || 'Unknown',
+            type: launch.rocket?.configuration?.variant || 'orbital',
+            reusable: launch.rocket?.configuration?.reusable || false
+          },
+          payload: {
+            name: launch.mission?.name || 'Mission Payload',
+            type: launch.mission?.type || 'unknown'
+          },
+          launchSite: {
+            name: launch.pad?.name || 'Unknown',
+            location: launch.pad?.location?.name || 'Unknown'
+          },
+          schedule: {
+            launchTime: new Date(launch.net),
+            precision: 'minute'
+          },
+          status: this.determineStatus(launch.net, null),
+          media: {
+            patch: launch.image,
+            images: [],
+            webcast: launch.webcast_live
+          },
+          source: 'launch-library',
+          lastUpdated: Date.now()
+        }));
+      }
+
+      mapAgency(providerName) {
+        if (!providerName) return 'international';
+        
+        const name = providerName.toLowerCase();
+        if (name.includes('spacex')) return 'spacex';
+        if (name.includes('nasa')) return 'nasa';
+        if (name.includes('blue origin')) return 'blue-origin';
+        if (name.includes('esa') || name.includes('arianespace')) return 'esa';
+        return 'international';
+      }
+
+      determineStatus(launchTime, success) {
+        const now = new Date();
+        const launch = new Date(launchTime);
+        const timeDiff = launch - now;
+
+        if (success === true) return 'success';
+        if (success === false) return 'failure';
+        if (timeDiff < 0) return 'success'; // Assume success if past and no failure indicated
+        if (timeDiff < 60 * 60 * 1000) return 'live'; // Within 1 hour
+        return 'upcoming';
+      }
+
+      combineAndSort(launchArrays) {
+        const allLaunches = launchArrays.flat();
+        
+        // Remove duplicates based on name and launch time
+        const uniqueLaunches = this.removeDuplicates(allLaunches);
+        
+        // Sort by launch time (earliest first)
+        return uniqueLaunches.sort((a, b) => 
+          new Date(a.schedule.launchTime) - new Date(b.schedule.launchTime)
+        );
+      }
+
+      removeDuplicates(launches) {
+        const seen = new Set();
+        return launches.filter(launch => {
+          const key = `${launch.name}-${launch.schedule.launchTime}`;
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+      }
+
+      updateLaunchData(launches) {
+        this.launches.clear();
+        launches.forEach(launch => {
+          this.launches.set(launch.id, launch);
+        });
+      }
+
+      filterByCategory(category) {
+        if (category === 'all') return Array.from(this.launches.values());
+        
+        return Array.from(this.launches.values()).filter(launch => {
+          if (category === 'live') return launch.status === 'live';
+          if (category === 'upcoming') return launch.status === 'upcoming';
+          if (category === 'recent') return ['success', 'failure'].includes(launch.status);
+          return launch.agency === category;
+        });
+      }
+
+      searchLaunches(query) {
+        if (!query || query.length < 2) return Array.from(this.launches.values());
+        
+        const searchTerm = query.toLowerCase();
+        return Array.from(this.launches.values()).filter(launch => 
+          launch.name.toLowerCase().includes(searchTerm) ||
+          launch.description.toLowerCase().includes(searchTerm) ||
+          launch.rocket.name.toLowerCase().includes(searchTerm) ||
+          launch.payload.name.toLowerCase().includes(searchTerm) ||
+          launch.launchSite.name.toLowerCase().includes(searchTerm)
+        );
+      }
+
+      getLaunchById(id) {
+        return this.launches.get(id);
+      }
+
+      getUpcomingLaunches(limit = 10) {
+        return this.filterByCategory('upcoming').slice(0, limit);
+      }
+
+      getLiveLaunches() {
+        return this.filterByCategory('live');
+      }
+
+      getRecentLaunches(limit = 10) {
+        return this.filterByCategory('recent').slice(0, limit);
+      }
+
+      startPeriodicUpdates() {
+        setInterval(async () => {
+          console.log('🔄 Updating launch data...');
+          await this.fetchAllLaunches();
+        }, this.updateInterval);
+      }
+
+      saveToCache(data) {
+        try {
+          const cacheData = {
+            launches: data,
+            timestamp: Date.now()
+          };
+          localStorage.setItem('launch-missions-cache', JSON.stringify(cacheData));
+        } catch (error) {
+          console.warn('Failed to save to cache:', error);
+        }
+      }
+
+      loadFromCache() {
+        try {
+          const cached = localStorage.getItem('launch-missions-cache');
+          if (cached) {
+            const cacheData = JSON.parse(cached);
+            const age = Date.now() - cacheData.timestamp;
+            
+            // Use cache if less than 1 hour old
+            if (age < 60 * 60 * 1000) {
+              this.updateLaunchData(cacheData.launches);
+              console.log('📦 Loaded launch data from cache');
+              return true;
+            }
+          }
+        } catch (error) {
+          console.warn('Failed to load from cache:', error);
+        }
+        return false;
+      }
+
+      createFallbackData() {
+        const baseTime = Date.now();
+        return [
+          {
+            id: 'fallback-spacex-1',
+            name: 'Falcon Heavy • Europa Clipper',
+            description: 'NASA\'s Europa Clipper mission to Jupiter\'s moon Europa to investigate its subsurface ocean and potential for life.',
+            agency: 'spacex',
+            rocket: { name: 'Falcon Heavy', type: 'heavy-lift', reusable: true },
+            payload: { name: 'Europa Clipper', type: 'interplanetary', mass: 6065 },
+            launchSite: { name: 'Kennedy Space Center LC-39A', location: 'Florida, USA' },
+            schedule: { launchTime: new Date(baseTime + 72 * 60 * 60 * 1000), precision: 'exact' },
+            status: 'upcoming',
+            media: { patch: null, images: [], webcast: null },
+            source: 'fallback',
+            lastUpdated: baseTime
+          },
+          {
+            id: 'fallback-nasa-1',
+            name: 'Artemis II • Lunar Flyby',
+            description: 'First crewed mission around the Moon since Apollo 17. Four astronauts will fly around the Moon on a 10-day mission.',
+            agency: 'nasa',
+            rocket: { name: 'Space Launch System (SLS)', type: 'super-heavy', reusable: false },
+            payload: { name: 'Orion Crew Capsule', type: 'crewed', mass: 26520 },
+            launchSite: { name: 'Kennedy Space Center LC-39B', location: 'Florida, USA' },
+            schedule: { launchTime: new Date(baseTime + 45 * 24 * 60 * 60 * 1000), precision: 'approximate' },
+            status: 'upcoming',
+            media: { patch: null, images: [], webcast: null },
+            source: 'fallback',
+            lastUpdated: baseTime
+          }
+        ];
+      }
+
+      getSpaceXFallback() {
+        return this.fallbackData.filter(launch => launch.agency === 'spacex');
+      }
+
+      getLaunchLibraryFallback() {
+        return [
+          {
+            id: 'fallback-esa-1',
+            name: 'Ariane 6 • Maiden Flight',
+            description: 'First flight of Europe\'s new Ariane 6 rocket, demonstrating the capabilities of ESA\'s next-generation launch vehicle.',
+            agency: 'esa',
+            rocket: { name: 'Ariane 6', type: 'heavy-lift', reusable: false },
+            payload: { name: 'Multiple Satellites', type: 'commercial', mass: 11500 },
+            launchSite: { name: 'Kourou, French Guiana', location: 'South America' },
+            schedule: { launchTime: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), precision: 'approximate' },
+            status: 'upcoming',
+            media: { patch: null, images: [], webcast: null },
+            source: 'fallback',
+            lastUpdated: Date.now()
+          }
+        ];
+      }
+
+      getNASAFallback() {
+        return this.fallbackData.filter(launch => launch.agency === 'nasa');
+      }
+
+      getFallbackData() {
+        console.log('📦 Using fallback launch data');
+        return this.fallbackData;
+      }
+
+      // Public API methods
+      async refreshData() {
+        return await this.fetchAllLaunches();
+      }
+
+      getStatistics() {
+        const launches = Array.from(this.launches.values());
+        const agencies = new Set(launches.map(l => l.agency));
+        const upcoming = launches.filter(l => l.status === 'upcoming').length;
+        const live = launches.filter(l => l.status === 'live').length;
+        const recent = launches.filter(l => ['success', 'failure'].includes(l.status)).length;
+        
+        return {
+          total: launches.length,
+          upcoming,
+          live,
+          recent,
+          agencies: agencies.size,
+          lastUpdate: this.lastUpdate
+        };
+      }
+
+      isDataFresh() {
+        const age = Date.now() - this.lastUpdate;
+        return age < this.updateInterval;
+      }
+    }
+
+    // Initialize global launch data manager
+    const launchDataManager = new LaunchDataManager();
+
     // Legacy function for compatibility
     function animateCountdowns() {
       // This function is now handled by CountdownManager
@@ -2711,6 +3152,164 @@
         // Fallback: copy to clipboard
         navigator.clipboard.writeText(`${missionName} - ${window.location.href}`);
         showNotification('Launch link copied to clipboard! 📋', 'success');
+      }
+    }
+
+    // Launch Data UI Updates
+    function updateLaunchGrid() {
+      if (!window.launchDataManager) return;
+      
+      const launches = launchDataManager.getUpcomingLaunches(6);
+      const launchGrid = document.getElementById('launch-grid');
+      
+      if (launches.length === 0) {
+        console.log('No launch data available, keeping placeholder cards');
+        return;
+      }
+      
+      // Update existing cards with real data
+      const existingCards = launchGrid.querySelectorAll('.launch-card');
+      
+      launches.forEach((launch, index) => {
+        if (index < existingCards.length) {
+          updateLaunchCard(existingCards[index], launch);
+        }
+      });
+      
+      console.log(`📊 Updated ${Math.min(launches.length, existingCards.length)} launch cards with real data`);
+    }
+
+    function updateLaunchCard(cardElement, launchData) {
+      // Update agency badge
+      const agencyBadge = cardElement.querySelector('.agency-badge');
+      const agencyName = cardElement.querySelector('.agency-name');
+      if (agencyBadge && agencyName) {
+        agencyBadge.className = `agency-badge ${launchData.agency}`;
+        agencyName.textContent = getAgencyDisplayName(launchData.agency);
+      }
+
+      // Update status
+      const statusElement = cardElement.querySelector('.launch-status');
+      if (statusElement) {
+        statusElement.className = `launch-status status-${launchData.status}`;
+        statusElement.textContent = launchData.status.charAt(0).toUpperCase() + launchData.status.slice(1);
+      }
+
+      // Update mission info
+      const missionName = cardElement.querySelector('.mission-name');
+      const missionDescription = cardElement.querySelector('.mission-description');
+      if (missionName) missionName.textContent = launchData.name;
+      if (missionDescription) missionDescription.textContent = launchData.description;
+
+      // Update launch details
+      const detailItems = cardElement.querySelectorAll('.detail-item');
+      if (detailItems.length >= 4) {
+        detailItems[0].querySelector('.detail-value').textContent = launchData.rocket.name;
+        detailItems[1].querySelector('.detail-value').textContent = launchData.launchSite.name;
+        detailItems[2].querySelector('.detail-value').textContent = formatLaunchTime(launchData.schedule.launchTime);
+        detailItems[3].querySelector('.detail-value').textContent = launchData.payload.name;
+      }
+
+      // Update countdown timer
+      const countdownTimer = cardElement.querySelector('.countdown-timer');
+      if (countdownTimer) {
+        countdownTimer.setAttribute('data-launch-time', launchData.schedule.launchTime.toISOString());
+        countdownTimer.setAttribute('data-precision', launchData.schedule.precision);
+      }
+
+      // Update card data attributes
+      cardElement.setAttribute('data-agency', launchData.agency);
+      cardElement.setAttribute('data-status', launchData.status);
+      cardElement.setAttribute('data-launch-id', launchData.id);
+    }
+
+    function updateDashboardStats() {
+      if (!window.launchDataManager) return;
+      
+      const stats = launchDataManager.getStatistics();
+      const statCards = document.querySelectorAll('.stat-card');
+      
+      if (statCards.length >= 4) {
+        // Update stat numbers
+        statCards[0].querySelector('.stat-number').textContent = stats.upcoming;
+        statCards[1].querySelector('.stat-number').textContent = '94.2%'; // Keep success rate static for now
+        statCards[2].querySelector('.stat-number').textContent = stats.agencies;
+        statCards[3].querySelector('.stat-number').textContent = stats.total;
+        
+        // Update labels to match real data
+        statCards[0].querySelector('.stat-label').textContent = 'Upcoming Launches';
+        statCards[2].querySelector('.stat-label').textContent = 'Active Agencies';
+        statCards[3].querySelector('.stat-label').textContent = 'Total Tracked';
+      }
+      
+      console.log('📈 Updated dashboard statistics:', stats);
+    }
+
+    function getAgencyDisplayName(agency) {
+      const names = {
+        'spacex': 'SpaceX',
+        'nasa': 'NASA',
+        'blue-origin': 'Blue Origin',
+        'esa': 'ESA',
+        'international': 'International'
+      };
+      return names[agency] || agency.toUpperCase();
+    }
+
+    function formatLaunchTime(launchTime) {
+      const date = new Date(launchTime);
+      const options = { 
+        month: 'short', 
+        day: 'numeric', 
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZoneName: 'short'
+      };
+      return date.toLocaleDateString('en-US', options);
+    }
+
+    // Enhanced Filter and Search Functions
+    function applyFilter(filterType) {
+      if (!window.launchDataManager) return;
+      
+      let filteredLaunches;
+      
+      if (filterType === 'all') {
+        filteredLaunches = Array.from(launchDataManager.launches.values());
+      } else {
+        filteredLaunches = launchDataManager.filterByCategory(filterType);
+      }
+      
+      // Update grid with filtered data
+      updateGridWithLaunches(filteredLaunches.slice(0, 6));
+      
+      console.log(`🔍 Applied filter: ${filterType}, found ${filteredLaunches.length} launches`);
+    }
+
+    function performSearch(query) {
+      if (!window.launchDataManager) return;
+      
+      const results = launchDataManager.searchLaunches(query);
+      updateGridWithLaunches(results.slice(0, 6));
+      
+      console.log(`🔎 Search for "${query}" found ${results.length} results`);
+    }
+
+    function updateGridWithLaunches(launches) {
+      const launchGrid = document.getElementById('launch-grid');
+      const existingCards = launchGrid.querySelectorAll('.launch-card');
+      
+      launches.forEach((launch, index) => {
+        if (index < existingCards.length) {
+          updateLaunchCard(existingCards[index], launch);
+          existingCards[index].style.display = 'block';
+        }
+      });
+      
+      // Hide unused cards
+      for (let i = launches.length; i < existingCards.length; i++) {
+        existingCards[i].style.display = 'none';
       }
     }
 
@@ -2801,14 +3400,24 @@
       // Launch Card Interactions
       initializeLaunchCards();
       
-      // Initialize Advanced Countdown System
-      setTimeout(() => {
+      // Initialize Advanced Systems
+      setTimeout(async () => {
+        // Initialize Countdown System
         countdownManager.init();
         window.countdownManagerInitialized = true;
         console.log('⏰ Advanced Countdown System Initialized');
         
-        // Make countdown manager globally available
+        // Initialize Launch Data Manager
+        await launchDataManager.init();
+        console.log('🚀 Launch Data Manager Initialized');
+        
+        // Make managers globally available
         window.countdownManager = countdownManager;
+        window.launchDataManager = launchDataManager;
+        
+        // Update UI with real data
+        updateLaunchGrid();
+        updateDashboardStats();
         
         // Show initialization notification
         const notification = document.createElement('div');
@@ -2824,7 +3433,7 @@
           z-index: 10000;
           animation: slideInRight 0.3s ease;
         `;
-        notification.textContent = '⏰ Real-Time Countdowns Active!';
+        notification.textContent = '🚀 Launch Data System Active!';
         document.body.appendChild(notification);
         
         setTimeout(() => {
