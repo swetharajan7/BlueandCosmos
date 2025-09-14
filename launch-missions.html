@@ -387,6 +387,43 @@
       overflow: hidden;
     }
 
+    .dashboard-controls {
+      position: absolute;
+      top: 1.5em;
+      right: 1.5em;
+    }
+
+    .notification-manager-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 0.8em 1.2em;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9em;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+
+    .notification-manager-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .notification-count {
+      background: var(--highlight);
+      color: white;
+      padding: 0.2em 0.6em;
+      border-radius: 12px;
+      font-size: 0.8em;
+      min-width: 20px;
+      text-align: center;
+    }
+
     .dashboard-header::before {
       content: '';
       position: absolute;
@@ -2862,6 +2899,443 @@
       100% { transform: rotate(360deg); }
     }
 
+    @keyframes highlight {
+      0% { background: transparent; }
+      50% { background: rgba(255, 215, 0, 0.3); }
+      100% { background: transparent; }
+    }
+
+    /* Comprehensive Notification System Styles */
+    .notification-permission-overlay,
+    .notification-confirmation-overlay,
+    .notification-timing-overlay,
+    .notification-manager-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 10002;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2em;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .notification-permission-dialog,
+    .notification-confirmation-dialog,
+    .notification-timing-dialog,
+    .notification-manager-dialog {
+      background: var(--text-white);
+      border-radius: 16px;
+      max-width: 500px;
+      width: 100%;
+      max-height: 90vh;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: slideInUp 0.4s ease;
+    }
+
+    body.dark .notification-permission-dialog,
+    body.dark .notification-confirmation-dialog,
+    body.dark .notification-timing-dialog,
+    body.dark .notification-manager-dialog {
+      background: var(--dark-bg);
+      color: var(--text-white);
+    }
+
+    .permission-header,
+    .confirmation-header,
+    .timing-header,
+    .manager-header {
+      padding: 2em 2em 1em;
+      text-align: center;
+      position: relative;
+    }
+
+    .permission-icon {
+      font-size: 3em;
+      margin-bottom: 0.5em;
+      animation: pulse 2s infinite;
+    }
+
+    .permission-header h3,
+    .confirmation-header h3,
+    .timing-header h3,
+    .manager-header h3 {
+      color: var(--accent);
+      margin: 0;
+      font-size: 1.5em;
+    }
+
+    body.dark .permission-header h3,
+    body.dark .confirmation-header h3,
+    body.dark .timing-header h3,
+    body.dark .manager-header h3 {
+      color: var(--text-light);
+    }
+
+    .dialog-close {
+      position: absolute;
+      top: 1em;
+      right: 1em;
+      background: none;
+      border: none;
+      font-size: 1.5em;
+      color: var(--text-dark);
+      cursor: pointer;
+      padding: 0.2em;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .dialog-close:hover {
+      background: rgba(0, 0, 0, 0.1);
+      color: var(--launch-failure);
+    }
+
+    body.dark .dialog-close {
+      color: var(--text-light);
+    }
+
+    body.dark .dialog-close:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .permission-content,
+    .confirmation-content,
+    .timing-content,
+    .manager-content {
+      padding: 0 2em 1em;
+    }
+
+    .permission-benefits {
+      margin-top: 1.5em;
+    }
+
+    .benefit-item {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      margin-bottom: 1em;
+      padding: 0.8em;
+      background: rgba(0, 51, 160, 0.05);
+      border-radius: 8px;
+    }
+
+    body.dark .benefit-item {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .benefit-icon {
+      font-size: 1.2em;
+      flex-shrink: 0;
+    }
+
+    .mission-info,
+    .mission-preview {
+      background: rgba(0, 51, 160, 0.1);
+      padding: 1em;
+      border-radius: 8px;
+      margin-bottom: 1.5em;
+      text-align: center;
+    }
+
+    body.dark .mission-info,
+    body.dark .mission-preview {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .launch-time,
+    .launch-info {
+      font-size: 0.9em;
+      opacity: 0.8;
+      margin-top: 0.5em;
+    }
+
+    .notification-schedule {
+      margin-top: 1em;
+    }
+
+    .notification-schedule h4 {
+      color: var(--accent);
+      margin-bottom: 0.8em;
+    }
+
+    body.dark .notification-schedule h4 {
+      color: var(--text-light);
+    }
+
+    .notification-schedule ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .notification-schedule li {
+      display: flex;
+      align-items: center;
+      gap: 0.8em;
+      padding: 0.5em 0;
+      border-bottom: 1px solid rgba(0, 51, 160, 0.1);
+    }
+
+    body.dark .notification-schedule li {
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .timing-icon {
+      font-size: 1.1em;
+    }
+
+    .timing-options {
+      margin-top: 1.5em;
+    }
+
+    .timing-options h4 {
+      color: var(--accent);
+      margin-bottom: 1em;
+    }
+
+    body.dark .timing-options h4 {
+      color: var(--text-light);
+    }
+
+    .timing-checkboxes {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8em;
+    }
+
+    .timing-option {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      padding: 1em;
+      background: rgba(0, 51, 160, 0.05);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .timing-option:hover {
+      background: rgba(0, 51, 160, 0.1);
+      border-color: rgba(0, 51, 160, 0.2);
+    }
+
+    .timing-option input:checked + .timing-icon + .timing-text {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    body.dark .timing-option {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    body.dark .timing-option:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    body.dark .timing-option input:checked + .timing-icon + .timing-text {
+      color: var(--text-light);
+    }
+
+    .timing-option input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+    }
+
+    .timing-text {
+      flex: 1;
+    }
+
+    .permission-actions,
+    .confirmation-actions,
+    .timing-actions {
+      padding: 1.5em 2em 2em;
+      display: flex;
+      gap: 1em;
+      justify-content: flex-end;
+    }
+
+    .permission-btn,
+    .action-btn {
+      padding: 0.8em 1.5em;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9em;
+    }
+
+    .permission-btn.primary,
+    .action-btn.primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .permission-btn.primary:hover,
+    .action-btn.primary:hover {
+      background: var(--dark-accent);
+      transform: translateY(-2px);
+    }
+
+    .permission-btn.secondary,
+    .action-btn.secondary {
+      background: rgba(0, 51, 160, 0.1);
+      color: var(--accent);
+      border: 1px solid rgba(0, 51, 160, 0.2);
+    }
+
+    .permission-btn.secondary:hover,
+    .action-btn.secondary:hover {
+      background: rgba(0, 51, 160, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .action-btn.danger {
+      background: rgba(255, 68, 68, 0.1);
+      color: var(--launch-failure);
+      border: 1px solid rgba(255, 68, 68, 0.2);
+    }
+
+    .action-btn.danger:hover {
+      background: rgba(255, 68, 68, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .action-btn.small {
+      padding: 0.5em 1em;
+      font-size: 0.8em;
+    }
+
+    body.dark .permission-btn.secondary,
+    body.dark .action-btn.secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-light);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    body.dark .permission-btn.secondary:hover,
+    body.dark .action-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Notification Manager Styles */
+    .notification-manager-dialog {
+      max-width: 600px;
+      max-height: 80vh;
+    }
+
+    .manager-content {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .no-notifications {
+      text-align: center;
+      padding: 3em 2em;
+    }
+
+    .no-notifications-icon {
+      font-size: 4em;
+      opacity: 0.5;
+      margin-bottom: 1em;
+    }
+
+    .no-notifications h4 {
+      color: var(--accent);
+      margin-bottom: 0.5em;
+    }
+
+    body.dark .no-notifications h4 {
+      color: var(--text-light);
+    }
+
+    .notifications-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+    }
+
+    .notification-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5em;
+      background: rgba(0, 51, 160, 0.05);
+      border-radius: 8px;
+      border: 1px solid rgba(0, 51, 160, 0.1);
+    }
+
+    body.dark .notification-item {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .notification-info {
+      flex: 1;
+    }
+
+    .notification-info .mission-name {
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 0.3em;
+    }
+
+    body.dark .notification-info .mission-name {
+      color: var(--text-light);
+    }
+
+    .notification-info .launch-time {
+      font-size: 0.9em;
+      opacity: 0.8;
+      margin-bottom: 0.5em;
+    }
+
+    .notification-timings {
+      display: flex;
+      gap: 0.5em;
+      flex-wrap: wrap;
+    }
+
+    .timing-badge {
+      background: var(--accent);
+      color: white;
+      padding: 0.2em 0.6em;
+      border-radius: 12px;
+      font-size: 0.8em;
+      font-weight: 500;
+    }
+
+    .notification-actions {
+      display: flex;
+      gap: 0.5em;
+    }
+
+    .manager-footer {
+      padding: 1.5em 2em;
+      border-top: 1px solid rgba(0, 51, 160, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    body.dark .manager-footer {
+      border-top-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .manager-stats {
+      font-size: 0.9em;
+      opacity: 0.8;
+    }
+
     /* Enhanced Mobile Modal Styles */
     @media (max-width: 768px) {
       .modal-content.large {
@@ -2965,6 +3439,50 @@
         font-size: 0.9em;
         bottom: -40px;
       }
+
+      /* Mobile Notification Styles */
+      .notification-permission-overlay,
+      .notification-confirmation-overlay,
+      .notification-timing-overlay,
+      .notification-manager-overlay {
+        padding: 1em;
+      }
+
+      .notification-permission-dialog,
+      .notification-confirmation-dialog,
+      .notification-timing-dialog,
+      .notification-manager-dialog {
+        max-width: none;
+        width: 100%;
+      }
+
+      .permission-actions,
+      .confirmation-actions,
+      .timing-actions {
+        flex-direction: column;
+      }
+
+      .permission-btn,
+      .action-btn {
+        width: 100%;
+      }
+
+      .notification-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1em;
+      }
+
+      .notification-actions {
+        width: 100%;
+        justify-content: flex-end;
+      }
+
+      .manager-footer {
+        flex-direction: column;
+        gap: 1em;
+        text-align: center;
+      }
     }
   </style>
 </head>
@@ -3032,6 +3550,11 @@
       <div class="live-indicator">
         <span class="status-dot live"></span>
         <span class="status-text">Live Launch Tracking</span>
+      </div>
+      <div class="dashboard-controls">
+        <button class="notification-manager-btn" onclick="notificationManager.showNotificationManager()" title="Manage Launch Alerts">
+          🔔 <span class="notification-count" id="notification-count">0</span>
+        </button>
       </div>
       <div class="next-launch-preview">
         <h1 class="next-mission-name">🚀 Launch Missions</h1>
@@ -6810,9 +7333,501 @@
       });
     }
 
+    // Comprehensive Notification System for Launch Alerts
+    class NotificationManager {
+      constructor() {
+        this.notifications = new Map();
+        this.permissionGranted = false;
+        this.init();
+      }
+
+      async init() {
+        // Check if notifications are supported
+        if (!('Notification' in window)) {
+          console.warn('This browser does not support notifications');
+          return;
+        }
+
+        // Check current permission status
+        this.permissionGranted = Notification.permission === 'granted';
+        
+        // Load saved notifications from localStorage
+        this.loadSavedNotifications();
+        
+        // Start checking for due notifications
+        this.startNotificationChecker();
+      }
+
+      async requestPermission() {
+        if (!('Notification' in window)) {
+          throw new Error('Notifications not supported');
+        }
+
+        if (Notification.permission === 'granted') {
+          this.permissionGranted = true;
+          return true;
+        }
+
+        if (Notification.permission === 'denied') {
+          throw new Error('Notification permission denied');
+        }
+
+        // Show custom permission dialog first
+        const userWantsNotifications = await this.showPermissionDialog();
+        if (!userWantsNotifications) {
+          throw new Error('User declined notifications');
+        }
+
+        // Request browser permission
+        const permission = await Notification.requestPermission();
+        this.permissionGranted = permission === 'granted';
+        
+        if (!this.permissionGranted) {
+          throw new Error('Notification permission not granted');
+        }
+
+        return true;
+      }
+
+      showPermissionDialog() {
+        return new Promise((resolve) => {
+          const dialog = this.createPermissionDialog(resolve);
+          document.body.appendChild(dialog);
+        });
+      }
+
+      createPermissionDialog(resolve) {
+        const overlay = document.createElement('div');
+        overlay.className = 'notification-permission-overlay';
+        overlay.innerHTML = `
+          <div class="notification-permission-dialog">
+            <div class="permission-header">
+              <div class="permission-icon">🔔</div>
+              <h3>Enable Launch Notifications</h3>
+            </div>
+            <div class="permission-content">
+              <p>Get notified about upcoming space launches so you never miss the action!</p>
+              <div class="permission-benefits">
+                <div class="benefit-item">
+                  <span class="benefit-icon">⏰</span>
+                  <span>Customizable timing (1hr, 10min, 1min before launch)</span>
+                </div>
+                <div class="benefit-item">
+                  <span class="benefit-icon">🚀</span>
+                  <span>Real-time launch status updates</span>
+                </div>
+                <div class="benefit-item">
+                  <span class="benefit-icon">📱</span>
+                  <span>Works even when the browser is closed</span>
+                </div>
+              </div>
+            </div>
+            <div class="permission-actions">
+              <button class="permission-btn secondary" onclick="this.closest('.notification-permission-overlay').remove(); arguments[0](false);">
+                Maybe Later
+              </button>
+              <button class="permission-btn primary" onclick="this.closest('.notification-permission-overlay').remove(); arguments[0](true);">
+                🔔 Enable Notifications
+              </button>
+            </div>
+          </div>
+        `;
+
+        // Add event listeners
+        const buttons = overlay.querySelectorAll('.permission-btn');
+        buttons[0].onclick = () => { overlay.remove(); resolve(false); };
+        buttons[1].onclick = () => { overlay.remove(); resolve(true); };
+
+        return overlay;
+      }
+
+      async scheduleNotification(missionData, timingOptions = ['1hour', '10min', '1min']) {
+        try {
+          await this.requestPermission();
+        } catch (error) {
+          showNotification(`Unable to set notifications: ${error.message}`, 'error');
+          return false;
+        }
+
+        const launchTime = this.parseLaunchTime(missionData.launchDate, missionData.launchTime);
+        if (!launchTime) {
+          showNotification('Unable to parse launch time for notifications', 'error');
+          return false;
+        }
+
+        const notificationId = `${missionData.name}-${Date.now()}`;
+        const notificationData = {
+          id: notificationId,
+          missionName: missionData.name,
+          launchTime: launchTime.getTime(),
+          timings: timingOptions,
+          created: Date.now(),
+          active: true
+        };
+
+        this.notifications.set(notificationId, notificationData);
+        this.saveNotifications();
+
+        // Show confirmation with management options
+        this.showNotificationConfirmation(missionData, timingOptions);
+        
+        showNotification(`Launch alerts set for ${missionData.name}! 🔔`, 'success');
+        return true;
+      }
+
+      parseLaunchTime(dateStr, timeStr) {
+        try {
+          // Try to parse the combined date and time
+          const combinedStr = `${dateStr} ${timeStr}`;
+          const launchTime = new Date(combinedStr);
+          
+          if (isNaN(launchTime.getTime())) {
+            // Fallback: try parsing just the date
+            const dateOnly = new Date(dateStr);
+            if (!isNaN(dateOnly.getTime())) {
+              return dateOnly;
+            }
+            return null;
+          }
+          
+          return launchTime;
+        } catch (error) {
+          console.error('Error parsing launch time:', error);
+          return null;
+        }
+      }
+
+      showNotificationConfirmation(missionData, timings) {
+        const dialog = document.createElement('div');
+        dialog.className = 'notification-confirmation-overlay';
+        dialog.innerHTML = `
+          <div class="notification-confirmation-dialog">
+            <div class="confirmation-header">
+              <h3>🔔 Notifications Set!</h3>
+              <button class="dialog-close" onclick="this.closest('.notification-confirmation-overlay').remove()">&times;</button>
+            </div>
+            <div class="confirmation-content">
+              <div class="mission-info">
+                <strong>${missionData.name}</strong>
+                <div class="launch-time">${missionData.launchDate} ${missionData.launchTime}</div>
+              </div>
+              <div class="notification-schedule">
+                <h4>You'll be notified:</h4>
+                <ul>
+                  ${timings.map(timing => `
+                    <li>
+                      <span class="timing-icon">${this.getTimingIcon(timing)}</span>
+                      ${this.getTimingLabel(timing)} before launch
+                    </li>
+                  `).join('')}
+                </ul>
+              </div>
+            </div>
+            <div class="confirmation-actions">
+              <button class="action-btn secondary" onclick="notificationManager.showNotificationManager()">
+                Manage All Alerts
+              </button>
+              <button class="action-btn primary" onclick="this.closest('.notification-confirmation-overlay').remove()">
+                Got It!
+              </button>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(dialog);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+          if (dialog.parentNode) {
+            dialog.remove();
+          }
+        }, 5000);
+      }
+
+      getTimingIcon(timing) {
+        const icons = {
+          '1hour': '⏰',
+          '10min': '⚡',
+          '1min': '🚨'
+        };
+        return icons[timing] || '🔔';
+      }
+
+      getTimingLabel(timing) {
+        const labels = {
+          '1hour': '1 hour',
+          '10min': '10 minutes',
+          '1min': '1 minute'
+        };
+        return labels[timing] || timing;
+      }
+
+      startNotificationChecker() {
+        // Check every minute for due notifications
+        setInterval(() => {
+          this.checkDueNotifications();
+        }, 60000);
+        
+        // Also check immediately
+        this.checkDueNotifications();
+      }
+
+      checkDueNotifications() {
+        const now = Date.now();
+        
+        this.notifications.forEach((notification, id) => {
+          if (!notification.active) return;
+          
+          const launchTime = notification.launchTime;
+          const timingsToCheck = [...notification.timings];
+          
+          timingsToCheck.forEach(timing => {
+            const notificationTime = this.getNotificationTime(launchTime, timing);
+            
+            // Check if it's time for this notification (within 1 minute window)
+            if (now >= notificationTime && now < notificationTime + 60000) {
+              this.sendNotification(notification, timing);
+              
+              // Remove this timing from the list
+              const index = notification.timings.indexOf(timing);
+              if (index > -1) {
+                notification.timings.splice(index, 1);
+              }
+              
+              // If no more timings, mark as inactive
+              if (notification.timings.length === 0) {
+                notification.active = false;
+              }
+              
+              this.saveNotifications();
+            }
+          });
+        });
+      }
+
+      getNotificationTime(launchTime, timing) {
+        const timingMs = {
+          '1hour': 60 * 60 * 1000,
+          '10min': 10 * 60 * 1000,
+          '1min': 1 * 60 * 1000
+        };
+        
+        return launchTime - (timingMs[timing] || 0);
+      }
+
+      sendNotification(notificationData, timing) {
+        if (!this.permissionGranted) return;
+        
+        const timeLabel = this.getTimingLabel(timing);
+        const title = `🚀 Launch Alert: ${notificationData.missionName}`;
+        const body = `Launch in ${timeLabel}! Don't miss this space mission.`;
+        
+        const notification = new Notification(title, {
+          body: body,
+          icon: '/favicon.ico',
+          badge: '/favicon.ico',
+          tag: `launch-${notificationData.id}-${timing}`,
+          requireInteraction: true,
+          actions: [
+            { action: 'view', title: 'View Mission' },
+            { action: 'dismiss', title: 'Dismiss' }
+          ]
+        });
+        
+        notification.onclick = () => {
+          window.focus();
+          // Scroll to the mission or open modal
+          this.focusOnMission(notificationData.missionName);
+          notification.close();
+        };
+        
+        // Auto-close after 10 seconds
+        setTimeout(() => {
+          notification.close();
+        }, 10000);
+      }
+
+      focusOnMission(missionName) {
+        // Find the mission card and highlight it
+        const cards = document.querySelectorAll('.launch-card');
+        cards.forEach(card => {
+          const cardMissionName = card.querySelector('.mission-name')?.textContent;
+          if (cardMissionName === missionName) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            card.style.animation = 'highlight 2s ease';
+            setTimeout(() => {
+              card.style.animation = '';
+            }, 2000);
+          }
+        });
+      }
+
+      showNotificationManager() {
+        const manager = this.createNotificationManager();
+        document.body.appendChild(manager);
+      }
+
+      createNotificationManager() {
+        const overlay = document.createElement('div');
+        overlay.className = 'notification-manager-overlay';
+        
+        const activeNotifications = Array.from(this.notifications.values())
+          .filter(n => n.active)
+          .sort((a, b) => a.launchTime - b.launchTime);
+        
+        overlay.innerHTML = `
+          <div class="notification-manager-dialog">
+            <div class="manager-header">
+              <h3>🔔 Launch Alert Manager</h3>
+              <button class="dialog-close" onclick="this.closest('.notification-manager-overlay').remove()">&times;</button>
+            </div>
+            <div class="manager-content">
+              ${activeNotifications.length === 0 ? `
+                <div class="no-notifications">
+                  <div class="no-notifications-icon">🔕</div>
+                  <h4>No Active Alerts</h4>
+                  <p>Set up notifications for upcoming launches to get notified before they happen!</p>
+                </div>
+              ` : `
+                <div class="notifications-list">
+                  ${activeNotifications.map(notification => `
+                    <div class="notification-item" data-id="${notification.id}">
+                      <div class="notification-info">
+                        <div class="mission-name">${notification.missionName}</div>
+                        <div class="launch-time">${new Date(notification.launchTime).toLocaleString()}</div>
+                        <div class="notification-timings">
+                          ${notification.timings.map(timing => `
+                            <span class="timing-badge">${this.getTimingIcon(timing)} ${this.getTimingLabel(timing)}</span>
+                          `).join('')}
+                        </div>
+                      </div>
+                      <div class="notification-actions">
+                        <button class="action-btn small secondary" onclick="notificationManager.editNotification('${notification.id}')">
+                          ✏️ Edit
+                        </button>
+                        <button class="action-btn small danger" onclick="notificationManager.cancelNotification('${notification.id}')">
+                          🗑️ Cancel
+                        </button>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              `}
+            </div>
+            <div class="manager-footer">
+              <div class="manager-stats">
+                ${activeNotifications.length} active alert${activeNotifications.length !== 1 ? 's' : ''}
+              </div>
+              <button class="action-btn secondary" onclick="notificationManager.clearAllNotifications()">
+                Clear All
+              </button>
+            </div>
+          </div>
+        `;
+        
+        return overlay;
+      }
+
+      cancelNotification(notificationId) {
+        if (this.notifications.has(notificationId)) {
+          this.notifications.delete(notificationId);
+          this.saveNotifications();
+          
+          // Refresh the manager if it's open
+          const manager = document.querySelector('.notification-manager-overlay');
+          if (manager) {
+            manager.remove();
+            this.showNotificationManager();
+          }
+          
+          showNotification('Notification cancelled', 'info');
+        }
+      }
+
+      clearAllNotifications() {
+        this.notifications.clear();
+        this.saveNotifications();
+        
+        const manager = document.querySelector('.notification-manager-overlay');
+        if (manager) {
+          manager.remove();
+        }
+        
+        showNotification('All notifications cleared', 'info');
+      }
+
+      saveNotifications() {
+        try {
+          const data = Array.from(this.notifications.entries());
+          localStorage.setItem('launchNotifications', JSON.stringify(data));
+          this.updateNotificationCount();
+        } catch (error) {
+          console.error('Error saving notifications:', error);
+        }
+      }
+
+      updateNotificationCount() {
+        const count = Array.from(this.notifications.values())
+          .filter(n => n.active).length;
+        
+        const countElement = document.getElementById('notification-count');
+        if (countElement) {
+          countElement.textContent = count;
+          countElement.style.display = count > 0 ? 'block' : 'none';
+        }
+      }
+
+      loadSavedNotifications() {
+        try {
+          const saved = localStorage.getItem('launchNotifications');
+          if (saved) {
+            const data = JSON.parse(saved);
+            this.notifications = new Map(data);
+            
+            // Clean up old notifications (older than 24 hours after launch)
+            const now = Date.now();
+            this.notifications.forEach((notification, id) => {
+              if (notification.launchTime + (24 * 60 * 60 * 1000) < now) {
+                this.notifications.delete(id);
+              }
+            });
+            
+            this.saveNotifications();
+          }
+        } catch (error) {
+          console.error('Error loading notifications:', error);
+          this.notifications = new Map();
+        }
+      }
+    }
+
+    // Initialize notification manager
+    const notificationManager = new NotificationManager();
+
+    // Update notification count display
+    function updateNotificationCount() {
+      const count = Array.from(notificationManager.notifications.values())
+        .filter(n => n.active).length;
+      
+      const countElement = document.getElementById('notification-count');
+      if (countElement) {
+        countElement.textContent = count;
+        countElement.style.display = count > 0 ? 'block' : 'none';
+      }
+    }
+
+    // Update count periodically
+    setInterval(updateNotificationCount, 5000);
+    
+    // Update count when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(updateNotificationCount, 1000);
+    });
+
+    // Enhanced setNotification function
     function setNotification(button) {
       const card = button.closest('.launch-card');
-      const missionName = card.querySelector('.mission-name').textContent;
+      const missionData = extractMissionData(card);
       
       // Add visual feedback
       button.style.transform = 'scale(0.95)';
@@ -6820,8 +7835,85 @@
         button.style.transform = '';
       }, 150);
       
-      console.log(`Setting notification for: ${missionName}`);
-      showNotification(`Notification set for ${missionName}! 🔔`, 'success');
+      // Show timing selection dialog
+      showNotificationTimingDialog(missionData);
+    }
+
+    function showNotificationTimingDialog(missionData) {
+      const dialog = document.createElement('div');
+      dialog.className = 'notification-timing-overlay';
+      dialog.innerHTML = `
+        <div class="notification-timing-dialog">
+          <div class="timing-header">
+            <h3>🔔 Set Launch Alerts</h3>
+            <button class="dialog-close" onclick="this.closest('.notification-timing-overlay').remove()">&times;</button>
+          </div>
+          <div class="timing-content">
+            <div class="mission-preview">
+              <strong>${missionData.name}</strong>
+              <div class="launch-info">${missionData.launchDate} ${missionData.launchTime}</div>
+            </div>
+            <div class="timing-options">
+              <h4>When would you like to be notified?</h4>
+              <div class="timing-checkboxes">
+                <label class="timing-option">
+                  <input type="checkbox" value="1hour" checked>
+                  <span class="timing-icon">⏰</span>
+                  <span class="timing-text">1 hour before launch</span>
+                </label>
+                <label class="timing-option">
+                  <input type="checkbox" value="10min" checked>
+                  <span class="timing-icon">⚡</span>
+                  <span class="timing-text">10 minutes before launch</span>
+                </label>
+                <label class="timing-option">
+                  <input type="checkbox" value="1min">
+                  <span class="timing-icon">🚨</span>
+                  <span class="timing-text">1 minute before launch</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="timing-actions">
+            <button class="action-btn secondary" onclick="this.closest('.notification-timing-overlay').remove()">
+              Cancel
+            </button>
+            <button class="action-btn primary" onclick="confirmNotificationTiming('${missionData.name}')">
+              🔔 Set Alerts
+            </button>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(dialog);
+    }
+
+    function confirmNotificationTiming(missionName) {
+      const dialog = document.querySelector('.notification-timing-overlay');
+      const checkboxes = dialog.querySelectorAll('input[type="checkbox"]:checked');
+      const selectedTimings = Array.from(checkboxes).map(cb => cb.value);
+      
+      if (selectedTimings.length === 0) {
+        showNotification('Please select at least one notification timing', 'warning');
+        return;
+      }
+      
+      // Find mission data
+      const cards = document.querySelectorAll('.launch-card');
+      let missionData = null;
+      
+      cards.forEach(card => {
+        const cardMissionName = card.querySelector('.mission-name')?.textContent;
+        if (cardMissionName === missionName) {
+          missionData = extractMissionData(card);
+        }
+      });
+      
+      if (missionData) {
+        notificationManager.scheduleNotification(missionData, selectedTimings);
+      }
+      
+      dialog.remove();
     }
 
     function shareLaunch(button) {
