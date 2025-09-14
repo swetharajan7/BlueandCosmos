@@ -2264,6 +2264,7 @@
         transform: translateX(-50%) translateY(-100%);
         opacity: 0;
       }
+
       to {
         transform: translateX(-50%) translateY(0);
         opacity: 1;
@@ -2275,6 +2276,7 @@
         transform: translateX(-50%) translateY(0);
         opacity: 1;
       }
+
       to {
         transform: translateX(-50%) translateY(-100%);
         opacity: 0;
@@ -2286,6 +2288,7 @@
         transform: translateX(100%);
         opacity: 0;
       }
+
       to {
         transform: translateX(0);
         opacity: 1;
@@ -2297,6 +2300,7 @@
         transform: translateX(0);
         opacity: 1;
       }
+
       to {
         transform: translateX(100%);
         opacity: 0;
@@ -2330,6 +2334,196 @@
     .retry-btn:hover {
       background: #e91e63;
       transform: translateY(-1px);
+    }
+
+    /* Enhanced Social Sharing Styles */
+    .social-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.5em;
+    }
+
+    .social-btn {
+      background: #fff;
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      padding: 0.8em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      font-size: 0.85em;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .social-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    body.dark .social-btn {
+      background: #343a40;
+      border-color: #495057;
+      color: #fff;
+    }
+
+    .social-icon {
+      font-size: 1.2em;
+      flex-shrink: 0;
+    }
+
+    .social-text {
+      font-weight: 500;
+    }
+
+    /* Platform-specific hover effects */
+    .social-btn[data-platform="twitter"]:hover {
+      background: #1da1f2;
+      border-color: #1da1f2;
+      color: white;
+    }
+
+    .social-btn[data-platform="facebook"]:hover {
+      background: #4267b2;
+      border-color: #4267b2;
+      color: white;
+    }
+
+    .social-btn[data-platform="reddit"]:hover {
+      background: #ff4500;
+      border-color: #ff4500;
+      color: white;
+    }
+
+    .social-btn[data-platform="linkedin"]:hover {
+      background: #0077b5;
+      border-color: #0077b5;
+      color: white;
+    }
+
+    .social-btn[data-platform="whatsapp"]:hover {
+      background: #25d366;
+      border-color: #25d366;
+      color: white;
+    }
+
+    .social-btn[data-platform="copy"]:hover {
+      background: #28a745;
+      border-color: #28a745;
+      color: white;
+    }
+
+    /* Share notification animations */
+    @keyframes slideInUp {
+      from {
+        transform: translateY(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideOutDown {
+      from {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(100%);
+        opacity: 0;
+      }
+    }
+
+    /* Quick share options */
+    .share-options {
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    body.dark .share-options {
+      background: #2a2a2a;
+      border-color: #444;
+    }
+
+    body.dark .quick-share-btn:hover {
+      background: #333;
+    }
+
+    /* Enhanced share menu */
+    .social-share-expanded {
+      margin-top: 1em;
+      padding: 1.5em;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 12px;
+      border-left: 4px solid var(--highlight);
+    }
+
+    body.dark .social-share-expanded {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .social-share-expanded h4 {
+      margin: 0 0 1em 0;
+      font-size: 1em;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+
+    body.dark .social-share-expanded h4 {
+      color: #fff;
+    }
+
+    .social-share-expanded h4::before {
+      content: '📤';
+      font-size: 1.2em;
+    }
+
+    /* Share statistics display */
+    .share-stats {
+      margin-top: 1em;
+      padding: 1em;
+      background: rgba(0, 0, 0, 0.03);
+      border-radius: 8px;
+      font-size: 0.8em;
+      color: #666;
+    }
+
+    body.dark .share-stats {
+      background: rgba(255, 255, 255, 0.03);
+      color: #aaa;
+    }
+
+    /* Mobile optimizations for sharing */
+    @media (max-width: 768px) {
+      .social-buttons {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.8em;
+      }
+
+      .social-btn {
+        padding: 1em;
+        font-size: 0.9em;
+      }
+
+      .social-share-expanded {
+        padding: 1em;
+      }
+
+      .share-options {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-radius: 16px 16px 0 0;
+        max-height: 50vh;
+        overflow-y: auto;
+      }
     }
 
     .image-container {
@@ -3365,7 +3559,7 @@
 
         } catch (error) {
           console.error('NASA API error:', error);
-          
+
           // Report error to error manager
           if (window.livestreamErrorManager) {
             livestreamErrorManager.reportError(
@@ -3374,7 +3568,7 @@
               'warning'
             );
           }
-          
+
           return this.getNASAFallback();
         }
       }
@@ -3490,7 +3684,7 @@
           return images;
         } catch (error) {
           console.error('ESA content error:', error);
-          
+
           // Report error to error manager
           if (window.livestreamErrorManager) {
             livestreamErrorManager.reportError(
@@ -3499,7 +3693,7 @@
               'warning'
             );
           }
-          
+
           return this.getESAFallback();
         }
       }
@@ -3615,7 +3809,7 @@
 
         } catch (error) {
           console.error('SpaceX API error:', error);
-          
+
           // Report error to error manager
           if (window.livestreamErrorManager) {
             livestreamErrorManager.reportError(
@@ -3624,7 +3818,7 @@
               'warning'
             );
           }
-          
+
           return this.getSpaceXFallback();
         }
       }
@@ -3696,7 +3890,7 @@
           return images;
         } catch (error) {
           console.error('ISS content error:', error);
-          
+
           // Report error to error manager
           if (window.livestreamErrorManager) {
             livestreamErrorManager.reportError(
@@ -3705,7 +3899,7 @@
               'warning'
             );
           }
-          
+
           return this.getISSFallback();
         }
       }
@@ -4403,29 +4597,32 @@
         return categoryMap[category] || category;
       }
 
-      // Share functionality
+      // Enhanced share functionality
       function shareImage() {
         const imageId = modal.dataset.currentImageId;
-        const imageData = currentImageData.find(img => img.id === imageId);
-        if (!imageData) return;
-
-        const shareData = {
-          title: imageData.title,
-          text: `Check out this amazing space image: ${imageData.title}`,
-          url: `${window.location.href}#image-${imageId}`
-        };
-
-        if (navigator.share) {
-          navigator.share(shareData);
+        if (window.livestreamSocialManager) {
+          livestreamSocialManager.shareImage(imageId, 'native');
         } else {
-          // Fallback: copy to clipboard
-          const shareText = `${shareData.title}\n${shareData.text}\n${shareData.url}`;
-          navigator.clipboard.writeText(shareText).then(() => {
-            showToast('Link copied to clipboard!');
-          }).catch(() => {
-            // Final fallback: show share text
-            prompt('Copy this link to share:', shareData.url);
-          });
+          // Fallback to original functionality
+          const imageData = currentImageData.find(img => img.id === imageId);
+          if (!imageData) return;
+
+          const shareData = {
+            title: imageData.title,
+            text: `Check out this amazing space image: ${imageData.title}`,
+            url: `${window.location.href}#image-${imageId}`
+          };
+
+          if (navigator.share) {
+            navigator.share(shareData);
+          } else {
+            const shareText = `${shareData.title}\n${shareData.text}\n${shareData.url}`;
+            navigator.clipboard.writeText(shareText).then(() => {
+              showToast('Link copied to clipboard!');
+            }).catch(() => {
+              prompt('Copy this link to share:', shareData.url);
+            });
+          }
         }
       }
 
@@ -4636,20 +4833,26 @@
         if (e.target.classList.contains('share-btn') && !e.target.id) {
           e.preventDefault();
           const imageId = e.target.dataset.imageId;
-          const imageData = currentImageData.find(img => img.id === imageId);
-          if (imageData) {
-            const shareData = {
-              title: imageData.title,
-              text: `Check out this space image: ${imageData.title}`,
-              url: window.location.href
-            };
-
-            if (navigator.share) {
-              navigator.share(shareData);
-            } else {
-              navigator.clipboard.writeText(`${shareData.title} - ${shareData.url}`).then(() => {
-                showToast('Link copied to clipboard!');
-              });
+          
+          if (window.livestreamSocialManager) {
+            livestreamSocialManager.shareImage(imageId, 'native');
+          } else {
+            // Fallback functionality
+            const imageData = currentImageData.find(img => img.id === imageId);
+            if (imageData) {
+              const shareData = {
+                title: imageData.title,
+                text: `Check out this space image: ${imageData.title}`,
+                url: window.location.href
+              };
+              
+              if (navigator.share) {
+                navigator.share(shareData);
+              } else {
+                navigator.clipboard.writeText(`${shareData.title} - ${shareData.url}`).then(() => {
+                  showToast('Link copied to clipboard!');
+                });
+              }
             }
           }
         }
@@ -6207,7 +6410,7 @@
         errorCounts: {},
         maxRetries: 3,
         retryDelays: [1000, 3000, 5000], // Progressive delays
-        
+
         init() {
           this.setupGlobalErrorHandling();
           this.setupNetworkErrorHandling();
@@ -6280,10 +6483,10 @@
 
         handleJavaScriptError(error, filename, lineno) {
           console.error('JavaScript Error:', error, 'at', filename, 'line', lineno);
-          
+
           const errorKey = `js_${error.message}`;
           this.incrementErrorCount(errorKey);
-          
+
           if (this.errorCounts[errorKey] <= 2) {
             this.showUserFriendlyError(
               'Something went wrong',
@@ -6300,10 +6503,10 @@
 
         handlePromiseRejection(reason) {
           console.error('Unhandled Promise Rejection:', reason);
-          
+
           const errorKey = `promise_${reason.message || reason}`;
           this.incrementErrorCount(errorKey);
-          
+
           if (this.errorCounts[errorKey] <= 2) {
             this.showUserFriendlyError(
               'Connection Issue',
@@ -6315,10 +6518,10 @@
 
         async handleFetchError(error, url) {
           console.error('Fetch Error:', error, 'for URL:', url);
-          
+
           const errorKey = `fetch_${url}`;
           this.incrementErrorCount(errorKey);
-          
+
           // Determine error type and show appropriate message
           if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
             this.showUserFriendlyError(
@@ -6351,10 +6554,10 @@
         handleImageError(img) {
           const errorKey = `image_${img.src}`;
           this.incrementErrorCount(errorKey);
-          
+
           // Try fallback image
           const fallbackUrl = this.getImageFallback(img.dataset.source || 'nasa');
-          
+
           if (img.src !== fallbackUrl) {
             img.src = fallbackUrl;
             img.alt = 'Image unavailable - ' + (img.alt || 'Space image');
@@ -6372,12 +6575,12 @@
             'warning',
             0 // Don't auto-hide
           );
-          
+
           // Disable auto-refresh
           if (window.autoRefreshManager) {
             autoRefreshManager.disable();
           }
-          
+
           // Show offline indicator
           this.showOfflineIndicator();
         },
@@ -6385,13 +6588,13 @@
         handleNetworkRestore() {
           this.hideError();
           this.hideOfflineIndicator();
-          
+
           this.showUserFriendlyError(
             'Connection Restored',
             'You\'re back online! Refreshing content...',
             'success'
           );
-          
+
           // Re-enable auto-refresh
           if (window.autoRefreshManager) {
             autoRefreshManager.enable();
@@ -6403,7 +6606,7 @@
           if ('connection' in navigator) {
             const connection = navigator.connection;
             const effectiveType = connection.effectiveType;
-            
+
             if (effectiveType === 'slow-2g' || effectiveType === '2g') {
               this.showUserFriendlyError(
                 'Slow Connection',
@@ -6418,14 +6621,14 @@
           if ('memory' in performance) {
             const memory = performance.memory;
             const memoryUsage = memory.usedJSHeapSize / memory.jsHeapSizeLimit;
-            
+
             if (memoryUsage > 0.9) {
               this.showUserFriendlyError(
                 'Performance Warning',
                 'The page is using a lot of memory. Consider refreshing for better performance.',
                 'warning'
               );
-              
+
               // Trigger cleanup
               this.performMemoryCleanup();
             }
@@ -6439,15 +6642,15 @@
         async retryFetch(url, errorKey) {
           const retryCount = this.errorCounts[errorKey] - 1;
           const delay = this.retryDelays[Math.min(retryCount, this.retryDelays.length - 1)];
-          
+
           this.showUserFriendlyError(
             'Retrying...',
             `Attempting to reconnect (${retryCount + 1}/${this.maxRetries})`,
             'info'
           );
-          
+
           await new Promise(resolve => setTimeout(resolve, delay));
-          
+
           try {
             return await fetch(url);
           } catch (error) {
@@ -6463,10 +6666,10 @@
             if (typeof initializeLazyLoading === 'function') {
               initializeLazyLoading();
             }
-            
+
             // Reapply event listeners
             this.reattachEventListeners();
-            
+
           } catch (recoveryError) {
             console.error('Recovery attempt failed:', recoveryError);
           }
@@ -6497,7 +6700,7 @@
               });
             }
           }
-          
+
           // Clear performance monitor data
           if (window.performanceMonitor) {
             performanceMonitor.imageLoadTimes = performanceMonitor.imageLoadTimes.slice(-50);
@@ -6522,7 +6725,7 @@
             height: 100%;
             min-height: 200px;
           `;
-          
+
           img.parentNode.replaceChild(placeholder, img);
         },
 
@@ -6573,20 +6776,20 @@
         showUserFriendlyError(title, message, type = 'error', autoHide = 5000) {
           // Remove existing error
           this.hideError();
-          
+
           const errorElement = document.createElement('div');
           errorElement.id = 'user-error-message';
           errorElement.className = `user-error ${type}`;
-          
+
           const colors = {
             error: { bg: '#dc3545', border: '#c82333' },
             warning: { bg: '#ffc107', border: '#e0a800', color: '#000' },
             success: { bg: '#28a745', border: '#1e7e34' },
             info: { bg: '#17a2b8', border: '#138496' }
           };
-          
+
           const color = colors[type] || colors.error;
-          
+
           errorElement.innerHTML = `
             <div class="error-content">
               <div class="error-title">${title}</div>
@@ -6594,7 +6797,7 @@
               <button class="error-close" onclick="this.parentElement.parentElement.remove()">×</button>
             </div>
           `;
-          
+
           errorElement.style.cssText = `
             position: fixed;
             top: 2em;
@@ -6610,9 +6813,9 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             animation: slideInDown 0.3s ease;
           `;
-          
+
           document.body.appendChild(errorElement);
-          
+
           if (autoHide > 0) {
             setTimeout(() => this.hideError(), autoHide);
           }
@@ -6654,6 +6857,455 @@
 
       // Make error manager globally available
       window.livestreamErrorManager = errorManager;
+
+      // Enhanced Social Sharing System
+      const socialSharingManager = {
+        platforms: {
+          twitter: {
+            name: 'Twitter',
+            icon: '🐦',
+            color: '#1da1f2',
+            urlTemplate: 'https://twitter.com/intent/tweet?text={text}&url={url}&hashtags={hashtags}',
+            maxLength: 280
+          },
+          facebook: {
+            name: 'Facebook',
+            icon: '📘',
+            color: '#4267b2',
+            urlTemplate: 'https://www.facebook.com/sharer/sharer.php?u={url}&quote={text}',
+            maxLength: 500
+          },
+          reddit: {
+            name: 'Reddit',
+            icon: '🔴',
+            color: '#ff4500',
+            urlTemplate: 'https://reddit.com/submit?title={text}&url={url}',
+            maxLength: 300
+          },
+          linkedin: {
+            name: 'LinkedIn',
+            icon: '💼',
+            color: '#0077b5',
+            urlTemplate: 'https://www.linkedin.com/sharing/share-offsite/?url={url}',
+            maxLength: 700
+          },
+          pinterest: {
+            name: 'Pinterest',
+            icon: '📌',
+            color: '#bd081c',
+            urlTemplate: 'https://pinterest.com/pin/create/button/?url={url}&media={image}&description={text}',
+            maxLength: 500
+          },
+          telegram: {
+            name: 'Telegram',
+            icon: '✈️',
+            color: '#0088cc',
+            urlTemplate: 'https://t.me/share/url?url={url}&text={text}',
+            maxLength: 4096
+          },
+          whatsapp: {
+            name: 'WhatsApp',
+            icon: '💬',
+            color: '#25d366',
+            urlTemplate: 'https://wa.me/?text={text}%20{url}',
+            maxLength: 65536
+          },
+          email: {
+            name: 'Email',
+            icon: '📧',
+            color: '#666666',
+            urlTemplate: 'mailto:?subject={subject}&body={text}%0A%0A{url}',
+            maxLength: 1000
+          }
+        },
+
+        init() {
+          this.setupNativeSharing();
+          this.setupCustomSharing();
+          this.setupShareTracking();
+          this.enhanceExistingSocialButtons();
+        },
+
+        setupNativeSharing() {
+          // Enhanced Web Share API support
+          this.hasNativeShare = 'share' in navigator && 'canShare' in navigator;
+          
+          if (this.hasNativeShare) {
+            console.log('✅ Native sharing available');
+          } else {
+            console.log('📱 Using custom sharing fallback');
+          }
+        },
+
+        setupCustomSharing() {
+          // Create enhanced sharing interface
+          this.createShareButton();
+          this.createShareModal();
+        },
+
+        setupShareTracking() {
+          // Track sharing analytics
+          this.shareStats = {
+            totalShares: 0,
+            platformStats: {},
+            popularImages: {}
+          };
+
+          // Load existing stats
+          const savedStats = localStorage.getItem('livestream-share-stats');
+          if (savedStats) {
+            this.shareStats = { ...this.shareStats, ...JSON.parse(savedStats) };
+          }
+        },
+
+        enhanceExistingSocialButtons() {
+          // Enhance existing social buttons with better functionality
+          document.addEventListener('click', (e) => {
+            if (e.target.closest('.social-btn')) {
+              const platform = e.target.closest('.social-btn').dataset.platform;
+              const imageId = document.getElementById('image-modal').dataset.currentImageId;
+              
+              if (imageId) {
+                this.shareImage(imageId, platform);
+              }
+            }
+          });
+        },
+
+        async shareImage(imageId, platform = 'native') {
+          const imageData = currentImageData.find(img => img.id === imageId);
+          if (!imageData) {
+            this.showShareError('Image not found');
+            return;
+          }
+
+          const shareData = this.prepareShareData(imageData);
+          
+          try {
+            if (platform === 'native' && this.hasNativeShare) {
+              await this.shareNative(shareData);
+            } else if (platform === 'copy') {
+              await this.copyToClipboard(shareData);
+            } else {
+              this.shareToSocial(shareData, platform);
+            }
+            
+            this.trackShare(imageId, platform);
+            this.showShareSuccess(platform);
+            
+          } catch (error) {
+            console.error('Share failed:', error);
+            this.showShareError(error.message);
+          }
+        },
+
+        prepareShareData(imageData) {
+          const baseUrl = window.location.origin + window.location.pathname;
+          const imageUrl = `${baseUrl}#image-${imageData.id}`;
+          
+          // Create compelling share text
+          const title = imageData.title;
+          const description = this.truncateText(imageData.description, 100);
+          const source = imageData.source.toUpperCase();
+          const hashtags = this.generateHashtags(imageData);
+          
+          const shareText = `🚀 ${title}\n\n${description}\n\n📸 ${source}`;
+          const shortText = `🚀 Amazing space image: ${title}`;
+          
+          return {
+            title: title,
+            text: shareText,
+            shortText: shortText,
+            url: imageUrl,
+            imageUrl: imageData.imageUrl,
+            hashtags: hashtags,
+            source: source,
+            description: description
+          };
+        },
+
+        generateHashtags(imageData) {
+          const hashtags = ['Space', 'Astronomy'];
+          
+          // Add source-specific hashtags
+          switch (imageData.source) {
+            case 'nasa':
+              hashtags.push('NASA', 'SpaceExploration');
+              break;
+            case 'spacex':
+              hashtags.push('SpaceX', 'RocketLaunch');
+              break;
+            case 'esa':
+              hashtags.push('ESA', 'EuropeanSpace');
+              break;
+            case 'iss':
+              hashtags.push('ISS', 'SpaceStation');
+              break;
+          }
+          
+          // Add category-specific hashtags
+          switch (imageData.category) {
+            case 'missions':
+              hashtags.push('SpaceMission');
+              break;
+            case 'deep-space':
+              hashtags.push('DeepSpace', 'Cosmos');
+              break;
+            case 'earth':
+              hashtags.push('EarthFromSpace');
+              break;
+            case 'planets':
+              hashtags.push('Planets', 'SolarSystem');
+              break;
+          }
+          
+          return hashtags.join(',');
+        },
+
+        async shareNative(shareData) {
+          const nativeShareData = {
+            title: shareData.title,
+            text: shareData.shortText,
+            url: shareData.url
+          };
+
+          // Check if we can share this data
+          if (navigator.canShare && !navigator.canShare(nativeShareData)) {
+            throw new Error('Cannot share this content');
+          }
+
+          await navigator.share(nativeShareData);
+        },
+
+        shareToSocial(shareData, platform) {
+          const platformConfig = this.platforms[platform];
+          if (!platformConfig) {
+            throw new Error(`Platform ${platform} not supported`);
+          }
+
+          // Prepare platform-specific data
+          const text = this.truncateText(shareData.text, platformConfig.maxLength);
+          const encodedData = {
+            text: encodeURIComponent(text),
+            url: encodeURIComponent(shareData.url),
+            image: encodeURIComponent(shareData.imageUrl),
+            hashtags: encodeURIComponent(shareData.hashtags),
+            subject: encodeURIComponent(`Amazing space image: ${shareData.title}`)
+          };
+
+          // Build share URL
+          let shareUrl = platformConfig.urlTemplate;
+          Object.keys(encodedData).forEach(key => {
+            shareUrl = shareUrl.replace(`{${key}}`, encodedData[key]);
+          });
+
+          // Open share window
+          const windowFeatures = 'width=600,height=400,scrollbars=yes,resizable=yes';
+          window.open(shareUrl, '_blank', windowFeatures);
+        },
+
+        async copyToClipboard(shareData) {
+          const shareText = `${shareData.text}\n\n${shareData.url}`;
+          
+          if (navigator.clipboard) {
+            await navigator.clipboard.writeText(shareText);
+          } else {
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = shareText;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+          }
+        },
+
+        createShareButton() {
+          // Enhanced share button for gallery cards
+          const style = document.createElement('style');
+          style.textContent = `
+            .enhanced-share-btn {
+              position: relative;
+              overflow: visible;
+            }
+            
+            .share-options {
+              position: absolute;
+              bottom: 100%;
+              right: 0;
+              background: white;
+              border-radius: 8px;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+              padding: 0.5em;
+              display: none;
+              z-index: 1000;
+              min-width: 200px;
+            }
+            
+            .share-options.visible {
+              display: block;
+              animation: shareOptionsSlideIn 0.2s ease;
+            }
+            
+            @keyframes shareOptionsSlideIn {
+              from { opacity: 0; transform: translateY(10px); }
+              to { opacity: 1; transform: translateY(0); }
+            }
+            
+            .quick-share-btn {
+              display: flex;
+              align-items: center;
+              gap: 0.5em;
+              padding: 0.4em 0.8em;
+              border: none;
+              background: none;
+              cursor: pointer;
+              border-radius: 4px;
+              font-size: 0.8em;
+              width: 100%;
+              text-align: left;
+              transition: background 0.2s ease;
+            }
+            
+            .quick-share-btn:hover {
+              background: #f0f0f0;
+            }
+          `;
+          document.head.appendChild(style);
+        },
+
+        createShareModal() {
+          // Enhanced share modal (already exists, but we'll enhance it)
+          const existingModal = document.getElementById('image-modal');
+          if (existingModal) {
+            this.enhanceShareModal(existingModal);
+          }
+        },
+
+        enhanceShareModal(modal) {
+          // Add more social platforms to existing modal
+          const socialButtons = modal.querySelector('.social-buttons');
+          if (socialButtons) {
+            // Clear existing buttons and rebuild with enhanced set
+            socialButtons.innerHTML = '';
+            
+            const platforms = ['twitter', 'facebook', 'reddit', 'linkedin', 'whatsapp', 'copy'];
+            platforms.forEach(platform => {
+              const config = this.platforms[platform] || { name: 'Copy Link', icon: '📋', color: '#666' };
+              
+              const button = document.createElement('button');
+              button.className = 'social-btn';
+              button.dataset.platform = platform;
+              button.style.borderColor = config.color;
+              
+              button.innerHTML = `
+                <span class="social-icon">${config.icon}</span>
+                <span class="social-text">${config.name}</span>
+              `;
+              
+              button.addEventListener('mouseenter', () => {
+                button.style.backgroundColor = config.color;
+                button.style.color = 'white';
+              });
+              
+              button.addEventListener('mouseleave', () => {
+                button.style.backgroundColor = '';
+                button.style.color = '';
+              });
+              
+              socialButtons.appendChild(button);
+            });
+          }
+        },
+
+        trackShare(imageId, platform) {
+          this.shareStats.totalShares++;
+          this.shareStats.platformStats[platform] = (this.shareStats.platformStats[platform] || 0) + 1;
+          this.shareStats.popularImages[imageId] = (this.shareStats.popularImages[imageId] || 0) + 1;
+          
+          // Save stats
+          localStorage.setItem('livestream-share-stats', JSON.stringify(this.shareStats));
+          
+          // Log for analytics
+          console.log('📊 Share tracked:', { imageId, platform, totalShares: this.shareStats.totalShares });
+        },
+
+        showShareSuccess(platform) {
+          const platformName = this.platforms[platform]?.name || platform;
+          const message = platform === 'copy' ? 'Link copied to clipboard!' : `Shared to ${platformName}!`;
+          
+          if (window.showToast) {
+            showToast(message);
+          } else {
+            // Fallback notification
+            this.showNotification(message, 'success');
+          }
+        },
+
+        showShareError(error) {
+          const message = `Share failed: ${error}`;
+          
+          if (window.livestreamErrorManager) {
+            livestreamErrorManager.reportError('Share Error', message, 'error');
+          } else {
+            this.showNotification(message, 'error');
+          }
+        },
+
+        showNotification(message, type) {
+          const notification = document.createElement('div');
+          notification.className = `share-notification ${type}`;
+          notification.textContent = message;
+          notification.style.cssText = `
+            position: fixed;
+            bottom: 2em;
+            right: 2em;
+            background: ${type === 'success' ? '#28a745' : '#dc3545'};
+            color: white;
+            padding: 1em;
+            border-radius: 8px;
+            z-index: 10003;
+            animation: slideInUp 0.3s ease;
+          `;
+          
+          document.body.appendChild(notification);
+          setTimeout(() => {
+            notification.style.animation = 'slideOutDown 0.3s ease';
+            setTimeout(() => {
+              if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+              }
+            }, 300);
+          }, 3000);
+        },
+
+        truncateText(text, maxLength) {
+          if (text.length <= maxLength) return text;
+          return text.substring(0, maxLength - 3) + '...';
+        },
+
+        // Public API methods
+        getShareStats() {
+          return { ...this.shareStats };
+        },
+
+        getMostSharedImages() {
+          return Object.entries(this.shareStats.popularImages)
+            .sort(([,a], [,b]) => b - a)
+            .slice(0, 10);
+        },
+
+        getPopularPlatforms() {
+          return Object.entries(this.shareStats.platformStats)
+            .sort(([,a], [,b]) => b - a);
+        }
+      };
+
+      // Initialize social sharing
+      socialSharingManager.init();
+
+      // Make social sharing manager globally available
+      window.livestreamSocialManager = socialSharingManager;
 
       // Cleanup on page unload
       window.addEventListener('beforeunload', cleanupResources);
