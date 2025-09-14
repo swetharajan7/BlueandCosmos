@@ -841,8 +841,26 @@
 
     .modal-actions {
       display: flex;
+      flex-direction: column;
+      gap: 1em;
+    }
+
+    .primary-actions {
+      display: flex;
       gap: 0.8em;
       flex-wrap: wrap;
+    }
+
+    .secondary-actions {
+      display: flex;
+      gap: 0.5em;
+      justify-content: center;
+      padding-top: 0.5em;
+      border-top: 1px solid #eee;
+    }
+
+    body.dark .secondary-actions {
+      border-top-color: #333;
     }
 
     .action-btn {
@@ -871,6 +889,43 @@
       box-shadow: 0 4px 12px rgba(0, 51, 160, 0.3);
     }
 
+    .action-btn-small {
+      background: #f8f9fa;
+      color: #333;
+      border: 1px solid #dee2e6;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 1.1em;
+    }
+
+    .action-btn-small:hover,
+    .action-btn-small:focus {
+      background: #e9ecef;
+      transform: scale(1.1);
+    }
+
+    .action-btn-small.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    body.dark .action-btn-small {
+      background: #343a40;
+      color: #fff;
+      border-color: #495057;
+    }
+
+    body.dark .action-btn-small:hover {
+      background: #495057;
+    }
+
     .share-btn {
       background: var(--highlight);
     }
@@ -885,6 +940,141 @@
 
     .download-btn:hover {
       background: #218838;
+    }
+
+    /* Enhanced metadata styling */
+    .modal-technical-info,
+    .modal-keywords {
+      margin-top: 1.5em;
+      padding-top: 1em;
+      border-top: 1px solid #eee;
+    }
+
+    body.dark .modal-technical-info,
+    body.dark .modal-keywords {
+      border-top-color: #333;
+    }
+
+    .modal-technical-info h4,
+    .modal-keywords h4 {
+      margin: 0 0 0.8em 0;
+      font-size: 0.9em;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    body.dark .modal-technical-info h4,
+    body.dark .modal-keywords h4 {
+      color: #aaa;
+    }
+
+    .technical-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8em;
+    }
+
+    .tech-item {
+      font-size: 0.85em;
+    }
+
+    .keywords-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5em;
+    }
+
+    .keyword-tag {
+      background: rgba(0, 51, 160, 0.1);
+      color: var(--accent);
+      padding: 0.3em 0.6em;
+      border-radius: 12px;
+      font-size: 0.8em;
+      border: 1px solid rgba(0, 51, 160, 0.2);
+    }
+
+    body.dark .keyword-tag {
+      background: rgba(0, 51, 160, 0.2);
+      color: #66b3ff;
+      border-color: rgba(0, 51, 160, 0.3);
+    }
+
+    /* Social sharing menu */
+    .social-share-expanded {
+      margin-top: 1em;
+      padding: 1em;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 8px;
+      border-left: 3px solid var(--highlight);
+    }
+
+    body.dark .social-share-expanded {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .social-share-expanded h4 {
+      margin: 0 0 0.8em 0;
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    body.dark .social-share-expanded h4 {
+      color: #aaa;
+    }
+
+    .social-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5em;
+    }
+
+    .social-btn {
+      background: #fff;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      padding: 0.6em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      font-size: 0.85em;
+      transition: all 0.2s ease;
+    }
+
+    .social-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    body.dark .social-btn {
+      background: #343a40;
+      border-color: #495057;
+      color: #fff;
+    }
+
+    .twitter-btn:hover {
+      background: #1da1f2;
+      color: white;
+      border-color: #1da1f2;
+    }
+
+    .facebook-btn:hover {
+      background: #4267b2;
+      color: white;
+      border-color: #4267b2;
+    }
+
+    .reddit-btn:hover {
+      background: #ff4500;
+      color: white;
+      border-color: #ff4500;
+    }
+
+    .copy-btn:hover {
+      background: #28a745;
+      color: white;
+      border-color: #28a745;
     }
 
     /* Mobile responsive modal */
@@ -1632,24 +1822,91 @@
               <strong>Mission:</strong> 
               <span class="modal-mission-name"></span>
             </div>
+            <div class="meta-item modal-instrument" style="display: none;">
+              <strong>Instrument:</strong> 
+              <span class="modal-instrument-name"></span>
+            </div>
+            <div class="meta-item modal-location" style="display: none;">
+              <strong>Location:</strong> 
+              <span class="modal-location-name"></span>
+            </div>
+          </div>
+          
+          <div class="modal-technical-info" style="display: none;">
+            <h4>Technical Details</h4>
+            <div class="technical-grid">
+              <div class="tech-item modal-resolution" style="display: none;">
+                <strong>Resolution:</strong> 
+                <span class="modal-resolution-value"></span>
+              </div>
+              <div class="tech-item modal-coordinates" style="display: none;">
+                <strong>Coordinates:</strong> 
+                <span class="modal-coordinates-value"></span>
+              </div>
+              <div class="tech-item modal-altitude" style="display: none;">
+                <strong>Altitude:</strong> 
+                <span class="modal-altitude-value"></span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="modal-keywords" style="display: none;">
+            <h4>Keywords</h4>
+            <div class="keywords-container"></div>
           </div>
           
           <div class="modal-attribution"></div>
         </div>
         
         <div class="modal-actions">
-          <button class="action-btn share-btn" id="modal-share">
-            <span class="btn-icon">📤</span>
-            <span class="btn-text">Share</span>
-          </button>
-          <a class="action-btn source-btn" href="#" target="_blank" rel="noopener" id="modal-source-link">
-            <span class="btn-icon">🔗</span>
-            <span class="btn-text">View Source</span>
-          </a>
-          <button class="action-btn download-btn" id="modal-download">
-            <span class="btn-icon">⬇️</span>
-            <span class="btn-text">Download</span>
-          </button>
+          <div class="primary-actions">
+            <button class="action-btn share-btn" id="modal-share">
+              <span class="btn-icon">📤</span>
+              <span class="btn-text">Share</span>
+            </button>
+            <a class="action-btn source-btn" href="#" target="_blank" rel="noopener" id="modal-source-link">
+              <span class="btn-icon">🔗</span>
+              <span class="btn-text">View Source</span>
+            </a>
+            <button class="action-btn download-btn" id="modal-download">
+              <span class="btn-icon">⬇️</span>
+              <span class="btn-text">Download</span>
+            </button>
+          </div>
+          
+          <div class="secondary-actions">
+            <button class="action-btn-small favorite-btn" id="modal-favorite" title="Add to Favorites">
+              <span class="btn-icon">❤️</span>
+            </button>
+            <button class="action-btn-small fullscreen-btn" id="modal-fullscreen" title="View Fullscreen">
+              <span class="btn-icon">⛶</span>
+            </button>
+            <button class="action-btn-small info-toggle-btn" id="modal-info-toggle" title="Toggle Technical Info">
+              <span class="btn-icon">ℹ️</span>
+            </button>
+          </div>
+          
+          <div class="social-share-expanded" id="social-share-menu" style="display: none;">
+            <h4>Share on Social Media</h4>
+            <div class="social-buttons">
+              <button class="social-btn twitter-btn" data-platform="twitter">
+                <span class="social-icon">🐦</span>
+                <span class="social-text">Twitter</span>
+              </button>
+              <button class="social-btn facebook-btn" data-platform="facebook">
+                <span class="social-icon">📘</span>
+                <span class="social-text">Facebook</span>
+              </button>
+              <button class="social-btn reddit-btn" data-platform="reddit">
+                <span class="social-icon">🔴</span>
+                <span class="social-text">Reddit</span>
+              </button>
+              <button class="social-btn copy-btn" data-platform="copy">
+                <span class="social-icon">📋</span>
+                <span class="social-text">Copy Link</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -2568,6 +2825,19 @@
       const modalCategory = document.querySelector('.modal-category');
       const modalMission = document.querySelector('.modal-mission');
       const modalMissionName = document.querySelector('.modal-mission-name');
+      const modalInstrument = document.querySelector('.modal-instrument');
+      const modalInstrumentName = document.querySelector('.modal-instrument-name');
+      const modalLocation = document.querySelector('.modal-location');
+      const modalLocationName = document.querySelector('.modal-location-name');
+      const modalTechnicalInfo = document.querySelector('.modal-technical-info');
+      const modalResolution = document.querySelector('.modal-resolution');
+      const modalResolutionValue = document.querySelector('.modal-resolution-value');
+      const modalCoordinates = document.querySelector('.modal-coordinates');
+      const modalCoordinatesValue = document.querySelector('.modal-coordinates-value');
+      const modalAltitude = document.querySelector('.modal-altitude');
+      const modalAltitudeValue = document.querySelector('.modal-altitude-value');
+      const modalKeywords = document.querySelector('.modal-keywords');
+      const keywordsContainer = document.querySelector('.keywords-container');
       const modalAttribution = document.querySelector('.modal-attribution');
       const modalSourceLink = document.getElementById('modal-source-link');
       const modalLoading = document.querySelector('.modal-loading');
@@ -2577,6 +2847,10 @@
       const nextBtn = document.querySelector('.next-btn');
       const shareBtn = document.getElementById('modal-share');
       const downloadBtn = document.getElementById('modal-download');
+      const favoriteBtn = document.getElementById('modal-favorite');
+      const fullscreenBtn = document.getElementById('modal-fullscreen');
+      const infoToggleBtn = document.getElementById('modal-info-toggle');
+      const socialShareMenu = document.getElementById('social-share-menu');
       
       let currentImageIndex = 0;
       let filteredImages = [];
@@ -2647,12 +2921,37 @@
           modalMission.style.display = 'none';
         }
 
+        // Update instrument info if available
+        if (imageData.metadata?.instrument) {
+          modalInstrument.style.display = 'block';
+          modalInstrumentName.textContent = imageData.metadata.instrument;
+        } else {
+          modalInstrument.style.display = 'none';
+        }
+
+        // Update location info if available
+        if (imageData.metadata?.location) {
+          modalLocation.style.display = 'block';
+          modalLocationName.textContent = imageData.metadata.location;
+        } else {
+          modalLocation.style.display = 'none';
+        }
+
+        // Update technical information
+        updateTechnicalInfo(imageData);
+
+        // Update keywords
+        updateKeywords(imageData);
+
         // Update attribution
         const attribution = imageData.metadata?.attribution || `${imageData.source.toUpperCase()}`;
         modalAttribution.textContent = attribution;
 
         // Update source link
         modalSourceLink.href = imageData.sourceUrl;
+
+        // Update favorite status
+        updateFavoriteStatus(imageData.id);
 
         // Store current image data for actions
         modal.dataset.currentImageId = imageData.id;
@@ -2769,6 +3068,148 @@
         document.body.removeChild(link);
       }
 
+      // Update technical information
+      function updateTechnicalInfo(imageData) {
+        let hasInfo = false;
+
+        // Resolution info
+        if (imageData.metadata?.resolution) {
+          modalResolution.style.display = 'block';
+          modalResolutionValue.textContent = imageData.metadata.resolution;
+          hasInfo = true;
+        } else {
+          modalResolution.style.display = 'none';
+        }
+
+        // Coordinates info (for ISS images)
+        if (imageData.metadata?.coordinates) {
+          modalCoordinates.style.display = 'block';
+          const coords = imageData.metadata.coordinates;
+          modalCoordinatesValue.textContent = `${coords.latitude.toFixed(2)}°, ${coords.longitude.toFixed(2)}°`;
+          hasInfo = true;
+        } else {
+          modalCoordinates.style.display = 'none';
+        }
+
+        // Altitude info (for ISS images)
+        if (imageData.metadata?.altitude) {
+          modalAltitude.style.display = 'block';
+          modalAltitudeValue.textContent = imageData.metadata.altitude;
+          hasInfo = true;
+        } else {
+          modalAltitude.style.display = 'none';
+        }
+
+        // Show/hide technical info section
+        modalTechnicalInfo.style.display = hasInfo ? 'block' : 'none';
+      }
+
+      // Update keywords display
+      function updateKeywords(imageData) {
+        keywordsContainer.innerHTML = '';
+        
+        if (imageData.metadata?.keywords && imageData.metadata.keywords.length > 0) {
+          imageData.metadata.keywords.forEach(keyword => {
+            const tag = document.createElement('span');
+            tag.className = 'keyword-tag';
+            tag.textContent = keyword;
+            keywordsContainer.appendChild(tag);
+          });
+          modalKeywords.style.display = 'block';
+        } else {
+          modalKeywords.style.display = 'none';
+        }
+      }
+
+      // Favorites management
+      function getFavorites() {
+        return JSON.parse(localStorage.getItem('space-image-favorites') || '[]');
+      }
+
+      function addToFavorites(imageId) {
+        const favorites = getFavorites();
+        if (!favorites.includes(imageId)) {
+          favorites.push(imageId);
+          localStorage.setItem('space-image-favorites', JSON.stringify(favorites));
+          showToast('Added to favorites!');
+        }
+      }
+
+      function removeFromFavorites(imageId) {
+        const favorites = getFavorites();
+        const index = favorites.indexOf(imageId);
+        if (index > -1) {
+          favorites.splice(index, 1);
+          localStorage.setItem('space-image-favorites', JSON.stringify(favorites));
+          showToast('Removed from favorites');
+        }
+      }
+
+      function updateFavoriteStatus(imageId) {
+        const favorites = getFavorites();
+        const isFavorite = favorites.includes(imageId);
+        favoriteBtn.classList.toggle('active', isFavorite);
+        favoriteBtn.title = isFavorite ? 'Remove from Favorites' : 'Add to Favorites';
+      }
+
+      // Toggle technical info visibility
+      function toggleTechnicalInfo() {
+        const isVisible = modalTechnicalInfo.style.display !== 'none';
+        modalTechnicalInfo.style.display = isVisible ? 'none' : 'block';
+        modalKeywords.style.display = isVisible ? 'none' : 'block';
+        infoToggleBtn.classList.toggle('active', !isVisible);
+      }
+
+      // Fullscreen functionality
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          modalImage.requestFullscreen().catch(err => {
+            showToast('Fullscreen not supported');
+          });
+        } else {
+          document.exitFullscreen();
+        }
+      }
+
+      // Enhanced social sharing
+      function shareToSocial(platform) {
+        const imageId = modal.dataset.currentImageId;
+        const imageData = currentImageData.find(img => img.id === imageId);
+        if (!imageData) return;
+
+        const url = `${window.location.href}#image-${imageId}`;
+        const text = `Check out this amazing space image: ${imageData.title}`;
+        
+        let shareUrl = '';
+        
+        switch(platform) {
+          case 'twitter':
+            shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+            break;
+          case 'facebook':
+            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+            break;
+          case 'reddit':
+            shareUrl = `https://reddit.com/submit?title=${encodeURIComponent(imageData.title)}&url=${encodeURIComponent(url)}`;
+            break;
+          case 'copy':
+            navigator.clipboard.writeText(`${text}\n${url}`).then(() => {
+              showToast('Link copied to clipboard!');
+            });
+            return;
+        }
+        
+        if (shareUrl) {
+          window.open(shareUrl, '_blank', 'width=600,height=400');
+        }
+      }
+
+      // Toggle social share menu
+      function toggleSocialShareMenu() {
+        const isVisible = socialShareMenu.style.display !== 'none';
+        socialShareMenu.style.display = isVisible ? 'none' : 'block';
+      }
+
       // Show toast notification
       function showToast(message) {
         const toast = document.createElement('div');
@@ -2828,8 +3269,28 @@
       closeBtn.addEventListener('click', closeModal);
       prevBtn.addEventListener('click', navigatePrevious);
       nextBtn.addEventListener('click', navigateNext);
-      shareBtn.addEventListener('click', shareImage);
+      shareBtn.addEventListener('click', toggleSocialShareMenu);
       downloadBtn.addEventListener('click', downloadImage);
+      favoriteBtn.addEventListener('click', function() {
+        const imageId = modal.dataset.currentImageId;
+        const favorites = getFavorites();
+        if (favorites.includes(imageId)) {
+          removeFromFavorites(imageId);
+        } else {
+          addToFavorites(imageId);
+        }
+        updateFavoriteStatus(imageId);
+      });
+      fullscreenBtn.addEventListener('click', toggleFullscreen);
+      infoToggleBtn.addEventListener('click', toggleTechnicalInfo);
+
+      // Social sharing event listeners
+      document.addEventListener('click', function(e) {
+        if (e.target.closest('.social-btn')) {
+          const platform = e.target.closest('.social-btn').dataset.platform;
+          shareToSocial(platform);
+        }
+      });
 
       // Close modal when clicking overlay
       modal.addEventListener('click', function(e) {
