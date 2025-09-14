@@ -40,7 +40,7 @@
   - Add error handling for API failures and network issues
   - _Requirements: 1.1, 1.4, 6.1_
 
-- [ ] 6. Integrate NASA API for space imagery
+- [x] 6. Integrate NASA API for space imagery
   - Set up NASA Image and Video Library API integration
   - Implement NASA APOD (Astronomy Picture of the Day) fetching
   - Create category mapping for NASA content (missions, deep-space, earth, planets)

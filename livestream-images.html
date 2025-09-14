@@ -450,6 +450,64 @@
       color: #ff6b9d;
     }
 
+    /* NASA-specific styling */
+    .apod-image {
+      position: relative;
+    }
+
+    .apod-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+      color: white;
+      padding: 0.3em 0.6em;
+      border-radius: 12px;
+      font-size: 0.7em;
+      font-weight: bold;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      z-index: 10;
+    }
+
+    .image-attribution {
+      font-size: 0.75em;
+      color: #888;
+      font-style: italic;
+      margin-top: 0.5em;
+      padding-top: 0.5em;
+      border-top: 1px solid #eee;
+    }
+
+    body.dark .image-attribution {
+      color: #aaa;
+      border-top-color: #333;
+    }
+
+    /* Enhanced NASA source styling */
+    [data-source="nasa"] .source {
+      background: linear-gradient(135deg, var(--accent), #0066cc);
+      box-shadow: 0 2px 4px rgba(0, 51, 160, 0.3);
+    }
+
+    [data-source="nasa"].apod-image .source {
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+    }
+
+    /* Image loading error handling */
+    .image-container img[src*="placeholder"] {
+      filter: grayscale(0.3);
+      opacity: 0.8;
+    }
+
+    .image-container img {
+      transition: opacity 0.3s ease;
+    }
+
+    .image-container img:not([complete]) {
+      opacity: 0.5;
+    }
+
     /* Responsive breakpoints */
     @media (max-width: 1200px) {
       .image-gallery {
@@ -1173,74 +1231,152 @@
         }
       }
 
-      // NASA Image and Video Library API
+      // Enhanced NASA Image and Video Library API
       async fetchNASAImages() {
         const cacheKey = 'nasa_images';
         const cached = this.getFromCache(cacheKey);
         if (cached) return cached;
 
         try {
-          // Using NASA's Image and Video Library API
-          const response = await this.fetchWithRetry(
-            'https://images-api.nasa.gov/search?q=space&media_type=image&page_size=20'
-          );
+          // Fetch multiple NASA collections for diverse content
+          const queries = [
+            'mars rover perseverance',
+            'hubble telescope',
+            'james webb telescope',
+            'earth from space',
+            'jupiter saturn planets',
+            'nebula galaxy stars'
+          ];
+
+          const allImages = [];
           
-          if (!response.ok) throw new Error(`NASA API error: ${response.status}`);
+          for (const query of queries) {
+            try {
+              const response = await this.fetchWithRetry(
+                `https://images-api.nasa.gov/search?q=${encodeURIComponent(query)}&media_type=image&page_size=5&year_start=2020`
+              );
+              
+              if (response.ok) {
+                const data = await response.json();
+                const images = data.collection.items
+                  .filter(item => item.links && item.links.length > 0)
+                  .map(item => this.parseNASAImage(item))
+                  .filter(img => img.imageUrl && !img.imageUrl.includes('placeholder'));
+                
+                allImages.push(...images);
+              }
+            } catch (queryError) {
+              console.warn(`NASA query failed for "${query}":`, queryError);
+            }
+          }
+
+          // Remove duplicates and limit results
+          const uniqueImages = this.removeDuplicates(allImages).slice(0, 15);
           
-          const data = await response.json();
-          const images = data.collection.items.map(item => this.parseNASAImage(item));
+          this.setCache(cacheKey, uniqueImages);
+          return uniqueImages.length > 0 ? uniqueImages : this.getNASAFallback();
           
-          this.setCache(cacheKey, images);
-          return images;
         } catch (error) {
           console.error('NASA API error:', error);
           return this.getNASAFallback();
         }
       }
 
-      // Parse NASA API response to our SpaceImage format
+      // Enhanced NASA API response parsing
       parseNASAImage(item) {
         const data = item.data[0];
         const links = item.links || [];
-        const imageLink = links.find(link => link.rel === 'preview');
+        const imageLink = links.find(link => link.rel === 'preview') || links[0];
         
+        // Clean and truncate description
+        let description = data.description || 'Image from NASA';
+        if (description.length > 200) {
+          description = description.substring(0, 200) + '...';
+        }
+        
+        // Clean title
+        let title = data.title || 'NASA Image';
+        if (title.length > 80) {
+          title = title.substring(0, 80) + '...';
+        }
+
         return {
           id: `nasa_${data.nasa_id}`,
-          title: data.title || 'NASA Image',
-          description: data.description || 'Image from NASA',
+          title: title,
+          description: description,
           imageUrl: imageLink ? imageLink.href : this.getPlaceholderImage(),
           thumbnailUrl: imageLink ? imageLink.href : this.getPlaceholderImage(),
           source: 'nasa',
           category: this.categorizeNASAImage(data),
           timestamp: new Date(data.date_created || Date.now()),
-          sourceUrl: `https://images.nasa.gov/details-${data.nasa_id}`,
+          sourceUrl: `https://images.nasa.gov/details/${data.nasa_id}`,
           metadata: {
+            nasaId: data.nasa_id,
             photographer: data.photographer,
             center: data.center,
-            keywords: data.keywords
+            keywords: data.keywords || [],
+            location: data.location,
+            album: data.album,
+            mediaType: data.media_type,
+            attribution: this.getNASAAttribution(data)
           }
         };
       }
 
-      // Categorize NASA images based on content
+      // Generate proper NASA attribution
+      getNASAAttribution(data) {
+        let attribution = 'NASA';
+        
+        if (data.center) {
+          attribution += `/${data.center}`;
+        }
+        
+        if (data.photographer) {
+          attribution += ` - ${data.photographer}`;
+        }
+        
+        return attribution;
+      }
+
+      // Enhanced NASA image categorization
       categorizeNASAImage(data) {
         const title = (data.title || '').toLowerCase();
         const description = (data.description || '').toLowerCase();
         const keywords = (data.keywords || []).join(' ').toLowerCase();
         const content = `${title} ${description} ${keywords}`;
 
-        if (content.includes('mars') || content.includes('rover') || content.includes('mission')) {
+        // Mission-related content
+        const missionTerms = ['mars', 'rover', 'perseverance', 'curiosity', 'opportunity', 'mission', 'launch', 'spacecraft', 'probe', 'lander', 'orbiter', 'apollo', 'artemis'];
+        if (missionTerms.some(term => content.includes(term))) {
           return 'missions';
-        } else if (content.includes('earth') || content.includes('planet earth')) {
+        }
+
+        // Earth observation
+        const earthTerms = ['earth', 'planet earth', 'blue marble', 'landsat', 'terra', 'aqua', 'modis', 'hurricane', 'weather', 'climate'];
+        if (earthTerms.some(term => content.includes(term))) {
           return 'earth';
-        } else if (content.includes('jupiter') || content.includes('saturn') || content.includes('planet')) {
+        }
+
+        // Planetary content
+        const planetTerms = ['jupiter', 'saturn', 'venus', 'mercury', 'uranus', 'neptune', 'planet', 'rings', 'moons', 'europa', 'titan', 'io', 'ganymede'];
+        if (planetTerms.some(term => content.includes(term))) {
           return 'planets';
-        } else if (content.includes('nebula') || content.includes('galaxy') || content.includes('star')) {
+        }
+
+        // Deep space objects
+        const deepSpaceTerms = ['nebula', 'galaxy', 'star', 'constellation', 'hubble', 'webb', 'telescope', 'supernova', 'black hole', 'quasar', 'pulsar', 'cosmic', 'universe'];
+        if (deepSpaceTerms.some(term => content.includes(term))) {
           return 'deep-space';
-        } else if (content.includes('iss') || content.includes('space station')) {
+        }
+
+        // ISS and space station content
+        const issTerms = ['iss', 'international space station', 'space station', 'expedition', 'spacewalk', 'eva', 'crew', 'astronaut'];
+        if (issTerms.some(term => content.includes(term))) {
           return 'iss';
         }
-        return 'missions'; // default
+
+        // Default to missions for space-related content
+        return 'missions';
       }
 
       // ESA Images (European Space Agency)
@@ -1317,46 +1453,97 @@
         return images;
       }
 
-      // NASA Astronomy Picture of the Day
+      // Enhanced NASA Astronomy Picture of the Day
       async fetchAPOD() {
         const cacheKey = 'nasa_apod';
         const cached = this.getFromCache(cacheKey);
         if (cached) return cached;
 
         try {
-          const response = await this.fetchWithRetry(
-            'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY'
-          );
+          // Fetch current APOD and recent ones for more content
+          const today = new Date();
+          const dates = [];
           
-          if (!response.ok) throw new Error(`APOD API error: ${response.status}`);
-          
-          const data = await response.json();
-          
-          if (data.media_type === 'image') {
-            const image = {
-              id: `apod_${data.date}`,
-              title: data.title,
-              description: data.explanation,
-              imageUrl: data.hdurl || data.url,
-              thumbnailUrl: data.url,
-              source: 'nasa',
-              category: 'deep-space',
-              timestamp: new Date(data.date),
-              sourceUrl: 'https://apod.nasa.gov/apod/',
-              metadata: {
-                copyright: data.copyright,
-                type: 'APOD'
-              }
-            };
-            
-            this.setCache(cacheKey, [image]);
-            return [image];
+          // Get last 5 days of APOD
+          for (let i = 0; i < 5; i++) {
+            const date = new Date(today);
+            date.setDate(date.getDate() - i);
+            dates.push(date.toISOString().split('T')[0]);
           }
+
+          const apodImages = [];
+
+          for (const date of dates) {
+            try {
+              const response = await this.fetchWithRetry(
+                `https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=${date}`
+              );
+              
+              if (response.ok) {
+                const data = await response.json();
+                
+                if (data.media_type === 'image' && data.url) {
+                  // Truncate long descriptions
+                  let description = data.explanation || 'Astronomy Picture of the Day from NASA';
+                  if (description.length > 300) {
+                    description = description.substring(0, 300) + '...';
+                  }
+
+                  const image = {
+                    id: `apod_${data.date}`,
+                    title: `APOD: ${data.title}`,
+                    description: description,
+                    imageUrl: data.hdurl || data.url,
+                    thumbnailUrl: data.url,
+                    source: 'nasa',
+                    category: 'deep-space',
+                    timestamp: new Date(data.date),
+                    sourceUrl: `https://apod.nasa.gov/apod/ap${data.date.replace(/-/g, '').substring(2)}.html`,
+                    metadata: {
+                      copyright: data.copyright,
+                      type: 'APOD',
+                      date: data.date,
+                      attribution: data.copyright ? `© ${data.copyright}` : 'NASA APOD',
+                      hdUrl: data.hdurl
+                    }
+                  };
+                  
+                  apodImages.push(image);
+                }
+              }
+            } catch (dateError) {
+              console.warn(`APOD fetch failed for ${date}:`, dateError);
+            }
+          }
+          
+          this.setCache(cacheKey, apodImages);
+          return apodImages;
+          
         } catch (error) {
           console.error('APOD API error:', error);
+          return this.getAPODFallback();
         }
-        
-        return [];
+      }
+
+      // APOD fallback data
+      getAPODFallback() {
+        return [
+          {
+            id: 'apod_fallback_1',
+            title: 'APOD: Webb\'s First Deep Field',
+            description: 'NASA\'s James Webb Space Telescope has delivered the deepest and sharpest infrared image of the distant universe so far.',
+            imageUrl: 'https://images-assets.nasa.gov/image/PIA24825/PIA24825~thumb.jpg',
+            thumbnailUrl: 'https://images-assets.nasa.gov/image/PIA24825/PIA24825~thumb.jpg',
+            source: 'nasa',
+            category: 'deep-space',
+            timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000), // 5 hours ago
+            sourceUrl: 'https://apod.nasa.gov/',
+            metadata: {
+              type: 'APOD',
+              attribution: 'NASA/ESA/CSA/STScI'
+            }
+          }
+        ];
       }
 
       // Combine and sort images from all sources
@@ -1530,6 +1717,9 @@
 
     // Initialize the data manager
     const imageDataManager = new ImageDataManager();
+    
+    // Global image data store for interaction handling
+    let currentImageData = [];
   </script>
   <script>
     (function initTheme(){
@@ -1727,6 +1917,9 @@
 
       // Update gallery with new image data
       async function updateGalleryWithImages(images) {
+        // Store image data globally for interaction handling
+        currentImageData = images;
+        
         // Clear existing content
         gallery.innerHTML = '';
         
@@ -1747,6 +1940,10 @@
         
         // Reinitialize lazy loading for new images
         initializeLazyLoading();
+        
+        // Log NASA API integration success
+        const nasaImages = images.filter(img => img.source === 'nasa');
+        console.log(`NASA API Integration: Loaded ${nasaImages.length} images from NASA sources`);
       }
 
       // Create an image card element from data
@@ -1755,26 +1952,35 @@
         card.className = 'image-card';
         card.dataset.category = imageData.category;
         card.dataset.source = imageData.source;
+        card.dataset.imageId = imageData.id;
         
         const timeAgo = getTimeAgo(imageData.timestamp);
+        const attribution = imageData.metadata?.attribution || imageData.source.toUpperCase();
+        
+        // Add NASA-specific styling for APOD images
+        const isAPOD = imageData.metadata?.type === 'APOD';
+        const apodClass = isAPOD ? ' apod-image' : '';
         
         card.innerHTML = `
-          <div class="image-container">
+          <div class="image-container${apodClass}">
             <img src="${imageData.thumbnailUrl}" 
                  alt="${imageData.title}" 
-                 loading="lazy">
+                 loading="lazy"
+                 onerror="this.src='https://via.placeholder.com/400x225/0033a0/ffffff?text=NASA+Image'">
             <div class="image-overlay">
-              <button class="overlay-btn expand-btn" title="View Full Size">🔍</button>
-              <button class="overlay-btn share-btn" title="Share Image">📤</button>
+              <button class="overlay-btn expand-btn" title="View Full Size" data-image-id="${imageData.id}">🔍</button>
+              <button class="overlay-btn share-btn" title="Share Image" data-image-id="${imageData.id}">📤</button>
             </div>
+            ${isAPOD ? '<div class="apod-badge">APOD</div>' : ''}
           </div>
           <div class="image-info">
             <h3 class="image-title">${imageData.title}</h3>
             <p class="image-description">${imageData.description}</p>
             <div class="image-meta">
-              <span class="source">${imageData.source.toUpperCase()}</span>
-              <time class="timestamp">${timeAgo}</time>
+              <span class="source" title="${attribution}">${imageData.source.toUpperCase()}</span>
+              <time class="timestamp" datetime="${imageData.timestamp.toISOString()}">${timeAgo}</time>
             </div>
+            ${imageData.metadata?.copyright ? `<div class="image-attribution">© ${imageData.metadata.copyright}</div>` : ''}
           </div>
         `;
         
