@@ -12053,6 +12053,850 @@
     // Initialize mobile optimization manager
     const mobileOptimizationManager = new MobileOptimizationManager();
 
+    // Performance Optimization and Caching Strategies
+    class PerformanceOptimizationManager {
+      constructor() {
+        this.cache = new Map();
+        this.cacheConfig = {
+          launchData: { ttl: 5 * 60 * 1000 }, // 5 minutes
+          images: { ttl: 60 * 60 * 1000 }, // 1 hour
+          staticData: { ttl: 24 * 60 * 60 * 1000 }, // 24 hours
+          userPreferences: { ttl: 7 * 24 * 60 * 60 * 1000 } // 7 days
+        };
+        this.performanceMetrics = {
+          loadTimes: [],
+          renderTimes: [],
+          cacheHits: 0,
+          cacheMisses: 0
+        };
+        this.serviceWorkerRegistered = false;
+        this.init();
+      }
+
+      init() {
+        // Initialize performance monitoring
+        this.initializePerformanceMonitoring();
+        
+        // Setup intelligent caching
+        this.setupIntelligentCaching();
+        
+        // Register service worker
+        this.registerServiceWorker();
+        
+        // Optimize countdown performance
+        this.optimizeCountdownPerformance();
+        
+        // Setup resource optimization
+        this.setupResourceOptimization();
+        
+        // Initialize performance budgets
+        this.initializePerformanceBudgets();
+        
+        console.log('Performance optimization manager initialized');
+      }
+
+      initializePerformanceMonitoring() {
+        // Monitor page load performance
+        window.addEventListener('load', () => {
+          this.measurePageLoadPerformance();
+        });
+
+        // Monitor runtime performance
+        this.setupRuntimePerformanceMonitoring();
+        
+        // Setup Core Web Vitals monitoring
+        this.setupCoreWebVitalsMonitoring();
+      }
+
+      measurePageLoadPerformance() {
+        if ('performance' in window) {
+          const navigation = performance.getEntriesByType('navigation')[0];
+          const loadTime = navigation.loadEventEnd - navigation.loadEventStart;
+          
+          this.performanceMetrics.loadTimes.push(loadTime);
+          
+          // Log performance metrics
+          console.log('Page Load Performance:', {
+            loadTime: `${loadTime}ms`,
+            domContentLoaded: `${navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart}ms`,
+            firstPaint: this.getFirstPaint(),
+            firstContentfulPaint: this.getFirstContentfulPaint()
+          });
+          
+          // Send to analytics if available
+          this.reportPerformanceMetrics('page_load', { loadTime });
+        }
+      }
+
+      getFirstPaint() {
+        const paintEntries = performance.getEntriesByType('paint');
+        const firstPaint = paintEntries.find(entry => entry.name === 'first-paint');
+        return firstPaint ? `${firstPaint.startTime}ms` : 'N/A';
+      }
+
+      getFirstContentfulPaint() {
+        const paintEntries = performance.getEntriesByType('paint');
+        const fcp = paintEntries.find(entry => entry.name === 'first-contentful-paint');
+        return fcp ? `${fcp.startTime}ms` : 'N/A';
+      }
+
+      setupRuntimePerformanceMonitoring() {
+        // Monitor long tasks
+        if ('PerformanceObserver' in window) {
+          const longTaskObserver = new PerformanceObserver((list) => {
+            list.getEntries().forEach((entry) => {
+              if (entry.duration > 50) {
+                console.warn('Long task detected:', entry.duration + 'ms');
+                this.reportPerformanceMetrics('long_task', { duration: entry.duration });
+              }
+            });
+          });
+          
+          try {
+            longTaskObserver.observe({ entryTypes: ['longtask'] });
+          } catch (e) {
+            console.log('Long task monitoring not supported');
+          }
+        }
+
+        // Monitor memory usage
+        this.monitorMemoryUsage();
+      }
+
+      monitorMemoryUsage() {
+        if ('memory' in performance) {
+          setInterval(() => {
+            const memory = performance.memory;
+            const memoryUsage = {
+              used: Math.round(memory.usedJSHeapSize / 1048576), // MB
+              total: Math.round(memory.totalJSHeapSize / 1048576), // MB
+              limit: Math.round(memory.jsHeapSizeLimit / 1048576) // MB
+            };
+            
+            // Warn if memory usage is high
+            if (memoryUsage.used / memoryUsage.limit > 0.8) {
+              console.warn('High memory usage detected:', memoryUsage);
+              this.optimizeMemoryUsage();
+            }
+          }, 30000); // Check every 30 seconds
+        }
+      }
+
+      setupCoreWebVitalsMonitoring() {
+        // Monitor Largest Contentful Paint (LCP)
+        if ('PerformanceObserver' in window) {
+          const lcpObserver = new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            const lastEntry = entries[entries.length - 1];
+            console.log('LCP:', lastEntry.startTime);
+            this.reportPerformanceMetrics('lcp', { value: lastEntry.startTime });
+          });
+          
+          try {
+            lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+          } catch (e) {
+            console.log('LCP monitoring not supported');
+          }
+        }
+
+        // Monitor Cumulative Layout Shift (CLS)
+        this.monitorLayoutShift();
+        
+        // Monitor First Input Delay (FID)
+        this.monitorFirstInputDelay();
+      }
+
+      monitorLayoutShift() {
+        if ('PerformanceObserver' in window) {
+          let clsValue = 0;
+          
+          const clsObserver = new PerformanceObserver((list) => {
+            list.getEntries().forEach((entry) => {
+              if (!entry.hadRecentInput) {
+                clsValue += entry.value;
+              }
+            });
+            
+            if (clsValue > 0.1) {
+              console.warn('High CLS detected:', clsValue);
+            }
+          });
+          
+          try {
+            clsObserver.observe({ entryTypes: ['layout-shift'] });
+          } catch (e) {
+            console.log('CLS monitoring not supported');
+          }
+        }
+      }
+
+      monitorFirstInputDelay() {
+        if ('PerformanceObserver' in window) {
+          const fidObserver = new PerformanceObserver((list) => {
+            list.getEntries().forEach((entry) => {
+              const fid = entry.processingStart - entry.startTime;
+              console.log('FID:', fid);
+              this.reportPerformanceMetrics('fid', { value: fid });
+            });
+          });
+          
+          try {
+            fidObserver.observe({ entryTypes: ['first-input'] });
+          } catch (e) {
+            console.log('FID monitoring not supported');
+          }
+        }
+      }
+
+      setupIntelligentCaching() {
+        // Setup different cache strategies
+        this.setupLaunchDataCache();
+        this.setupImageCache();
+        this.setupStaticDataCache();
+        this.setupUserPreferencesCache();
+        
+        // Setup cache cleanup
+        this.setupCacheCleanup();
+      }
+
+      setupLaunchDataCache() {
+        // Cache launch data with TTL
+        this.cacheLaunchData = (key, data) => {
+          const cacheEntry = {
+            data,
+            timestamp: Date.now(),
+            ttl: this.cacheConfig.launchData.ttl
+          };
+          
+          this.cache.set(`launch_${key}`, cacheEntry);
+          
+          // Also store in localStorage for persistence
+          try {
+            localStorage.setItem(`launch_cache_${key}`, JSON.stringify(cacheEntry));
+          } catch (e) {
+            console.warn('localStorage cache failed:', e);
+          }
+        };
+
+        this.getCachedLaunchData = (key) => {
+          // Check memory cache first
+          let cacheEntry = this.cache.get(`launch_${key}`);
+          
+          // Fallback to localStorage
+          if (!cacheEntry) {
+            try {
+              const stored = localStorage.getItem(`launch_cache_${key}`);
+              if (stored) {
+                cacheEntry = JSON.parse(stored);
+                this.cache.set(`launch_${key}`, cacheEntry);
+              }
+            } catch (e) {
+              console.warn('localStorage retrieval failed:', e);
+            }
+          }
+          
+          if (cacheEntry) {
+            const isExpired = Date.now() - cacheEntry.timestamp > cacheEntry.ttl;
+            
+            if (!isExpired) {
+              this.performanceMetrics.cacheHits++;
+              return cacheEntry.data;
+            } else {
+              // Remove expired entry
+              this.cache.delete(`launch_${key}`);
+              localStorage.removeItem(`launch_cache_${key}`);
+            }
+          }
+          
+          this.performanceMetrics.cacheMisses++;
+          return null;
+        };
+      }
+
+      setupImageCache() {
+        // Implement image caching with IndexedDB
+        this.imageCache = {
+          store: null,
+          
+          init: async () => {
+            if ('indexedDB' in window) {
+              return new Promise((resolve, reject) => {
+                const request = indexedDB.open('BlueandCosmosImageCache', 1);
+                
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                  this.imageCache.store = request.result;
+                  resolve();
+                };
+                
+                request.onupgradeneeded = (event) => {
+                  const db = event.target.result;
+                  if (!db.objectStoreNames.contains('images')) {
+                    const store = db.createObjectStore('images', { keyPath: 'url' });
+                    store.createIndex('timestamp', 'timestamp');
+                  }
+                };
+              });
+            }
+          },
+          
+          set: async (url, blob) => {
+            if (!this.imageCache.store) return;
+            
+            const transaction = this.imageCache.store.transaction(['images'], 'readwrite');
+            const store = transaction.objectStore('images');
+            
+            const entry = {
+              url,
+              blob,
+              timestamp: Date.now(),
+              ttl: this.cacheConfig.images.ttl
+            };
+            
+            store.put(entry);
+          },
+          
+          get: async (url) => {
+            if (!this.imageCache.store) return null;
+            
+            const transaction = this.imageCache.store.transaction(['images'], 'readonly');
+            const store = transaction.objectStore('images');
+            
+            return new Promise((resolve) => {
+              const request = store.get(url);
+              
+              request.onsuccess = () => {
+                const entry = request.result;
+                
+                if (entry) {
+                  const isExpired = Date.now() - entry.timestamp > entry.ttl;
+                  
+                  if (!isExpired) {
+                    resolve(entry.blob);
+                  } else {
+                    // Remove expired entry
+                    store.delete(url);
+                    resolve(null);
+                  }
+                } else {
+                  resolve(null);
+                }
+              };
+              
+              request.onerror = () => resolve(null);
+            });
+          }
+        };
+        
+        this.imageCache.init();
+      }
+
+      setupStaticDataCache() {
+        // Cache static data like agency info, rocket specs
+        this.cacheStaticData = (key, data) => {
+          const cacheEntry = {
+            data,
+            timestamp: Date.now(),
+            ttl: this.cacheConfig.staticData.ttl
+          };
+          
+          this.cache.set(`static_${key}`, cacheEntry);
+          
+          try {
+            localStorage.setItem(`static_cache_${key}`, JSON.stringify(cacheEntry));
+          } catch (e) {
+            console.warn('Static data cache failed:', e);
+          }
+        };
+
+        this.getCachedStaticData = (key) => {
+          let cacheEntry = this.cache.get(`static_${key}`);
+          
+          if (!cacheEntry) {
+            try {
+              const stored = localStorage.getItem(`static_cache_${key}`);
+              if (stored) {
+                cacheEntry = JSON.parse(stored);
+                this.cache.set(`static_${key}`, cacheEntry);
+              }
+            } catch (e) {
+              console.warn('Static data retrieval failed:', e);
+            }
+          }
+          
+          if (cacheEntry) {
+            const isExpired = Date.now() - cacheEntry.timestamp > cacheEntry.ttl;
+            
+            if (!isExpired) {
+              return cacheEntry.data;
+            } else {
+              this.cache.delete(`static_${key}`);
+              localStorage.removeItem(`static_cache_${key}`);
+            }
+          }
+          
+          return null;
+        };
+      }
+
+      setupUserPreferencesCache() {
+        // Cache user preferences and settings
+        this.cacheUserPreferences = (preferences) => {
+          const cacheEntry = {
+            data: preferences,
+            timestamp: Date.now(),
+            ttl: this.cacheConfig.userPreferences.ttl
+          };
+          
+          try {
+            localStorage.setItem('user_preferences_cache', JSON.stringify(cacheEntry));
+          } catch (e) {
+            console.warn('User preferences cache failed:', e);
+          }
+        };
+
+        this.getCachedUserPreferences = () => {
+          try {
+            const stored = localStorage.getItem('user_preferences_cache');
+            if (stored) {
+              const cacheEntry = JSON.parse(stored);
+              const isExpired = Date.now() - cacheEntry.timestamp > cacheEntry.ttl;
+              
+              if (!isExpired) {
+                return cacheEntry.data;
+              } else {
+                localStorage.removeItem('user_preferences_cache');
+              }
+            }
+          } catch (e) {
+            console.warn('User preferences retrieval failed:', e);
+          }
+          
+          return null;
+        };
+      }
+
+      setupCacheCleanup() {
+        // Periodic cache cleanup
+        setInterval(() => {
+          this.cleanupExpiredCache();
+        }, 10 * 60 * 1000); // Every 10 minutes
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+          this.cleanupExpiredCache();
+        });
+      }
+
+      cleanupExpiredCache() {
+        const now = Date.now();
+        
+        // Clean memory cache
+        for (const [key, entry] of this.cache.entries()) {
+          if (now - entry.timestamp > entry.ttl) {
+            this.cache.delete(key);
+          }
+        }
+        
+        // Clean localStorage cache
+        for (let i = localStorage.length - 1; i >= 0; i--) {
+          const key = localStorage.key(i);
+          if (key && key.includes('_cache_')) {
+            try {
+              const entry = JSON.parse(localStorage.getItem(key));
+              if (entry && now - entry.timestamp > entry.ttl) {
+                localStorage.removeItem(key);
+              }
+            } catch (e) {
+              // Remove corrupted entries
+              localStorage.removeItem(key);
+            }
+          }
+        }
+        
+        console.log('Cache cleanup completed');
+      }
+
+      registerServiceWorker() {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('Service Worker registered:', registration);
+              this.serviceWorkerRegistered = true;
+              this.setupServiceWorkerMessaging(registration);
+            })
+            .catch((error) => {
+              console.log('Service Worker registration failed:', error);
+              // Create inline service worker as fallback
+              this.createInlineServiceWorker();
+            });
+        } else {
+          console.log('Service Worker not supported');
+        }
+      }
+
+      createInlineServiceWorker() {
+        // Create a basic service worker inline for caching
+        const swCode = `
+          const CACHE_NAME = 'blueandcosmos-v1';
+          const urlsToCache = [
+            '/',
+            '/launch-missions.html',
+            '/favicon.ico'
+          ];
+
+          self.addEventListener('install', (event) => {
+            event.waitUntil(
+              caches.open(CACHE_NAME)
+                .then((cache) => cache.addAll(urlsToCache))
+            );
+          });
+
+          self.addEventListener('fetch', (event) => {
+            event.respondWith(
+              caches.match(event.request)
+                .then((response) => {
+                  if (response) {
+                    return response;
+                  }
+                  return fetch(event.request);
+                })
+            );
+          });
+        `;
+        
+        const blob = new Blob([swCode], { type: 'application/javascript' });
+        const swUrl = URL.createObjectURL(blob);
+        
+        navigator.serviceWorker.register(swUrl)
+          .then((registration) => {
+            console.log('Inline Service Worker registered:', registration);
+            this.serviceWorkerRegistered = true;
+          })
+          .catch((error) => {
+            console.log('Inline Service Worker registration failed:', error);
+          });
+      }
+
+      setupServiceWorkerMessaging(registration) {
+        // Setup communication with service worker
+        navigator.serviceWorker.addEventListener('message', (event) => {
+          if (event.data.type === 'CACHE_UPDATED') {
+            console.log('Cache updated by service worker');
+          }
+        });
+        
+        // Send cache instructions to service worker
+        this.sendToServiceWorker = (message) => {
+          if (registration.active) {
+            registration.active.postMessage(message);
+          }
+        };
+      }
+
+      optimizeCountdownPerformance() {
+        // Optimize countdown timer performance
+        let countdownElements = [];
+        let lastUpdate = 0;
+        const updateInterval = 1000; // 1 second
+        
+        // Collect all countdown elements
+        const collectCountdownElements = () => {
+          countdownElements = Array.from(document.querySelectorAll('.countdown-display, .next-countdown'));
+        };
+        
+        // Optimized countdown update function
+        const updateCountdowns = (timestamp) => {
+          if (timestamp - lastUpdate >= updateInterval) {
+            countdownElements.forEach(element => {
+              if (element.offsetParent !== null) { // Only update visible elements
+                this.updateSingleCountdown(element);
+              }
+            });
+            lastUpdate = timestamp;
+          }
+          
+          requestAnimationFrame(updateCountdowns);
+        };
+        
+        // Start optimized countdown loop
+        collectCountdownElements();
+        requestAnimationFrame(updateCountdowns);
+        
+        // Re-collect elements when DOM changes
+        const observer = new MutationObserver(() => {
+          collectCountdownElements();
+        });
+        
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      }
+
+      updateSingleCountdown(element) {
+        // Optimized single countdown update
+        const timeUnits = element.querySelectorAll('.time-unit .number');
+        if (timeUnits.length === 0) return;
+        
+        // Get target time from data attribute or calculate
+        const targetTime = element.dataset.targetTime || this.calculateTargetTime(element);
+        if (!targetTime) return;
+        
+        const now = Date.now();
+        const distance = targetTime - now;
+        
+        if (distance < 0) {
+          timeUnits.forEach(unit => unit.textContent = '00');
+          return;
+        }
+        
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        // Update only if values changed
+        const newValues = [
+          days.toString().padStart(2, '0'),
+          hours.toString().padStart(2, '0'),
+          minutes.toString().padStart(2, '0'),
+          seconds.toString().padStart(2, '0')
+        ];
+        
+        timeUnits.forEach((unit, index) => {
+          if (unit.textContent !== newValues[index]) {
+            unit.textContent = newValues[index];
+          }
+        });
+      }
+
+      calculateTargetTime(element) {
+        // Calculate target time from launch data
+        const card = element.closest('.launch-card');
+        if (!card) return null;
+        
+        const dateElement = card.querySelector('.launch-date');
+        const timeElement = card.querySelector('.launch-time');
+        
+        if (dateElement && timeElement) {
+          const dateStr = dateElement.textContent;
+          const timeStr = timeElement.textContent;
+          
+          try {
+            const targetTime = new Date(`${dateStr} ${timeStr}`).getTime();
+            element.dataset.targetTime = targetTime;
+            return targetTime;
+          } catch (e) {
+            return null;
+          }
+        }
+        
+        return null;
+      }
+
+      setupResourceOptimization() {
+        // Optimize resource loading
+        this.setupImageOptimization();
+        this.setupFontOptimization();
+        this.setupScriptOptimization();
+      }
+
+      setupImageOptimization() {
+        // Implement progressive image loading
+        const images = document.querySelectorAll('img');
+        
+        images.forEach(img => {
+          // Add loading attribute
+          img.loading = 'lazy';
+          
+          // Optimize image loading
+          img.addEventListener('load', () => {
+            img.classList.add('loaded');
+          });
+          
+          img.addEventListener('error', () => {
+            img.classList.add('error');
+            // Fallback to placeholder
+            img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlPC90ZXh0Pjwvc3ZnPg==';
+          });
+        });
+      }
+
+      setupFontOptimization() {
+        // Optimize font loading
+        if ('fonts' in document) {
+          document.fonts.ready.then(() => {
+            console.log('Fonts loaded');
+            document.body.classList.add('fonts-loaded');
+          });
+        }
+      }
+
+      setupScriptOptimization() {
+        // Defer non-critical scripts
+        const scripts = document.querySelectorAll('script[data-defer]');
+        
+        scripts.forEach(script => {
+          const newScript = document.createElement('script');
+          newScript.src = script.src;
+          newScript.defer = true;
+          
+          script.parentNode.replaceChild(newScript, script);
+        });
+      }
+
+      initializePerformanceBudgets() {
+        // Set performance budgets
+        this.performanceBudgets = {
+          maxLoadTime: 3000, // 3 seconds
+          maxRenderTime: 100, // 100ms
+          maxMemoryUsage: 50, // 50MB
+          maxCacheSize: 10 // 10MB
+        };
+        
+        // Monitor budgets
+        this.monitorPerformanceBudgets();
+      }
+
+      monitorPerformanceBudgets() {
+        setInterval(() => {
+          this.checkPerformanceBudgets();
+        }, 60000); // Check every minute
+      }
+
+      checkPerformanceBudgets() {
+        // Check load time budget
+        const avgLoadTime = this.performanceMetrics.loadTimes.reduce((a, b) => a + b, 0) / this.performanceMetrics.loadTimes.length;
+        
+        if (avgLoadTime > this.performanceBudgets.maxLoadTime) {
+          console.warn('Load time budget exceeded:', avgLoadTime);
+          this.optimizePerformance();
+        }
+        
+        // Check cache size
+        this.checkCacheSize();
+      }
+
+      checkCacheSize() {
+        if ('storage' in navigator && 'estimate' in navigator.storage) {
+          navigator.storage.estimate().then(estimate => {
+            const usedMB = estimate.usage / (1024 * 1024);
+            
+            if (usedMB > this.performanceBudgets.maxCacheSize) {
+              console.warn('Cache size budget exceeded:', usedMB + 'MB');
+              this.cleanupCache();
+            }
+          });
+        }
+      }
+
+      optimizePerformance() {
+        // Performance optimization strategies
+        this.optimizeMemoryUsage();
+        this.optimizeAnimations();
+        this.cleanupCache();
+      }
+
+      optimizeMemoryUsage() {
+        // Clear unused data
+        this.cache.clear();
+        
+        // Remove unused event listeners
+        this.cleanupEventListeners();
+        
+        // Trigger garbage collection if available
+        if (window.gc) {
+          window.gc();
+        }
+      }
+
+      optimizeAnimations() {
+        // Reduce animations on performance issues
+        document.body.classList.add('reduce-animations');
+        
+        setTimeout(() => {
+          document.body.classList.remove('reduce-animations');
+        }, 30000); // Re-enable after 30 seconds
+      }
+
+      cleanupEventListeners() {
+        // Remove unused event listeners
+        const elements = document.querySelectorAll('[data-cleanup]');
+        elements.forEach(element => {
+          element.removeEventListener('click', element._clickHandler);
+          element.removeEventListener('touchstart', element._touchHandler);
+        });
+      }
+
+      cleanupCache() {
+        // Aggressive cache cleanup
+        this.cleanupExpiredCache();
+        
+        // Clear old localStorage entries
+        const keysToRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && key.includes('cache') && Math.random() > 0.5) {
+            keysToRemove.push(key);
+          }
+        }
+        
+        keysToRemove.forEach(key => localStorage.removeItem(key));
+      }
+
+      reportPerformanceMetrics(type, data) {
+        // Report to analytics service
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'performance_metric', {
+            metric_type: type,
+            metric_value: data.value || data.duration || data.loadTime,
+            custom_parameter: JSON.stringify(data)
+          });
+        }
+        
+        // Log to console in development
+        if (window.location.hostname === 'localhost') {
+          console.log('Performance Metric:', type, data);
+        }
+      }
+
+      // Public API methods
+      getCacheStats() {
+        return {
+          size: this.cache.size,
+          hits: this.performanceMetrics.cacheHits,
+          misses: this.performanceMetrics.cacheMisses,
+          hitRate: this.performanceMetrics.cacheHits / (this.performanceMetrics.cacheHits + this.performanceMetrics.cacheMisses)
+        };
+      }
+
+      clearAllCaches() {
+        this.cache.clear();
+        localStorage.clear();
+        
+        if ('caches' in window) {
+          caches.keys().then(names => {
+            names.forEach(name => caches.delete(name));
+          });
+        }
+        
+        showNotification('All caches cleared! 🗑️', 'success');
+      }
+
+      getPerformanceReport() {
+        return {
+          loadTimes: this.performanceMetrics.loadTimes,
+          renderTimes: this.performanceMetrics.renderTimes,
+          cacheStats: this.getCacheStats(),
+          serviceWorkerActive: this.serviceWorkerRegistered
+        };
+      }
+    }
+
+    // Initialize performance optimization manager
+    const performanceOptimizationManager = new PerformanceOptimizationManager();
+
     // Enhanced setNotification function
     function setNotification(button) {
       const card = button.closest('.launch-card');
