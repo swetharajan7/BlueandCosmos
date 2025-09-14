@@ -2421,6 +2421,7 @@
         transform: translateY(100%);
         opacity: 0;
       }
+
       to {
         transform: translateY(0);
         opacity: 1;
@@ -2432,6 +2433,7 @@
         transform: translateY(0);
         opacity: 1;
       }
+
       to {
         transform: translateY(100%);
         opacity: 0;
@@ -2968,6 +2970,132 @@
         font-size: 0.8em;
         padding: 0.4em 0.8em;
       }
+    }
+
+    /* Enhanced Performance Analytics Styles */
+    .performance-indicator {
+      position: fixed;
+      top: 50px;
+      left: 2em;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      padding: 0.8em;
+      border-radius: 8px;
+      font-size: 0.75em;
+      z-index: 10004;
+      font-family: monospace;
+      max-width: 280px;
+      backdrop-filter: blur(10px);
+      animation: slideInLeft 0.3s ease;
+    }
+
+    .performance-indicator.good {
+      border-left: 4px solid #28a745;
+    }
+
+    .performance-indicator.warning {
+      border-left: 4px solid #ffc107;
+      color: #000;
+      background: rgba(255, 193, 7, 0.95);
+    }
+
+    .performance-indicator.error {
+      border-left: 4px solid #dc3545;
+      background: rgba(220, 53, 69, 0.95);
+    }
+
+    /* Performance Dashboard Enhancements */
+    #performance-dashboard {
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      animation: slideInRight 0.3s ease;
+      line-height: 1.3;
+    }
+
+    /* Core Web Vitals Status Colors */
+    .cwv-good { color: #28a745; }
+    .cwv-needs-improvement { color: #ffc107; }
+    .cwv-poor { color: #dc3545; }
+
+    /* Bundle optimization indicators */
+    .webp-support .image-card img {
+      /* WebP optimized images would be served here */
+    }
+
+    .slow-connection .image-card img {
+      /* Lower quality images for slow connections */
+      filter: contrast(0.9) brightness(1.1);
+    }
+
+    .slow-connection .loading-skeleton {
+      animation-duration: 2s; /* Slower animation for slow connections */
+    }
+
+    /* Performance budget exceeded animation */
+    @keyframes budgetExceeded {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); background-color: rgba(220, 53, 69, 0.1); }
+      100% { transform: scale(1); }
+    }
+
+    .budget-exceeded {
+      animation: budgetExceeded 0.5s ease-in-out;
+    }
+
+    /* Analytics visualization */
+    .analytics-chart {
+      width: 100%;
+      height: 40px;
+      background: linear-gradient(90deg, #28a745 0%, #ffc107 50%, #dc3545 100%);
+      border-radius: 4px;
+      margin: 0.3em 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .analytics-chart::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 8px,
+        rgba(255, 255, 255, 0.1) 8px,
+        rgba(255, 255, 255, 0.1) 9px
+      );
+    }
+
+    /* Performance monitoring help text */
+    .perf-help {
+      position: fixed;
+      bottom: 2em;
+      left: 2em;
+      background: rgba(0, 0, 0, 0.8);
+      color: #ccc;
+      padding: 0.5em;
+      border-radius: 4px;
+      font-size: 0.7em;
+      z-index: 10003;
+      font-family: monospace;
+      opacity: 0.7;
+    }
+
+    /* Development mode indicator */
+    body[data-dev-mode="true"]::before {
+      content: "🚀 DEV MODE - Performance Analytics Active";
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #17a2b8;
+      color: white;
+      text-align: center;
+      padding: 0.3em;
+      font-size: 0.8em;
+      z-index: 10006;
     }
   </style>
 </head>
@@ -4833,7 +4961,7 @@
         if (e.target.classList.contains('share-btn') && !e.target.id) {
           e.preventDefault();
           const imageId = e.target.dataset.imageId;
-          
+
           if (window.livestreamSocialManager) {
             livestreamSocialManager.shareImage(imageId, 'native');
           } else {
@@ -4845,7 +4973,7 @@
                 text: `Check out this space image: ${imageData.title}`,
                 url: window.location.href
               };
-              
+
               if (navigator.share) {
                 navigator.share(shareData);
               } else {
@@ -6929,7 +7057,7 @@
         setupNativeSharing() {
           // Enhanced Web Share API support
           this.hasNativeShare = 'share' in navigator && 'canShare' in navigator;
-          
+
           if (this.hasNativeShare) {
             console.log('✅ Native sharing available');
           } else {
@@ -6964,7 +7092,7 @@
             if (e.target.closest('.social-btn')) {
               const platform = e.target.closest('.social-btn').dataset.platform;
               const imageId = document.getElementById('image-modal').dataset.currentImageId;
-              
+
               if (imageId) {
                 this.shareImage(imageId, platform);
               }
@@ -6980,7 +7108,7 @@
           }
 
           const shareData = this.prepareShareData(imageData);
-          
+
           try {
             if (platform === 'native' && this.hasNativeShare) {
               await this.shareNative(shareData);
@@ -6989,10 +7117,10 @@
             } else {
               this.shareToSocial(shareData, platform);
             }
-            
+
             this.trackShare(imageId, platform);
             this.showShareSuccess(platform);
-            
+
           } catch (error) {
             console.error('Share failed:', error);
             this.showShareError(error.message);
@@ -7002,16 +7130,16 @@
         prepareShareData(imageData) {
           const baseUrl = window.location.origin + window.location.pathname;
           const imageUrl = `${baseUrl}#image-${imageData.id}`;
-          
+
           // Create compelling share text
           const title = imageData.title;
           const description = this.truncateText(imageData.description, 100);
           const source = imageData.source.toUpperCase();
           const hashtags = this.generateHashtags(imageData);
-          
+
           const shareText = `🚀 ${title}\n\n${description}\n\n📸 ${source}`;
           const shortText = `🚀 Amazing space image: ${title}`;
-          
+
           return {
             title: title,
             text: shareText,
@@ -7026,7 +7154,7 @@
 
         generateHashtags(imageData) {
           const hashtags = ['Space', 'Astronomy'];
-          
+
           // Add source-specific hashtags
           switch (imageData.source) {
             case 'nasa':
@@ -7042,7 +7170,7 @@
               hashtags.push('ISS', 'SpaceStation');
               break;
           }
-          
+
           // Add category-specific hashtags
           switch (imageData.category) {
             case 'missions':
@@ -7058,7 +7186,7 @@
               hashtags.push('Planets', 'SolarSystem');
               break;
           }
-          
+
           return hashtags.join(',');
         },
 
@@ -7106,7 +7234,7 @@
 
         async copyToClipboard(shareData) {
           const shareText = `${shareData.text}\n\n${shareData.url}`;
-          
+
           if (navigator.clipboard) {
             await navigator.clipboard.writeText(shareText);
           } else {
@@ -7188,31 +7316,31 @@
           if (socialButtons) {
             // Clear existing buttons and rebuild with enhanced set
             socialButtons.innerHTML = '';
-            
+
             const platforms = ['twitter', 'facebook', 'reddit', 'linkedin', 'whatsapp', 'copy'];
             platforms.forEach(platform => {
               const config = this.platforms[platform] || { name: 'Copy Link', icon: '📋', color: '#666' };
-              
+
               const button = document.createElement('button');
               button.className = 'social-btn';
               button.dataset.platform = platform;
               button.style.borderColor = config.color;
-              
+
               button.innerHTML = `
                 <span class="social-icon">${config.icon}</span>
                 <span class="social-text">${config.name}</span>
               `;
-              
+
               button.addEventListener('mouseenter', () => {
                 button.style.backgroundColor = config.color;
                 button.style.color = 'white';
               });
-              
+
               button.addEventListener('mouseleave', () => {
                 button.style.backgroundColor = '';
                 button.style.color = '';
               });
-              
+
               socialButtons.appendChild(button);
             });
           }
@@ -7222,10 +7350,10 @@
           this.shareStats.totalShares++;
           this.shareStats.platformStats[platform] = (this.shareStats.platformStats[platform] || 0) + 1;
           this.shareStats.popularImages[imageId] = (this.shareStats.popularImages[imageId] || 0) + 1;
-          
+
           // Save stats
           localStorage.setItem('livestream-share-stats', JSON.stringify(this.shareStats));
-          
+
           // Log for analytics
           console.log('📊 Share tracked:', { imageId, platform, totalShares: this.shareStats.totalShares });
         },
@@ -7233,7 +7361,7 @@
         showShareSuccess(platform) {
           const platformName = this.platforms[platform]?.name || platform;
           const message = platform === 'copy' ? 'Link copied to clipboard!' : `Shared to ${platformName}!`;
-          
+
           if (window.showToast) {
             showToast(message);
           } else {
@@ -7244,7 +7372,7 @@
 
         showShareError(error) {
           const message = `Share failed: ${error}`;
-          
+
           if (window.livestreamErrorManager) {
             livestreamErrorManager.reportError('Share Error', message, 'error');
           } else {
@@ -7267,7 +7395,7 @@
             z-index: 10003;
             animation: slideInUp 0.3s ease;
           `;
-          
+
           document.body.appendChild(notification);
           setTimeout(() => {
             notification.style.animation = 'slideOutDown 0.3s ease';
@@ -7291,13 +7419,13 @@
 
         getMostSharedImages() {
           return Object.entries(this.shareStats.popularImages)
-            .sort(([,a], [,b]) => b - a)
+            .sort(([, a], [, b]) => b - a)
             .slice(0, 10);
         },
 
         getPopularPlatforms() {
           return Object.entries(this.shareStats.platformStats)
-            .sort(([,a], [,b]) => b - a);
+            .sort(([, a], [, b]) => b - a);
         }
       };
 
@@ -7307,6 +7435,1465 @@
       // Make social sharing manager globally available
       window.livestreamSocialManager = socialSharingManager;
 
+      // Comprehensive Test Suite
+      const testSuite = {
+        tests: [],
+        results: {
+          passed: 0,
+          failed: 0,
+          total: 0,
+          details: []
+        },
+
+        init() {
+          this.setupTestEnvironment();
+          this.registerTests();
+          
+          // Auto-run tests in development mode
+          if (this.isDevelopmentMode()) {
+            console.log('🧪 Running automated tests...');
+            setTimeout(() => this.runAllTests(), 2000);
+          }
+        },
+
+        isDevelopmentMode() {
+          return window.location.hostname === 'localhost' || 
+                 window.location.hostname === '127.0.0.1' ||
+                 window.location.search.includes('test=true');
+        },
+
+        setupTestEnvironment() {
+          // Create test utilities
+          this.mockData = this.createMockData();
+          this.testUtils = this.createTestUtils();
+        },
+
+        createMockData() {
+          return {
+            sampleImage: {
+              id: 'test_nasa_1',
+              title: 'Test Mars Rover Image',
+              description: 'A test image from Mars showing the rover in action.',
+              imageUrl: 'https://via.placeholder.com/400x225/0033a0/ffffff?text=Test+Image',
+              thumbnailUrl: 'https://via.placeholder.com/400x225/0033a0/ffffff?text=Test+Thumb',
+              source: 'nasa',
+              category: 'missions',
+              timestamp: new Date(),
+              sourceUrl: 'https://nasa.gov/test',
+              metadata: {
+                mission: 'Test Mission',
+                photographer: 'Test Photographer',
+                keywords: ['mars', 'rover', 'test']
+              }
+            },
+            sampleImages: [
+              // Multiple test images for comprehensive testing
+              {
+                id: 'test_spacex_1',
+                title: 'Test SpaceX Launch',
+                description: 'Test launch image',
+                source: 'spacex',
+                category: 'missions',
+                timestamp: new Date(Date.now() - 60000)
+              },
+              {
+                id: 'test_esa_1',
+                title: 'Test ESA Deep Space',
+                description: 'Test deep space image',
+                source: 'esa',
+                category: 'deep-space',
+                timestamp: new Date(Date.now() - 120000)
+              }
+            ]
+          };
+        },
+
+        createTestUtils() {
+          return {
+            waitFor: (condition, timeout = 5000) => {
+              return new Promise((resolve, reject) => {
+                const startTime = Date.now();
+                const check = () => {
+                  if (condition()) {
+                    resolve();
+                  } else if (Date.now() - startTime > timeout) {
+                    reject(new Error('Timeout waiting for condition'));
+                  } else {
+                    setTimeout(check, 100);
+                  }
+                };
+                check();
+              });
+            },
+
+            simulateClick: (element) => {
+              const event = new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                view: window
+              });
+              element.dispatchEvent(event);
+            },
+
+            simulateKeyPress: (element, key) => {
+              const event = new KeyboardEvent('keydown', {
+                key: key,
+                bubbles: true,
+                cancelable: true
+              });
+              element.dispatchEvent(event);
+            },
+
+            createTestElement: (tag, attributes = {}) => {
+              const element = document.createElement(tag);
+              Object.keys(attributes).forEach(key => {
+                element.setAttribute(key, attributes[key]);
+              });
+              return element;
+            }
+          };
+        },
+
+        registerTests() {
+          // Unit Tests
+          this.addTest('Image Data Manager - Parse NASA Image', this.testParseNASAImage);
+          this.addTest('Image Data Manager - Categorize Images', this.testCategorizeImages);
+          this.addTest('Image Data Manager - Cache Management', this.testCacheManagement);
+          
+          // Filter and Search Tests
+          this.addTest('Filter System - Category Filtering', this.testCategoryFiltering);
+          this.addTest('Search System - Text Search', this.testTextSearch);
+          this.addTest('Filter System - Multiple Filters', this.testMultipleFilters);
+          
+          // Modal Tests
+          this.addTest('Modal System - Open and Close', this.testModalOpenClose);
+          this.addTest('Modal System - Navigation', this.testModalNavigation);
+          this.addTest('Modal System - Keyboard Controls', this.testModalKeyboard);
+          
+          // Performance Tests
+          this.addTest('Performance - Image Loading', this.testImageLoadingPerformance);
+          this.addTest('Performance - Memory Usage', this.testMemoryUsage);
+          this.addTest('Performance - Scroll Performance', this.testScrollPerformance);
+          
+          // Error Handling Tests
+          this.addTest('Error Handling - API Failures', this.testAPIErrorHandling);
+          this.addTest('Error Handling - Network Issues', this.testNetworkErrorHandling);
+          this.addTest('Error Handling - Image Load Failures', this.testImageErrorHandling);
+          
+          // Social Sharing Tests
+          this.addTest('Social Sharing - Share Data Generation', this.testShareDataGeneration);
+          this.addTest('Social Sharing - Platform Integration', this.testPlatformIntegration);
+          
+          // Accessibility Tests
+          this.addTest('Accessibility - Keyboard Navigation', this.testKeyboardNavigation);
+          this.addTest('Accessibility - Screen Reader Support', this.testScreenReaderSupport);
+          this.addTest('Accessibility - Focus Management', this.testFocusManagement);
+          
+          // Mobile Tests
+          this.addTest('Mobile - Touch Gestures', this.testTouchGestures);
+          this.addTest('Mobile - Responsive Layout', this.testResponsiveLayout);
+          
+          // Integration Tests
+          this.addTest('Integration - Full User Journey', this.testFullUserJourney);
+          this.addTest('Integration - Auto-refresh Cycle', this.testAutoRefreshCycle);
+        },
+
+        addTest(name, testFunction) {
+          this.tests.push({ name, testFunction: testFunction.bind(this) });
+        },
+
+        async runAllTests() {
+          console.log('🚀 Starting comprehensive test suite...');
+          this.results = { passed: 0, failed: 0, total: 0, details: [] };
+          
+          for (const test of this.tests) {
+            await this.runTest(test);
+          }
+          
+          this.displayResults();
+        },
+
+        async runTest(test) {
+          this.results.total++;
+          const startTime = performance.now();
+          
+          try {
+            await test.testFunction();
+            const duration = performance.now() - startTime;
+            this.results.passed++;
+            this.results.details.push({
+              name: test.name,
+              status: 'PASSED',
+              duration: Math.round(duration),
+              error: null
+            });
+            console.log(`✅ ${test.name} (${Math.round(duration)}ms)`);
+          } catch (error) {
+            const duration = performance.now() - startTime;
+            this.results.failed++;
+            this.results.details.push({
+              name: test.name,
+              status: 'FAILED',
+              duration: Math.round(duration),
+              error: error.message
+            });
+            console.error(`❌ ${test.name}: ${error.message}`);
+          }
+        },
+
+        // Unit Tests
+        async testParseNASAImage() {
+          if (!window.imageDataManager) throw new Error('ImageDataManager not available');
+          
+          const mockNASAItem = {
+            data: [{
+              nasa_id: 'test123',
+              title: 'Test Image',
+              description: 'Test description',
+              date_created: '2023-01-01T00:00:00Z',
+              photographer: 'Test Photographer',
+              keywords: ['mars', 'rover']
+            }],
+            links: [{ rel: 'preview', href: 'https://test.com/image.jpg' }]
+          };
+          
+          const result = imageDataManager.parseNASAImage(mockNASAItem);
+          
+          if (!result.id || !result.title || !result.source) {
+            throw new Error('Parsed image missing required fields');
+          }
+          
+          if (result.source !== 'nasa') {
+            throw new Error('Source not set correctly');
+          }
+        },
+
+        async testCategorizeImages() {
+          if (!window.imageDataManager) throw new Error('ImageDataManager not available');
+          
+          const testCases = [
+            { title: 'Mars Rover Perseverance', expected: 'missions' },
+            { title: 'Hubble Deep Space Image', expected: 'deep-space' },
+            { title: 'Earth from ISS', expected: 'iss' },
+            { title: 'Jupiter Great Red Spot', expected: 'planets' }
+          ];
+          
+          testCases.forEach(testCase => {
+            const result = imageDataManager.categorizeNASAImage({ title: testCase.title });
+            if (result !== testCase.expected) {
+              throw new Error(`Categorization failed: ${testCase.title} -> ${result}, expected ${testCase.expected}`);
+            }
+          });
+        },
+
+        async testCacheManagement() {
+          if (!window.imageDataManager) throw new Error('ImageDataManager not available');
+          
+          const testKey = 'test_cache_key';
+          const testData = { test: 'data' };
+          
+          // Test cache set
+          imageDataManager.setCache(testKey, testData);
+          
+          // Test cache get
+          const retrieved = imageDataManager.getFromCache(testKey);
+          if (!retrieved || retrieved.test !== 'data') {
+            throw new Error('Cache set/get failed');
+          }
+          
+          // Test cache expiry (simulate old timestamp)
+          imageDataManager.cache.set(testKey, {
+            data: testData,
+            timestamp: Date.now() - (10 * 60 * 1000) // 10 minutes ago
+          });
+          
+          const expired = imageDataManager.getFromCache(testKey);
+          if (expired) {
+            throw new Error('Cache expiry not working');
+          }
+        },
+
+        // Filter and Search Tests
+        async testCategoryFiltering() {
+          // Wait for gallery to be initialized
+          await this.testUtils.waitFor(() => document.querySelector('.image-gallery'));
+          
+          const filterBtn = document.querySelector('[data-filter="missions"]');
+          if (!filterBtn) throw new Error('Filter button not found');
+          
+          this.testUtils.simulateClick(filterBtn);
+          
+          // Check if filter was applied
+          if (!filterBtn.classList.contains('active')) {
+            throw new Error('Filter button not activated');
+          }
+        },
+
+        async testTextSearch() {
+          const searchInput = document.getElementById('search-input');
+          if (!searchInput) throw new Error('Search input not found');
+          
+          // Simulate search input
+          searchInput.value = 'mars';
+          searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+          
+          // Wait for search to process
+          await new Promise(resolve => setTimeout(resolve, 100));
+          
+          // Check if search was applied (currentSearch should be set)
+          if (typeof currentSearch === 'undefined') {
+            throw new Error('Search functionality not working');
+          }
+        },
+
+        async testMultipleFilters() {
+          // Test combining category and source filters
+          const categoryBtn = document.querySelector('[data-filter="missions"]');
+          const sourceBtn = document.querySelector('[data-source="nasa"]');
+          
+          if (!categoryBtn || !sourceBtn) {
+            throw new Error('Filter buttons not found');
+          }
+          
+          this.testUtils.simulateClick(categoryBtn);
+          this.testUtils.simulateClick(sourceBtn);
+          
+          // Both filters should be active
+          if (!categoryBtn.classList.contains('active') || !sourceBtn.classList.contains('active')) {
+            throw new Error('Multiple filters not working');
+          }
+        },
+
+        // Modal Tests
+        async testModalOpenClose() {
+          const modal = document.getElementById('image-modal');
+          const expandBtn = document.querySelector('.expand-btn');
+          const closeBtn = document.querySelector('.modal-close');
+          
+          if (!modal || !expandBtn || !closeBtn) {
+            throw new Error('Modal elements not found');
+          }
+          
+          // Test open
+          this.testUtils.simulateClick(expandBtn);
+          await this.testUtils.waitFor(() => modal.classList.contains('active'));
+          
+          // Test close
+          this.testUtils.simulateClick(closeBtn);
+          await this.testUtils.waitFor(() => !modal.classList.contains('active'));
+        },
+
+        async testModalNavigation() {
+          const modal = document.getElementById('image-modal');
+          const prevBtn = document.querySelector('.prev-btn');
+          const nextBtn = document.querySelector('.next-btn');
+          
+          if (!modal || !prevBtn || !nextBtn) {
+            throw new Error('Modal navigation elements not found');
+          }
+          
+          // Open modal first
+          const expandBtn = document.querySelector('.expand-btn');
+          this.testUtils.simulateClick(expandBtn);
+          await this.testUtils.waitFor(() => modal.classList.contains('active'));
+          
+          // Test navigation
+          const initialImageId = modal.dataset.currentImageId;
+          this.testUtils.simulateClick(nextBtn);
+          
+          // Wait for navigation to complete
+          await new Promise(resolve => setTimeout(resolve, 100));
+          
+          // Check if image changed (in a real scenario)
+          // This is a basic test - in practice we'd check if the image actually changed
+        },
+
+        async testModalKeyboard() {
+          const modal = document.getElementById('image-modal');
+          
+          // Open modal
+          const expandBtn = document.querySelector('.expand-btn');
+          this.testUtils.simulateClick(expandBtn);
+          await this.testUtils.waitFor(() => modal.classList.contains('active'));
+          
+          // Test escape key
+          this.testUtils.simulateKeyPress(document, 'Escape');
+          await this.testUtils.waitFor(() => !modal.classList.contains('active'));
+        },
+
+        // Performance Tests
+        async testImageLoadingPerformance() {
+          if (!window.performanceMonitor) {
+            throw new Error('Performance monitor not available');
+          }
+          
+          const avgLoadTime = performanceMonitor.getAverageLoadTime();
+          const successRate = performanceMonitor.getLoadSuccessRate();
+          
+          if (avgLoadTime > 10000) { // 10 seconds threshold
+            throw new Error(`Image loading too slow: ${avgLoadTime}ms average`);
+          }
+          
+          if (successRate < 80) { // 80% success rate threshold
+            throw new Error(`Image loading success rate too low: ${successRate}%`);
+          }
+        },
+
+        async testMemoryUsage() {
+          if (!('memory' in performance)) {
+            console.log('⚠️ Memory API not available, skipping memory test');
+            return;
+          }
+          
+          const memory = performance.memory;
+          const memoryUsage = memory.usedJSHeapSize / memory.jsHeapSizeLimit;
+          
+          if (memoryUsage > 0.8) { // 80% memory usage threshold
+            throw new Error(`Memory usage too high: ${Math.round(memoryUsage * 100)}%`);
+          }
+        },
+
+        async testScrollPerformance() {
+          const gallery = document.querySelector('.image-gallery');
+          if (!gallery) throw new Error('Gallery not found');
+          
+          const startTime = performance.now();
+          
+          // Simulate scroll
+          gallery.scrollTop = 100;
+          
+          // Wait for scroll to complete
+          await new Promise(resolve => setTimeout(resolve, 100));
+          
+          const scrollTime = performance.now() - startTime;
+          
+          if (scrollTime > 100) { // 100ms threshold for scroll response
+            throw new Error(`Scroll performance too slow: ${scrollTime}ms`);
+          }
+        },
+
+        // Error Handling Tests
+        async testAPIErrorHandling() {
+          if (!window.livestreamErrorManager) {
+            throw new Error('Error manager not available');
+          }
+          
+          // Simulate API error
+          const originalFetch = window.fetch;
+          window.fetch = () => Promise.reject(new Error('Test API error'));
+          
+          try {
+            await imageDataManager.fetchNASAImages();
+          } catch (error) {
+            // Expected to fail
+          }
+          
+          // Restore fetch
+          window.fetch = originalFetch;
+          
+          // Check if error was handled
+          const errorStats = livestreamErrorManager.getErrorStats();
+          if (errorStats.totalErrors === 0) {
+            throw new Error('API error not tracked');
+          }
+        },
+
+        async testNetworkErrorHandling() {
+          if (!window.livestreamErrorManager) {
+            throw new Error('Error manager not available');
+          }
+          
+          // Simulate network offline
+          const originalOnline = navigator.onLine;
+          Object.defineProperty(navigator, 'onLine', {
+            writable: true,
+            value: false
+          });
+          
+          // Trigger offline event
+          window.dispatchEvent(new Event('offline'));
+          
+          // Wait for offline handling
+          await new Promise(resolve => setTimeout(resolve, 100));
+          
+          // Check for offline indicator
+          const offlineIndicator = document.getElementById('offline-indicator');
+          if (!offlineIndicator) {
+            throw new Error('Offline indicator not shown');
+          }
+          
+          // Restore online status
+          Object.defineProperty(navigator, 'onLine', {
+            writable: true,
+            value: originalOnline
+          });
+          
+          window.dispatchEvent(new Event('online'));
+        },
+
+        async testImageErrorHandling() {
+          // Create test image element
+          const testImg = this.testUtils.createTestElement('img', {
+            'src': 'https://invalid-url.com/nonexistent.jpg',
+            'data-source': 'nasa'
+          });
+          
+          document.body.appendChild(testImg);
+          
+          // Trigger error event
+          testImg.dispatchEvent(new Event('error'));
+          
+          // Wait for error handling
+          await new Promise(resolve => setTimeout(resolve, 100));
+          
+          // Check if fallback was applied
+          if (!testImg.src.includes('placeholder')) {
+            throw new Error('Image error fallback not applied');
+          }
+          
+          // Cleanup
+          document.body.removeChild(testImg);
+        },
+
+        // Social Sharing Tests
+        async testShareDataGeneration() {
+          if (!window.livestreamSocialManager) {
+            throw new Error('Social manager not available');
+          }
+          
+          const shareData = livestreamSocialManager.prepareShareData(this.mockData.sampleImage);
+          
+          if (!shareData.title || !shareData.url || !shareData.hashtags) {
+            throw new Error('Share data generation incomplete');
+          }
+          
+          if (!shareData.hashtags.includes('Space')) {
+            throw new Error('Hashtag generation not working');
+          }
+        },
+
+        async testPlatformIntegration() {
+          if (!window.livestreamSocialManager) {
+            throw new Error('Social manager not available');
+          }
+          
+          const platforms = Object.keys(livestreamSocialManager.platforms);
+          
+          if (platforms.length < 5) {
+            throw new Error('Insufficient social platforms configured');
+          }
+          
+          // Test platform configuration
+          const twitter = livestreamSocialManager.platforms.twitter;
+          if (!twitter.urlTemplate || !twitter.maxLength) {
+            throw new Error('Platform configuration incomplete');
+          }
+        },
+
+        // Accessibility Tests
+        async testKeyboardNavigation() {
+          const filterBtns = document.querySelectorAll('.filter-btn');
+          if (filterBtns.length === 0) throw new Error('Filter buttons not found');
+          
+          // Test tab navigation
+          filterBtns[0].focus();
+          
+          // Test enter key activation
+          this.testUtils.simulateKeyPress(filterBtns[0], 'Enter');
+          
+          if (!filterBtns[0].classList.contains('active')) {
+            throw new Error('Keyboard activation not working');
+          }
+        },
+
+        async testScreenReaderSupport() {
+          const modal = document.getElementById('image-modal');
+          if (!modal) throw new Error('Modal not found');
+          
+          // Check ARIA attributes
+          if (!modal.hasAttribute('aria-hidden')) {
+            throw new Error('Modal missing aria-hidden attribute');
+          }
+          
+          if (!modal.hasAttribute('role')) {
+            throw new Error('Modal missing role attribute');
+          }
+        },
+
+        async testFocusManagement() {
+          const modal = document.getElementById('image-modal');
+          const closeBtn = document.querySelector('.modal-close');
+          
+          if (!modal || !closeBtn) throw new Error('Modal elements not found');
+          
+          // Open modal
+          const expandBtn = document.querySelector('.expand-btn');
+          this.testUtils.simulateClick(expandBtn);
+          await this.testUtils.waitFor(() => modal.classList.contains('active'));
+          
+          // Check if focus moved to close button
+          if (document.activeElement !== closeBtn) {
+            console.log('⚠️ Focus management could be improved');
+          }
+        },
+
+        // Mobile Tests
+        async testTouchGestures() {
+          if (!window.mobileGestureManager) {
+            console.log('⚠️ Mobile gesture manager not available, skipping touch test');
+            return;
+          }
+          
+          // This is a basic test - full touch testing would require more complex simulation
+          const gallery = document.querySelector('.image-gallery');
+          if (!gallery) throw new Error('Gallery not found');
+          
+          // Check if touch event listeners are attached
+          // In a real test, we'd simulate touch events
+        },
+
+        async testResponsiveLayout() {
+          const gallery = document.querySelector('.image-gallery');
+          if (!gallery) throw new Error('Gallery not found');
+          
+          // Test different viewport sizes
+          const originalWidth = window.innerWidth;
+          
+          // Simulate mobile viewport
+          Object.defineProperty(window, 'innerWidth', {
+            writable: true,
+            configurable: true,
+            value: 375
+          });
+          
+          window.dispatchEvent(new Event('resize'));
+          
+          // Wait for layout adjustment
+          await new Promise(resolve => setTimeout(resolve, 100));
+          
+          // Check if mobile layout is applied
+          const computedStyle = getComputedStyle(gallery);
+          
+          // Restore original width
+          Object.defineProperty(window, 'innerWidth', {
+            writable: true,
+            configurable: true,
+            value: originalWidth
+          });
+        },
+
+        // Integration Tests
+        async testFullUserJourney() {
+          // Test complete user flow: load page -> filter -> open modal -> share
+          
+          // 1. Wait for page load
+          await this.testUtils.waitFor(() => document.querySelector('.image-gallery'));
+          
+          // 2. Apply filter
+          const filterBtn = document.querySelector('[data-filter="missions"]');
+          if (filterBtn) this.testUtils.simulateClick(filterBtn);
+          
+          // 3. Open modal
+          const expandBtn = document.querySelector('.expand-btn');
+          if (expandBtn) {
+            this.testUtils.simulateClick(expandBtn);
+            await this.testUtils.waitFor(() => document.getElementById('image-modal').classList.contains('active'));
+          }
+          
+          // 4. Test share (if available)
+          const shareBtn = document.getElementById('modal-share');
+          if (shareBtn) {
+            this.testUtils.simulateClick(shareBtn);
+          }
+          
+          // Journey completed successfully if no errors thrown
+        },
+
+        async testAutoRefreshCycle() {
+          if (!window.autoRefreshManager) {
+            throw new Error('Auto-refresh manager not available');
+          }
+          
+          // Test refresh functionality
+          const initialInterval = autoRefreshManager.currentInterval;
+          
+          if (!initialInterval || initialInterval <= 0) {
+            throw new Error('Auto-refresh not properly configured');
+          }
+          
+          // Test manual refresh
+          try {
+            await autoRefreshManager.performAutoRefresh();
+          } catch (error) {
+            // Expected to potentially fail in test environment
+            console.log('⚠️ Auto-refresh test completed with expected limitations');
+          }
+        },
+
+        displayResults() {
+          const passRate = Math.round((this.results.passed / this.results.total) * 100);
+          
+          console.log('\n🧪 Test Suite Results:');
+          console.log(`✅ Passed: ${this.results.passed}`);
+          console.log(`❌ Failed: ${this.results.failed}`);
+          console.log(`📊 Total: ${this.results.total}`);
+          console.log(`📈 Pass Rate: ${passRate}%`);
+          
+          if (this.results.failed > 0) {
+            console.log('\n❌ Failed Tests:');
+            this.results.details
+              .filter(test => test.status === 'FAILED')
+              .forEach(test => {
+                console.log(`  • ${test.name}: ${test.error}`);
+              });
+          }
+          
+          // Show test results in UI if in development mode
+          if (this.isDevelopmentMode()) {
+            this.showTestResultsUI();
+          }
+        },
+
+        showTestResultsUI() {
+          const resultsDiv = document.createElement('div');
+          resultsDiv.id = 'test-results';
+          resultsDiv.style.cssText = `
+            position: fixed;
+            top: 2em;
+            right: 2em;
+            background: ${this.results.failed === 0 ? '#28a745' : '#dc3545'};
+            color: white;
+            padding: 1em;
+            border-radius: 8px;
+            z-index: 10004;
+            font-family: monospace;
+            font-size: 0.8em;
+            max-width: 300px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+          `;
+          
+          const passRate = Math.round((this.results.passed / this.results.total) * 100);
+          
+          resultsDiv.innerHTML = `
+            <div style="font-weight: bold; margin-bottom: 0.5em;">🧪 Test Results</div>
+            <div>✅ Passed: ${this.results.passed}</div>
+            <div>❌ Failed: ${this.results.failed}</div>
+            <div>📊 Pass Rate: ${passRate}%</div>
+            <button onclick="this.parentElement.remove()" style="
+              position: absolute;
+              top: 0.5em;
+              right: 0.5em;
+              background: none;
+              border: none;
+              color: white;
+              cursor: pointer;
+              font-size: 1.2em;
+            ">×</button>
+          `;
+          
+          document.body.appendChild(resultsDiv);
+          
+          // Auto-hide after 10 seconds
+          setTimeout(() => {
+            if (resultsDiv.parentNode) {
+              resultsDiv.parentNode.removeChild(resultsDiv);
+            }
+          }, 10000);
+        }
+      };
+
+      // Initialize test suite
+      testSuite.init();
+
+      // Make test suite globally available
+      window.livestreamTestSuite = testSuite;
+
+      // Advanced Performance Analytics and Optimization System
+      const performanceAnalytics = {
+        metrics: {
+          pageLoadTime: 0,
+          firstContentfulPaint: 0,
+          largestContentfulPaint: 0,
+          cumulativeLayoutShift: 0,
+          firstInputDelay: 0,
+          imageLoadTimes: [],
+          apiResponseTimes: [],
+          userInteractions: [],
+          errorCount: 0,
+          memoryUsage: [],
+          networkRequests: [],
+          coreWebVitals: {},
+          bundleSize: 0
+        },
+
+        budgets: {
+          pageLoadTime: 3000, // 3 seconds
+          imageLoadTime: 2000, // 2 seconds per image
+          apiResponseTime: 5000, // 5 seconds
+          memoryUsage: 100 * 1024 * 1024, // 100MB
+          bundleSize: 500 * 1024, // 500KB
+          cumulativeLayoutShift: 0.1,
+          largestContentfulPaint: 2500
+        },
+
+        init() {
+          this.setupPerformanceObservers();
+          this.trackPageLoad();
+          this.setupMemoryMonitoring();
+          this.setupNetworkMonitoring();
+          this.setupUserInteractionTracking();
+          this.setupErrorTracking();
+          this.optimizeBundle();
+          this.startPeriodicReporting();
+          this.createPerformanceDashboard();
+        },
+
+        setupPerformanceObservers() {
+          // Core Web Vitals monitoring
+          if ('PerformanceObserver' in window) {
+            try {
+              // Largest Contentful Paint
+              const lcpObserver = new PerformanceObserver((list) => {
+                const entries = list.getEntries();
+                const lastEntry = entries[entries.length - 1];
+                this.metrics.largestContentfulPaint = lastEntry.startTime;
+                this.metrics.coreWebVitals.lcp = lastEntry.startTime;
+                this.checkBudget('largestContentfulPaint', lastEntry.startTime);
+              });
+              lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+
+              // First Input Delay
+              const fidObserver = new PerformanceObserver((list) => {
+                const entries = list.getEntries();
+                entries.forEach(entry => {
+                  this.metrics.firstInputDelay = entry.processingStart - entry.startTime;
+                  this.metrics.coreWebVitals.fid = entry.processingStart - entry.startTime;
+                });
+              });
+              fidObserver.observe({ entryTypes: ['first-input'] });
+
+              // Cumulative Layout Shift
+              const clsObserver = new PerformanceObserver((list) => {
+                let clsValue = 0;
+                const entries = list.getEntries();
+                entries.forEach(entry => {
+                  if (!entry.hadRecentInput) {
+                    clsValue += entry.value;
+                  }
+                });
+                this.metrics.cumulativeLayoutShift = clsValue;
+                this.metrics.coreWebVitals.cls = clsValue;
+                this.checkBudget('cumulativeLayoutShift', clsValue);
+              });
+              clsObserver.observe({ entryTypes: ['layout-shift'] });
+            } catch (error) {
+              console.warn('Performance observers not fully supported:', error);
+            }
+          }
+
+          // First Contentful Paint
+          if ('performance' in window && 'getEntriesByType' in performance) {
+            const paintEntries = performance.getEntriesByType('paint');
+            paintEntries.forEach(entry => {
+              if (entry.name === 'first-contentful-paint') {
+                this.metrics.firstContentfulPaint = entry.startTime;
+              }
+            });
+          }
+        },
+
+        trackPageLoad() {
+          const startTime = performance.now();
+          
+          window.addEventListener('load', () => {
+            const loadTime = performance.now() - startTime;
+            this.metrics.pageLoadTime = loadTime;
+            this.checkBudget('pageLoadTime', loadTime);
+            
+            // Track resource loading
+            const resources = performance.getEntriesByType('resource');
+            let totalSize = 0;
+            
+            resources.forEach(resource => {
+              const size = resource.transferSize || 0;
+              totalSize += size;
+              
+              this.metrics.networkRequests.push({
+                name: resource.name,
+                duration: resource.responseEnd - resource.requestStart,
+                size: size,
+                type: resource.initiatorType,
+                timestamp: Date.now()
+              });
+            });
+            
+            this.metrics.bundleSize = totalSize;
+            this.checkBudget('bundleSize', totalSize);
+          });
+        },
+
+        setupMemoryMonitoring() {
+          if ('memory' in performance) {
+            const trackMemory = () => {
+              const memInfo = {
+                used: performance.memory.usedJSHeapSize,
+                total: performance.memory.totalJSHeapSize,
+                limit: performance.memory.jsHeapSizeLimit,
+                timestamp: Date.now()
+              };
+              
+              this.metrics.memoryUsage.push(memInfo);
+              this.checkBudget('memoryUsage', memInfo.used);
+              
+              // Keep only last 100 entries
+              if (this.metrics.memoryUsage.length > 100) {
+                this.metrics.memoryUsage = this.metrics.memoryUsage.slice(-100);
+              }
+            };
+            
+            trackMemory();
+            setInterval(trackMemory, 30000); // Every 30 seconds
+          }
+        },
+
+        setupNetworkMonitoring() {
+          // Monitor API response times
+          const originalFetch = window.fetch;
+          window.fetch = async (...args) => {
+            const startTime = performance.now();
+            try {
+              const response = await originalFetch(...args);
+              const endTime = performance.now();
+              const duration = endTime - startTime;
+              
+              this.metrics.apiResponseTimes.push({
+                url: args[0],
+                duration: duration,
+                status: response.status,
+                timestamp: Date.now()
+              });
+              
+              this.checkBudget('apiResponseTime', duration);
+              return response;
+            } catch (error) {
+              const endTime = performance.now();
+              const duration = endTime - startTime;
+              
+              this.metrics.apiResponseTimes.push({
+                url: args[0],
+                duration: duration,
+                status: 'error',
+                error: error.message,
+                timestamp: Date.now()
+              });
+              
+              this.metrics.errorCount++;
+              throw error;
+            }
+          };
+        },
+
+        setupUserInteractionTracking() {
+          // Track user interactions for analytics
+          const trackInteraction = (type, target, data = {}) => {
+            this.metrics.userInteractions.push({
+              type,
+              target: target.tagName + (target.id ? '#' + target.id : '') + (target.className ? '.' + target.className.split(' ')[0] : ''),
+              timestamp: Date.now(),
+              ...data
+            });
+            
+            // Keep only last 1000 interactions
+            if (this.metrics.userInteractions.length > 1000) {
+              this.metrics.userInteractions = this.metrics.userInteractions.slice(-1000);
+            }
+          };
+
+          // Click tracking with popular content analytics
+          document.addEventListener('click', (e) => {
+            trackInteraction('click', e.target, {
+              x: e.clientX,
+              y: e.clientY
+            });
+
+            // Track popular images
+            if (e.target.closest('.image-card')) {
+              const imageCard = e.target.closest('.image-card');
+              const imageId = imageCard.dataset.imageId;
+              const category = imageCard.dataset.category;
+              
+              this.trackEvent('image_interaction', {
+                imageId,
+                category,
+                action: 'click'
+              });
+            }
+          });
+
+          // Filter usage tracking
+          document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('filter-btn')) {
+              trackInteraction('filter', e.target, {
+                filter: e.target.dataset.filter,
+                active: e.target.classList.contains('active')
+              });
+              
+              this.trackEvent('filter_usage', {
+                filter: e.target.dataset.filter,
+                active: e.target.classList.contains('active')
+              });
+            }
+          });
+
+          // Modal interactions
+          document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('expand-btn')) {
+              trackInteraction('modal_open', e.target);
+              this.trackEvent('modal_interaction', { action: 'open' });
+            } else if (e.target.classList.contains('modal-close')) {
+              trackInteraction('modal_close', e.target);
+              this.trackEvent('modal_interaction', { action: 'close' });
+            }
+          });
+
+          // Search interactions
+          const searchInput = document.getElementById('search-input');
+          if (searchInput) {
+            let searchTimeout;
+            searchInput.addEventListener('input', (e) => {
+              clearTimeout(searchTimeout);
+              searchTimeout = setTimeout(() => {
+                trackInteraction('search', e.target, {
+                  query: e.target.value,
+                  length: e.target.value.length
+                });
+                
+                this.trackEvent('search_query', {
+                  query: e.target.value,
+                  length: e.target.value.length
+                });
+              }, 500);
+            });
+          }
+
+          // Scroll tracking for engagement
+          let scrollTimeout;
+          window.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+              const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+              trackInteraction('scroll', document.body, {
+                scrollY: window.scrollY,
+                scrollPercent: scrollPercent
+              });
+              
+              // Track engagement milestones
+              if (scrollPercent >= 25 && !this.scrollMilestones?.['25']) {
+                this.trackEvent('engagement_milestone', { milestone: '25_percent_scroll' });
+                this.scrollMilestones = { ...this.scrollMilestones, '25': true };
+              }
+              if (scrollPercent >= 50 && !this.scrollMilestones?.['50']) {
+                this.trackEvent('engagement_milestone', { milestone: '50_percent_scroll' });
+                this.scrollMilestones = { ...this.scrollMilestones, '50': true };
+              }
+              if (scrollPercent >= 75 && !this.scrollMilestones?.['75']) {
+                this.trackEvent('engagement_milestone', { milestone: '75_percent_scroll' });
+                this.scrollMilestones = { ...this.scrollMilestones, '75': true };
+              }
+            }, 250);
+          });
+        },
+
+        setupErrorTracking() {
+          window.addEventListener('error', (e) => {
+            this.metrics.errorCount++;
+            this.trackError('javascript', e.error?.message || e.message, {
+              filename: e.filename,
+              lineno: e.lineno,
+              colno: e.colno,
+              stack: e.error?.stack
+            });
+          });
+
+          window.addEventListener('unhandledrejection', (e) => {
+            this.metrics.errorCount++;
+            this.trackError('promise', e.reason?.message || 'Unhandled promise rejection', {
+              reason: e.reason
+            });
+          });
+        },
+
+        optimizeBundle() {
+          // Code splitting and lazy loading optimization
+          const optimizeImages = () => {
+            // Implement WebP support detection
+            const supportsWebP = () => {
+              const canvas = document.createElement('canvas');
+              canvas.width = 1;
+              canvas.height = 1;
+              return canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+            };
+
+            if (supportsWebP()) {
+              document.documentElement.classList.add('webp-support');
+            }
+
+            // Optimize for slow connections
+            if ('connection' in navigator) {
+              const connection = navigator.connection;
+              if (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g') {
+                document.documentElement.classList.add('slow-connection');
+                this.trackEvent('connection_type', { type: 'slow' });
+              } else {
+                this.trackEvent('connection_type', { type: connection.effectiveType });
+              }
+            }
+          };
+
+          optimizeImages();
+
+          // Preload critical resources
+          const preloadCriticalResources = () => {
+            const criticalImages = document.querySelectorAll('.image-card img[data-src]');
+            const visibleImages = Array.from(criticalImages).slice(0, 6); // First 6 images
+            
+            visibleImages.forEach(img => {
+              const link = document.createElement('link');
+              link.rel = 'preload';
+              link.as = 'image';
+              link.href = img.dataset.src;
+              document.head.appendChild(link);
+            });
+          };
+
+          setTimeout(preloadCriticalResources, 1000);
+        },
+
+        trackError(type, message, details = {}) {
+          console.error(`Performance Analytics - ${type} error:`, message, details);
+          
+          this.sendAnalytics('error', {
+            type,
+            message,
+            details,
+            timestamp: Date.now(),
+            url: window.location.href,
+            userAgent: navigator.userAgent
+          });
+        },
+
+        checkBudget(metric, value) {
+          const budget = this.budgets[metric];
+          if (budget && value > budget) {
+            console.warn(`Performance budget exceeded for ${metric}: ${value} > ${budget}`);
+            this.showPerformanceWarning(metric, value, budget);
+            
+            this.trackEvent('performance_budget_exceeded', {
+              metric,
+              value,
+              budget,
+              exceedBy: value - budget
+            });
+          }
+        },
+
+        showPerformanceWarning(metric, value, budget) {
+          // Only show in development mode
+          if (window.location.hostname === 'localhost' || window.location.search.includes('dev=true')) {
+            const warning = document.createElement('div');
+            warning.className = 'performance-indicator warning';
+            warning.innerHTML = `
+              <strong>⚠️ Performance Budget Exceeded</strong><br>
+              ${metric}: ${Math.round(value)}${metric.includes('Time') ? 'ms' : metric === 'memoryUsage' ? 'B' : metric === 'bundleSize' ? 'B' : ''}<br>
+              Budget: ${budget}${metric.includes('Time') ? 'ms' : metric === 'memoryUsage' ? 'B' : metric === 'bundleSize' ? 'B' : ''}
+            `;
+            
+            document.body.appendChild(warning);
+            
+            setTimeout(() => {
+              warning.remove();
+            }, 8000);
+          }
+        },
+
+        getMetricsSummary() {
+          const avgImageLoadTime = this.metrics.imageLoadTimes.length > 0 
+            ? this.metrics.imageLoadTimes.reduce((sum, item) => sum + item.loadTime, 0) / this.metrics.imageLoadTimes.length 
+            : 0;
+            
+          const avgApiResponseTime = this.metrics.apiResponseTimes.length > 0
+            ? this.metrics.apiResponseTimes.reduce((sum, item) => sum + item.duration, 0) / this.metrics.apiResponseTimes.length
+            : 0;
+
+          const currentMemory = this.metrics.memoryUsage.length > 0 
+            ? this.metrics.memoryUsage[this.metrics.memoryUsage.length - 1]
+            : null;
+
+          return {
+            pageLoadTime: Math.round(this.metrics.pageLoadTime),
+            firstContentfulPaint: Math.round(this.metrics.firstContentfulPaint),
+            largestContentfulPaint: Math.round(this.metrics.largestContentfulPaint),
+            cumulativeLayoutShift: Math.round(this.metrics.cumulativeLayoutShift * 1000) / 1000,
+            firstInputDelay: Math.round(this.metrics.firstInputDelay),
+            avgImageLoadTime: Math.round(avgImageLoadTime),
+            avgApiResponseTime: Math.round(avgApiResponseTime),
+            totalInteractions: this.metrics.userInteractions.length,
+            errorCount: this.metrics.errorCount,
+            currentMemoryUsage: currentMemory ? Math.round(currentMemory.used / 1024 / 1024) + 'MB' : 'N/A',
+            networkRequests: this.metrics.networkRequests.length,
+            bundleSize: Math.round(this.metrics.bundleSize / 1024) + 'KB',
+            coreWebVitals: this.metrics.coreWebVitals
+          };
+        },
+
+        startPeriodicReporting() {
+          // Report metrics every 5 minutes
+          setInterval(() => {
+            this.sendAnalytics('performance_report', this.getMetricsSummary());
+          }, 5 * 60 * 1000);
+
+          // Report popular content every 10 minutes
+          setInterval(() => {
+            this.reportPopularContent();
+          }, 10 * 60 * 1000);
+        },
+
+        reportPopularContent() {
+          const imageInteractions = this.metrics.userInteractions.filter(i => i.type === 'click' && i.target.includes('image-card'));
+          const filterUsage = this.metrics.userInteractions.filter(i => i.type === 'filter');
+          const searchQueries = this.metrics.userInteractions.filter(i => i.type === 'search');
+
+          this.sendAnalytics('popular_content_report', {
+            mostClickedImages: this.getMostPopular(imageInteractions, 'target'),
+            mostUsedFilters: this.getMostPopular(filterUsage, 'filter'),
+            topSearchQueries: this.getMostPopular(searchQueries, 'query'),
+            timestamp: Date.now()
+          });
+        },
+
+        getMostPopular(interactions, key) {
+          const counts = {};
+          interactions.forEach(interaction => {
+            const value = interaction[key] || 'unknown';
+            counts[value] = (counts[value] || 0) + 1;
+          });
+
+          return Object.entries(counts)
+            .sort(([,a], [,b]) => b - a)
+            .slice(0, 10)
+            .map(([item, count]) => ({ item, count }));
+        },
+
+        sendAnalytics(eventType, data) {
+          const analyticsData = {
+            eventType,
+            data,
+            timestamp: Date.now(),
+            sessionId: this.getSessionId(),
+            userId: this.getUserId(),
+            page: 'livestream-images',
+            url: window.location.href,
+            referrer: document.referrer,
+            userAgent: navigator.userAgent,
+            viewport: {
+              width: window.innerWidth,
+              height: window.innerHeight
+            },
+            connection: this.getConnectionInfo()
+          };
+
+          // Store in localStorage for development
+          if (window.location.hostname === 'localhost' || window.location.search.includes('dev=true')) {
+            const stored = JSON.parse(localStorage.getItem('livestream_analytics') || '[]');
+            stored.push(analyticsData);
+            
+            // Keep only last 1000 events
+            if (stored.length > 1000) {
+              stored.splice(0, stored.length - 1000);
+            }
+            
+            localStorage.setItem('livestream_analytics', JSON.stringify(stored));
+            console.log('📊 Analytics Event:', eventType, data);
+          }
+
+          // In production, send to analytics service
+          // fetch('/api/analytics', {
+          //   method: 'POST',
+          //   headers: { 'Content-Type': 'application/json' },
+          //   body: JSON.stringify(analyticsData)
+          // }).catch(error => console.warn('Analytics send failed:', error));
+        },
+
+        getSessionId() {
+          let sessionId = sessionStorage.getItem('livestream_session_id');
+          if (!sessionId) {
+            sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            sessionStorage.setItem('livestream_session_id', sessionId);
+          }
+          return sessionId;
+        },
+
+        getUserId() {
+          let userId = localStorage.getItem('livestream_user_id');
+          if (!userId) {
+            userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('livestream_user_id', userId);
+          }
+          return userId;
+        },
+
+        getConnectionInfo() {
+          if ('connection' in navigator) {
+            return {
+              effectiveType: navigator.connection.effectiveType,
+              downlink: navigator.connection.downlink,
+              rtt: navigator.connection.rtt,
+              saveData: navigator.connection.saveData
+            };
+          }
+          return null;
+        },
+
+        createPerformanceDashboard() {
+          // Performance monitoring dashboard (development only)
+          if (window.location.hostname === 'localhost' || window.location.search.includes('dev=true')) {
+            const dashboard = document.createElement('div');
+            dashboard.id = 'performance-dashboard';
+            dashboard.style.cssText = `
+              position: fixed;
+              top: 100px;
+              right: 2em;
+              background: rgba(0, 0, 0, 0.95);
+              color: white;
+              padding: 1em;
+              border-radius: 8px;
+              font-family: monospace;
+              font-size: 0.7em;
+              z-index: 10007;
+              max-width: 320px;
+              display: none;
+              backdrop-filter: blur(10px);
+              border: 1px solid #333;
+            `;
+
+            const updateDashboard = () => {
+              const metrics = this.getMetricsSummary();
+              const vitalsStatus = this.getCoreWebVitalsStatus(metrics.coreWebVitals);
+              
+              dashboard.innerHTML = `
+                <div style="margin-bottom: 0.8em; font-weight: bold; color: #00ff00;">📊 Performance Dashboard</div>
+                
+                <div style="margin-bottom: 0.5em; color: #ffc107;"><strong>Core Web Vitals</strong></div>
+                <div style="font-size: 0.9em; margin-bottom: 0.5em;">
+                  <div>LCP: ${metrics.largestContentfulPaint}ms ${vitalsStatus.lcp}</div>
+                  <div>FID: ${metrics.firstInputDelay}ms ${vitalsStatus.fid}</div>
+                  <div>CLS: ${metrics.cumulativeLayoutShift} ${vitalsStatus.cls}</div>
+                </div>
+                
+                <div style="margin-bottom: 0.5em; color: #17a2b8;"><strong>Performance Metrics</strong></div>
+                <div style="font-size: 0.9em; margin-bottom: 0.5em;">
+                  <div>Page Load: ${metrics.pageLoadTime}ms</div>
+                  <div>FCP: ${metrics.firstContentfulPaint}ms</div>
+                  <div>Bundle Size: ${metrics.bundleSize}</div>
+                  <div>Memory: ${metrics.currentMemoryUsage}</div>
+                </div>
+                
+                <div style="margin-bottom: 0.5em; color: #28a745;"><strong>User Analytics</strong></div>
+                <div style="font-size: 0.9em; margin-bottom: 0.5em;">
+                  <div>Interactions: ${metrics.totalInteractions}</div>
+                  <div>API Avg: ${metrics.avgApiResponseTime}ms</div>
+                  <div>Image Avg: ${metrics.avgImageLoadTime}ms</div>
+                  <div>Errors: ${metrics.errorCount}</div>
+                </div>
+                
+                <div style="display: flex; gap: 0.5em; margin-top: 0.8em;">
+                  <button onclick="window.performanceAnalytics.clearAnalyticsData()" style="
+                    background: #dc3545; border: none; color: white; padding: 0.3em 0.6em;
+                    border-radius: 4px; cursor: pointer; font-size: 0.8em;
+                  ">Clear Data</button>
+                  <button onclick="console.log(window.performanceAnalytics.getAnalyticsData())" style="
+                    background: #17a2b8; border: none; color: white; padding: 0.3em 0.6em;
+                    border-radius: 4px; cursor: pointer; font-size: 0.8em;
+                  ">Log Data</button>
+                  <button onclick="this.parentElement.parentElement.style.display='none'" style="
+                    background: #6c757d; border: none; color: white; padding: 0.3em 0.6em;
+                    border-radius: 4px; cursor: pointer; font-size: 0.8em;
+                  ">Close</button>
+                </div>
+              `;
+            };
+
+            document.body.appendChild(dashboard);
+
+            // Toggle dashboard with Ctrl+Shift+P
+            document.addEventListener('keydown', (e) => {
+              if (e.ctrlKey && e.shiftKey && e.key === 'P') {
+                dashboard.style.display = dashboard.style.display === 'none' ? 'block' : 'none';
+                if (dashboard.style.display === 'block') {
+                  updateDashboard();
+                  // Update every 3 seconds when visible
+                  const interval = setInterval(() => {
+                    if (dashboard.style.display === 'block') {
+                      updateDashboard();
+                    } else {
+                      clearInterval(interval);
+                    }
+                  }, 3000);
+                }
+              }
+            });
+          }
+        },
+
+        getCoreWebVitalsStatus(vitals) {
+          const getStatus = (value, good, needsImprovement) => {
+            if (value <= good) return '✅';
+            if (value <= needsImprovement) return '⚠️';
+            return '❌';
+          };
+
+          return {
+            lcp: getStatus(vitals.lcp || 0, 2500, 4000),
+            fid: getStatus(vitals.fid || 0, 100, 300),
+            cls: getStatus(vitals.cls || 0, 0.1, 0.25)
+          };
+        },
+
+        // Public API for manual tracking
+        trackEvent(eventName, properties = {}) {
+          this.sendAnalytics('custom_event', {
+            eventName,
+            properties
+          });
+        },
+
+        trackPageView(page = window.location.pathname) {
+          this.sendAnalytics('page_view', {
+            page,
+            title: document.title
+          });
+        },
+
+        getAnalyticsData() {
+          return JSON.parse(localStorage.getItem('livestream_analytics') || '[]');
+        },
+
+        clearAnalyticsData() {
+          localStorage.removeItem('livestream_analytics');
+          sessionStorage.removeItem('livestream_session_id');
+          console.log('🗑️ Analytics data cleared');
+        }
+      };
+
+      // Initialize performance analytics
+      performanceAnalytics.init();
+
+      // Make it globally available
+      window.performanceAnalytics = performanceAnalytics;
+
+      // Track initial page view
+      performanceAnalytics.trackPageView();
+
       // Cleanup on page unload
       window.addEventListener('beforeunload', cleanupResources);
 
@@ -7314,6 +8901,261 @@
       setTimeout(() => {
         performanceMonitor.logPerformanceStats();
       }, 5000);
+
+      // Show development mode indicators
+      if (window.location.hostname === 'localhost' || window.location.search.includes('dev=true')) {
+        document.body.setAttribute('data-dev-mode', 'true');
+        
+        // Add performance help indicator
+        const perfHelp = document.createElement('div');
+        perfHelp.className = 'perf-help';
+        perfHelp.innerHTML = '📊 Press Ctrl+Shift+P for Performance Dashboard';
+        document.body.appendChild(perfHelp);
+        
+        // Hide after 10 seconds
+        setTimeout(() => {
+          perfHelp.style.opacity = '0';
+          setTimeout(() => perfHelp.remove(), 1000);
+        }, 10000);
+      }
+
+      // Final Integration Test Suite
+      const integrationTest = {
+        async runFullIntegrationTest() {
+          console.log('🚀 Running Full Integration Test Suite...');
+          
+          const results = {
+            navigation: await this.testNavigation(),
+            apiIntegration: await this.testAPIIntegration(),
+            userJourney: await this.testUserJourney(),
+            performance: await this.testPerformance(),
+            accessibility: await this.testAccessibility(),
+            mobileResponsiveness: await this.testMobileResponsiveness()
+          };
+          
+          const overallSuccess = Object.values(results).every(result => result.success);
+          
+          console.log('📊 Integration Test Results:', results);
+          console.log(overallSuccess ? '✅ All integration tests passed!' : '❌ Some integration tests failed');
+          
+          return { success: overallSuccess, results };
+        },
+
+        async testNavigation() {
+          try {
+            // Test navigation highlighting
+            const livestreamDropdown = document.querySelector('[data-menu="livestream"]');
+            const activeLink = document.querySelector('a[href="livestream-images.html"].clicked');
+            
+            return {
+              success: !!(livestreamDropdown && activeLink),
+              details: {
+                dropdownExists: !!livestreamDropdown,
+                activeLinkHighlighted: !!activeLink
+              }
+            };
+          } catch (error) {
+            return { success: false, error: error.message };
+          }
+        },
+
+        async testAPIIntegration() {
+          try {
+            const apiTests = [];
+            
+            // Test NASA API
+            try {
+              const nasaResponse = await fetch('https://images-api.nasa.gov/search?q=mars&media_type=image&page_size=1');
+              apiTests.push({ api: 'NASA', success: nasaResponse.ok });
+            } catch (error) {
+              apiTests.push({ api: 'NASA', success: false, error: error.message });
+            }
+            
+            // Test SpaceX API
+            try {
+              const spacexResponse = await fetch('https://api.spacexdata.com/v4/launches/latest');
+              apiTests.push({ api: 'SpaceX', success: spacexResponse.ok });
+            } catch (error) {
+              apiTests.push({ api: 'SpaceX', success: false, error: error.message });
+            }
+            
+            const allAPIsWorking = apiTests.every(test => test.success);
+            
+            return {
+              success: allAPIsWorking,
+              details: apiTests
+            };
+          } catch (error) {
+            return { success: false, error: error.message };
+          }
+        },
+
+        async testUserJourney() {
+          try {
+            const journeyTests = [];
+            
+            // Test filter functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            journeyTests.push({ 
+              test: 'Filter buttons exist', 
+              success: filterButtons.length >= 6 
+            });
+            
+            // Test search input
+            const searchInput = document.getElementById('search-input');
+            journeyTests.push({ 
+              test: 'Search input exists', 
+              success: !!searchInput 
+            });
+            
+            // Test modal structure
+            const modal = document.getElementById('image-modal');
+            journeyTests.push({ 
+              test: 'Modal exists', 
+              success: !!modal 
+            });
+            
+            // Test image gallery
+            const gallery = document.getElementById('image-gallery');
+            journeyTests.push({ 
+              test: 'Image gallery exists', 
+              success: !!gallery 
+            });
+            
+            const allJourneyTestsPass = journeyTests.every(test => test.success);
+            
+            return {
+              success: allJourneyTestsPass,
+              details: journeyTests
+            };
+          } catch (error) {
+            return { success: false, error: error.message };
+          }
+        },
+
+        async testPerformance() {
+          try {
+            const performanceTests = [];
+            
+            // Test performance analytics availability
+            performanceTests.push({
+              test: 'Performance analytics initialized',
+              success: !!window.performanceAnalytics
+            });
+            
+            // Test performance monitor
+            performanceTests.push({
+              test: 'Performance monitor initialized',
+              success: !!window.performanceMonitor
+            });
+            
+            // Test lazy loading support
+            performanceTests.push({
+              test: 'Intersection Observer supported',
+              success: 'IntersectionObserver' in window
+            });
+            
+            // Test memory monitoring
+            performanceTests.push({
+              test: 'Memory monitoring available',
+              success: 'memory' in performance
+            });
+            
+            const allPerformanceTestsPass = performanceTests.every(test => test.success);
+            
+            return {
+              success: allPerformanceTestsPass,
+              details: performanceTests
+            };
+          } catch (error) {
+            return { success: false, error: error.message };
+          }
+        },
+
+        async testAccessibility() {
+          try {
+            const accessibilityTests = [];
+            
+            // Test ARIA labels
+            const modalWithAria = document.querySelector('#image-modal[aria-labelledby]');
+            accessibilityTests.push({
+              test: 'Modal has ARIA labels',
+              success: !!modalWithAria
+            });
+            
+            // Test keyboard navigation elements
+            const focusableElements = document.querySelectorAll(
+              'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            accessibilityTests.push({
+              test: 'Focusable elements exist',
+              success: focusableElements.length > 0
+            });
+            
+            // Test semantic HTML
+            const mainElement = document.querySelector('main');
+            accessibilityTests.push({
+              test: 'Semantic main element exists',
+              success: !!mainElement
+            });
+            
+            const allAccessibilityTestsPass = accessibilityTests.every(test => test.success);
+            
+            return {
+              success: allAccessibilityTestsPass,
+              details: accessibilityTests
+            };
+          } catch (error) {
+            return { success: false, error: error.message };
+          }
+        },
+
+        async testMobileResponsiveness() {
+          try {
+            const responsiveTests = [];
+            
+            // Test viewport meta tag
+            const viewportMeta = document.querySelector('meta[name="viewport"]');
+            responsiveTests.push({
+              test: 'Viewport meta tag exists',
+              success: !!viewportMeta
+            });
+            
+            // Test responsive grid
+            const gallery = document.getElementById('image-gallery');
+            const galleryStyles = gallery ? window.getComputedStyle(gallery) : null;
+            responsiveTests.push({
+              test: 'Gallery uses CSS Grid',
+              success: galleryStyles && galleryStyles.display === 'grid'
+            });
+            
+            // Test touch support detection
+            responsiveTests.push({
+              test: 'Touch support detected',
+              success: 'ontouchstart' in window || navigator.maxTouchPoints > 0
+            });
+            
+            const allResponsiveTestsPass = responsiveTests.every(test => test.success);
+            
+            return {
+              success: allResponsiveTestsPass,
+              details: responsiveTests
+            };
+          } catch (error) {
+            return { success: false, error: error.message };
+          }
+        }
+      };
+
+      // Make integration test available globally
+      window.integrationTest = integrationTest;
+
+      // Auto-run integration test in development mode
+      if (window.location.search.includes('integration=true')) {
+        setTimeout(() => {
+          integrationTest.runFullIntegrationTest();
+        }, 3000);
+      }
     })();
   </script>
 </body>

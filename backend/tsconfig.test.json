@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "strictFunctionTypes": false,
+    "noImplicitThis": false,
+    "noImplicitReturns": false,
+    "noFallthroughCasesInSwitch": false,
+    "types": ["jest", "node", "@types/jest"]
+  },
+  "include": ["src/**/*", "src/**/*.test.ts"],
+  "exclude": ["node_modules", "dist"]
+}
