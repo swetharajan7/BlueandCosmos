@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ExploreX - Space Travel Experiences | BlueandCosmos</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      /* Inherited from BlueandCosmos */
+      --accent: #0033a0;
+      --flag-blue: #002366;
+      --highlight: #ff4081;
+      --text-white: #ffffff;
+      --text-light: #cce0ff;
+      --dark-bg: #121212;
+      --dark-accent: #001f5b;
+      
+      /* ExploreX-specific colors */
+      --explorex-primary: #1e3a8a;
+      --explorex-secondary: #3b82f6;
+      --explorex-accent: #06b6d4;
+      --explorex-success: #10b981;
+      --explorex-warning: #f59e0b;
+      --explorex-error: #ef4444;
+      --explorex-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+      
+      /* Theme-aware properties */
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-tertiary: #f1f5f9;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --border-color: #e2e8f0;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    }
+
+    /* Dark theme properties */
+    body.dark {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-tertiary: #334155;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --border-color: #475569;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+    }
+
+    html, body { 
+      height: 100%; 
+      margin: 0;
+      font-family: 'Work Sans', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    main { 
+      flex: 1 0 auto; 
+    }
+
+    :focus-visible { 
+      outline: 2px dashed var(--highlight); 
+      outline-offset: 2px; 
+    }
+
+    /* Header Styles (Inherited from BlueandCosmos) */
+    header {
+      background: var(--accent);
+      color: var(--text-white);
+      padding: 1em 2em;
+      display: grid;
+      grid-template-columns: auto 1fr auto auto auto;
+      align-items: center;
+      gap: 1.5em;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo-link { 
+      display: flex; 
+      align-items: center; 
+      text-decoration: none; 
+      color: inherit; 
+    }
+
+    .logo-area { 
+      display: flex; 
+      align-items: center; 
+      gap: 0.4em; 
+    }
+
+    .logo-area img { 
+      height: 50px; 
+      width: 50px; 
+      margin: 0; 
+      padding: 0; 
+      background-color: transparent; 
+      display: block; 
+    }
+
+    .logo-text { 
+      display: flex; 
+      flex-direction: column; 
+      line-height: 1.2; 
+      margin-left: -4px; 
+    }
+
+    .logo-text .title { 
+      font-size: 1.4em; 
+      font-weight: bold; 
+      color: #fff; 
+      margin: 0; 
+    }
+
+    .logo-text .tagline { 
+      font-size: 0.85em; 
+      color: var(--text-light); 
+      margin: 0; 
+    }
+
+    .nav-right {
+      display: flex; 
+      align-items: center; 
+      justify-content: flex-end; 
+      gap: 1.2em;
+    }
+
+    .nav-right > * { 
+      display: inline-flex; 
+      align-items: center; 
+    }
+
+    /* Moon Widget */
+    .moon-widget {
+      display: flex; 
+      align-items: center; 
+      gap: 0.6em; 
+      justify-self: center;
+      min-width: 220px; 
+      user-select: none; 
+      text-decoration: none; 
+      color: inherit;
+    }
+
+    .moon-icon { 
+      width: 28px; 
+      height: 28px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      font-size: 24px; 
+      flex-shrink: 0; 
+    }
+
+    .moon-info { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 0.1em; 
+    }
+
+    .moon-label { 
+      color: var(--text-light); 
+      font-size: 0.95em; 
+      white-space: nowrap; 
+      font-weight: 500; 
+    }
+
+    .moon-context { 
+      color: var(--text-light); 
+      font-size: 0.75em; 
+      opacity: 0.8; 
+      white-space: nowrap; 
+    }
+
+    body.dark .moon-label, 
+    body.dark .moon-context { 
+      color: #e0ecff; 
+    }
+
+    @media (max-width: 900px) { 
+      .moon-widget { 
+        display: none; 
+      } 
+    }
+
+    /* Mars Widget */
+    .mars-widget {
+      display: flex; 
+      align-items: center; 
+      gap: 0.6em; 
+      justify-self: center;
+      user-select: none; 
+      text-decoration: none; 
+      color: inherit;
+      transition: transform 0.2s ease;
+    }
+
+    .mars-label {
+      color: var(--text-light); 
+      font-size: 0.95em; 
+      font-weight: 600; 
+      white-space: nowrap;
+    }
+
+    body.dark .mars-label { 
+      color: #e0ecff; 
+    }
+
+    .mars-widget:hover { 
+      transform: scale(1.05); 
+    }
+
+    .mars-icon { 
+      width: 32px; 
+      height: 32px; 
+      border-radius: 50%; 
+      background-image: url('https://photojournal.jpl.nasa.gov/jpeg/PIA00407.jpg');
+      background-size: cover;
+      background-position: center;
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(205, 92, 92, 0.4);
+      border: 2px solid rgba(205, 92, 92, 0.3);
+    }
+
+    @media (max-width: 1100px) { 
+      .mars-widget { 
+        display: none; 
+      } 
+    }
+
+    /* Navigation Styles */
+    nav { 
+      display: contents; 
+    }
+
+    .dropdown { 
+      position: relative; 
+    }
+
+    .dropbtn {
+      background: none; 
+      border: none; 
+      font-size: 1em; 
+      color: #fff;
+      cursor: pointer; 
+      padding: 0.4em 0; 
+      position: relative;
+      text-decoration: none; 
+      display: inline-block;
+    }
+
+    .dropbtn:hover, 
+    .dropbtn:focus { 
+      color: var(--highlight); 
+    }
+
+    .dropbtn::after {
+      content: ""; 
+      position: absolute; 
+      left: 0; 
+      bottom: -2px;
+      width: 0; 
+      height: 2px; 
+      background: var(--highlight);
+      transition: width 0.25s ease-in-out;
+    }
+
+    .dropdown:hover > .dropbtn::after,
+    .dropbtn:focus::after,
+    .dropdown.open > .dropbtn::after { 
+      width: 100%; 
+    }
+
+    .dropdown-content {
+      display: none; 
+      position: absolute; 
+      top: calc(100% + 0.6em); 
+      left: 0;
+      background: var(--accent); 
+      min-width: 220px;
+      flex-direction: column; 
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      z-index: 1001; 
+      padding: 0.3em 0; 
+      border-radius: 6px;
+    }
+
+    .dropdown:hover .dropdown-content,
+    .dropdown:focus-within .dropdown-content,
+    .dropdown.open .dropdown-content { 
+      display: flex; 
+    }
+
+    .dropdown-content a {
+      color: var(--text-light); 
+      text-decoration: none;
+      padding: 0.8em 1em; 
+      position: relative;
+      transition: color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
+    }
+
+    .dropdown-content a:hover,
+    .dropdown-content a:focus,
+    .dropdown-content a.clicked {
+      background-color: var(--flag-blue); 
+      color: #fff !important; 
+      transform: translateX(5px);
+    }
+
+    .dropdown-content a::after {
+      content: ""; 
+      position: absolute; 
+      left: 1em; 
+      bottom: 6px;
+      width: 0; 
+      height: 2px; 
+      background: var(--highlight);
+      transition: width 0.25s ease;
+    }
+
+    .dropdown-content a:hover::after,
+    .dropdown-content a:focus::after,
+    .dropdown-content a.clicked::after { 
+      width: calc(100% - 2em); 
+    }
+
+    body.dark .dropdown-content a { 
+      color: #d9e6ff; 
+    }
+
+    .toggle-theme { 
+      cursor: pointer; 
+      font-size: 1.5em; 
+      line-height: 1; 
+      user-select: none; 
+    }
+
+    body.dark header { 
+      background-color: var(--dark-accent); 
+    }
+
+    body.dark .dropbtn { 
+      color: #e6f0ff; 
+    }
+
+    /* ExploreX Main Content Styles */
+    .explorex-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .explorex-hero {
+      background: var(--explorex-gradient);
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+      margin-bottom: 3rem;
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .explorex-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('https://images.unsplash.com/photo-1446776877081-d282a0f896e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover;
+      opacity: 0.2;
+      z-index: 0;
+    }
+
+    .explorex-hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .explorex-title {
+      font-size: 3.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .explorex-subtitle {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+
+    .search-container {
+      background: var(--bg-primary);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 3rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .search-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 1rem;
+      align-items: end;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .form-input {
+      padding: 0.75rem 1rem;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 1rem;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--explorex-secondary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .search-button {
+      background: var(--explorex-gradient);
+      color: white;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      height: fit-content;
+    }
+
+    .search-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+    }
+
+    .search-button:active {
+      transform: translateY(0);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .feature-card {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      border: 1px solid var(--border-color);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .feature-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .feature-description {
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .coming-soon {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 3rem;
+      text-align: center;
+      border: 2px dashed var(--border-color);
+      margin-top: 2rem;
+    }
+
+    .coming-soon-title {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      color: var(--explorex-primary);
+    }
+
+    .coming-soon-text {
+      color: var(--text-secondary);
+      font-size: 1.125rem;
+      margin-bottom: 2rem;
+    }
+
+    .development-status {
+      background: var(--explorex-accent);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .explorex-title {
+        font-size: 2.5rem;
+      }
+
+      .search-form {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .explorex-container {
+        padding: 1rem;
+      }
+
+      .explorex-hero {
+        padding: 3rem 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .feature-card {
+        padding: 1.5rem;
+      }
+    }
+
+    /* Loading States */
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .loading .search-button {
+      background: var(--text-secondary);
+    }
+
+    /* Error States */
+    .error {
+      border-color: var(--explorex-error) !important;
+    }
+
+    .error-message {
+      color: var(--explorex-error);
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+
+    /* Success States */
+    .success {
+      border-color: var(--explorex-success) !important;
+    }
+
+    /* Development Environment Indicator */
+    .dev-indicator {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: var(--explorex-warning);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      z-index: 1000;
+      box-shadow: var(--shadow-md);
+    }
+
+    @media (max-width: 768px) {
+      .dev-indicator {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Development Environment Indicator -->
+  <div class="dev-indicator">
+    🚧 Development Mode
+  </div>
+
+  <header>
+    <a href="index.html" class="logo-link" aria-label="BlueandCosmos Home">
+      <div class="logo-area">
+        <img src="https://cdn.jsdelivr.net/gh/swetharajan7/blueandcosmos/assets/logo-transparent.png" alt="BlueandCosmos Logo" />
+        <div class="logo-text">
+          <div class="title">BlueandCosmos</div>
+          <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="moon.html" class="moon-widget" title="View detailed moon phase information">
+      <div class="moon-icon" id="moon-display">🌙</div>
+      <div class="moon-info">
+        <span class="moon-label">Loading moon phase…</span>
+        <span class="moon-context" id="moon-context">New York City, NY</span>
+      </div>
+    </a>
+
+    <a href="mars.html" class="mars-widget" title="Explore Mars - The Red Planet">
+      <div class="mars-icon"></div>
+      <span class="mars-label">MARS</span>
+    </a>
+
+    <nav>
+      <div class="nav-right">
+        <!-- About (internal links, same tab) -->
+        <div class="dropdown" data-menu="about">
+          <button class="dropbtn">About</button>
+          <div class="dropdown-content" role="menu" aria-label="About submenu">
+            <a href="about.html" role="menuitem">About BlueandCosmos</a>
+          </div>
+        </div>
+
+        <!-- Livestream (internal placeholders as relative links) -->
+        <div class="dropdown" data-menu="livestream">
+          <button class="dropbtn">Livestream</button>
+          <div class="dropdown-content" role="menu" aria-label="Livestream submenu">
+            <a href="livestream-images.html" role="menuitem">Live Stream Images</a>
+            <a href="launch-missions.html" role="menuitem">Launch Missions</a>
+            <a href="webinars.html" role="menuitem">Webinars</a>
+          </div>
+        </div>
+
+        <!-- Dashboard (educational tools and features) -->
+        <div class="dropdown" data-menu="dashboard">
+          <a href="dashboard.html" class="dropbtn">Dashboard</a>
+          <div class="dropdown-content" role="menu" aria-label="Dashboard submenu">
+            <a href="moon.html" role="menuitem">🌙 Lunar Intelligence Center</a>
+            <a href="telescope.html" role="menuitem">🔭 Telescope</a>
+            <a href="flashcards.html" role="menuitem">🧠 Flashcards</a>
+            <a href="stellarrec.html" role="menuitem">⭐ StellarRec</a>
+            <a href="explorex.html" role="menuitem" class="clicked">🚀 ExploreX</a>
+            <a href="discussion.html" role="menuitem">💬 Community</a>
+          </div>
+        </div>
+        <div class="toggle-theme" id="themeToggle">🌙</div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="explorex-container">
+      <!-- Hero Section -->
+      <section class="explorex-hero">
+        <div class="explorex-hero-content">
+          <h1 class="explorex-title">ExploreX</h1>
+          <p class="explorex-subtitle">Discover Amazing Space Experiences During Your Travels</p>
+        </div>
+      </section>
+
+      <!-- Search Interface -->
+      <section class="search-container">
+        <form class="search-form" id="exploreXSearch">
+          <div class="form-group">
+            <label for="location" class="form-label">📍 Destination</label>
+            <input 
+              type="text" 
+              id="location" 
+              class="form-input" 
+              placeholder="Enter city, state, or country"
+              autocomplete="off"
+            />
+          </div>
+          <div class="form-group">
+            <label for="dates" class="form-label">📅 Travel Dates</label>
+            <input 
+              type="date" 
+              id="dates" 
+              class="form-input"
+            />
+          </div>
+          <button type="submit" class="search-button">
+            🔍 Explore
+          </button>
+        </form>
+      </section>
+
+      <!-- Features Grid -->
+      <section class="features-grid">
+        <div class="feature-card">
+          <span class="feature-icon">🔭</span>
+          <h3 class="feature-title">Observatories & Planetariums</h3>
+          <p class="feature-description">Discover world-class observatories and immersive planetarium experiences near your destination.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🚀</span>
+          <h3 class="feature-title">Space Centers & Museums</h3>
+          <p class="feature-description">Explore interactive space exhibitions, rocket displays, and hands-on learning experiences.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">⭐</span>
+          <h3 class="feature-title">Stargazing Events</h3>
+          <p class="feature-description">Join local astronomy clubs for stargazing sessions, meteor shower viewing, and celestial events.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🎓</span>
+          <h3 class="feature-title">Workshops & Classes</h3>
+          <p class="feature-description">Participate in astronomy workshops, astrophotography classes, and educational programs.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🌌</span>
+          <h3 class="feature-title">Celestial Events</h3>
+          <p class="feature-description">Never miss eclipses, planet alignments, meteor showers, and other astronomical phenomena.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">📱</span>
+          <h3 class="feature-title">Smart Itineraries</h3>
+          <p class="feature-description">Get personalized recommendations and optimized schedules for your space-themed adventures.</p>
+        </div>
+      </section>
+
+      <!-- Coming Soon Section -->
+      <section class="coming-soon">
+        <h2 class="coming-soon-title">🚧 Under Development</h2>
+        <p class="coming-soon-text">
+          ExploreX is currently being built with cutting-edge technology to provide you with the best space travel experience recommendations.
+        </p>
+        <span class="development-status">Task 1 Complete - Project Structure Ready</span>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    // Development Environment Configuration
+    const ExploreXConfig = {
+      environment: 'development',
+      version: '0.1.0',
+      apiEndpoints: {
+        search: '/api/search',
+        experiences: '/api/experiences',
+        events: '/api/events',
+        weather: '/api/weather'
+      },
+      features: {
+        locationAutocomplete: false,
+        realTimeEvents: false,
+        weatherIntegration: false,
+        userAccounts: false,
+        itineraryPlanning: false
+      },
+      debug: true
+    };
+
+    // Initialize ExploreX Application
+    class ExploreXApp {
+      constructor() {
+        this.config = ExploreXConfig;
+        this.init();
+      }
+
+      init() {
+        this.setupEventListeners();
+        this.setupTheme();
+        this.setupMoonPhase();
+        this.setupDropdowns();
+        this.logInitialization();
+      }
+
+      setupEventListeners() {
+        const searchForm = document.getElementById('exploreXSearch');
+        if (searchForm) {
+          searchForm.addEventListener('submit', this.handleSearch.bind(this));
+        }
+
+        const locationInput = document.getElementById('location');
+        if (locationInput) {
+          locationInput.addEventListener('input', this.handleLocationInput.bind(this));
+        }
+      }
+
+      handleSearch(event) {
+        event.preventDefault();
+        const location = document.getElementById('location').value;
+        const dates = document.getElementById('dates').value;
+
+        if (this.config.debug) {
+          console.log('ExploreX Search:', { location, dates });
+        }
+
+        // Show development message
+        alert(`🚧 ExploreX is under development!\n\nYour search:\n📍 Location: ${location || 'Not specified'}\n📅 Date: ${dates || 'Not specified'}\n\nComing soon with real recommendations!`);
+      }
+
+      handleLocationInput(event) {
+        const value = event.target.value;
+        if (this.config.debug && value.length > 2) {
+          console.log('Location input:', value);
+          // Future: Implement autocomplete
+        }
+      }
+
+      setupTheme() {
+        const saved = localStorage.getItem("theme");
+        if (saved === "dark") {
+          document.body.classList.add("dark");
+          document.getElementById("themeToggle").textContent = "☀️";
+        }
+        
+        document.getElementById("themeToggle").addEventListener("click", () => {
+          document.body.classList.toggle("dark");
+          const isDark = document.body.classList.contains("dark");
+          document.getElementById("themeToggle").textContent = isDark ? "☀️" : "🌙";
+          localStorage.setItem("theme", isDark ? "dark" : "light");
+        });
+      }
+
+      setupMoonPhase() {
+        function getMoonPhase() {
+          const now = new Date();
+          const m = now.getMonth() + 1;
+          const d = now.getDate();
+          const y = now.getFullYear();
+          
+          if (y === 2025 && m === 8) {
+            if (d <= 3) return 7;
+            if (d <= 6) return 0;
+            if (d <= 10) return 1;
+            if (d <= 13) return 2;
+            if (d <= 17) return 3;
+            if (d <= 20) return 4;
+            if (d <= 24) return 5;
+            if (d <= 27) return 6;
+            return 7;
+          }
+          
+          const base = new Date(2024, 7, 4);
+          const days = (now - base) / (1000 * 60 * 60 * 24);
+          const cycle = days / 29.53;
+          return Math.floor((cycle - Math.floor(cycle)) * 8) % 8;
+        }
+
+        function getMoonInfo(phase) {
+          return [
+            { name: "New Moon", emoji: "🌑" },
+            { name: "Waxing Crescent", emoji: "🌒" },
+            { name: "First Quarter", emoji: "🌓" },
+            { name: "Waxing Gibbous", emoji: "🌔" },
+            { name: "Full Moon", emoji: "🌕" },
+            { name: "Waning Gibbous", emoji: "🌖" },
+            { name: "Last Quarter", emoji: "🌗" },
+            { name: "Waning Crescent", emoji: "🌘" }
+          ][phase];
+        }
+
+        const phase = getMoonPhase();
+        const data = getMoonInfo(phase);
+        const now = new Date();
+        
+        document.getElementById("moon-display").textContent = data.emoji;
+        document.querySelector(".moon-label").textContent = data.name;
+        document.getElementById("moon-context").textContent = 
+          `${now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} • New York City, NY`;
+      }
+
+      setupDropdowns() {
+        const OPEN = "open";
+        const DELAY = 160;
+        
+        document.querySelectorAll(".dropdown").forEach(dd => {
+          let t = null;
+          const btn = dd.querySelector(".dropbtn");
+          const menu = dd.querySelector(".dropdown-content");
+          
+          function open() {
+            dd.classList.add(OPEN);
+            btn?.setAttribute("aria-expanded", "true");
+            if (t) {
+              clearTimeout(t);
+              t = null;
+            }
+          }
+          
+          function close() {
+            if (t) clearTimeout(t);
+            t = setTimeout(() => {
+              dd.classList.remove(OPEN);
+              btn?.setAttribute("aria-expanded", "false");
+            }, DELAY);
+          }
+          
+          dd.addEventListener("pointerenter", open);
+          dd.addEventListener("pointerleave", close);
+          btn?.addEventListener("focus", open);
+          
+          menu?.addEventListener("focusout", e => {
+            if (!dd.contains(e.relatedTarget)) close();
+          });
+          
+          menu?.querySelectorAll("a").forEach(a => {
+            a.addEventListener("click", () => {
+              menu.querySelectorAll("a").forEach(el => el.classList.remove("clicked"));
+              a.classList.add("clicked");
+              dd.classList.remove(OPEN);
+              btn?.setAttribute("aria-expanded", "false");
+            });
+          });
+        });
+      }
+
+      logInitialization() {
+        if (this.config.debug) {
+          console.log('🚀 ExploreX Initialized', {
+            version: this.config.version,
+            environment: this.config.environment,
+            features: this.config.features
+          });
+        }
+      }
+    }
+
+    // Initialize application when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      new ExploreXApp();
+    });
+
+    // Development utilities
+    if (ExploreXConfig.debug) {
+      window.ExploreX = {
+        config: ExploreXConfig,
+        version: () => console.log(`ExploreX v${ExploreXConfig.version}`),
+        features: () => console.table(ExploreXConfig.features),
+        test: () => console.log('🧪 ExploreX Test Mode - All systems operational')
+      };
+    }
+  </script>
+</body>
+</html>

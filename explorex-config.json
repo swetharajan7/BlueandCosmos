@@ -1,0 +1,128 @@
+{
+  "project": {
+    "name": "ExploreX",
+    "version": "0.1.0",
+    "description": "Space Travel Experience Recommendation System",
+    "author": "BlueandCosmos Team",
+    "license": "MIT"
+  },
+  "environment": {
+    "development": {
+      "debug": true,
+      "apiBaseUrl": "http://localhost:3000/api",
+      "enableMockData": true,
+      "logLevel": "debug"
+    },
+    "production": {
+      "debug": false,
+      "apiBaseUrl": "https://api.blueandcosmos.com/explorex",
+      "enableMockData": false,
+      "logLevel": "error"
+    }
+  },
+  "features": {
+    "locationAutocomplete": {
+      "enabled": false,
+      "provider": "google-places",
+      "apiKey": "GOOGLE_PLACES_API_KEY"
+    },
+    "weatherIntegration": {
+      "enabled": false,
+      "provider": "openweathermap",
+      "apiKey": "OPENWEATHER_API_KEY"
+    },
+    "eventIntegration": {
+      "enabled": false,
+      "providers": {
+        "eventbrite": "EVENTBRITE_API_KEY",
+        "astronomyCalendar": "ASTRONOMY_API_KEY"
+      }
+    },
+    "userAccounts": {
+      "enabled": false,
+      "authProvider": "firebase",
+      "socialLogin": ["google", "facebook", "apple"]
+    },
+    "analytics": {
+      "enabled": false,
+      "provider": "google-analytics",
+      "trackingId": "GA_TRACKING_ID"
+    }
+  },
+  "database": {
+    "development": {
+      "type": "sqlite",
+      "database": "./explorex-dev.db"
+    },
+    "production": {
+      "type": "postgresql",
+      "host": "DB_HOST",
+      "port": 5432,
+      "database": "explorex_prod",
+      "username": "DB_USERNAME",
+      "password": "DB_PASSWORD"
+    }
+  },
+  "cache": {
+    "development": {
+      "type": "memory",
+      "ttl": 300
+    },
+    "production": {
+      "type": "redis",
+      "host": "REDIS_HOST",
+      "port": 6379,
+      "ttl": 3600
+    }
+  },
+  "apis": {
+    "googlePlaces": {
+      "baseUrl": "https://maps.googleapis.com/maps/api/place",
+      "rateLimit": {
+        "requests": 1000,
+        "period": "day"
+      }
+    },
+    "openWeather": {
+      "baseUrl": "https://api.openweathermap.org/data/2.5",
+      "rateLimit": {
+        "requests": 1000,
+        "period": "day"
+      }
+    },
+    "eventbrite": {
+      "baseUrl": "https://www.eventbriteapi.com/v3",
+      "rateLimit": {
+        "requests": 1000,
+        "period": "hour"
+      }
+    }
+  },
+  "testing": {
+    "framework": "jest",
+    "coverage": {
+      "threshold": 80,
+      "reports": ["html", "text", "lcov"]
+    },
+    "e2e": {
+      "framework": "playwright",
+      "browsers": ["chromium", "firefox", "webkit"]
+    }
+  },
+  "build": {
+    "outputDir": "dist",
+    "assetsDir": "assets",
+    "minify": true,
+    "sourcemap": true
+  },
+  "deployment": {
+    "staging": {
+      "url": "https://staging-explorex.blueandcosmos.com",
+      "branch": "develop"
+    },
+    "production": {
+      "url": "https://explorex.blueandcosmos.com",
+      "branch": "main"
+    }
+  }
+}
