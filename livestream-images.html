@@ -526,18 +526,80 @@
       border-left: 3px solid var(--accent);
     }
 
-    /* Image loading error handling */
-    .image-container img[src*="placeholder"] {
-      filter: grayscale(0.3);
-      opacity: 0.8;
-    }
-
+    /* Enhanced image loading states and performance optimizations */
     .image-container img {
-      transition: opacity 0.3s ease;
+      transition: opacity 0.4s ease, transform 0.3s ease;
+      opacity: 0;
+      will-change: opacity, transform;
     }
 
-    .image-container img:not([complete]) {
-      opacity: 0.5;
+    .image-container img.loaded {
+      opacity: 1;
+    }
+
+    .image-container img.loading {
+      opacity: 0.3;
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    body.dark .image-container img.loading {
+      background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+      background-size: 200% 100%;
+    }
+
+    .image-container img.error {
+      opacity: 0.7;
+      filter: grayscale(0.5);
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Performance optimizations */
+    .image-card {
+      contain: layout style paint;
+      transform: translateZ(0); /* Force hardware acceleration */
+    }
+
+    .image-container {
+      contain: layout;
+      transform: translateZ(0);
+    }
+
+    /* Reduce motion for users who prefer it */
+    @media (prefers-reduced-motion: reduce) {
+      .image-container img,
+      .image-card,
+      .overlay-btn {
+        transition: none !important;
+        animation: none !important;
+      }
+      
+      .skeleton {
+        animation: none !important;
+      }
+    }
+
+    /* Optimize for high DPI displays */
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+      .image-container img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+      }
+    }
+
+    /* Memory optimization for large galleries */
+    .image-gallery {
+      contain: layout style;
+    }
+
+    /* Preload critical images */
+    .image-container img[data-priority="high"] {
+      opacity: 1;
     }
 
     /* Responsive breakpoints */
@@ -2016,6 +2078,44 @@
     
     // Global image data store for interaction handling
     let currentImageData = [];
+    
+    // Performance monitoring
+    const performanceMonitor = {
+      startTime: Date.now(),
+      imageLoadTimes: [],
+      
+      recordImageLoad(startTime, endTime, success = true) {
+        this.imageLoadTimes.push({
+          duration: endTime - startTime,
+          success: success,
+          timestamp: Date.now()
+        });
+      },
+      
+      getAverageLoadTime() {
+        const successfulLoads = this.imageLoadTimes.filter(load => load.success);
+        if (successfulLoads.length === 0) return 0;
+        
+        const total = successfulLoads.reduce((sum, load) => sum + load.duration, 0);
+        return Math.round(total / successfulLoads.length);
+      },
+      
+      getLoadSuccessRate() {
+        if (this.imageLoadTimes.length === 0) return 100;
+        
+        const successful = this.imageLoadTimes.filter(load => load.success).length;
+        return Math.round((successful / this.imageLoadTimes.length) * 100);
+      },
+      
+      logPerformanceStats() {
+        console.log('🚀 Performance Stats:', {
+          averageImageLoadTime: `${this.getAverageLoadTime()}ms`,
+          loadSuccessRate: `${this.getLoadSuccessRate()}%`,
+          totalImagesLoaded: this.imageLoadTimes.length,
+          pageLoadTime: `${Date.now() - this.startTime}ms`
+        });
+      }
+    };
   </script>
   <script>
     (function initTheme(){
@@ -2228,11 +2328,16 @@
         // Clear loading message
         gallery.innerHTML = '';
         
-        // Create image cards from data
-        images.forEach(imageData => {
-          const card = createImageCard(imageData);
-          gallery.appendChild(card);
+        // Create image cards from data with performance optimization
+        const fragment = document.createDocumentFragment();
+        
+        images.forEach((imageData, index) => {
+          const card = createImageCard(imageData, index);
+          fragment.appendChild(card);
         });
+        
+        // Batch DOM update for better performance
+        gallery.appendChild(fragment);
         
         // Reinitialize lazy loading for new images
         initializeLazyLoading();
@@ -2242,8 +2347,8 @@
         console.log(`NASA API Integration: Loaded ${nasaImages.length} images from NASA sources`);
       }
 
-      // Create an image card element from data
-      function createImageCard(imageData) {
+      // Enhanced image card creation with performance optimizations
+      function createImageCard(imageData, index = 0) {
         const card = document.createElement('article');
         card.className = 'image-card';
         card.dataset.category = imageData.category;
@@ -2257,12 +2362,24 @@
         const isAPOD = imageData.metadata?.type === 'APOD';
         const apodClass = isAPOD ? ' apod-image' : '';
         
+        // Determine loading strategy based on position
+        const isAboveFold = index < 4; // First 4 images are above fold
+        const loadingStrategy = isAboveFold ? 'eager' : 'lazy';
+        const priority = isAboveFold ? 'high' : 'low';
+        
+        // Optimize image URLs for different screen sizes
+        const optimizedImageUrl = getOptimizedImageUrl(imageData.thumbnailUrl, imageData.imageUrl);
+        const fallbackUrl = getImageFallback(imageData.source);
+        
         card.innerHTML = `
           <div class="image-container${apodClass}">
-            <img src="${imageData.thumbnailUrl}" 
-                 alt="${imageData.title}" 
-                 loading="lazy"
-                 onerror="this.src='https://via.placeholder.com/400x225/0033a0/ffffff?text=NASA+Image'">
+            <img ${isAboveFold ? `src="${optimizedImageUrl}"` : `data-src="${optimizedImageUrl}"`}
+                 alt="${escapeHtml(imageData.title)}" 
+                 loading="${loadingStrategy}"
+                 data-priority="${priority}"
+                 data-source="${imageData.source}"
+                 decoding="async"
+                 onerror="this.src='${fallbackUrl}'; this.classList.add('error');">
             <div class="image-overlay">
               <button class="overlay-btn expand-btn" title="View Full Size" data-image-id="${imageData.id}">🔍</button>
               <button class="overlay-btn share-btn" title="Share Image" data-image-id="${imageData.id}">📤</button>
@@ -2270,17 +2387,41 @@
             ${isAPOD ? '<div class="apod-badge">APOD</div>' : ''}
           </div>
           <div class="image-info">
-            <h3 class="image-title">${imageData.title}</h3>
-            <p class="image-description">${imageData.description}</p>
+            <h3 class="image-title">${escapeHtml(imageData.title)}</h3>
+            <p class="image-description">${escapeHtml(imageData.description)}</p>
             <div class="image-meta">
-              <span class="source" title="${attribution}">${imageData.source.toUpperCase()}</span>
+              <span class="source" title="${escapeHtml(attribution)}">${imageData.source.toUpperCase()}</span>
               <time class="timestamp" datetime="${imageData.timestamp.toISOString()}">${timeAgo}</time>
             </div>
-            ${imageData.metadata?.copyright ? `<div class="image-attribution">© ${imageData.metadata.copyright}</div>` : ''}
+            ${imageData.metadata?.copyright ? `<div class="image-attribution">© ${escapeHtml(imageData.metadata.copyright)}</div>` : ''}
           </div>
         `;
         
         return card;
+      }
+
+      // Optimize image URLs based on screen size and connection
+      function getOptimizedImageUrl(thumbnailUrl, fullUrl) {
+        // Check for high DPI displays
+        const isHighDPI = window.devicePixelRatio > 1.5;
+        
+        // Check connection speed (if available)
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        const isSlowConnection = connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g');
+        
+        // Use full resolution for high DPI displays unless connection is slow
+        if (isHighDPI && !isSlowConnection && fullUrl && fullUrl !== thumbnailUrl) {
+          return fullUrl;
+        }
+        
+        return thumbnailUrl;
+      }
+
+      // Escape HTML to prevent XSS
+      function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
       }
 
       // Calculate time ago string
@@ -2300,26 +2441,131 @@
         }
       }
 
-      // Initialize lazy loading for new images
+      // Enhanced lazy loading with performance optimizations
       function initializeLazyLoading() {
         if ('IntersectionObserver' in window) {
+          // Create optimized intersection observer
           const imageObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
               if (entry.isIntersecting) {
                 const img = entry.target;
-                if (img.dataset.src) {
-                  img.src = img.dataset.src;
-                  img.removeAttribute('data-src');
-                  observer.unobserve(img);
-                }
+                loadImageWithOptimization(img, observer);
               }
             });
+          }, {
+            // Load images when they're 100px away from viewport
+            rootMargin: '100px 0px',
+            // Trigger when 10% of image is visible
+            threshold: 0.1
           });
 
-          document.querySelectorAll('img[data-src]').forEach(img => {
+          // Observe all images that need lazy loading
+          document.querySelectorAll('img[data-src], img[loading="lazy"]').forEach(img => {
             imageObserver.observe(img);
           });
+
+          // Store observer globally for cleanup
+          window.lazyImageObserver = imageObserver;
+        } else {
+          // Fallback for older browsers
+          loadAllImagesImmediately();
         }
+      }
+
+      // Enhanced image loading with performance monitoring
+      function loadImageWithOptimization(img, observer) {
+        const originalSrc = img.dataset.src || img.src;
+        const loadStartTime = performance.now();
+        
+        // Create a new image element for preloading
+        const imageLoader = new Image();
+        
+        // Add loading state
+        img.classList.add('loading');
+        
+        // Set up performance monitoring
+        const timeoutId = setTimeout(() => {
+          console.warn('Image loading timeout:', originalSrc);
+          performanceMonitor.recordImageLoad(loadStartTime, performance.now(), false);
+        }, 10000); // 10 second timeout
+        
+        imageLoader.onload = function() {
+          clearTimeout(timeoutId);
+          const loadEndTime = performance.now();
+          
+          // Record successful load
+          performanceMonitor.recordImageLoad(loadStartTime, loadEndTime, true);
+          
+          // Image loaded successfully
+          img.src = originalSrc;
+          img.classList.remove('loading');
+          img.classList.add('loaded');
+          
+          // Remove data-src attribute
+          if (img.dataset.src) {
+            img.removeAttribute('data-src');
+          }
+          
+          // Stop observing this image
+          observer.unobserve(img);
+          
+          // Trigger fade-in animation with RAF for smooth performance
+          requestAnimationFrame(() => {
+            img.style.opacity = '1';
+          });
+        };
+        
+        imageLoader.onerror = function() {
+          clearTimeout(timeoutId);
+          const loadEndTime = performance.now();
+          
+          // Record failed load
+          performanceMonitor.recordImageLoad(loadStartTime, loadEndTime, false);
+          
+          // Handle loading error
+          img.classList.remove('loading');
+          img.classList.add('error');
+          
+          // Set fallback image
+          img.src = getImageFallback(img.dataset.source || 'nasa');
+          img.alt = 'Image unavailable - ' + (img.alt || 'Space image');
+          
+          observer.unobserve(img);
+        };
+        
+        // Optimize loading based on connection
+        if (navigator.connection) {
+          const connection = navigator.connection;
+          if (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g') {
+            // Add delay for slow connections to prevent overwhelming
+            setTimeout(() => {
+              imageLoader.src = originalSrc;
+            }, 100);
+          } else {
+            imageLoader.src = originalSrc;
+          }
+        } else {
+          imageLoader.src = originalSrc;
+        }
+      }
+
+      // Fallback for browsers without IntersectionObserver
+      function loadAllImagesImmediately() {
+        document.querySelectorAll('img[data-src]').forEach(img => {
+          img.src = img.dataset.src;
+          img.removeAttribute('data-src');
+        });
+      }
+
+      // Get appropriate fallback image based on source
+      function getImageFallback(source) {
+        const fallbacks = {
+          nasa: 'https://via.placeholder.com/400x225/0033a0/ffffff?text=NASA+Image+Unavailable',
+          spacex: 'https://via.placeholder.com/400x225/005288/ffffff?text=SpaceX+Image+Unavailable',
+          esa: 'https://via.placeholder.com/400x225/6f42c1/ffffff?text=ESA+Image+Unavailable',
+          iss: 'https://via.placeholder.com/400x225/28a745/ffffff?text=ISS+Image+Unavailable'
+        };
+        return fallbacks[source] || fallbacks.nasa;
       }
 
       // Update last refresh time
@@ -2384,15 +2630,60 @@
         }
       }
       
+      // Memory management and cleanup
+      function cleanupResources() {
+        // Clean up intersection observer
+        if (window.lazyImageObserver) {
+          window.lazyImageObserver.disconnect();
+        }
+        
+        // Clear image cache periodically
+        if (imageDataManager.cache.size > 50) {
+          const oldestEntries = Array.from(imageDataManager.cache.entries())
+            .sort((a, b) => a[1].timestamp - b[1].timestamp)
+            .slice(0, 20);
+          
+          oldestEntries.forEach(([key]) => {
+            imageDataManager.cache.delete(key);
+          });
+          
+          console.log('🧹 Cleaned up old cache entries');
+        }
+      }
+
+      // Performance optimization: Cleanup on page visibility change
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') {
+          cleanupResources();
+        } else if (document.visibilityState === 'visible') {
+          // Log performance stats when page becomes visible
+          performanceMonitor.logPerformanceStats();
+        }
+      });
+
       // Start initialization
       initializeGallery();
       
-      // Auto-refresh every 5 minutes
+      // Auto-refresh every 5 minutes with performance consideration
       setInterval(() => {
         if (document.visibilityState === 'visible') {
-          refreshGallery();
+          // Only refresh if performance is good
+          const avgLoadTime = performanceMonitor.getAverageLoadTime();
+          if (avgLoadTime < 3000) { // Less than 3 seconds average
+            refreshGallery();
+          } else {
+            console.log('⏳ Skipping auto-refresh due to slow performance');
+          }
         }
       }, 300000); // 5 minutes
+
+      // Cleanup on page unload
+      window.addEventListener('beforeunload', cleanupResources);
+      
+      // Log initial performance after 5 seconds
+      setTimeout(() => {
+        performanceMonitor.logPerformanceStats();
+      }, 5000);
     })();
   </script>
 </body>
