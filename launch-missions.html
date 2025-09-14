@@ -5255,6 +5255,334 @@
       font-family: monospace;
     }
 
+    /* Performance Optimization and Advanced Analytics Styles */
+    .performance-monitor {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: var(--text-white);
+      border: 2px solid var(--accent);
+      border-radius: 8px;
+      padding: 1em;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      z-index: 10014;
+      min-width: 200px;
+      font-size: 0.8em;
+      opacity: 0.9;
+      transition: opacity 0.3s ease;
+    }
+
+    .performance-monitor:hover {
+      opacity: 1;
+    }
+
+    body.dark .performance-monitor {
+      background: var(--dark-bg);
+      color: var(--text-white);
+    }
+
+    .performance-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.8em;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    body.dark .performance-header {
+      color: var(--text-light);
+    }
+
+    .performance-toggle {
+      background: none;
+      border: none;
+      font-size: 1em;
+      cursor: pointer;
+      color: var(--accent);
+    }
+
+    body.dark .performance-toggle {
+      color: var(--text-light);
+    }
+
+    .performance-metrics {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4em;
+    }
+
+    .metric-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .metric-label {
+      font-size: 0.75em;
+      opacity: 0.8;
+    }
+
+    .metric-value {
+      font-weight: 600;
+      font-family: monospace;
+    }
+
+    .metric-value.good {
+      color: var(--launch-success);
+    }
+
+    .metric-value.warning {
+      color: var(--launch-delayed);
+    }
+
+    .metric-value.critical {
+      color: var(--launch-failure);
+    }
+
+    .performance-chart {
+      width: 100%;
+      height: 40px;
+      background: rgba(0, 51, 160, 0.1);
+      border-radius: 4px;
+      margin: 0.5em 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body.dark .performance-chart {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .chart-bar {
+      height: 100%;
+      background: var(--accent);
+      transition: width 0.3s ease;
+      border-radius: 4px;
+    }
+
+    .analytics-summary {
+      margin-top: 1em;
+      padding-top: 0.8em;
+      border-top: 1px solid rgba(0, 51, 160, 0.2);
+    }
+
+    body.dark .analytics-summary {
+      border-top-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .analytics-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.3em;
+      font-size: 0.75em;
+    }
+
+    .analytics-controls {
+      margin-top: 0.8em;
+      display: flex;
+      gap: 0.5em;
+    }
+
+    .analytics-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.4em 0.8em;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.7em;
+      transition: all 0.3s ease;
+    }
+
+    .analytics-btn:hover {
+      background: var(--dark-accent);
+      transform: translateY(-1px);
+    }
+
+    .analytics-btn.secondary {
+      background: rgba(0, 51, 160, 0.1);
+      color: var(--accent);
+      border: 1px solid rgba(0, 51, 160, 0.2);
+    }
+
+    .analytics-btn.secondary:hover {
+      background: rgba(0, 51, 160, 0.2);
+    }
+
+    body.dark .analytics-btn.secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-light);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    body.dark .analytics-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Performance Alert Notifications */
+    .performance-alert {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: var(--launch-failure);
+      color: white;
+      padding: 1em;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      z-index: 10015;
+      max-width: 300px;
+      animation: slideInRight 0.3s ease;
+    }
+
+    .performance-alert.warning {
+      background: var(--launch-delayed);
+    }
+
+    .performance-alert.info {
+      background: var(--accent);
+    }
+
+    .alert-header {
+      font-weight: 600;
+      margin-bottom: 0.5em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .alert-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.2em;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .alert-message {
+      font-size: 0.9em;
+      line-height: 1.4;
+    }
+
+    /* Analytics Dashboard Modal */
+    .analytics-dashboard-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 10016;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2em;
+    }
+
+    .analytics-dashboard {
+      background: var(--text-white);
+      border-radius: 16px;
+      width: 90vw;
+      height: 80vh;
+      max-width: 1200px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+    }
+
+    body.dark .analytics-dashboard {
+      background: var(--dark-bg);
+      color: var(--text-white);
+    }
+
+    .analytics-dashboard-header {
+      padding: 1.5em 2em;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--flag-blue) 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .analytics-dashboard-header h3 {
+      margin: 0;
+      font-size: 1.3em;
+    }
+
+    .analytics-dashboard-close {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      font-size: 1.3em;
+      cursor: pointer;
+      padding: 0.3em;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .analytics-dashboard-body {
+      flex: 1;
+      padding: 2em;
+      overflow-y: auto;
+    }
+
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2em;
+      margin-bottom: 2em;
+    }
+
+    .analytics-card {
+      background: rgba(0, 51, 160, 0.05);
+      padding: 1.5em;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 51, 160, 0.1);
+    }
+
+    body.dark .analytics-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .analytics-card h4 {
+      color: var(--accent);
+      margin-bottom: 1em;
+      font-size: 1.1em;
+    }
+
+    body.dark .analytics-card h4 {
+      color: var(--text-light);
+    }
+
+    .analytics-metric {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.8em;
+      padding: 0.5em 0;
+      border-bottom: 1px solid rgba(0, 51, 160, 0.1);
+    }
+
+    body.dark .analytics-metric {
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .metric-name {
+      font-weight: 600;
+    }
+
+    .metric-data {
+      font-family: monospace;
+      font-size: 0.9em;
+    }
+
     /* Enhanced Mobile Modal Styles */
     @media (max-width: 768px) {
       .modal-content.large {
@@ -14985,6 +15313,968 @@
     // Initialize test runner UI
     document.addEventListener('DOMContentLoaded', () => {
       createTestRunnerUI();
+    });
+
+    // Performance Optimization and Advanced Analytics System
+    class PerformanceAnalyticsManager {
+      constructor() {
+        this.performanceMetrics = new Map();
+        this.analyticsData = new Map();
+        this.observers = new Map();
+        this.performanceThresholds = {
+          countdownUpdate: 16, // 60fps = 16.67ms per frame
+          dataProcessing: 100,
+          modalOpen: 300,
+          apiResponse: 2000,
+          memoryUsage: 50 * 1024 * 1024 // 50MB
+        };
+        this.init();
+      }
+
+      init() {
+        // Initialize performance monitoring
+        this.setupPerformanceMonitoring();
+        this.setupAnalyticsTracking();
+        this.setupCoreWebVitals();
+        this.setupResourceMonitoring();
+        this.setupUserEngagementTracking();
+        this.optimizeExistingFunctions();
+        
+        console.log('Performance optimization and analytics system initialized');
+      }
+
+      setupPerformanceMonitoring() {
+        // Performance Observer for measuring key metrics
+        if ('PerformanceObserver' in window) {
+          // Measure navigation timing
+          const navObserver = new PerformanceObserver((list) => {
+            for (const entry of list.getEntries()) {
+              this.recordMetric('navigation', entry.name, entry.duration);
+            }
+          });
+          navObserver.observe({ entryTypes: ['navigation'] });
+
+          // Measure resource loading
+          const resourceObserver = new PerformanceObserver((list) => {
+            for (const entry of list.getEntries()) {
+              this.recordMetric('resource', entry.name, entry.duration);
+            }
+          });
+          resourceObserver.observe({ entryTypes: ['resource'] });
+
+          // Measure user interactions
+          const measureObserver = new PerformanceObserver((list) => {
+            for (const entry of list.getEntries()) {
+              this.recordMetric('measure', entry.name, entry.duration);
+            }
+          });
+          measureObserver.observe({ entryTypes: ['measure'] });
+        }
+
+        // Custom performance tracking
+        this.startPerformanceTracking();
+      }
+
+      setupAnalyticsTracking() {
+        // User engagement analytics
+        this.trackPageLoad();
+        this.trackUserInteractions();
+        this.trackFeatureUsage();
+        this.trackErrorEvents();
+        
+        // Session analytics
+        this.sessionStart = Date.now();
+        this.sessionData = {
+          pageViews: 1,
+          interactions: 0,
+          timeSpent: 0,
+          featuresUsed: new Set(),
+          errors: []
+        };
+      }
+
+      setupCoreWebVitals() {
+        // Largest Contentful Paint (LCP)
+        if ('PerformanceObserver' in window) {
+          const lcpObserver = new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            const lastEntry = entries[entries.length - 1];
+            this.recordMetric('core-web-vitals', 'LCP', lastEntry.startTime);
+            
+            // Good: < 2.5s, Needs Improvement: 2.5s - 4s, Poor: > 4s
+            const rating = lastEntry.startTime < 2500 ? 'good' : 
+                          lastEntry.startTime < 4000 ? 'needs-improvement' : 'poor';
+            this.recordAnalytic('core-web-vitals', 'lcp-rating', rating);
+          });
+          lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+
+          // First Input Delay (FID)
+          const fidObserver = new PerformanceObserver((list) => {
+            for (const entry of list.getEntries()) {
+              this.recordMetric('core-web-vitals', 'FID', entry.processingStart - entry.startTime);
+              
+              const rating = entry.processingStart - entry.startTime < 100 ? 'good' : 
+                            entry.processingStart - entry.startTime < 300 ? 'needs-improvement' : 'poor';
+              this.recordAnalytic('core-web-vitals', 'fid-rating', rating);
+            }
+          });
+          fidObserver.observe({ entryTypes: ['first-input'] });
+
+          // Cumulative Layout Shift (CLS)
+          let clsValue = 0;
+          const clsObserver = new PerformanceObserver((list) => {
+            for (const entry of list.getEntries()) {
+              if (!entry.hadRecentInput) {
+                clsValue += entry.value;
+              }
+            }
+            this.recordMetric('core-web-vitals', 'CLS', clsValue);
+            
+            const rating = clsValue < 0.1 ? 'good' : 
+                          clsValue < 0.25 ? 'needs-improvement' : 'poor';
+            this.recordAnalytic('core-web-vitals', 'cls-rating', rating);
+          });
+          clsObserver.observe({ entryTypes: ['layout-shift'] });
+        }
+      }
+
+      setupResourceMonitoring() {
+        // Monitor memory usage
+        if (performance.memory) {
+          setInterval(() => {
+            const memoryInfo = {
+              used: performance.memory.usedJSHeapSize,
+              total: performance.memory.totalJSHeapSize,
+              limit: performance.memory.jsHeapSizeLimit
+            };
+            
+            this.recordMetric('memory', 'heap-usage', memoryInfo.used);
+            
+            if (memoryInfo.used > this.performanceThresholds.memoryUsage) {
+              this.recordAnalytic('performance-warning', 'high-memory-usage', memoryInfo.used);
+            }
+          }, 10000); // Check every 10 seconds
+        }
+
+        // Monitor network conditions
+        if ('connection' in navigator) {
+          const connection = navigator.connection;
+          this.recordAnalytic('network', 'connection-type', connection.effectiveType);
+          this.recordAnalytic('network', 'downlink', connection.downlink);
+          
+          connection.addEventListener('change', () => {
+            this.recordAnalytic('network', 'connection-change', connection.effectiveType);
+          });
+        }
+      }
+
+      setupUserEngagementTracking() {
+        // Track scroll depth
+        let maxScrollDepth = 0;
+        window.addEventListener('scroll', this.throttle(() => {
+          const scrollDepth = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+          if (scrollDepth > maxScrollDepth) {
+            maxScrollDepth = scrollDepth;
+            this.recordAnalytic('engagement', 'scroll-depth', scrollDepth);
+          }
+        }, 1000));
+
+        // Track time on page
+        let timeOnPage = 0;
+        setInterval(() => {
+          timeOnPage += 1;
+          this.sessionData.timeSpent = timeOnPage;
+          
+          // Record milestone time spent
+          if ([30, 60, 120, 300].includes(timeOnPage)) {
+            this.recordAnalytic('engagement', 'time-milestone', timeOnPage);
+          }
+        }, 1000);
+
+        // Track visibility changes
+        document.addEventListener('visibilitychange', () => {
+          this.recordAnalytic('engagement', 'visibility-change', document.hidden ? 'hidden' : 'visible');
+        });
+
+        // Track page unload
+        window.addEventListener('beforeunload', () => {
+          this.recordAnalytic('session', 'session-end', {
+            duration: Date.now() - this.sessionStart,
+            interactions: this.sessionData.interactions,
+            featuresUsed: Array.from(this.sessionData.featuresUsed)
+          });
+        });
+      }
+
+      optimizeExistingFunctions() {
+        // Optimize countdown updates with requestAnimationFrame
+        this.optimizeCountdownUpdates();
+        
+        // Optimize data processing with web workers (simulation)
+        this.optimizeDataProcessing();
+        
+        // Optimize modal interactions
+        this.optimizeModalPerformance();
+        
+        // Optimize image loading
+        this.optimizeImageLoading();
+        
+        // Optimize event handlers
+        this.optimizeEventHandlers();
+      }
+
+      optimizeCountdownUpdates() {
+        // Replace setInterval with requestAnimationFrame for smoother updates
+        const originalStartCountdown = window.startResilientCountdown;
+        
+        window.startResilientCountdown = (targetDate, displayElement) => {
+          let animationId;
+          let lastUpdate = 0;
+          
+          const updateCountdown = (timestamp) => {
+            // Throttle updates to 1 second intervals
+            if (timestamp - lastUpdate >= 1000) {
+              const startTime = performance.now();
+              
+              try {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance < 0) {
+                  displayElement.innerHTML = '<span class="countdown-expired">Launch Time!</span>';
+                  this.recordMetric('countdown', 'update-duration', performance.now() - startTime);
+                  return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Use DocumentFragment for better performance
+                const fragment = document.createDocumentFragment();
+                const timeUnits = [
+                  { value: days, label: 'Days' },
+                  { value: hours, label: 'Hours' },
+                  { value: minutes, label: 'Min' },
+                  { value: seconds, label: 'Sec' }
+                ];
+
+                timeUnits.forEach(unit => {
+                  const timeUnit = document.createElement('span');
+                  timeUnit.className = 'time-unit';
+                  timeUnit.innerHTML = `
+                    <span class="number">${unit.value.toString().padStart(2, '0')}</span>
+                    <span class="label">${unit.label}</span>
+                  `;
+                  fragment.appendChild(timeUnit);
+                });
+
+                displayElement.innerHTML = '';
+                displayElement.appendChild(fragment);
+                
+                const updateDuration = performance.now() - startTime;
+                this.recordMetric('countdown', 'update-duration', updateDuration);
+                
+                if (updateDuration > this.performanceThresholds.countdownUpdate) {
+                  this.recordAnalytic('performance-warning', 'slow-countdown-update', updateDuration);
+                }
+                
+                lastUpdate = timestamp;
+              } catch (error) {
+                this.recordAnalytic('error', 'countdown-update-error', error.message);
+              }
+            }
+            
+            animationId = requestAnimationFrame(updateCountdown);
+          };
+
+          animationId = requestAnimationFrame(updateCountdown);
+          return () => cancelAnimationFrame(animationId);
+        };
+      }
+
+      optimizeDataProcessing() {
+        // Simulate web worker optimization for data processing
+        const originalProcessLaunchData = window.processLaunchData || function(data) { return data; };
+        
+        window.processLaunchData = (data) => {
+          const startTime = performance.now();
+          
+          try {
+            // Use more efficient processing methods
+            const processed = data.map(launch => ({
+              ...launch,
+              processedAt: Date.now()
+            }));
+            
+            const processingTime = performance.now() - startTime;
+            this.recordMetric('data-processing', 'duration', processingTime);
+            
+            if (processingTime > this.performanceThresholds.dataProcessing) {
+              this.recordAnalytic('performance-warning', 'slow-data-processing', processingTime);
+            }
+            
+            return processed;
+          } catch (error) {
+            this.recordAnalytic('error', 'data-processing-error', error.message);
+            return data;
+          }
+        };
+      }
+
+      optimizeModalPerformance() {
+        // Optimize modal opening with performance tracking
+        const originalOpenMissionModal = window.openMissionModal;
+        
+        window.openMissionModal = (button) => {
+          const startTime = performance.now();
+          
+          try {
+            // Track modal interaction
+            this.recordAnalytic('interaction', 'modal-open', 'mission-details');
+            this.sessionData.interactions++;
+            this.sessionData.featuresUsed.add('mission-modal');
+            
+            // Call original function
+            originalOpenMissionModal(button);
+            
+            const openTime = performance.now() - startTime;
+            this.recordMetric('modal', 'open-duration', openTime);
+            
+            if (openTime > this.performanceThresholds.modalOpen) {
+              this.recordAnalytic('performance-warning', 'slow-modal-open', openTime);
+            }
+          } catch (error) {
+            this.recordAnalytic('error', 'modal-open-error', error.message);
+          }
+        };
+      }
+
+      optimizeImageLoading() {
+        // Implement lazy loading with Intersection Observer
+        const imageObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              const startTime = performance.now();
+              
+              img.onload = () => {
+                const loadTime = performance.now() - startTime;
+                this.recordMetric('image', 'load-duration', loadTime);
+                imageObserver.unobserve(img);
+              };
+              
+              img.onerror = () => {
+                this.recordAnalytic('error', 'image-load-error', img.src);
+                imageObserver.unobserve(img);
+              };
+              
+              if (img.dataset.src) {
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src');
+              }
+            }
+          });
+        }, { rootMargin: '50px' });
+
+        // Observe all images with data-src
+        document.querySelectorAll('img[data-src]').forEach(img => {
+          imageObserver.observe(img);
+        });
+      }
+
+      optimizeEventHandlers() {
+        // Use event delegation for better performance
+        document.addEventListener('click', this.throttle((event) => {
+          const target = event.target;
+          
+          // Track button clicks
+          if (target.tagName === 'BUTTON') {
+            this.recordAnalytic('interaction', 'button-click', target.textContent.trim());
+            this.sessionData.interactions++;
+          }
+          
+          // Track link clicks
+          if (target.tagName === 'A') {
+            this.recordAnalytic('interaction', 'link-click', target.href);
+            this.sessionData.interactions++;
+          }
+          
+          // Track launch card interactions
+          if (target.closest('.launch-card')) {
+            this.recordAnalytic('interaction', 'launch-card-click', 'mission-interaction');
+            this.sessionData.featuresUsed.add('launch-cards');
+          }
+        }, 100));
+      }
+
+      // Performance measurement utilities
+      measureFunction(name, fn) {
+        return (...args) => {
+          const startTime = performance.now();
+          try {
+            const result = fn.apply(this, args);
+            const duration = performance.now() - startTime;
+            this.recordMetric('function', name, duration);
+            return result;
+          } catch (error) {
+            this.recordAnalytic('error', `function-${name}`, error.message);
+            throw error;
+          }
+        };
+      }
+
+      measureAsync(name, promise) {
+        const startTime = performance.now();
+        return promise
+          .then(result => {
+            const duration = performance.now() - startTime;
+            this.recordMetric('async', name, duration);
+            return result;
+          })
+          .catch(error => {
+            const duration = performance.now() - startTime;
+            this.recordMetric('async', `${name}-error`, duration);
+            this.recordAnalytic('error', `async-${name}`, error.message);
+            throw error;
+          });
+      }
+
+      // Analytics tracking methods
+      trackPageLoad() {
+        this.recordAnalytic('page', 'load', {
+          url: window.location.href,
+          referrer: document.referrer,
+          timestamp: Date.now(),
+          userAgent: navigator.userAgent
+        });
+      }
+
+      trackUserInteractions() {
+        // Track feature usage
+        const features = [
+          { selector: '.notification-manager-btn', name: 'notification-manager' },
+          { selector: '.statistics-btn', name: 'statistics-dashboard' },
+          { selector: '.accessibility-toggle', name: 'accessibility-controls' },
+          { selector: '.theme-toggle', name: 'theme-toggle' }
+        ];
+
+        features.forEach(feature => {
+          const element = document.querySelector(feature.selector);
+          if (element) {
+            element.addEventListener('click', () => {
+              this.recordAnalytic('feature-usage', feature.name, 'activated');
+              this.sessionData.featuresUsed.add(feature.name);
+            });
+          }
+        });
+      }
+
+      trackFeatureUsage() {
+        // Track countdown interactions
+        document.addEventListener('click', (event) => {
+          if (event.target.closest('.countdown-display')) {
+            this.recordAnalytic('feature-usage', 'countdown-interaction', 'clicked');
+          }
+        });
+
+        // Track filter usage
+        document.addEventListener('change', (event) => {
+          if (event.target.matches('select, input[type="checkbox"], input[type="radio"]')) {
+            this.recordAnalytic('feature-usage', 'filter-change', event.target.value);
+          }
+        });
+      }
+
+      trackErrorEvents() {
+        // Track JavaScript errors
+        window.addEventListener('error', (event) => {
+          this.recordAnalytic('error', 'javascript-error', {
+            message: event.message,
+            filename: event.filename,
+            lineno: event.lineno,
+            colno: event.colno
+          });
+        });
+
+        // Track unhandled promise rejections
+        window.addEventListener('unhandledrejection', (event) => {
+          this.recordAnalytic('error', 'unhandled-rejection', event.reason);
+        });
+      }
+
+      // Data recording methods
+      recordMetric(category, name, value) {
+        const key = `${category}.${name}`;
+        if (!this.performanceMetrics.has(key)) {
+          this.performanceMetrics.set(key, []);
+        }
+        
+        this.performanceMetrics.get(key).push({
+          value,
+          timestamp: Date.now()
+        });
+
+        // Keep only last 100 measurements
+        const metrics = this.performanceMetrics.get(key);
+        if (metrics.length > 100) {
+          metrics.shift();
+        }
+      }
+
+      recordAnalytic(category, event, data) {
+        const key = `${category}.${event}`;
+        if (!this.analyticsData.has(key)) {
+          this.analyticsData.set(key, []);
+        }
+        
+        this.analyticsData.get(key).push({
+          data,
+          timestamp: Date.now(),
+          sessionId: this.getSessionId()
+        });
+      }
+
+      // Utility methods
+      throttle(func, limit) {
+        let inThrottle;
+        return function() {
+          const args = arguments;
+          const context = this;
+          if (!inThrottle) {
+            func.apply(context, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+          }
+        };
+      }
+
+      debounce(func, delay) {
+        let timeoutId;
+        return function() {
+          const args = arguments;
+          const context = this;
+          clearTimeout(timeoutId);
+          timeoutId = setTimeout(() => func.apply(context, args), delay);
+        };
+      }
+
+      getSessionId() {
+        if (!this.sessionId) {
+          this.sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+        return this.sessionId;
+      }
+
+      // Reporting and analysis
+      generatePerformanceReport() {
+        const report = {
+          timestamp: new Date().toISOString(),
+          session: {
+            id: this.getSessionId(),
+            duration: Date.now() - this.sessionStart,
+            interactions: this.sessionData.interactions,
+            featuresUsed: Array.from(this.sessionData.featuresUsed)
+          },
+          metrics: this.getMetricsSummary(),
+          analytics: this.getAnalyticsSummary(),
+          recommendations: this.generateRecommendations()
+        };
+
+        return report;
+      }
+
+      getMetricsSummary() {
+        const summary = {};
+        
+        this.performanceMetrics.forEach((values, key) => {
+          const numbers = values.map(v => v.value);
+          summary[key] = {
+            count: numbers.length,
+            avg: numbers.reduce((a, b) => a + b, 0) / numbers.length,
+            min: Math.min(...numbers),
+            max: Math.max(...numbers),
+            latest: numbers[numbers.length - 1]
+          };
+        });
+        
+        return summary;
+      }
+
+      getAnalyticsSummary() {
+        const summary = {};
+        
+        this.analyticsData.forEach((events, key) => {
+          summary[key] = {
+            count: events.length,
+            latest: events[events.length - 1]?.data,
+            firstSeen: events[0]?.timestamp,
+            lastSeen: events[events.length - 1]?.timestamp
+          };
+        });
+        
+        return summary;
+      }
+
+      generateRecommendations() {
+        const recommendations = [];
+        const metrics = this.getMetricsSummary();
+        
+        // Performance recommendations
+        if (metrics['countdown.update-duration']?.avg > this.performanceThresholds.countdownUpdate) {
+          recommendations.push({
+            type: 'performance',
+            priority: 'high',
+            message: 'Countdown updates are slower than optimal. Consider optimizing DOM updates.',
+            metric: 'countdown.update-duration',
+            threshold: this.performanceThresholds.countdownUpdate,
+            actual: metrics['countdown.update-duration'].avg
+          });
+        }
+
+        if (metrics['memory.heap-usage']?.latest > this.performanceThresholds.memoryUsage) {
+          recommendations.push({
+            type: 'memory',
+            priority: 'medium',
+            message: 'Memory usage is higher than recommended. Check for memory leaks.',
+            metric: 'memory.heap-usage',
+            threshold: this.performanceThresholds.memoryUsage,
+            actual: metrics['memory.heap-usage'].latest
+          });
+        }
+
+        // User experience recommendations
+        const analytics = this.getAnalyticsSummary();
+        if (analytics['error.javascript-error']?.count > 0) {
+          recommendations.push({
+            type: 'reliability',
+            priority: 'high',
+            message: 'JavaScript errors detected. Review error logs and fix issues.',
+            errorCount: analytics['error.javascript-error'].count
+          });
+        }
+
+        return recommendations;
+      }
+
+      // Public API
+      getPerformanceData() {
+        return {
+          metrics: this.performanceMetrics,
+          analytics: this.analyticsData,
+          session: this.sessionData
+        };
+      }
+
+      exportAnalytics() {
+        const report = this.generatePerformanceReport();
+        const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `performance-analytics-${Date.now()}.json`;
+        link.click();
+        
+        URL.revokeObjectURL(url);
+      }
+
+      startPerformanceTracking() {
+        // Start continuous performance monitoring
+        setInterval(() => {
+          this.checkPerformanceThresholds();
+        }, 5000);
+      }
+
+      checkPerformanceThresholds() {
+        const metrics = this.getMetricsSummary();
+        
+        Object.entries(metrics).forEach(([key, data]) => {
+          const [category, metric] = key.split('.');
+          const threshold = this.performanceThresholds[metric];
+          
+          if (threshold && data.avg > threshold) {
+            this.recordAnalytic('performance-alert', key, {
+              threshold,
+              actual: data.avg,
+              severity: data.avg > threshold * 2 ? 'critical' : 'warning'
+            });
+          }
+        });
+      }
+    }
+
+    // Initialize performance and analytics manager
+    const performanceAnalyticsManager = new PerformanceAnalyticsManager();
+
+    // Add performance monitoring to global scope
+    window.getPerformanceReport = () => performanceAnalyticsManager.generatePerformanceReport();
+    window.exportAnalytics = () => performanceAnalyticsManager.exportAnalytics();
+
+    // Performance Monitor UI
+    function createPerformanceMonitor() {
+      const monitor = document.createElement('div');
+      monitor.className = 'performance-monitor';
+      monitor.style.display = 'none';
+      monitor.innerHTML = `
+        <div class="performance-header">
+          <span>⚡ Performance</span>
+          <button class="performance-toggle" onclick="togglePerformanceMonitor()" title="Toggle Performance Monitor">−</button>
+        </div>
+        <div class="performance-metrics" id="performance-metrics">
+          <div class="metric-item">
+            <span class="metric-label">FPS:</span>
+            <span class="metric-value good" id="fps-value">60</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Memory:</span>
+            <span class="metric-value good" id="memory-value">0 MB</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Countdown:</span>
+            <span class="metric-value good" id="countdown-value">0ms</span>
+          </div>
+          <div class="performance-chart">
+            <div class="chart-bar" id="performance-chart-bar" style="width: 80%"></div>
+          </div>
+        </div>
+        <div class="analytics-summary" id="analytics-summary">
+          <div class="analytics-item">
+            <span>Interactions:</span>
+            <span id="interactions-count">0</span>
+          </div>
+          <div class="analytics-item">
+            <span>Features Used:</span>
+            <span id="features-count">0</span>
+          </div>
+          <div class="analytics-item">
+            <span>Errors:</span>
+            <span id="errors-count">0</span>
+          </div>
+        </div>
+        <div class="analytics-controls">
+          <button class="analytics-btn" onclick="showAnalyticsDashboard()">📊 Dashboard</button>
+          <button class="analytics-btn secondary" onclick="exportAnalytics()">💾 Export</button>
+        </div>
+      `;
+      
+      document.body.appendChild(monitor);
+      
+      // Show monitor in development mode
+      if (window.location.hostname === 'localhost' || window.location.search.includes('perf=true')) {
+        monitor.style.display = 'block';
+        startPerformanceUpdates();
+      }
+    }
+
+    function togglePerformanceMonitor() {
+      const monitor = document.querySelector('.performance-monitor');
+      const metrics = monitor.querySelector('.performance-metrics');
+      const summary = monitor.querySelector('.analytics-summary');
+      const controls = monitor.querySelector('.analytics-controls');
+      const toggle = monitor.querySelector('.performance-toggle');
+      
+      const isCollapsed = metrics.style.display === 'none';
+      
+      metrics.style.display = isCollapsed ? 'flex' : 'none';
+      summary.style.display = isCollapsed ? 'block' : 'none';
+      controls.style.display = isCollapsed ? 'flex' : 'none';
+      toggle.textContent = isCollapsed ? '−' : '+';
+    }
+
+    function startPerformanceUpdates() {
+      let frameCount = 0;
+      let lastTime = performance.now();
+      
+      function updatePerformanceMetrics() {
+        frameCount++;
+        const currentTime = performance.now();
+        
+        // Update FPS every second
+        if (currentTime - lastTime >= 1000) {
+          const fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
+          updateMetricDisplay('fps-value', fps, fps >= 55 ? 'good' : fps >= 30 ? 'warning' : 'critical');
+          
+          frameCount = 0;
+          lastTime = currentTime;
+        }
+        
+        // Update memory usage
+        if (performance.memory) {
+          const memoryMB = Math.round(performance.memory.usedJSHeapSize / 1024 / 1024);
+          updateMetricDisplay('memory-value', `${memoryMB} MB`, 
+            memoryMB < 50 ? 'good' : memoryMB < 100 ? 'warning' : 'critical');
+        }
+        
+        // Update analytics data
+        const analyticsData = performanceAnalyticsManager.getPerformanceData();
+        document.getElementById('interactions-count').textContent = analyticsData.session.interactions;
+        document.getElementById('features-count').textContent = analyticsData.session.featuresUsed.size;
+        
+        // Update performance chart
+        const performanceScore = calculatePerformanceScore();
+        const chartBar = document.getElementById('performance-chart-bar');
+        chartBar.style.width = performanceScore + '%';
+        chartBar.style.background = performanceScore >= 80 ? 'var(--launch-success)' : 
+                                   performanceScore >= 60 ? 'var(--launch-delayed)' : 'var(--launch-failure)';
+        
+        requestAnimationFrame(updatePerformanceMetrics);
+      }
+      
+      updatePerformanceMetrics();
+    }
+
+    function updateMetricDisplay(elementId, value, status) {
+      const element = document.getElementById(elementId);
+      if (element) {
+        element.textContent = value;
+        element.className = `metric-value ${status}`;
+      }
+    }
+
+    function calculatePerformanceScore() {
+      const metrics = performanceAnalyticsManager.getMetricsSummary();
+      let score = 100;
+      
+      // Deduct points for poor performance
+      if (metrics['countdown.update-duration']?.avg > 16) {
+        score -= 20;
+      }
+      if (performance.memory && performance.memory.usedJSHeapSize > 50 * 1024 * 1024) {
+        score -= 15;
+      }
+      if (metrics['modal.open-duration']?.avg > 300) {
+        score -= 10;
+      }
+      
+      return Math.max(0, score);
+    }
+
+    function showAnalyticsDashboard() {
+      const report = performanceAnalyticsManager.generatePerformanceReport();
+      
+      const modal = document.createElement('div');
+      modal.className = 'analytics-dashboard-overlay';
+      modal.innerHTML = `
+        <div class="analytics-dashboard">
+          <div class="analytics-dashboard-header">
+            <h3>📊 Performance & Analytics Dashboard</h3>
+            <button class="analytics-dashboard-close" onclick="this.closest('.analytics-dashboard-overlay').remove()">&times;</button>
+          </div>
+          <div class="analytics-dashboard-body">
+            ${generateAnalyticsDashboardHTML(report)}
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+    }
+
+    function generateAnalyticsDashboardHTML(report) {
+      return `
+        <div class="analytics-grid">
+          <div class="analytics-card">
+            <h4>Session Overview</h4>
+            <div class="analytics-metric">
+              <span class="metric-name">Duration:</span>
+              <span class="metric-data">${Math.round(report.session.duration / 1000)}s</span>
+            </div>
+            <div class="analytics-metric">
+              <span class="metric-name">Interactions:</span>
+              <span class="metric-data">${report.session.interactions}</span>
+            </div>
+            <div class="analytics-metric">
+              <span class="metric-name">Features Used:</span>
+              <span class="metric-data">${report.session.featuresUsed.length}</span>
+            </div>
+          </div>
+          
+          <div class="analytics-card">
+            <h4>Performance Metrics</h4>
+            ${Object.entries(report.metrics).slice(0, 5).map(([key, data]) => `
+              <div class="analytics-metric">
+                <span class="metric-name">${key}:</span>
+                <span class="metric-data">${data.avg?.toFixed(2) || 'N/A'}ms</span>
+              </div>
+            `).join('')}
+          </div>
+          
+          <div class="analytics-card">
+            <h4>User Engagement</h4>
+            ${Object.entries(report.analytics).filter(([key]) => key.startsWith('interaction')).slice(0, 5).map(([key, data]) => `
+              <div class="analytics-metric">
+                <span class="metric-name">${key.replace('interaction.', '')}:</span>
+                <span class="metric-data">${data.count}</span>
+              </div>
+            `).join('')}
+          </div>
+          
+          <div class="analytics-card">
+            <h4>Recommendations</h4>
+            ${report.recommendations.length > 0 ? 
+              report.recommendations.map(rec => `
+                <div class="analytics-metric">
+                  <span class="metric-name">${rec.type}:</span>
+                  <span class="metric-data">${rec.priority}</span>
+                </div>
+              `).join('') : 
+              '<div class="analytics-metric"><span>No issues detected</span></div>'
+            }
+          </div>
+        </div>
+        
+        <div class="analytics-card">
+          <h4>Detailed Recommendations</h4>
+          ${report.recommendations.length > 0 ? 
+            report.recommendations.map(rec => `
+              <div style="margin-bottom: 1em; padding: 1em; background: rgba(0,51,160,0.05); border-radius: 8px;">
+                <strong>${rec.type.toUpperCase()}</strong> (${rec.priority}): ${rec.message}
+              </div>
+            `).join('') : 
+            '<p>Your application is performing well! No recommendations at this time.</p>'
+          }
+        </div>
+      `;
+    }
+
+    function showPerformanceAlert(type, message) {
+      const alert = document.createElement('div');
+      alert.className = `performance-alert ${type}`;
+      alert.innerHTML = `
+        <div class="alert-header">
+          <span>⚠️ Performance Alert</span>
+          <button class="alert-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
+        </div>
+        <div class="alert-message">${message}</div>
+      `;
+      
+      document.body.appendChild(alert);
+      
+      // Auto-remove after 5 seconds
+      setTimeout(() => {
+        if (alert.parentElement) {
+          alert.remove();
+        }
+      }, 5000);
+    }
+
+    // Initialize performance monitor
+    document.addEventListener('DOMContentLoaded', () => {
+      createPerformanceMonitor();
+      
+      // Monitor for performance issues
+      setInterval(() => {
+        const metrics = performanceAnalyticsManager.getMetricsSummary();
+        
+        if (metrics['countdown.update-duration']?.avg > 50) {
+          showPerformanceAlert('warning', 'Countdown updates are running slowly. Consider optimizing.');
+        }
+        
+        if (performance.memory && performance.memory.usedJSHeapSize > 100 * 1024 * 1024) {
+          showPerformanceAlert('critical', 'High memory usage detected. Check for memory leaks.');
+        }
+      }, 30000); // Check every 30 seconds
     });
 
     // Mobile-Specific Optimizations and Touch Interactions
