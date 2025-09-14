@@ -403,6 +403,16 @@
       50% { opacity: 0.8; }
     }
 
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes slideOutRight {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(100%); opacity: 0; }
+    }
+
     .live-indicator {
       display: flex;
       align-items: center;
@@ -475,10 +485,350 @@
       margin-top: 0.2em;
     }
 
-    /* Placeholder Content */
+    /* Controls Bar */
+    .controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5em;
+      margin-bottom: 2em;
+      padding: 1.5em;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark .controls-bar {
+      background: rgba(0, 0, 0, 0.2);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .filter-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8em;
+    }
+
+    .filter-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(0, 51, 160, 0.3);
+      color: var(--accent);
+      padding: 0.6em 1.2em;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9em;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .filter-btn:hover {
+      background: rgba(0, 51, 160, 0.1);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+      box-shadow: 0 4px 12px rgba(0, 51, 160, 0.3);
+    }
+
+    body.dark .filter-btn {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-light);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    body.dark .filter-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--text-light);
+    }
+
+    body.dark .filter-btn.active {
+      background: var(--dark-accent);
+      color: white;
+      border-color: var(--dark-accent);
+    }
+
+    .view-controls {
+      display: flex;
+      gap: 0.5em;
+    }
+
+    .view-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(0, 51, 160, 0.3);
+      color: var(--accent);
+      padding: 0.6em 1em;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9em;
+      font-weight: 500;
+    }
+
+    .view-btn:hover {
+      background: rgba(0, 51, 160, 0.1);
+      border-color: var(--accent);
+    }
+
+    .view-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    body.dark .view-btn {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-light);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    body.dark .view-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--text-light);
+    }
+
+    body.dark .view-btn.active {
+      background: var(--dark-accent);
+      color: white;
+      border-color: var(--dark-accent);
+    }
+
+    .search-controls {
+      display: flex;
+      gap: 0.5em;
+      align-items: center;
+    }
+
+    .search-input {
+      padding: 0.6em 1em;
+      border: 1px solid rgba(0, 51, 160, 0.3);
+      border-radius: 25px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--accent);
+      font-size: 0.9em;
+      min-width: 250px;
+      backdrop-filter: blur(10px);
+    }
+
+    .search-input::placeholder {
+      color: rgba(0, 51, 160, 0.6);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 0 3px rgba(0, 51, 160, 0.1);
+    }
+
+    body.dark .search-input {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-light);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    body.dark .search-input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    body.dark .search-input:focus {
+      border-color: var(--text-light);
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+    }
+
+    .search-btn {
+      background: var(--accent);
+      border: none;
+      color: white;
+      padding: 0.6em;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search-btn:hover {
+      background: var(--flag-blue);
+      transform: scale(1.1);
+    }
+
+    body.dark .search-btn {
+      background: var(--dark-accent);
+    }
+
+    body.dark .search-btn:hover {
+      background: var(--accent);
+    }
+
+    /* Launch Grid Layout */
+    .launch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 2em;
+      margin-bottom: 3em;
+    }
+
+    /* Loading Skeleton Animations */
+    .loading-skeleton {
+      background: linear-gradient(90deg, 
+        rgba(0, 51, 160, 0.1) 25%, 
+        rgba(0, 51, 160, 0.2) 50%, 
+        rgba(0, 51, 160, 0.1) 75%
+      );
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 12px;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .skeleton-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 1.5em;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    body.dark .skeleton-card {
+      background: rgba(0, 0, 0, 0.2);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .skeleton-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1em;
+    }
+
+    .skeleton-agency {
+      width: 120px;
+      height: 24px;
+    }
+
+    .skeleton-status {
+      width: 80px;
+      height: 20px;
+    }
+
+    .skeleton-mission-name {
+      width: 70%;
+      height: 28px;
+      margin-bottom: 0.8em;
+    }
+
+    .skeleton-description {
+      width: 100%;
+      height: 16px;
+      margin-bottom: 0.5em;
+    }
+
+    .skeleton-description:last-of-type {
+      width: 80%;
+    }
+
+    .skeleton-details {
+      margin: 1.5em 0;
+    }
+
+    .skeleton-detail {
+      width: 60%;
+      height: 14px;
+      margin-bottom: 0.5em;
+    }
+
+    .skeleton-countdown {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5em;
+      margin: 1.5em 0;
+    }
+
+    .skeleton-time-unit {
+      flex: 1;
+      height: 60px;
+      border-radius: 8px;
+    }
+
+    .skeleton-actions {
+      display: flex;
+      gap: 0.8em;
+      margin-top: 1.5em;
+    }
+
+    .skeleton-action {
+      flex: 1;
+      height: 36px;
+      border-radius: 8px;
+    }
+
+    /* Enhanced Dashboard Header */
+    .dashboard-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5em;
+      margin-top: 2em;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1.5em;
+      border-radius: 12px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .stat-number {
+      font-size: 2.5em;
+      font-weight: bold;
+      margin-bottom: 0.2em;
+      font-family: 'Courier New', monospace;
+    }
+
+    .stat-label {
+      font-size: 0.9em;
+      opacity: 0.8;
+    }
+
+    .stat-change {
+      font-size: 0.8em;
+      margin-top: 0.3em;
+    }
+
+    .stat-change.positive {
+      color: var(--launch-success);
+    }
+
+    .stat-change.negative {
+      color: var(--launch-failure);
+    }
+
+    .stat-change.neutral {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* Placeholder Content (Updated) */
     .placeholder-content {
       text-align: center;
-      padding: 4em 2em;
+      padding: 3em 2em;
       background: rgba(0, 51, 160, 0.05);
       border-radius: 16px;
       border: 2px dashed var(--accent);
@@ -487,15 +837,15 @@
 
     .placeholder-content h2 {
       color: var(--accent);
-      font-size: 2em;
+      font-size: 1.8em;
       margin-bottom: 1em;
     }
 
     .placeholder-content p {
       color: var(--text-light);
-      font-size: 1.1em;
+      font-size: 1em;
       max-width: 600px;
-      margin: 0 auto 2em;
+      margin: 0 auto 1.5em;
       line-height: 1.6;
     }
 
@@ -536,6 +886,46 @@
     }
 
     /* Responsive Design */
+    @media (max-width: 1200px) {
+      .launch-grid {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 1.5em;
+      }
+
+      .dashboard-stats {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1em;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .controls-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1em;
+      }
+
+      .filter-controls {
+        justify-content: center;
+      }
+
+      .view-controls {
+        justify-content: center;
+      }
+
+      .search-controls {
+        justify-content: center;
+      }
+
+      .search-input {
+        min-width: 200px;
+      }
+
+      .launch-grid {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      }
+    }
+
     @media (max-width: 768px) {
       .launch-dashboard {
         padding: 1em;
@@ -567,6 +957,14 @@
         font-size: 0.8em;
       }
 
+      .dashboard-stats {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+
+      .stat-number {
+        font-size: 2em;
+      }
+
       header {
         grid-template-columns: auto 1fr auto;
         gap: 1em;
@@ -574,6 +972,87 @@
 
       .nav-right {
         gap: 0.8em;
+      }
+
+      .launch-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5em;
+      }
+
+      .filter-controls {
+        gap: 0.5em;
+      }
+
+      .filter-btn {
+        padding: 0.5em 1em;
+        font-size: 0.85em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .launch-dashboard {
+        padding: 0.5em;
+      }
+
+      .dashboard-header {
+        padding: 1em;
+        margin-bottom: 1.5em;
+      }
+
+      .next-mission-name {
+        font-size: 1.5em;
+      }
+
+      .next-countdown {
+        gap: 0.3em;
+      }
+
+      .time-unit {
+        padding: 0.6em;
+        min-width: 50px;
+      }
+
+      .time-unit .number {
+        font-size: 1.5em;
+      }
+
+      .time-unit .label {
+        font-size: 0.7em;
+      }
+
+      .controls-bar {
+        padding: 1em;
+      }
+
+      .search-input {
+        min-width: 150px;
+        font-size: 0.85em;
+      }
+
+      .filter-controls {
+        flex-wrap: wrap;
+      }
+
+      .filter-btn {
+        padding: 0.4em 0.8em;
+        font-size: 0.8em;
+      }
+
+      .dashboard-stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.8em;
+      }
+
+      .stat-card {
+        padding: 1em;
+      }
+
+      .stat-number {
+        font-size: 1.8em;
+      }
+
+      .stat-label {
+        font-size: 0.8em;
       }
     }
   </style>
@@ -666,20 +1145,146 @@
       </div>
     </section>
 
+        <div class="dashboard-stats">
+          <div class="stat-card">
+            <div class="stat-number">12</div>
+            <div class="stat-label">Upcoming Launches</div>
+            <div class="stat-change positive">+3 this week</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">94.2%</div>
+            <div class="stat-label">Success Rate</div>
+            <div class="stat-change positive">+2.1% vs 2023</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">6</div>
+            <div class="stat-label">Active Agencies</div>
+            <div class="stat-change neutral">Same as last month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">127</div>
+            <div class="stat-label">Total This Year</div>
+            <div class="stat-change positive">+18% vs 2023</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="controls-bar">
+      <div class="filter-controls">
+        <button class="filter-btn active" data-filter="all">All Agencies</button>
+        <button class="filter-btn" data-filter="spacex">SpaceX</button>
+        <button class="filter-btn" data-filter="nasa">NASA</button>
+        <button class="filter-btn" data-filter="blue-origin">Blue Origin</button>
+        <button class="filter-btn" data-filter="esa">ESA</button>
+        <button class="filter-btn" data-filter="international">International</button>
+      </div>
+      <div class="view-controls">
+        <button class="view-btn active" data-view="upcoming">Upcoming</button>
+        <button class="view-btn" data-view="live">Live Now</button>
+        <button class="view-btn" data-view="recent">Recent</button>
+        <button class="view-btn" data-view="statistics">Statistics</button>
+      </div>
+      <div class="search-controls">
+        <input type="text" id="mission-search" placeholder="Search missions, rockets, payloads..." class="search-input">
+        <button class="search-btn" title="Search">🔍</button>
+      </div>
+    </section>
+
+    <section class="launch-grid" id="launch-grid">
+      <!-- Loading Skeleton Cards -->
+      <div class="skeleton-card">
+        <div class="skeleton-header">
+          <div class="loading-skeleton skeleton-agency"></div>
+          <div class="loading-skeleton skeleton-status"></div>
+        </div>
+        <div class="loading-skeleton skeleton-mission-name"></div>
+        <div class="loading-skeleton skeleton-description"></div>
+        <div class="loading-skeleton skeleton-description"></div>
+        <div class="skeleton-details">
+          <div class="loading-skeleton skeleton-detail"></div>
+          <div class="loading-skeleton skeleton-detail"></div>
+          <div class="loading-skeleton skeleton-detail"></div>
+        </div>
+        <div class="skeleton-countdown">
+          <div class="loading-skeleton skeleton-time-unit"></div>
+          <div class="loading-skeleton skeleton-time-unit"></div>
+          <div class="loading-skeleton skeleton-time-unit"></div>
+          <div class="loading-skeleton skeleton-time-unit"></div>
+        </div>
+        <div class="skeleton-actions">
+          <div class="loading-skeleton skeleton-action"></div>
+          <div class="loading-skeleton skeleton-action"></div>
+          <div class="loading-skeleton skeleton-action"></div>
+        </div>
+      </div>
+
+      <div class="skeleton-card">
+        <div class="skeleton-header">
+          <div class="loading-skeleton skeleton-agency"></div>
+          <div class="loading-skeleton skeleton-status"></div>
+        </div>
+        <div class="loading-skeleton skeleton-mission-name"></div>
+        <div class="loading-skeleton skeleton-description"></div>
+        <div class="loading-skeleton skeleton-description"></div>
+        <div class="skeleton-details">
+          <div class="loading-skeleton skeleton-detail"></div>
+          <div class="loading-skeleton skeleton-detail"></div>
+          <div class="loading-skeleton skeleton-detail"></div>
+        </div>
+        <div class="skeleton-countdown">
+          <div class="loading-skeleton skeleton-time-unit"></div>
+          <div class="loading-skeleton skeleton-time-unit"></div>
+          <div class="loading-skeleton skeleton-time-unit"></div>
+          <div class="loading-skeleton skeleton-time-unit"></div>
+        </div>
+        <div class="skeleton-actions">
+          <div class="loading-skeleton skeleton-action"></div>
+          <div class="loading-skeleton skeleton-action"></div>
+          <div class="loading-skeleton skeleton-action"></div>
+        </div>
+      </div>
+
+      <div class="skeleton-card">
+        <div class="skeleton-header">
+          <div class="loading-skeleton skeleton-agency"></div>
+          <div class="loading-skeleton skeleton-status"></div>
+        </div>
+        <div class="loading-skeleton skeleton-mission-name"></div>
+        <div class="loading-skeleton skeleton-description"></div>
+        <div class="loading-skeleton skeleton-description"></div>
+        <div class="skeleton-details">
+          <div class="loading-skeleton skeleton-detail"></div>
+          <div class="loading-skeleton skeleton-detail"></div>
+          <div class="loading-skeleton skeleton-detail"></div>
+        </div>
+        <div class="skeleton-countdown">
+          <div class="loading-skeleton skeleton-time-unit"></div>
+          <div class="loading-skeleton skeleton-time-unit"></div>
+          <div class="loading-skeleton skeleton-time-unit"></div>
+          <div class="loading-skeleton skeleton-time-unit"></div>
+        </div>
+        <div class="skeleton-actions">
+          <div class="loading-skeleton skeleton-action"></div>
+          <div class="loading-skeleton skeleton-action"></div>
+          <div class="loading-skeleton skeleton-action"></div>
+        </div>
+      </div>
+    </section>
+
     <div class="placeholder-content">
-      <h2>🚀 Launch Missions Coming Soon!</h2>
+      <h2>🚀 Launch Dashboard Ready!</h2>
       <p>
-        We're building an incredible launch tracking system that will provide real-time countdown timers, 
-        comprehensive mission details, and live launch updates from SpaceX, NASA, Blue Origin, and international 
-        space agencies. Get ready for the ultimate launch tracking experience!
+        The responsive launch dashboard layout is now complete with CSS Grid, loading skeletons, 
+        and mobile optimization. Ready for real launch data integration!
       </p>
       <p>
-        <strong>Features in development:</strong><br>
-        • Real-time countdown timers for upcoming launches<br>
-        • Detailed mission information and rocket specifications<br>
-        • Live launch status updates and notifications<br>
-        • Historical launch data and statistics<br>
-        • Multi-agency integration and filtering
+        <strong>Layout Features Implemented:</strong><br>
+        • Responsive 3-column grid (desktop) → 2-column (tablet) → 1-column (mobile)<br>
+        • Advanced filter and search controls with smooth animations<br>
+        • Loading skeleton animations for smooth data loading<br>
+        • Enhanced dashboard header with live statistics<br>
+        • Mobile-optimized touch-friendly interface
       </p>
     </div>
   </main>
@@ -800,13 +1405,162 @@
       });
     })();
 
+    // Filter and View Controls
+    function initializeControls() {
+      // Filter button functionality
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      filterButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+          // Remove active class from all filter buttons
+          filterButtons.forEach(b => b.classList.remove('active'));
+          // Add active class to clicked button
+          this.classList.add('active');
+          
+          const filter = this.dataset.filter;
+          console.log(`Filter selected: ${filter}`);
+          
+          // Add visual feedback
+          this.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            this.style.transform = '';
+          }, 150);
+        });
+      });
+
+      // View button functionality
+      const viewButtons = document.querySelectorAll('.view-btn');
+      viewButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+          // Remove active class from all view buttons
+          viewButtons.forEach(b => b.classList.remove('active'));
+          // Add active class to clicked button
+          this.classList.add('active');
+          
+          const view = this.dataset.view;
+          console.log(`View selected: ${view}`);
+          
+          // Add visual feedback
+          this.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            this.style.transform = '';
+          }, 150);
+        });
+      });
+
+      // Search functionality
+      const searchInput = document.getElementById('mission-search');
+      const searchBtn = document.querySelector('.search-btn');
+      
+      if (searchInput) {
+        searchInput.addEventListener('input', function() {
+          const query = this.value.trim();
+          if (query.length > 2) {
+            console.log(`Searching for: ${query}`);
+            // Add search visual feedback
+            this.style.borderColor = 'var(--launch-success)';
+            setTimeout(() => {
+              this.style.borderColor = '';
+            }, 300);
+          }
+        });
+
+        searchInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            performSearch();
+          }
+        });
+      }
+
+      if (searchBtn) {
+        searchBtn.addEventListener('click', performSearch);
+      }
+
+      function performSearch() {
+        const query = searchInput.value.trim();
+        if (query) {
+          console.log(`Performing search for: ${query}`);
+          // Add button animation
+          searchBtn.style.transform = 'scale(0.9)';
+          setTimeout(() => {
+            searchBtn.style.transform = '';
+          }, 150);
+        }
+      }
+    }
+
+    // Loading Skeleton Animation Controller
+    function animateSkeletons() {
+      const skeletons = document.querySelectorAll('.loading-skeleton');
+      skeletons.forEach((skeleton, index) => {
+        // Stagger the animation start times
+        skeleton.style.animationDelay = `${index * 0.1}s`;
+      });
+    }
+
+    // Statistics Animation
+    function animateStatistics() {
+      const statNumbers = document.querySelectorAll('.stat-number');
+      statNumbers.forEach((stat, index) => {
+        const finalValue = stat.textContent;
+        let currentValue = 0;
+        const increment = finalValue.includes('%') ? 
+          parseFloat(finalValue) / 20 : 
+          parseInt(finalValue) / 20;
+        
+        stat.textContent = '0';
+        
+        const timer = setInterval(() => {
+          currentValue += increment;
+          if (currentValue >= parseFloat(finalValue)) {
+            stat.textContent = finalValue;
+            clearInterval(timer);
+          } else {
+            stat.textContent = finalValue.includes('%') ? 
+              `${currentValue.toFixed(1)}%` : 
+              Math.floor(currentValue).toString();
+          }
+        }, 50);
+      });
+    }
+
+    // Responsive Layout Adjustments
+    function handleResponsiveLayout() {
+      function adjustLayout() {
+        const width = window.innerWidth;
+        const launchGrid = document.getElementById('launch-grid');
+        
+        if (width <= 480) {
+          // Mobile layout adjustments
+          launchGrid.style.gap = '1em';
+        } else if (width <= 768) {
+          // Tablet layout adjustments
+          launchGrid.style.gap = '1.5em';
+        } else {
+          // Desktop layout
+          launchGrid.style.gap = '2em';
+        }
+      }
+
+      // Initial adjustment
+      adjustLayout();
+      
+      // Listen for resize events
+      window.addEventListener('resize', adjustLayout);
+    }
+
     // Initialize page
     document.addEventListener('DOMContentLoaded', function() {
       updateMoonPhase();
+      initializeControls();
+      animateSkeletons();
+      handleResponsiveLayout();
+      
+      // Animate statistics after a short delay
+      setTimeout(animateStatistics, 500);
       
       // Placeholder countdown animation
       function animatePlaceholderCountdown() {
-        const timeUnits = document.querySelectorAll('.time-unit .number');
+        const timeUnits = document.querySelectorAll('.next-countdown .time-unit .number');
         timeUnits.forEach((unit, index) => {
           setTimeout(() => {
             unit.style.animation = 'pulse 1s ease-in-out';
@@ -820,7 +1574,32 @@
       // Animate placeholder countdown every 5 seconds
       setInterval(animatePlaceholderCountdown, 5000);
       
-      console.log('🚀 Launch Missions page loaded - Ready for development!');
+      // Simulate loading completion after 3 seconds
+      setTimeout(() => {
+        console.log('🚀 Launch Dashboard Layout Complete - Ready for real data!');
+        
+        // Add a subtle notification that layout is ready
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+          position: fixed;
+          top: 100px;
+          right: 20px;
+          background: var(--launch-success);
+          color: white;
+          padding: 1em 1.5em;
+          border-radius: 8px;
+          font-size: 0.9em;
+          z-index: 10000;
+          animation: slideInRight 0.3s ease;
+        `;
+        notification.textContent = '✅ Dashboard Layout Ready!';
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+          notification.style.animation = 'slideOutRight 0.3s ease';
+          setTimeout(() => notification.remove(), 300);
+        }, 3000);
+      }, 3000);
     });
   </script>
 </body>
