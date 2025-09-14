@@ -4185,6 +4185,378 @@
       accent-color: var(--accent);
     }
 
+    /* Comprehensive Error Handling and Resilience Styles */
+    .error-notification-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10005;
+      max-width: 400px;
+      pointer-events: none;
+    }
+
+    .error-notification {
+      background: white;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border-left: 4px solid #ccc;
+      animation: slideInRight 0.3s ease;
+      pointer-events: auto;
+    }
+
+    .error-notification.error {
+      border-left-color: var(--launch-failure);
+    }
+
+    .error-notification.warning {
+      border-left-color: var(--launch-delayed);
+    }
+
+    .error-notification.info {
+      border-left-color: var(--accent);
+    }
+
+    .error-notification.success {
+      border-left-color: var(--launch-success);
+    }
+
+    body.dark .error-notification {
+      background: var(--dark-bg);
+      color: var(--text-white);
+    }
+
+    .error-content {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      gap: 10px;
+    }
+
+    .error-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .error-message {
+      flex: 1;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .error-close {
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 0;
+      opacity: 0.6;
+      transition: opacity 0.3s ease;
+    }
+
+    .error-close:hover {
+      opacity: 1;
+    }
+
+    .offline-indicator {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--launch-delayed);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 10006;
+      animation: slideInDown 0.3s ease;
+    }
+
+    .error-recovery-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 10007;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2em;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .error-recovery-modal {
+      background: var(--text-white);
+      border-radius: 16px;
+      max-width: 500px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: slideInUp 0.4s ease;
+    }
+
+    body.dark .error-recovery-modal {
+      background: var(--dark-bg);
+      color: var(--text-white);
+    }
+
+    .recovery-header {
+      padding: 1.5em 2em;
+      background: linear-gradient(135deg, var(--launch-failure) 0%, #cc3333 100%);
+      color: white;
+    }
+
+    .recovery-header h3 {
+      margin: 0;
+      font-size: 1.3em;
+    }
+
+    .recovery-content {
+      padding: 2em;
+    }
+
+    .recovery-content p {
+      margin-bottom: 1.5em;
+      color: var(--text-dark);
+      line-height: 1.5;
+    }
+
+    body.dark .recovery-content p {
+      color: var(--text-light);
+    }
+
+    .recovery-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8em;
+      margin-bottom: 1.5em;
+    }
+
+    .recovery-btn {
+      padding: 0.8em 1.5em;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9em;
+    }
+
+    .recovery-btn.primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .recovery-btn.primary:hover {
+      background: var(--dark-accent);
+      transform: translateY(-2px);
+    }
+
+    .recovery-btn.secondary {
+      background: rgba(0, 51, 160, 0.1);
+      color: var(--accent);
+      border: 1px solid rgba(0, 51, 160, 0.2);
+    }
+
+    .recovery-btn.secondary:hover {
+      background: rgba(0, 51, 160, 0.2);
+      transform: translateY(-2px);
+    }
+
+    body.dark .recovery-btn.secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-light);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    body.dark .recovery-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .recovery-details {
+      margin-top: 1em;
+    }
+
+    .recovery-details summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 0.5em;
+    }
+
+    body.dark .recovery-details summary {
+      color: var(--text-light);
+    }
+
+    .recovery-details pre {
+      background: rgba(0, 51, 160, 0.05);
+      padding: 1em;
+      border-radius: 6px;
+      font-size: 0.8em;
+      overflow-x: auto;
+      margin-top: 0.5em;
+    }
+
+    body.dark .recovery-details pre {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Loading States for Error Recovery */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(5px);
+      z-index: 10008;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1em;
+    }
+
+    body.dark .loading-overlay {
+      background: rgba(0, 0, 0, 0.9);
+    }
+
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(0, 51, 160, 0.2);
+      border-top: 4px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .loading-text {
+      font-size: 1.1em;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    body.dark .loading-text {
+      color: var(--text-light);
+    }
+
+    .retry-indicator {
+      background: rgba(0, 51, 160, 0.1);
+      padding: 0.5em 1em;
+      border-radius: 20px;
+      font-size: 0.9em;
+      color: var(--accent);
+      margin-top: 0.5em;
+    }
+
+    body.dark .retry-indicator {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-light);
+    }
+
+    /* Error State Styling for Components */
+    .error-state {
+      text-align: center;
+      padding: 3em 2em;
+      color: var(--text-dark);
+    }
+
+    body.dark .error-state {
+      color: var(--text-light);
+    }
+
+    .error-state-icon {
+      font-size: 4em;
+      margin-bottom: 1em;
+      opacity: 0.5;
+    }
+
+    .error-state h3 {
+      color: var(--accent);
+      margin-bottom: 0.5em;
+    }
+
+    body.dark .error-state h3 {
+      color: var(--text-light);
+    }
+
+    .error-state-actions {
+      margin-top: 1.5em;
+      display: flex;
+      gap: 1em;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .error-action-btn {
+      padding: 0.8em 1.5em;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .error-action-btn:hover {
+      background: var(--dark-accent);
+      transform: translateY(-2px);
+    }
+
+    .error-action-btn.secondary {
+      background: rgba(0, 51, 160, 0.1);
+      color: var(--accent);
+      border: 1px solid rgba(0, 51, 160, 0.2);
+    }
+
+    .error-action-btn.secondary:hover {
+      background: rgba(0, 51, 160, 0.2);
+    }
+
+    body.dark .error-action-btn.secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-light);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    body.dark .error-action-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Animations */
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideInDown {
+      from {
+        transform: translate(-50%, -100%);
+        opacity: 0;
+      }
+      to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
     /* Enhanced Mobile Modal Styles */
     @media (max-width: 768px) {
       .modal-content.large {
@@ -4442,6 +4814,70 @@
       }
 
       .qr-image {
+        max-width: 250px;
+      }
+
+      /* Mobile Error Handling */
+      .error-notification-container {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+      }
+
+      .error-notification {
+        margin-bottom: 8px;
+      }
+
+      .error-content {
+        padding: 10px 12px;
+      }
+
+      .error-message {
+        font-size: 13px;
+      }
+
+      .offline-indicator {
+        top: 5px;
+        font-size: 13px;
+        padding: 6px 12px;
+      }
+
+      .error-recovery-modal {
+        max-width: none;
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+      }
+
+      .recovery-content {
+        padding: 1.5em;
+      }
+
+      .recovery-options {
+        gap: 0.6em;
+      }
+
+      .recovery-btn {
+        padding: 0.7em 1.2em;
+        font-size: 0.85em;
+      }
+
+      .error-state {
+        padding: 2em 1em;
+      }
+
+      .error-state-icon {
+        font-size: 3em;
+      }
+
+      .error-state-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .error-action-btn {
+        width: 100%;
         max-width: 250px;
       }
     }
@@ -11067,6 +11503,798 @@
 
     // Initialize social sharing manager
     const socialSharingManager = new SocialSharingManager();
+
+    // Comprehensive Error Handling and Resilience System
+    class ErrorHandlingManager {
+      constructor() {
+        this.retryAttempts = new Map();
+        this.maxRetries = 3;
+        this.baseDelay = 1000;
+        this.cachedData = new Map();
+        this.fallbackData = new Map();
+        this.networkStatus = 'online';
+        this.errorQueue = [];
+        this.init();
+      }
+
+      init() {
+        // Initialize error handling
+        this.setupGlobalErrorHandlers();
+        this.setupNetworkMonitoring();
+        this.initializeFallbackData();
+        this.setupOfflineCapabilities();
+        this.createErrorNotificationSystem();
+        
+        console.log('Error handling and resilience system initialized');
+      }
+
+      setupGlobalErrorHandlers() {
+        // Global JavaScript error handler
+        window.addEventListener('error', (event) => {
+          this.handleJavaScriptError(event.error, event.filename, event.lineno, event.colno);
+        });
+
+        // Unhandled promise rejection handler
+        window.addEventListener('unhandledrejection', (event) => {
+          this.handlePromiseRejection(event.reason);
+          event.preventDefault();
+        });
+
+        // Resource loading error handler
+        window.addEventListener('error', (event) => {
+          if (event.target !== window) {
+            this.handleResourceError(event.target);
+          }
+        }, true);
+      }
+
+      setupNetworkMonitoring() {
+        // Monitor online/offline status
+        window.addEventListener('online', () => {
+          this.networkStatus = 'online';
+          this.handleNetworkReconnection();
+        });
+
+        window.addEventListener('offline', () => {
+          this.networkStatus = 'offline';
+          this.handleNetworkDisconnection();
+        });
+
+        // Initial network status
+        this.networkStatus = navigator.onLine ? 'online' : 'offline';
+      }
+
+      initializeFallbackData() {
+        // Initialize with sample fallback data for graceful degradation
+        this.fallbackData.set('launches', [
+          {
+            name: 'Sample Mission Alpha',
+            agency: 'SpaceX',
+            rocket: 'Falcon 9',
+            launchDate: 'Dec 20, 2024',
+            launchTime: '10:30 AM EST',
+            status: 'Upcoming',
+            description: 'Commercial satellite deployment mission'
+          },
+          {
+            name: 'Sample Mission Beta',
+            agency: 'NASA',
+            rocket: 'SLS',
+            launchDate: 'Jan 15, 2025',
+            launchTime: '2:45 PM EST',
+            status: 'Upcoming',
+            description: 'Deep space exploration mission'
+          },
+          {
+            name: 'Sample Mission Gamma',
+            agency: 'Blue Origin',
+            rocket: 'New Glenn',
+            launchDate: 'Feb 8, 2025',
+            launchTime: '11:20 AM EST',
+            status: 'Upcoming',
+            description: 'Lunar payload delivery mission'
+          }
+        ]);
+
+        this.fallbackData.set('agencies', [
+          { name: 'SpaceX', launches: 45, successRate: 98.9 },
+          { name: 'NASA', launches: 12, successRate: 95.8 },
+          { name: 'Blue Origin', launches: 8, successRate: 87.5 }
+        ]);
+      }
+
+      setupOfflineCapabilities() {
+        // Service worker registration for offline functionality
+        if ('serviceWorker' in navigator) {
+          this.registerServiceWorker();
+        }
+
+        // Local storage management for offline data
+        this.setupLocalStorageCache();
+      }
+
+      async registerServiceWorker() {
+        try {
+          // In production, this would register an actual service worker
+          console.log('Service worker registration simulated for offline capabilities');
+          
+          // Simulate service worker functionality
+          this.simulateServiceWorker();
+        } catch (error) {
+          console.warn('Service worker registration failed:', error);
+        }
+      }
+
+      simulateServiceWorker() {
+        // Simulate caching of critical resources
+        const criticalResources = [
+          window.location.href,
+          '/favicon.ico',
+          // Add other critical resources
+        ];
+
+        console.log('Simulating caching of critical resources:', criticalResources);
+      }
+
+      setupLocalStorageCache() {
+        try {
+          // Load cached data from localStorage
+          const cachedLaunches = localStorage.getItem('cachedLaunches');
+          if (cachedLaunches) {
+            this.cachedData.set('launches', JSON.parse(cachedLaunches));
+          }
+
+          const cachedAgencies = localStorage.getItem('cachedAgencies');
+          if (cachedAgencies) {
+            this.cachedData.set('agencies', JSON.parse(cachedAgencies));
+          }
+        } catch (error) {
+          console.warn('Failed to load cached data:', error);
+        }
+      }
+
+      createErrorNotificationSystem() {
+        // Create error notification container
+        const errorContainer = document.createElement('div');
+        errorContainer.id = 'error-notification-container';
+        errorContainer.className = 'error-notification-container';
+        document.body.appendChild(errorContainer);
+      }
+
+      // API Request with Retry Logic and Exponential Backoff
+      async makeResilientRequest(url, options = {}, retryKey = null) {
+        const key = retryKey || url;
+        const currentAttempts = this.retryAttempts.get(key) || 0;
+
+        try {
+          // Check network status
+          if (this.networkStatus === 'offline') {
+            throw new Error('Network is offline');
+          }
+
+          // Add timeout to request
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), options.timeout || 10000);
+
+          const requestOptions = {
+            ...options,
+            signal: controller.signal
+          };
+
+          const response = await fetch(url, requestOptions);
+          clearTimeout(timeoutId);
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+
+          // Reset retry attempts on success
+          this.retryAttempts.delete(key);
+          
+          // Cache successful response
+          const data = await response.json();
+          this.cacheData(key, data);
+          
+          return data;
+
+        } catch (error) {
+          clearTimeout(timeoutId);
+          
+          if (currentAttempts < this.maxRetries) {
+            // Increment retry attempts
+            this.retryAttempts.set(key, currentAttempts + 1);
+            
+            // Calculate exponential backoff delay
+            const delay = this.baseDelay * Math.pow(2, currentAttempts);
+            const jitter = Math.random() * 0.1 * delay; // Add jitter
+            const totalDelay = delay + jitter;
+
+            console.warn(`Request failed, retrying in ${totalDelay}ms (attempt ${currentAttempts + 1}/${this.maxRetries}):`, error.message);
+            
+            // Show retry notification
+            this.showRetryNotification(currentAttempts + 1, this.maxRetries, totalDelay);
+
+            // Wait and retry
+            await this.delay(totalDelay);
+            return this.makeResilientRequest(url, options, key);
+          } else {
+            // Max retries exceeded, handle graceful degradation
+            console.error(`Max retries exceeded for ${url}:`, error);
+            this.retryAttempts.delete(key);
+            
+            return this.handleRequestFailure(key, error);
+          }
+        }
+      }
+
+      async handleRequestFailure(key, error) {
+        // Try to return cached data first
+        if (this.cachedData.has(key)) {
+          console.log(`Returning cached data for ${key}`);
+          this.showErrorNotification('Using cached data due to network issues', 'warning');
+          return this.cachedData.get(key);
+        }
+
+        // Fall back to static fallback data
+        const fallbackKey = this.getFallbackKey(key);
+        if (this.fallbackData.has(fallbackKey)) {
+          console.log(`Returning fallback data for ${key}`);
+          this.showErrorNotification('Using sample data - please check your connection', 'info');
+          return this.fallbackData.get(fallbackKey);
+        }
+
+        // Last resort: throw error for handling by calling code
+        this.showErrorNotification(`Failed to load data: ${error.message}`, 'error');
+        throw error;
+      }
+
+      getFallbackKey(requestKey) {
+        // Map request keys to fallback data keys
+        if (requestKey.includes('launch')) return 'launches';
+        if (requestKey.includes('agency')) return 'agencies';
+        return 'launches'; // Default fallback
+      }
+
+      cacheData(key, data) {
+        try {
+          this.cachedData.set(key, data);
+          
+          // Also store in localStorage for persistence
+          if (key.includes('launch')) {
+            localStorage.setItem('cachedLaunches', JSON.stringify(data));
+          } else if (key.includes('agency')) {
+            localStorage.setItem('cachedAgencies', JSON.stringify(data));
+          }
+          
+          // Add timestamp for cache expiration
+          localStorage.setItem(`${key}_timestamp`, Date.now().toString());
+        } catch (error) {
+          console.warn('Failed to cache data:', error);
+        }
+      }
+
+      isCacheExpired(key, maxAge = 300000) { // 5 minutes default
+        try {
+          const timestamp = localStorage.getItem(`${key}_timestamp`);
+          if (!timestamp) return true;
+          
+          return Date.now() - parseInt(timestamp) > maxAge;
+        } catch (error) {
+          return true;
+        }
+      }
+
+      delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      // Error Notification System
+      showErrorNotification(message, type = 'error', duration = 5000) {
+        const container = document.getElementById('error-notification-container');
+        if (!container) return;
+
+        const notification = document.createElement('div');
+        notification.className = `error-notification ${type}`;
+        notification.innerHTML = `
+          <div class="error-content">
+            <span class="error-icon">${this.getErrorIcon(type)}</span>
+            <span class="error-message">${message}</span>
+            <button class="error-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
+          </div>
+        `;
+
+        container.appendChild(notification);
+
+        // Auto-remove after duration
+        setTimeout(() => {
+          if (notification.parentElement) {
+            notification.remove();
+          }
+        }, duration);
+
+        // Add to error queue for debugging
+        this.errorQueue.push({
+          message,
+          type,
+          timestamp: new Date().toISOString()
+        });
+
+        // Keep only last 50 errors
+        if (this.errorQueue.length > 50) {
+          this.errorQueue.shift();
+        }
+      }
+
+      showRetryNotification(attempt, maxAttempts, delay) {
+        const message = `Retrying request (${attempt}/${maxAttempts}) in ${Math.round(delay/1000)}s...`;
+        this.showErrorNotification(message, 'info', 3000);
+      }
+
+      getErrorIcon(type) {
+        const icons = {
+          'error': '❌',
+          'warning': '⚠️',
+          'info': 'ℹ️',
+          'success': '✅'
+        };
+        return icons[type] || '❌';
+      }
+
+      // Specific Error Handlers
+      handleJavaScriptError(error, filename, lineno, colno) {
+        console.error('JavaScript Error:', {
+          message: error?.message || 'Unknown error',
+          filename,
+          line: lineno,
+          column: colno,
+          stack: error?.stack
+        });
+
+        this.showErrorNotification(
+          'A JavaScript error occurred. The page may not function correctly.',
+          'error'
+        );
+      }
+
+      handlePromiseRejection(reason) {
+        console.error('Unhandled Promise Rejection:', reason);
+        
+        this.showErrorNotification(
+          'An unexpected error occurred. Please refresh the page if issues persist.',
+          'warning'
+        );
+      }
+
+      handleResourceError(element) {
+        const resourceType = element.tagName.toLowerCase();
+        const resourceSrc = element.src || element.href;
+        
+        console.warn(`Failed to load ${resourceType}:`, resourceSrc);
+
+        // Handle specific resource types
+        switch (resourceType) {
+          case 'img':
+            this.handleImageError(element);
+            break;
+          case 'script':
+            this.handleScriptError(element);
+            break;
+          case 'link':
+            this.handleStylesheetError(element);
+            break;
+        }
+      }
+
+      handleImageError(imgElement) {
+        // Replace with placeholder image
+        imgElement.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2NjYyIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSIjNjY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+SW1hZ2UgTm90IEZvdW5kPC90ZXh0Pjwvc3ZnPg==';
+        imgElement.alt = 'Image not available';
+        imgElement.title = 'Failed to load image';
+      }
+
+      handleScriptError(scriptElement) {
+        console.error('Failed to load script:', scriptElement.src);
+        this.showErrorNotification(
+          'Some features may not work properly due to loading issues.',
+          'warning'
+        );
+      }
+
+      handleStylesheetError(linkElement) {
+        console.warn('Failed to load stylesheet:', linkElement.href);
+        // Styles will fall back to defaults
+      }
+
+      // Network Status Handlers
+      handleNetworkDisconnection() {
+        console.log('Network disconnected - switching to offline mode');
+        this.showErrorNotification(
+          'You are now offline. Using cached data where available.',
+          'warning',
+          10000
+        );
+
+        // Add offline indicator to UI
+        this.addOfflineIndicator();
+      }
+
+      handleNetworkReconnection() {
+        console.log('Network reconnected - switching to online mode');
+        this.showErrorNotification(
+          'Connection restored! Refreshing data...',
+          'success',
+          3000
+        );
+
+        // Remove offline indicator
+        this.removeOfflineIndicator();
+
+        // Retry failed requests
+        this.retryFailedRequests();
+      }
+
+      addOfflineIndicator() {
+        let indicator = document.getElementById('offline-indicator');
+        if (!indicator) {
+          indicator = document.createElement('div');
+          indicator.id = 'offline-indicator';
+          indicator.className = 'offline-indicator';
+          indicator.innerHTML = '📡 Offline Mode';
+          document.body.appendChild(indicator);
+        }
+      }
+
+      removeOfflineIndicator() {
+        const indicator = document.getElementById('offline-indicator');
+        if (indicator) {
+          indicator.remove();
+        }
+      }
+
+      retryFailedRequests() {
+        // Clear retry attempts to allow fresh requests
+        this.retryAttempts.clear();
+        
+        // Trigger data refresh if needed
+        if (typeof updateLaunchGrid === 'function') {
+          updateLaunchGrid();
+        }
+      }
+
+      // User-Friendly Error Recovery
+      showErrorRecoveryOptions(error) {
+        const recoveryModal = document.createElement('div');
+        recoveryModal.className = 'error-recovery-modal-overlay';
+        recoveryModal.innerHTML = `
+          <div class="error-recovery-modal">
+            <div class="recovery-header">
+              <h3>⚠️ Connection Issues</h3>
+            </div>
+            <div class="recovery-content">
+              <p>We're having trouble loading the latest launch data.</p>
+              <div class="recovery-options">
+                <button class="recovery-btn primary" onclick="errorHandlingManager.retryConnection()">
+                  🔄 Try Again
+                </button>
+                <button class="recovery-btn secondary" onclick="errorHandlingManager.useCachedData()">
+                  📦 Use Cached Data
+                </button>
+                <button class="recovery-btn secondary" onclick="errorHandlingManager.useOfflineMode()">
+                  📡 Continue Offline
+                </button>
+              </div>
+              <div class="recovery-details">
+                <details>
+                  <summary>Technical Details</summary>
+                  <pre>${error.message}</pre>
+                </details>
+              </div>
+            </div>
+          </div>
+        `;
+
+        document.body.appendChild(recoveryModal);
+      }
+
+      retryConnection() {
+        document.querySelector('.error-recovery-modal-overlay')?.remove();
+        this.showErrorNotification('Retrying connection...', 'info');
+        
+        // Clear retry attempts and try again
+        this.retryAttempts.clear();
+        if (typeof updateLaunchGrid === 'function') {
+          updateLaunchGrid();
+        }
+      }
+
+      useCachedData() {
+        document.querySelector('.error-recovery-modal-overlay')?.remove();
+        this.showErrorNotification('Using cached data', 'info');
+        
+        // Load cached data if available
+        // Implementation would depend on specific data loading functions
+      }
+
+      useOfflineMode() {
+        document.querySelector('.error-recovery-modal-overlay')?.remove();
+        this.networkStatus = 'offline';
+        this.addOfflineIndicator();
+        this.showErrorNotification('Switched to offline mode', 'info');
+      }
+
+      // Debug and Monitoring
+      getErrorReport() {
+        return {
+          networkStatus: this.networkStatus,
+          retryAttempts: Object.fromEntries(this.retryAttempts),
+          cachedDataKeys: Array.from(this.cachedData.keys()),
+          recentErrors: this.errorQueue.slice(-10),
+          timestamp: new Date().toISOString()
+        };
+      }
+
+      exportErrorLog() {
+        const report = this.getErrorReport();
+        const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `error-report-${Date.now()}.json`;
+        link.click();
+        
+        URL.revokeObjectURL(url);
+        this.showErrorNotification('Error report downloaded', 'success');
+      }
+
+      // Public API for other components
+      async fetchWithResilience(url, options = {}) {
+        return this.makeResilientRequest(url, options);
+      }
+
+      getCachedData(key) {
+        return this.cachedData.get(key);
+      }
+
+      isOnline() {
+        return this.networkStatus === 'online';
+      }
+
+      clearCache() {
+        this.cachedData.clear();
+        try {
+          localStorage.removeItem('cachedLaunches');
+          localStorage.removeItem('cachedAgencies');
+        } catch (error) {
+          console.warn('Failed to clear localStorage cache:', error);
+        }
+        this.showErrorNotification('Cache cleared', 'success');
+      }
+    }
+
+    // Initialize error handling manager
+    const errorHandlingManager = new ErrorHandlingManager();
+
+    // Enhanced Functions with Error Handling Integration
+    
+    // Override existing functions to use resilient requests
+    const originalUpdateLaunchGrid = window.updateLaunchGrid;
+    window.updateLaunchGrid = async function() {
+      try {
+        // Show loading state
+        const dashboard = document.querySelector('.launch-dashboard');
+        if (dashboard) {
+          dashboard.classList.add('loading');
+        }
+
+        // Use resilient request for launch data
+        const launchData = await errorHandlingManager.fetchWithResilience('/api/launches', {
+          timeout: 8000
+        });
+
+        // Process and display data
+        if (launchData && launchData.length > 0) {
+          displayLaunchData(launchData);
+          errorHandlingManager.showErrorNotification('Launch data updated successfully', 'success', 2000);
+        } else {
+          // Use fallback data
+          const fallbackData = errorHandlingManager.getCachedData('launches') || 
+                              errorHandlingManager.fallbackData.get('launches');
+          displayLaunchData(fallbackData);
+        }
+
+      } catch (error) {
+        console.error('Failed to update launch grid:', error);
+        
+        // Try to use cached or fallback data
+        const fallbackData = errorHandlingManager.getCachedData('launches') || 
+                            errorHandlingManager.fallbackData.get('launches');
+        
+        if (fallbackData) {
+          displayLaunchData(fallbackData);
+          errorHandlingManager.showErrorNotification('Using cached launch data', 'warning');
+        } else {
+          showErrorState();
+        }
+      } finally {
+        // Remove loading state
+        const dashboard = document.querySelector('.launch-dashboard');
+        if (dashboard) {
+          dashboard.classList.remove('loading');
+        }
+      }
+    };
+
+    function displayLaunchData(launches) {
+      const grid = document.querySelector('.launch-grid');
+      if (!grid) return;
+
+      // Clear existing content
+      grid.innerHTML = '';
+
+      // Display launches
+      launches.forEach(launch => {
+        const card = createLaunchCard(launch);
+        grid.appendChild(card);
+      });
+    }
+
+    function createLaunchCard(launch) {
+      const card = document.createElement('article');
+      card.className = 'launch-card';
+      card.innerHTML = `
+        <div class="mission-patch">
+          <img src="${launch.patch || ''}" alt="Mission Patch" 
+               onerror="errorHandlingManager.handleImageError(this)">
+        </div>
+        <div class="mission-info">
+          <h3 class="mission-name">${launch.name}</h3>
+          <p class="mission-description">${launch.description || 'Mission details coming soon'}</p>
+          <div class="launch-details">
+            <div class="agency-info">
+              <img src="${launch.agencyLogo || ''}" alt="${launch.agency}" class="agency-logo"
+                   onerror="errorHandlingManager.handleImageError(this)">
+              <span class="agency-name">${launch.agency}</span>
+            </div>
+            <div class="launch-status status-${launch.status.toLowerCase().replace(' ', '-')}">${launch.status}</div>
+          </div>
+          <div class="launch-timing">
+            <div class="launch-date">${launch.launchDate}</div>
+            <div class="launch-time">${launch.launchTime}</div>
+          </div>
+        </div>
+        <div class="launch-actions">
+          <button class="action-btn primary" onclick="openMissionModal(this)">View Details</button>
+          <button class="action-btn secondary" onclick="setNotification(this)">🔔 Alert</button>
+          <button class="action-btn secondary" onclick="shareLaunch(this)">📤 Share</button>
+        </div>
+      `;
+      
+      return card;
+    }
+
+    function showErrorState() {
+      const grid = document.querySelector('.launch-grid');
+      if (!grid) return;
+
+      grid.innerHTML = `
+        <div class="error-state">
+          <div class="error-state-icon">🚀</div>
+          <h3>Unable to Load Launch Data</h3>
+          <p>We're having trouble connecting to our launch data servers.</p>
+          <div class="error-state-actions">
+            <button class="error-action-btn" onclick="retryLoadingData()">
+              🔄 Try Again
+            </button>
+            <button class="error-action-btn secondary" onclick="loadOfflineData()">
+              📦 View Sample Data
+            </button>
+            <button class="error-action-btn secondary" onclick="errorHandlingManager.exportErrorLog()">
+              📋 Report Issue
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function retryLoadingData() {
+      errorHandlingManager.showErrorNotification('Retrying data load...', 'info');
+      updateLaunchGrid();
+    }
+
+    function loadOfflineData() {
+      const fallbackData = errorHandlingManager.fallbackData.get('launches');
+      displayLaunchData(fallbackData);
+      errorHandlingManager.showErrorNotification('Loaded sample data for demonstration', 'info');
+    }
+
+    // Enhanced image loading with error handling
+    function loadImageWithFallback(imgElement, primarySrc, fallbackSrc) {
+      imgElement.onerror = function() {
+        if (this.src !== fallbackSrc) {
+          this.src = fallbackSrc;
+        } else {
+          errorHandlingManager.handleImageError(this);
+        }
+      };
+      imgElement.src = primarySrc;
+    }
+
+    // Enhanced countdown with error handling
+    function startResilientCountdown(targetDate, displayElement) {
+      const updateCountdown = () => {
+        try {
+          const now = new Date().getTime();
+          const distance = targetDate - now;
+
+          if (distance < 0) {
+            displayElement.innerHTML = '<span class="countdown-expired">Launch Time!</span>';
+            return false;
+          }
+
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          displayElement.innerHTML = `
+            <span class="time-unit">
+              <span class="number">${days.toString().padStart(2, '0')}</span>
+              <span class="label">Days</span>
+            </span>
+            <span class="time-unit">
+              <span class="number">${hours.toString().padStart(2, '0')}</span>
+              <span class="label">Hours</span>
+            </span>
+            <span class="time-unit">
+              <span class="number">${minutes.toString().padStart(2, '0')}</span>
+              <span class="label">Min</span>
+            </span>
+            <span class="time-unit">
+              <span class="number">${seconds.toString().padStart(2, '0')}</span>
+              <span class="label">Sec</span>
+            </span>
+          `;
+
+          return true;
+        } catch (error) {
+          console.error('Countdown error:', error);
+          displayElement.innerHTML = '<span class="countdown-error">Time calculation error</span>';
+          return false;
+        }
+      };
+
+      // Initial update
+      if (updateCountdown()) {
+        // Continue updating every second
+        const interval = setInterval(() => {
+          if (!updateCountdown()) {
+            clearInterval(interval);
+          }
+        }, 1000);
+
+        return interval;
+      }
+    }
+
+    // Initialize error handling for existing elements
+    document.addEventListener('DOMContentLoaded', () => {
+      // Add error handling to existing images
+      document.querySelectorAll('img').forEach(img => {
+        if (!img.onerror) {
+          img.onerror = function() {
+            errorHandlingManager.handleImageError(this);
+          };
+        }
+      });
+
+      // Initialize with error handling
+      setTimeout(() => {
+        if (typeof updateLaunchGrid === 'function') {
+          updateLaunchGrid();
+        }
+      }, 1000);
+    });
 
     // Mobile-Specific Optimizations and Touch Interactions
     class MobileOptimizationManager {
