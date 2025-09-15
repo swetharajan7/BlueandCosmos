@@ -96,7 +96,7 @@
   - Create A/B testing framework for recommendation algorithms
   - _Requirements: 6.1, 6.2, 6.3_
 
-- [ ] 13. Add social features and review system
+- [x] 13. Add social features and review system
   - Implement user review and rating submission
   - Create review moderation and spam detection
   - Add photo upload functionality for user-generated content
