@@ -80,7 +80,7 @@
   - Create notification settings for events and recommendations
   - _Requirements: 6.1, 6.2, 6.3, 6.4_
 
-- [ ] 11. Build itinerary planning and optimization system
+- [x] 11. Build itinerary planning and optimization system
   - Create drag-and-drop itinerary builder interface
   - Implement schedule optimization based on location and hours
   - Add travel time calculations between experiences
