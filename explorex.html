@@ -460,11 +460,174 @@
       border: 1px solid var(--border-color);
     }
 
-    .search-form {
+    .travel-search-form {
       display: grid;
       grid-template-columns: 1fr 1fr auto;
       gap: 1rem;
       align-items: end;
+    }
+
+    .form-group {
+      position: relative;
+    }
+
+    .location-suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: var(--shadow-lg);
+      z-index: 100;
+      max-height: 200px;
+      overflow-y: auto;
+      display: none;
+    }
+
+    .location-suggestion {
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border-color);
+      transition: background-color 0.2s ease;
+    }
+
+    .location-suggestion:hover {
+      background: var(--bg-secondary);
+    }
+
+    .location-suggestion:last-child {
+      border-bottom: none;
+    }
+
+    .recommendations-section {
+      margin-top: 3rem;
+      padding: 2rem 0;
+    }
+
+    .recommendations-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 2rem;
+      text-align: left;
+    }
+
+    .recommendations-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .experience-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .experience-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .experience-type {
+      display: inline-block;
+      background: var(--explorex-gradient);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+
+    .experience-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .experience-subtitle {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+
+    .experience-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .experience-detail {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .experience-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .experience-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .experience-btn-primary {
+      background: var(--explorex-gradient);
+      color: white;
+      border: none;
+    }
+
+    .experience-btn-secondary {
+      background: transparent;
+      color: var(--explorex-secondary);
+      border: 1px solid var(--explorex-secondary);
+    }
+
+    .experience-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .loading-section {
+      text-align: center;
+      padding: 3rem 0;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--border-color);
+      border-top: 4px solid var(--explorex-secondary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     .form-group {
@@ -596,7 +759,7 @@
         font-size: 2.5rem;
       }
 
-      .search-form {
+      .travel-search-form {
         grid-template-columns: 1fr;
         gap: 1.5rem;
       }
@@ -854,50 +1017,56 @@
         </div>
       </section>
 
-      <!-- Advanced Search Interface -->
+      <!-- Travel Date & Location Search Interface -->
       <section class="search-container">
-        <form class="search-form" id="exploreXSearch">
-          <div class="search-input-wrapper">
-            <span class="search-input-icon">🔍</span>
+        <h2 style="text-align: center; margin-bottom: 2rem; color: var(--text-primary); font-size: 1.5rem;">Find space-related experiences</h2>
+        
+        <form class="travel-search-form" id="travelSearchForm">
+          <div class="form-group">
+            <label class="form-label" for="travelDate">Date</label>
             <input 
-              type="text" 
-              id="searchInput" 
-              class="search-input" 
-              placeholder="Search space experiences, locations, or attractions..."
-              autocomplete="off"
+              type="date" 
+              id="travelDate" 
+              class="form-input" 
+              required
+              min="2025-01-01"
+              max="2030-12-31"
             />
           </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="travelLocation">Location</label>
+            <input 
+              type="text" 
+              id="travelLocation" 
+              class="form-input" 
+              placeholder="New York, NY"
+              required
+              autocomplete="off"
+            />
+            <div class="location-suggestions" id="locationSuggestions"></div>
+          </div>
+          
           <button type="submit" class="search-button" id="searchButton">
-            🚀 Explore
+            <span class="search-button-text">Search</span>
+            <span class="search-button-icon">🔍</span>
           </button>
         </form>
+      </section>
 
-        <!-- Live Data Status Panel -->
-        <div class="live-data-status" id="liveDataStatus" style="display: none;">
-          <div class="status-header">
-            <span class="status-icon">🔴</span>
-            <span class="status-title">Live Data Active</span>
-            <button class="status-toggle" onclick="this.toggleDataStatus()">ℹ️</button>
-          </div>
-          <div class="status-details" id="statusDetails" style="display: none;">
-            <div class="status-item">
-              <span class="status-label">Location Services:</span>
-              <span class="status-value" id="locationStatus">Checking...</span>
-            </div>
-            <div class="status-item">
-              <span class="status-label">Weather Data:</span>
-              <span class="status-value" id="weatherStatus">Checking...</span>
-            </div>
-            <div class="status-item">
-              <span class="status-label">ISS Tracking:</span>
-              <span class="status-value" id="issStatus">Checking...</span>
-            </div>
-            <div class="status-item">
-              <span class="status-label">Astronomy Data:</span>
-              <span class="status-value" id="astronomyStatus">Checking...</span>
-            </div>
-          </div>
+      <!-- Recommended Experiences Section -->
+      <section class="recommendations-section" id="recommendationsSection" style="display: none;">
+        <h2 class="recommendations-title">Recommended experiences</h2>
+        <div class="recommendations-grid" id="recommendationsGrid">
+          <!-- Recommendations will be populated here -->
         </div>
+      </section>
+
+      <!-- Loading State -->
+      <section class="loading-section" id="loadingSection" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p>Finding amazing space experiences for your trip...</p>
+      </section>
 
         <!-- Advanced Filters -->
         <div class="filters-container" id="filtersContainer">
@@ -3997,9 +4166,361 @@
       }
     }
 
-    // Initialize application when DOM is loaded
+    // Travel Recommendation System
+    class TravelRecommendationEngine {
+      constructor() {
+        this.experiences = this.initializeExperienceDatabase();
+        this.locationSuggestions = this.initializeLocationSuggestions();
+        this.initializeEventListeners();
+      }
+
+      initializeExperienceDatabase() {
+        return {
+          'New York, NY': [
+            {
+              type: 'Observatory',
+              title: 'Hayden Planetarium',
+              subtitle: 'American Museum of Natural History',
+              details: [
+                { icon: '📍', text: 'Central Park West & 79th St' },
+                { icon: '🕒', text: 'Open 10:00 AM - 5:30 PM' },
+                { icon: '💰', text: '$28 - $35' },
+                { icon: '⭐', text: '4.6/5 (2,847 reviews)' }
+              ],
+              description: 'World-renowned planetarium with immersive space shows and the latest astronomical discoveries.',
+              website: 'https://www.amnh.org/planetarium',
+              events: ['Dark Universe Show', 'Worlds Beyond Earth', 'Cosmic Collisions']
+            },
+            {
+              type: 'Observatory',
+              title: 'Brooklyn Bridge Park Observatory',
+              subtitle: 'Amateur Astronomy Night',
+              details: [
+                { icon: '📍', text: 'Pier 1, Brooklyn Bridge Park' },
+                { icon: '🕒', text: 'Every Friday 8:00 PM - 11:00 PM' },
+                { icon: '💰', text: 'Free' },
+                { icon: '⭐', text: '4.8/5 (156 reviews)' }
+              ],
+              description: 'Free weekly stargazing sessions with telescopes provided by Brooklyn Astronomical Society.',
+              website: 'https://www.brooklynbridgepark.org/activities/astronomy',
+              events: ['Telescope Viewing', 'Constellation Tours', 'Planet Spotting']
+            }
+          ],
+          'Los Angeles, CA': [
+            {
+              type: 'Observatory',
+              title: 'Griffith Observatory',
+              subtitle: 'Iconic LA Observatory',
+              details: [
+                { icon: '📍', text: '2800 E Observatory Rd' },
+                { icon: '🕒', text: 'Tue-Fri 12:00 PM - 10:00 PM' },
+                { icon: '💰', text: 'Free (Planetarium $7)' },
+                { icon: '⭐', text: '4.5/5 (15,234 reviews)' }
+              ],
+              description: 'Historic observatory with stunning city views and world-class astronomical exhibits.',
+              website: 'https://griffithobservatory.org',
+              events: ['Public Telescope Viewing', 'Planetarium Shows', 'Astronomy Talks']
+            },
+            {
+              type: 'Planetarium',
+              title: 'California Science Center',
+              subtitle: 'Space Shuttle Endeavour',
+              details: [
+                { icon: '📍', text: '700 Exposition Park Dr' },
+                { icon: '🕒', text: 'Open 10:00 AM - 5:00 PM' },
+                { icon: '💰', text: '$2 - $25' },
+                { icon: '⭐', text: '4.4/5 (8,967 reviews)' }
+              ],
+              description: 'Home to Space Shuttle Endeavour and interactive space exploration exhibits.',
+              website: 'https://californiasciencecenter.org',
+              events: ['Endeavour Tours', 'IMAX Space Films', 'Astronaut Encounters']
+            }
+          ],
+          'Chicago, IL': [
+            {
+              type: 'Planetarium',
+              title: 'Adler Planetarium',
+              subtitle: 'Americas First Planetarium',
+              details: [
+                { icon: '📍', text: '1300 S DuSable Lake Shore Dr' },
+                { icon: '🕒', text: 'Open 9:00 AM - 4:00 PM' },
+                { icon: '💰', text: '$12 - $30' },
+                { icon: '⭐', text: '4.3/5 (3,456 reviews)' }
+              ],
+              description: 'Historic planetarium with cutting-edge sky shows and space science exhibits.',
+              website: 'https://www.adlerplanetarium.org',
+              events: ['Sky Shows', 'Telescope Nights', 'Astronomy Workshops']
+            }
+          ],
+          'Washington, DC': [
+            {
+              type: 'Museum',
+              title: 'National Air and Space Museum',
+              subtitle: 'Smithsonian Institution',
+              details: [
+                { icon: '📍', text: '600 Independence Ave SW' },
+                { icon: '🕒', text: 'Open 10:00 AM - 5:30 PM' },
+                { icon: '💰', text: 'Free (Timed entry required)' },
+                { icon: '⭐', text: '4.2/5 (12,789 reviews)' }
+              ],
+              description: 'World\'s largest collection of historic aircraft and spacecraft.',
+              website: 'https://airandspace.si.edu',
+              events: ['Apollo 11 Exhibit', 'Planetarium Shows', 'Flight Simulators']
+            }
+          ]
+        };
+      }
+
+      initializeLocationSuggestions() {
+        return [
+          'New York, NY', 'Los Angeles, CA', 'Chicago, IL', 'Houston, TX', 'Phoenix, AZ',
+          'Philadelphia, PA', 'San Antonio, TX', 'San Diego, CA', 'Dallas, TX', 'San Jose, CA',
+          'Austin, TX', 'Jacksonville, FL', 'Fort Worth, TX', 'Columbus, OH', 'Charlotte, NC',
+          'San Francisco, CA', 'Indianapolis, IN', 'Seattle, WA', 'Denver, CO', 'Washington, DC',
+          'Boston, MA', 'El Paso, TX', 'Nashville, TN', 'Detroit, MI', 'Oklahoma City, OK',
+          'Portland, OR', 'Las Vegas, NV', 'Memphis, TN', 'Louisville, KY', 'Baltimore, MD'
+        ];
+      }
+
+      initializeEventListeners() {
+        const form = document.getElementById('travelSearchForm');
+        const locationInput = document.getElementById('travelLocation');
+        const suggestionsDiv = document.getElementById('locationSuggestions');
+
+        if (!form || !locationInput || !suggestionsDiv) return;
+
+        // Form submission
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          this.handleSearch();
+        });
+
+        // Location autocomplete
+        locationInput.addEventListener('input', (e) => {
+          this.showLocationSuggestions(e.target.value);
+        });
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!locationInput.contains(e.target) && !suggestionsDiv.contains(e.target)) {
+            suggestionsDiv.style.display = 'none';
+          }
+        });
+
+        // Set default date to today
+        const today = new Date().toISOString().split('T')[0];
+        const dateInput = document.getElementById('travelDate');
+        if (dateInput) dateInput.value = today;
+      }
+
+      showLocationSuggestions(query) {
+        const suggestionsDiv = document.getElementById('locationSuggestions');
+        
+        if (query.length < 2) {
+          suggestionsDiv.style.display = 'none';
+          return;
+        }
+
+        const matches = this.locationSuggestions.filter(location => 
+          location.toLowerCase().includes(query.toLowerCase())
+        ).slice(0, 5);
+
+        if (matches.length === 0) {
+          suggestionsDiv.style.display = 'none';
+          return;
+        }
+
+        suggestionsDiv.innerHTML = matches.map(location => 
+          `<div class="location-suggestion" onclick="window.travelEngine.selectLocation('${location}')">${location}</div>`
+        ).join('');
+
+        suggestionsDiv.style.display = 'block';
+      }
+
+      selectLocation(location) {
+        document.getElementById('travelLocation').value = location;
+        document.getElementById('locationSuggestions').style.display = 'none';
+      }
+
+      async handleSearch() {
+        const date = document.getElementById('travelDate').value;
+        const location = document.getElementById('travelLocation').value;
+
+        if (!date || !location) {
+          alert('Please enter both date and location');
+          return;
+        }
+
+        // Show loading state
+        this.showLoading();
+
+        // Simulate API call delay
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        // Get recommendations
+        const recommendations = this.getRecommendations(location, date);
+        
+        // Show results
+        this.displayRecommendations(recommendations, location, date);
+      }
+
+      showLoading() {
+        const recommendationsSection = document.getElementById('recommendationsSection');
+        const loadingSection = document.getElementById('loadingSection');
+        
+        if (recommendationsSection) recommendationsSection.style.display = 'none';
+        if (loadingSection) loadingSection.style.display = 'block';
+      }
+
+      getRecommendations(location, date) {
+        // Get base experiences for location
+        let experiences = this.experiences[location] || [];
+        
+        // If no exact match, provide generic recommendations
+        if (experiences.length === 0) {
+          experiences = [
+            {
+              type: 'Observatory',
+              title: 'Local Observatory',
+              subtitle: 'Check for nearby observatories',
+              details: [
+                { icon: '📍', text: 'Search online for local observatories' },
+                { icon: '🕒', text: 'Varies by location' },
+                { icon: '💰', text: 'Varies' },
+                { icon: '⭐', text: 'Check reviews online' }
+              ],
+              description: 'Many cities have local observatories or astronomy clubs that offer public viewing sessions.',
+              website: '#',
+              events: ['Public Viewing', 'Astronomy Talks', 'Stargazing Events']
+            },
+            {
+              type: 'Planetarium',
+              title: 'Science Museum Planetarium',
+              subtitle: 'Local science centers',
+              details: [
+                { icon: '📍', text: 'Check local science museums' },
+                { icon: '🕒', text: 'Varies by location' },
+                { icon: '💰', text: 'Varies' },
+                { icon: '⭐', text: 'Check reviews online' }
+              ],
+              description: 'Most major cities have science museums with planetariums offering space-themed shows.',
+              website: '#',
+              events: ['Planetarium Shows', 'Space Exhibits', 'Educational Programs']
+            }
+          ];
+        }
+
+        // Add date-specific celestial events
+        const celestialEvents = this.getCelestialEvents(date);
+        if (celestialEvents.length > 0) {
+          experiences.push({
+            type: 'Astronomy Lab',
+            title: 'Celestial Events',
+            subtitle: `Special events for ${new Date(date).toLocaleDateString()}`,
+            details: [
+              { icon: '📅', text: new Date(date).toLocaleDateString() },
+              { icon: '🌌', text: `${celestialEvents.length} events` },
+              { icon: '💰', text: 'Free (outdoor viewing)' },
+              { icon: '⭐', text: 'Weather dependent' }
+            ],
+            description: 'Special astronomical events visible on your travel date.',
+            website: '#',
+            events: celestialEvents
+          });
+        }
+
+        return experiences;
+      }
+
+      getCelestialEvents(date) {
+        const events = [];
+        const travelDate = new Date(date);
+        const month = travelDate.getMonth() + 1;
+        const day = travelDate.getDate();
+
+        // Sample celestial events (in a real app, this would come from an astronomy API)
+        if (month === 12 && day >= 13 && day <= 15) {
+          events.push('Geminids Meteor Shower Peak');
+        }
+        if (month === 8 && day >= 11 && day <= 13) {
+          events.push('Perseids Meteor Shower Peak');
+        }
+        if (month === 1 && day >= 2 && day <= 4) {
+          events.push('Quadrantids Meteor Shower');
+        }
+        if (month === 10 && day >= 20 && day <= 22) {
+          events.push('Orionids Meteor Shower');
+        }
+
+        // Add moon phases
+        const moonPhase = this.getMoonPhase(travelDate);
+        if (moonPhase) {
+          events.push(`${moonPhase} Moon`);
+        }
+
+        return events;
+      }
+
+      getMoonPhase(date) {
+        const phases = ['New', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous', 'Full', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent'];
+        // Simplified moon phase calculation (in a real app, use proper astronomical calculations)
+        const dayOfYear = Math.floor((date - new Date(date.getFullYear(), 0, 0)) / 86400000);
+        const phaseIndex = Math.floor((dayOfYear % 29.5) / 3.69);
+        return phases[phaseIndex] || null;
+      }
+
+      displayRecommendations(recommendations, location, date) {
+        const section = document.getElementById('recommendationsSection');
+        const grid = document.getElementById('recommendationsGrid');
+        const loadingSection = document.getElementById('loadingSection');
+        
+        if (loadingSection) loadingSection.style.display = 'none';
+        
+        if (grid) {
+          grid.innerHTML = recommendations.map(exp => `
+            <div class="experience-card">
+              <div class="experience-type">${exp.type}</div>
+              <h3 class="experience-title">${exp.title}</h3>
+              <p class="experience-subtitle">${exp.subtitle}</p>
+              <div class="experience-details">
+                ${exp.details.map(detail => `
+                  <div class="experience-detail">
+                    <span>${detail.icon}</span>
+                    <span>${detail.text}</span>
+                  </div>
+                `).join('')}
+              </div>
+              <p class="experience-subtitle">${exp.description}</p>
+              ${exp.events && exp.events.length > 0 ? `
+                <div class="experience-details">
+                  <strong>Featured Events:</strong>
+                  ${exp.events.map(event => `<div class="experience-detail">• ${event}</div>`).join('')}
+                </div>
+              ` : ''}
+              <div class="experience-actions">
+                ${exp.website !== '#' ? `<a href="${exp.website}" target="_blank" class="experience-btn experience-btn-primary">Visit Website 🔗</a>` : ''}
+                <button class="experience-btn experience-btn-secondary" onclick="window.travelEngine.saveExperience('${exp.title}')">Save for Later ❤️</button>
+              </div>
+            </div>
+          `).join('');
+        }
+        
+        if (section) {
+          section.style.display = 'block';
+          section.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+
+      saveExperience(title) {
+        // In a real app, this would save to user's profile
+        alert(`Saved "${title}" to your favorites!`);
+      }
+    }
+
+    // Initialize both systems when DOM is loaded
     document.addEventListener('DOMContentLoaded', () => {
       new ExploreXApp();
+      window.travelEngine = new TravelRecommendationEngine();
     });
 
     // Development utilities
