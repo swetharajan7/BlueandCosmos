@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExploreX Experience Modal Test</title>
+  
+  <!-- Load ExploreX Styles -->
+  <link rel="stylesheet" href="explorex-ui-styles.css">
+  <link rel="stylesheet" href="explorex-modal-styles.css">
+  
+  <style>
+    body {
+      font-family: 'Work Sans', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+      min-height: 100vh;
+    }
+    
+    .test-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+    
+    .test-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .test-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin: 0 0 10px 0;
+    }
+    
+    .test-subtitle {
+      font-size: 16px;
+      color: #666666;
+      margin: 0;
+    }
+    
+    .test-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    
+    .test-card {
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .test-card:hover {
+      background: #e3f2fd;
+      border-color: #64b5f6;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(100, 181, 246, 0.2);
+    }
+    
+    .test-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    
+    .test-card-icon {
+      font-size: 24px;
+    }
+    
+    .test-card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a2e;
+      margin: 0;
+    }
+    
+    .test-card-description {
+      font-size: 14px;
+      color: #666666;
+      line-height: 1.5;
+      margin: 0;
+    }
+    
+    .test-info {
+      background: #e8f5e8;
+      border: 1px solid #4caf50;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .test-info h3 {
+      margin: 0 0 10px 0;
+      color: #2e7d32;
+      font-size: 16px;
+    }
+    
+    .test-info p {
+      margin: 0;
+      color: #388e3c;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <div class="test-header">
+      <h1 class="test-title">🚀 ExploreX Experience Modal Test</h1>
+      <p class="test-subtitle">Click on any experience card below to test the comprehensive modal system</p>
+    </div>
+    
+    <div class="test-info">
+      <h3>✅ Modal Features Being Tested</h3>
+      <p>
+        • Tabbed interface with Overview, Details, Photos, Reviews, and Contact tabs<br>
+        • Photo gallery with navigation and fullscreen viewer<br>
+        • Interactive review system with star ratings<br>
+        • Contact information and directions integration<br>
+        • Responsive design for all screen sizes<br>
+        • Accessibility features and keyboard navigation
+      </p>
+    </div>
+    
+    <div class="test-grid" id="testGrid">
+      <!-- Test cards will be populated by JavaScript -->
+    </div>
+  </div>
+
+  <!-- Load ExploreX JavaScript -->
+  <script src="explorex-models.js"></script>
+  <script src="explorex-utils.js"></script>
+  <script src="explorex-ui-components.js"></script>
+  <script src="explorex-experience-modal.js"></script>
+
+  <script>
+    // Test data for different experience types
+    const testExperiences = [
+      {
+        id: 'test-observatory-1',
+        name: 'Griffith Observatory',
+        type: 'observatory',
+        description: 'Iconic observatory offering stunning views of Los Angeles and the cosmos. Features state-of-the-art telescopes, planetarium shows, and interactive exhibits exploring astronomy and space science.',
+        address: new window.ExploreXModels.Address({
+          street: '2800 E Observatory Rd',
+          city: 'Los Angeles',
+          state: 'CA',
+          zipCode: '90027',
+          country: 'USA'
+        }),
+        location: new window.ExploreXModels.Location(34.1184, -118.3004),
+        rating: 4.6,
+        reviewCount: 12847,
+        admissionFee: new window.ExploreXModels.AdmissionFee({
+          isFree: true,
+          notes: 'Free admission, parking fees may apply'
+        }),
+        operatingHours: [
+          { dayOfWeek: 0, openTime: '12:00 PM', closeTime: '10:00 PM', isClosed: false },
+          { dayOfWeek: 1, isClosed: true },
+          { dayOfWeek: 2, openTime: '12:00 PM', closeTime: '10:00 PM', isClosed: false },
+          { dayOfWeek: 3, openTime: '12:00 PM', closeTime: '10:00 PM', isClosed: false },
+          { dayOfWeek: 4, openTime: '12:00 PM', closeTime: '10:00 PM', isClosed: false },
+          { dayOfWeek: 5, openTime: '12:00 PM', closeTime: '10:00 PM', isClosed: false },
+          { dayOfWeek: 6, openTime: '12:00 PM', closeTime: '10:00 PM', isClosed: false }
+        ],
+        amenities: ['parking', 'restrooms', 'gift_shop', 'telescope', 'wheelchair_accessible'],
+        accessibility: ['wheelchair_accessible', 'audio_descriptions', 'large_print_materials'],
+        contactInfo: {
+          phone: '(213) 473-0800',
+          website: 'https://griffithobservatory.org',
+          email: 'info@griffithobservatory.org'
+        },
+        tags: ['astronomy', 'planetarium', 'free_admission', 'family_friendly'],
+        featured: true,
+        verified: true,
+        distance: 2.3,
+        lastUpdated: new Date('2024-01-15')
+      },
+      {
+        id: 'test-planetarium-1',
+        name: 'Hayden Planetarium',
+        type: 'planetarium',
+        description: 'World-renowned planetarium at the American Museum of Natural History. Experience immersive space shows, explore the universe through cutting-edge visualization technology.',
+        address: new window.ExploreXModels.Address({
+          street: '200 Central Park West',
+          city: 'New York',
+          state: 'NY',
+          zipCode: '10024',
+          country: 'USA'
+        }),
+        location: new window.ExploreXModels.Location(40.7813, -73.9737),
+        rating: 4.8,
+        reviewCount: 8934,
+        admissionFee: new window.ExploreXModels.AdmissionFee({
+          isFree: false,
+          adultPrice: 28.00,
+          childPrice: 16.50,
+          seniorPrice: 22.50,
+          studentPrice: 22.50,
+          notes: 'Includes museum admission'
+        }),
+        operatingHours: [
+          { dayOfWeek: 0, openTime: '10:00 AM', closeTime: '5:45 PM', isClosed: false },
+          { dayOfWeek: 1, openTime: '10:00 AM', closeTime: '5:45 PM', isClosed: false },
+          { dayOfWeek: 2, openTime: '10:00 AM', closeTime: '5:45 PM', isClosed: false },
+          { dayOfWeek: 3, openTime: '10:00 AM', closeTime: '5:45 PM', isClosed: false },
+          { dayOfWeek: 4, openTime: '10:00 AM', closeTime: '5:45 PM', isClosed: false },
+          { dayOfWeek: 5, openTime: '10:00 AM', closeTime: '8:00 PM', isClosed: false },
+          { dayOfWeek: 6, openTime: '10:00 AM', closeTime: '5:45 PM', isClosed: false }
+        ],
+        amenities: ['restrooms', 'gift_shop', 'cafe', 'planetarium_shows', 'wheelchair_accessible', 'audio_guide'],
+        accessibility: ['wheelchair_accessible', 'assistive_listening', 'audio_descriptions'],
+        contactInfo: {
+          phone: '(212) 769-5100',
+          website: 'https://www.amnh.org/planetarium',
+          email: 'info@amnh.org'
+        },
+        tags: ['planetarium', 'museum', 'space_shows', 'educational'],
+        featured: true,
+        verified: true,
+        distance: 156.7,
+        lastUpdated: new Date('2024-01-12')
+      },
+      {
+        id: 'test-space-center-1',
+        name: 'Kennedy Space Center',
+        type: 'space_center',
+        description: 'Americas premier space center offering behind-the-scenes access to space exploration. Meet astronauts, see real spacecraft, and experience the thrill of space travel through interactive exhibits.',
+        address: new window.ExploreXModels.Address({
+          street: 'Space Commerce Way',
+          city: 'Merritt Island',
+          state: 'FL',
+          zipCode: '32953',
+          country: 'USA'
+        }),
+        location: new window.ExploreXModels.Location(28.5721, -80.6480),
+        rating: 4.7,
+        reviewCount: 23156,
+        admissionFee: new window.ExploreXModels.AdmissionFee({
+          isFree: false,
+          adultPrice: 75.00,
+          childPrice: 65.00,
+          notes: 'Multi-day passes available'
+        }),
+        operatingHours: [
+          { dayOfWeek: 0, openTime: '9:00 AM', closeTime: '5:00 PM', isClosed: false },
+          { dayOfWeek: 1, openTime: '9:00 AM', closeTime: '5:00 PM', isClosed: false },
+          { dayOfWeek: 2, openTime: '9:00 AM', closeTime: '5:00 PM', isClosed: false },
+          { dayOfWeek: 3, openTime: '9:00 AM', closeTime: '5:00 PM', isClosed: false },
+          { dayOfWeek: 4, openTime: '9:00 AM', closeTime: '5:00 PM', isClosed: false },
+          { dayOfWeek: 5, openTime: '9:00 AM', closeTime: '5:00 PM', isClosed: false },
+          { dayOfWeek: 6, openTime: '9:00 AM', closeTime: '5:00 PM', isClosed: false }
+        ],
+        amenities: ['parking', 'restrooms', 'gift_shop', 'cafe', 'guided_tours', 'wheelchair_accessible'],
+        accessibility: ['wheelchair_accessible', 'assistive_listening', 'service_animals_welcome'],
+        contactInfo: {
+          phone: '(855) 433-4210',
+          website: 'https://www.kennedyspacecenter.com',
+          email: 'info@kennedyspacecenter.com'
+        },
+        tags: ['space_center', 'astronauts', 'rockets', 'interactive_exhibits'],
+        featured: true,
+        verified: true,
+        distance: 892.4,
+        lastUpdated: new Date('2024-01-10')
+      },
+      {
+        id: 'test-science-center-1',
+        name: 'California Science Center',
+        type: 'science_center',
+        description: 'Interactive science museum featuring the Space Shuttle Endeavour, hands-on exhibits, and IMAX theater. Explore space exploration, earth sciences, and cutting-edge technology.',
+        address: new window.ExploreXModels.Address({
+          street: '700 Exposition Park Dr',
+          city: 'Los Angeles',
+          state: 'CA',
+          zipCode: '90037',
+          country: 'USA'
+        }),
+        location: new window.ExploreXModels.Location(34.0169, -118.2863),
+        rating: 4.5,
+        reviewCount: 15672,
+        admissionFee: new window.ExploreXModels.AdmissionFee({
+          isFree: true,
+          notes: 'Free general admission, special exhibits may charge fees'
+        }),
+        operatingHours: [
+          { dayOfWeek: 0, openTime: '10:00 AM', closeTime: '5:00 PM', isClosed: false },
+          { dayOfWeek: 1, openTime: '10:00 AM', closeTime: '5:00 PM', isClosed: false },
+          { dayOfWeek: 2, openTime: '10:00 AM', closeTime: '5:00 PM', isClosed: false },
+          { dayOfWeek: 3, openTime: '10:00 AM', closeTime: '5:00 PM', isClosed: false },
+          { dayOfWeek: 4, openTime: '10:00 AM', closeTime: '5:00 PM', isClosed: false },
+          { dayOfWeek: 5, openTime: '10:00 AM', closeTime: '5:00 PM', isClosed: false },
+          { dayOfWeek: 6, openTime: '10:00 AM', closeTime: '5:00 PM', isClosed: false }
+        ],
+        amenities: ['parking', 'restrooms', 'gift_shop', 'cafe', 'wheelchair_accessible', 'guided_tours'],
+        accessibility: ['wheelchair_accessible', 'assistive_listening', 'braille_materials'],
+        contactInfo: {
+          phone: '(323) 724-3623',
+          website: 'https://californiasciencecenter.org',
+          email: 'info@californiasciencecenter.org'
+        },
+        tags: ['science_center', 'space_shuttle', 'interactive', 'free_admission'],
+        featured: false,
+        verified: true,
+        distance: 8.1,
+        lastUpdated: new Date('2024-01-08')
+      }
+    ];
+
+    // Initialize the test
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('🚀 ExploreX Experience Modal Test Initialized');
+      
+      // Create test cards
+      const testGrid = document.getElementById('testGrid');
+      
+      testExperiences.forEach(experience => {
+        const card = createTestCard(experience);
+        testGrid.appendChild(card);
+      });
+      
+      console.log(`✅ Created ${testExperiences.length} test experience cards`);
+    });
+
+    function createTestCard(experience) {
+      const card = document.createElement('div');
+      card.className = 'test-card';
+      
+      const typeIcon = getTypeIcon(experience.type);
+      const typeLabel = window.ExploreXUtils.StringUtils.toTitleCase(experience.type.replace(/_/g, ' '));
+      const stars = '★'.repeat(Math.floor(experience.rating)) + '☆'.repeat(5 - Math.floor(experience.rating));
+      
+      card.innerHTML = `
+        <div class="test-card-header">
+          <span class="test-card-icon">${typeIcon}</span>
+          <h3 class="test-card-title">${experience.name}</h3>
+        </div>
+        <p class="test-card-description">
+          <strong>${typeLabel}</strong> • ${stars} ${experience.rating} (${experience.reviewCount.toLocaleString()} reviews)<br>
+          ${experience.address.city}, ${experience.address.state} • ${experience.distance} miles away<br>
+          ${experience.admissionFee.isFree ? 'Free admission' : `From $${experience.admissionFee.adultPrice}`}
+        </p>
+      `;
+      
+      card.addEventListener('click', () => {
+        showExperienceModal(experience);
+      });
+      
+      return card;
+    }
+
+    function getTypeIcon(type) {
+      const iconMap = {
+        observatory: '🔭',
+        planetarium: '🌌',
+        space_center: '🚀',
+        space_museum: '🏛️',
+        science_center: '🔬',
+        astronomy_lab: '🧪',
+        stargazing_site: '✨'
+      };
+      return iconMap[type] || '📍';
+    }
+
+    function showExperienceModal(experience) {
+      console.log('🎯 Opening modal for:', experience.name);
+      
+      // Create modal instance if it doesn't exist
+      if (!window.testModal) {
+        window.testModal = new window.ExploreXExperienceModal();
+      }
+      
+      // Show the experience in the modal
+      window.testModal.showExperience(experience);
+    }
+  </script>
+</body>
+</html>

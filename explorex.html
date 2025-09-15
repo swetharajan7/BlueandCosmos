@@ -620,6 +620,10 @@
       }
     }
   </style>
+  
+  <!-- External CSS Files -->
+  <link rel="stylesheet" href="explorex-modal-styles.css">
+  <link rel="stylesheet" href="explorex-events-styles.css">
 </head>
 
 <body>
@@ -887,6 +891,9 @@
   <script src="explorex-database.js"></script>
   <script src="explorex-search-engine.js"></script>
   <script src="explorex-ui-components.js"></script>
+  <script src="explorex-experience-modal.js"></script>
+  <script src="explorex-events-api.js"></script>
+  <script src="explorex-events-integration.js"></script>
   
   <!-- Load Styles -->
   <link rel="stylesheet" href="explorex-location-styles.css" />
@@ -944,6 +951,7 @@
         this.initializeSearchEngine();
         this.initializeDataModels();
         this.initializeLocationServices();
+        this.initializeEventsSystem();
         this.setupAdvancedFilters();
         this.setupPopularDestinations();
         this.setupDatabaseStats();
@@ -962,12 +970,8 @@
         // Initialize loading manager
         this.loadingManager = new this.ui.LoadingManager();
         
-        // Initialize experience detail modal
-        this.experienceModal = new this.ui.Modal({
-          size: 'large',
-          closeOnBackdrop: true,
-          closeOnEscape: true
-        });
+        // Initialize experience detail modal (will be created on demand)
+        this.experienceDetailModal = null;
         
         // Setup global event listeners
         this.setupGlobalUIEvents();
@@ -1028,8 +1032,8 @@
         
         if (event.key === 'Escape') {
           // Close any open modals or overlays
-          if (this.experienceModal && this.experienceModal.isOpen) {
-            this.experienceModal.close();
+          if (this.experienceDetailModal && this.experienceDetailModal.isOpen) {
+            this.experienceDetailModal.close();
           }
         }
       }
@@ -1043,13 +1047,12 @@
       }
 
       showExperienceDetails(experience) {
-        const modalContent = this.createExperienceModalContent(experience);
+        // Use the new comprehensive experience modal
+        if (!this.experienceDetailModal) {
+          this.experienceDetailModal = new window.ExploreXExperienceModal();
+        }
         
-        this.experienceModal.open({
-          title: experience.name,
-          body: modalContent,
-          footer: this.createExperienceModalFooter(experience)
-        });
+        this.experienceDetailModal.showExperience(experience);
       }
 
       createExperienceModalContent(experience) {
@@ -1403,6 +1406,60 @@
         }
       }
 
+      async initializeEventsSystem() {
+        try {
+          // Initialize events integration
+          this.eventsIntegration = new window.ExploreXEventsIntegration({
+            enableEventSearch: true,
+            enableEventCalendar: true,
+            enableEventRegistration: true,
+            autoRefreshInterval: 5 * 60 * 1000 // 5 minutes
+          });
+          
+          await this.eventsIntegration.initialize();
+          
+          // Setup event listeners for events integration
+          document.addEventListener('showEventDetails', this.handleShowEventDetails.bind(this));
+          document.addEventListener('registerForEvent', this.handleEventRegistration.bind(this));
+          
+          if (this.config.debug) {
+            console.log('🎓 Events System initialized successfully');
+          }
+          
+        } catch (error) {
+          console.error('❌ Failed to initialize Events System:', error);
+          
+          // Show error toast
+          if (this.toastManager) {
+            this.toastManager.error('Events system unavailable. Some features may be limited.');
+          }
+        }
+      }
+
+      handleShowEventDetails(event) {
+        const eventData = event.detail.event;
+        
+        if (this.config.debug) {
+          console.log('📋 Showing event details:', eventData.title);
+        }
+        
+        // Event details are handled by the events integration system
+        // This is just for logging and additional app-level handling
+      }
+
+      handleEventRegistration(event) {
+        const eventData = event.detail.event;
+        
+        if (this.config.debug) {
+          console.log('🎫 Event registration requested:', eventData.title);
+        }
+        
+        // Show success message
+        if (this.toastManager) {
+          this.toastManager.info(`Opening registration for ${eventData.title}...`);
+        }
+      }
+
       setupPopularDestinations() {
         const popularDestinationsGrid = document.getElementById('popular-destinations-grid');
         const popularDestinationsSection = document.getElementById('popular-destinations');
@@ -1491,6 +1548,11 @@
 
         // Update validation display
         this.showLocationValidation(true, `Location set: ${name}`);
+
+        // Set location for events system
+        if (this.eventsIntegration) {
+          this.eventsIntegration.setLocation(location);
+        }
 
         // Hide popular destinations when location is selected
         const popularDestinationsSection = document.getElementById('popular-destinations');

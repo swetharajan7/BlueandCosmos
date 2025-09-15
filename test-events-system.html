@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExploreX Events System Test</title>
+  
+  <!-- Load ExploreX Styles -->
+  <link rel="stylesheet" href="explorex-ui-styles.css">
+  <link rel="stylesheet" href="explorex-events-styles.css">
+  
+  <style>
+    body {
+      font-family: 'Work Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+      min-height: 100vh;
+    }
+    
+    .test-header {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .test-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin: 0 0 8px 0;
+    }
+    
+    .test-subtitle {
+      font-size: 16px;
+      color: #666666;
+      margin: 0;
+    }
+    
+    .test-controls {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 20px;
+      margin: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .test-controls h3 {
+      margin: 0 0 16px 0;
+      color: #1a1a2e;
+    }
+    
+    .test-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .test-button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .test-button.primary {
+      background: linear-gradient(135deg, #64b5f6, #42a5f5);
+      color: #ffffff;
+    }
+    
+    .test-button.primary:hover {
+      background: linear-gradient(135deg, #42a5f5, #1e88e5);
+      transform: translateY(-2px);
+    }
+    
+    .test-button.secondary {
+      background: #ffffff;
+      color: #64b5f6;
+      border: 2px solid #64b5f6;
+    }
+    
+    .test-button.secondary:hover {
+      background: #64b5f6;
+      color: #ffffff;
+    }
+    
+    .test-info {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 16px;
+      margin: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #10b981;
+    }
+    
+    .test-info h4 {
+      margin: 0 0 8px 0;
+      color: #2e7d32;
+    }
+    
+    .test-info p {
+      margin: 0;
+      color: #388e3c;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    .main-content {
+      margin: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-header">
+    <h1 class="test-title">🎓 ExploreX Events System Test</h1>
+    <p class="test-subtitle">Test the comprehensive events and workshops integration system</p>
+  </div>
+  
+  <div class="test-controls">
+    <h3>Test Controls</h3>
+    <div class="test-buttons">
+      <button class="test-button primary" onclick="initializeEventsSystem()">Initialize Events System</button>
+      <button class="test-button secondary" onclick="loadSampleEvents()">Load Sample Events</button>
+      <button class="test-button secondary" onclick="testEventFilters()">Test Filters</button>
+      <button class="test-button secondary" onclick="testEventCalendar()">Test Calendar</button>
+      <button class="test-button secondary" onclick="testEventRegistration()">Test Registration</button>
+      <button class="test-button secondary" onclick="clearEvents()">Clear Events</button>
+    </div>
+  </div>
+  
+  <div class="test-info">
+    <h4>✅ Features Being Tested</h4>
+    <p>
+      • Event API integration with Eventbrite and astronomy calendars<br>
+      • Event filtering by type, date, price, and location<br>
+      • Interactive event calendar with monthly navigation<br>
+      • Event registration and booking workflows<br>
+      • Real-time event availability tracking<br>
+      • Responsive design and mobile optimization
+    </p>
+  </div>
+  
+  <div class="main-content">
+    <!-- Events system will be injected here -->
+  </div>
+
+  <!-- Load ExploreX JavaScript -->
+  <script src="explorex-models.js"></script>
+  <script src="explorex-utils.js"></script>
+  <script src="explorex-ui-components.js"></script>
+  <script src="explorex-events-api.js"></script>
+  <script src="explorex-events-integration.js"></script>
+
+  <script>
+    let eventsIntegration = null;
+    let testLocation = null;
+
+    // Initialize test environment
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('🚀 ExploreX Events System Test Initialized');
+      
+      // Set up test location (Los Angeles)
+      testLocation = {
+        latitude: 34.0522,
+        longitude: -118.2437,
+        city: 'Los Angeles',
+        state: 'CA'
+      };
+      
+      // Show initial instructions
+      showTestInstructions();
+    });
+
+    function showTestInstructions() {
+      const mainContent = document.querySelector('.main-content');
+      mainContent.innerHTML = `
+        <div style="background: rgba(255, 255, 255, 0.95); padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+          <h2 style="color: #1a1a2e; margin: 0 0 16px 0;">🎯 Ready to Test Events System</h2>
+          <p style="color: #666666; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
+            Click "Initialize Events System" above to start testing the comprehensive events and workshops integration.
+            The system will load sample astronomy events, workshops, and celestial phenomena.
+          </p>
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <button class="test-button primary" onclick="initializeEventsSystem()">
+              🚀 Initialize Events System
+            </button>
+            <button class="test-button secondary" onclick="showSystemInfo()">
+              ℹ️ System Information
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    async function initializeEventsSystem() {
+      try {
+        console.log('🚀 Initializing Events System...');
+        
+        // Show loading state
+        const mainContent = document.querySelector('.main-content');
+        mainContent.innerHTML = `
+          <div style="background: rgba(255, 255, 255, 0.95); padding: 40px; border-radius: 12px; text-align: center;">
+            <div style="width: 48px; height: 48px; border: 4px solid #e0e0e0; border-top: 4px solid #64b5f6; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px;"></div>
+            <h3 style="color: #1a1a2e; margin: 0 0 8px 0;">Initializing Events System</h3>
+            <p style="color: #666666; margin: 0;">Setting up event APIs and integration components...</p>
+          </div>
+        `;
+        
+        // Initialize the events integration
+        eventsIntegration = new window.ExploreXEventsIntegration({
+          enableEventSearch: true,
+          enableEventCalendar: true,
+          enableEventRegistration: true
+        });
+        
+        await eventsIntegration.initialize();
+        
+        // Set test location
+        eventsIntegration.setLocation(testLocation);
+        
+        // Inject the events UI into main content
+        mainContent.innerHTML = '';
+        eventsIntegration.createEventsSection();
+        
+        // Move the events section to main content
+        const eventsSection = document.getElementById('events-section');
+        if (eventsSection) {
+          mainContent.appendChild(eventsSection);
+          eventsSection.style.display = 'block';
+        }
+        
+        // Load initial events
+        await loadSampleEvents();
+        
+        console.log('✅ Events System initialized successfully');
+        
+        // Show success message
+        const toastManager = window.exploreXApp?.toastManager;
+        if (toastManager) {
+          toastManager.success('Events System initialized successfully!');
+        }
+        
+      } catch (error) {
+        console.error('❌ Failed to initialize Events System:', error);
+        
+        const mainContent = document.querySelector('.main-content');
+        mainContent.innerHTML = `
+          <div style="background: rgba(255, 255, 255, 0.95); padding: 40px; border-radius: 12px; text-align: center; border-left: 4px solid #ef4444;">
+            <h3 style="color: #dc2626; margin: 0 0 8px 0;">❌ Initialization Failed</h3>
+            <p style="color: #666666; margin: 0 0 16px 0;">
+              Failed to initialize the Events System. Check the console for details.
+            </p>
+            <button class="test-button secondary" onclick="initializeEventsSystem()">
+              🔄 Try Again
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    async function loadSampleEvents() {
+      if (!eventsIntegration) {
+        alert('Please initialize the Events System first');
+        return;
+      }
+      
+      try {
+        console.log('📅 Loading sample events...');
+        
+        // Trigger event search with test location
+        await eventsIntegration.searchEvents(testLocation);
+        
+        console.log('✅ Sample events loaded successfully');
+        
+      } catch (error) {
+        console.error('❌ Failed to load sample events:', error);
+      }
+    }
+
+    function testEventFilters() {
+      if (!eventsIntegration) {
+        alert('Please initialize the Events System first');
+        return;
+      }
+      
+      console.log('🔍 Testing event filters...');
+      
+      // Simulate filter changes
+      const eventTypeCheckboxes = document.querySelectorAll('#event-type-filters input[type="checkbox"]');
+      if (eventTypeCheckboxes.length > 0) {
+        // Check first two event types
+        eventTypeCheckboxes[0].checked = true;
+        eventTypeCheckboxes[0].dispatchEvent(new Event('change'));
+        
+        if (eventTypeCheckboxes[1]) {
+          eventTypeCheckboxes[1].checked = true;
+          eventTypeCheckboxes[1].dispatchEvent(new Event('change'));
+        }
+      }
+      
+      // Set date range filter
+      const dateRangeFilter = document.getElementById('date-range-filter');
+      if (dateRangeFilter) {
+        dateRangeFilter.value = 'this-month';
+        dateRangeFilter.dispatchEvent(new Event('change'));
+      }
+      
+      // Set price range filter
+      const priceRangeFilter = document.getElementById('price-range-filter');
+      if (priceRangeFilter) {
+        priceRangeFilter.value = '0-50';
+        priceRangeFilter.dispatchEvent(new Event('change'));
+      }
+      
+      console.log('✅ Event filters test completed');
+    }
+
+    function testEventCalendar() {
+      if (!eventsIntegration) {
+        alert('Please initialize the Events System first');
+        return;
+      }
+      
+      console.log('📅 Testing event calendar...');
+      
+      // Navigate calendar months
+      const nextButton = document.getElementById('calendar-next-month');
+      const prevButton = document.getElementById('calendar-prev-month');
+      
+      if (nextButton && prevButton) {
+        // Navigate forward and backward
+        setTimeout(() => {
+          nextButton.click();
+          console.log('📅 Navigated to next month');
+        }, 1000);
+        
+        setTimeout(() => {
+          prevButton.click();
+          console.log('📅 Navigated to previous month');
+        }, 2000);
+        
+        setTimeout(() => {
+          prevButton.click();
+          console.log('📅 Navigated to current month');
+        }, 3000);
+      }
+      
+      console.log('✅ Event calendar test completed');
+    }
+
+    function testEventRegistration() {
+      if (!eventsIntegration) {
+        alert('Please initialize the Events System first');
+        return;
+      }
+      
+      console.log('🎫 Testing event registration...');
+      
+      // Find first event card and simulate click
+      const eventCard = document.querySelector('.event-card');
+      if (eventCard) {
+        // Simulate showing event details
+        const showDetailsButton = eventCard.querySelector('.event-action-button.secondary');
+        if (showDetailsButton) {
+          showDetailsButton.click();
+          console.log('📋 Event details modal opened');
+        }
+        
+        // Simulate registration click
+        setTimeout(() => {
+          const registerButton = eventCard.querySelector('.event-action-button.primary');
+          if (registerButton) {
+            registerButton.click();
+            console.log('🎫 Event registration initiated');
+          }
+        }, 1000);
+      }
+      
+      console.log('✅ Event registration test completed');
+    }
+
+    function clearEvents() {
+      const eventsGrid = document.getElementById('events-grid');
+      const resultsHeader = document.getElementById('events-results-header');
+      const emptyState = document.getElementById('events-empty');
+      
+      if (eventsGrid) {
+        eventsGrid.innerHTML = '';
+      }
+      
+      if (resultsHeader) {
+        resultsHeader.style.display = 'none';
+      }
+      
+      if (emptyState) {
+        emptyState.style.display = 'flex';
+      }
+      
+      console.log('🧹 Events cleared');
+    }
+
+    function showSystemInfo() {
+      const mainContent = document.querySelector('.main-content');
+      mainContent.innerHTML = `
+        <div style="background: rgba(255, 255, 255, 0.95); padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+          <h2 style="color: #1a1a2e; margin: 0 0 20px 0;">📊 Events System Information</h2>
+          
+          <div style="display: grid; gap: 20px;">
+            <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; border-left: 4px solid #3b82f6;">
+              <h4 style="margin: 0 0 8px 0; color: #1e40af;">🔌 API Integrations</h4>
+              <ul style="margin: 0; padding-left: 20px; color: #374151;">
+                <li>Eventbrite API for workshops and classes</li>
+                <li>NASA API for celestial events and phenomena</li>
+                <li>Astronomy calendar APIs for stargazing events</li>
+                <li>Real-time event availability tracking</li>
+              </ul>
+            </div>
+            
+            <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; border-left: 4px solid #10b981;">
+              <h4 style="margin: 0 0 8px 0; color: #059669;">🎯 Event Types Supported</h4>
+              <ul style="margin: 0; padding-left: 20px; color: #374151;">
+                <li>🎓 Workshops & Classes</li>
+                <li>✨ Stargazing Events</li>
+                <li>🎤 Lectures & Talks</li>
+                <li>🌙 Celestial Events</li>
+                <li>🏛️ Exhibitions</li>
+                <li>👨‍👩‍👧‍👦 Family Events</li>
+              </ul>
+            </div>
+            
+            <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; border-left: 4px solid #f59e0b;">
+              <h4 style="margin: 0 0 8px 0; color: #d97706;">⚡ Features</h4>
+              <ul style="margin: 0; padding-left: 20px; color: #374151;">
+                <li>Advanced filtering by type, date, price, location</li>
+                <li>Interactive calendar with event visualization</li>
+                <li>Event registration and booking integration</li>
+                <li>Real-time availability and capacity tracking</li>
+                <li>Mobile-responsive design</li>
+                <li>Accessibility compliance (WCAG 2.1)</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div style="margin-top: 24px; text-align: center;">
+            <button class="test-button primary" onclick="initializeEventsSystem()">
+              🚀 Start Testing
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Global event handlers for testing
+    window.handleEventTypeFilter = function(typeId, checked) {
+      if (eventsIntegration) {
+        eventsIntegration.handleEventTypeFilter(typeId, checked);
+      }
+    };
+
+    window.toggleEventsSearch = function(enabled) {
+      if (eventsIntegration) {
+        eventsIntegration.toggleEventsSearch(enabled);
+      }
+    };
+
+    // Add CSS animation for loading spinner
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>
