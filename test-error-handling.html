@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExploreX Error Handling Test</title>
+    <link rel="stylesheet" href="explorex-error-styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .test-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .test-title {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .test-subtitle {
+            font-size: 1.2rem;
+            color: #ccc;
+            margin-bottom: 2rem;
+        }
+
+        .test-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .test-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .test-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .test-button.danger {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+        }
+
+        .test-button.warning {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1 class="test-title">🛡️ ExploreX Error Handling</h1>
+            <p class="test-subtitle">Comprehensive Error Management & Fallback Systems Testing</p>
+        </div>
+
+        <!-- Error Simulation -->
+        <div class="test-section">
+            <h2 class="section-title">🚨 Error Simulation</h2>
+            <div class="test-controls">
+                <button class="test-button" onclick="simulateNetworkError()">
+                    <span>🌐</span> Network Error
+                </button>
+                <button class="test-button" onclick="simulateAPIError()">
+                    <span>🔌</span> API Error
+                </button>
+                <button class="test-button" onclick="simulatePermissionError()">
+                    <span>🔒</span> Permission Error
+                </button>
+                <button class="test-button" onclick="simulateValidationError()">
+                    <span>❌</span> Validation Error
+                </button>
+                <button class="test-button" onclick="simulateTimeoutError()">
+                    <span>⏰</span> Timeout Error
+                </button>
+                <button class="test-button" onclick="simulateStorageError()">
+                    <span>💾</span> Storage Error
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Dependencies -->
+    <script src="explorex-error-handling.js"></script>
+    <script src="explorex-fallback-systems.js"></script>
+
+    <script>
+        // Global variables
+        let errorHandlingManager;
+        let fallbackDataManager;
+
+        // Initialize systems
+        async function initializeSystems() {
+            try {
+                errorHandlingManager = new window.ExploreXErrorHandling.ErrorHandlingManager();
+                await errorHandlingManager.initialize();
+
+                fallbackDataManager = new window.ExploreXFallback.FallbackDataManager();
+                await fallbackDataManager.initialize();
+
+                console.log('✅ Error handling systems initialized');
+            } catch (error) {
+                console.error('❌ Failed to initialize systems:', error);
+            }
+        }
+
+        // Error simulation functions
+        async function simulateNetworkError() {
+            const error = new Error('Network connection failed');
+            error.name = 'NetworkError';
+            
+            await errorHandlingManager.handleError(error, {
+                operation: async () => {
+                    throw new Error('Simulated network failure');
+                },
+                apiEndpoint: 'experiences'
+            });
+        }
+
+        async function simulateAPIError() {
+            const error = new Error('API server returned 500 error');
+            error.status = 500;
+            
+            await errorHandlingManager.handleError(error, {
+                operation: async () => {
+                    const response = await fetch('/api/nonexistent');
+                    if (!response.ok) throw new Error('API Error');
+                    return response.json();
+                },
+                apiEndpoint: 'weather'
+            });
+        }
+
+        async function simulatePermissionError() {
+            const error = new Error('Geolocation permission denied');
+            error.name = 'PermissionError';
+            
+            await errorHandlingManager.handleError(error, {
+                feature: 'geolocation',
+                required: true
+            });
+        }
+
+        async function simulateValidationError() {
+            const error = new Error('Invalid email format provided');
+            error.name = 'ValidationError';
+            
+            await errorHandlingManager.handleError(error, {
+                field: 'email',
+                value: 'invalid-email',
+                rule: 'email_format'
+            });
+        }
+
+        async function simulateTimeoutError() {
+            const error = new Error('Request timeout after 30 seconds');
+            error.name = 'TimeoutError';
+            
+            await errorHandlingManager.handleError(error, {
+                operation: async () => {
+                    return new Promise((_, reject) => {
+                        setTimeout(() => reject(new Error('Timeout')), 100);
+                    });
+                },
+                timeout: 30000
+            });
+        }
+
+        async function simulateStorageError() {
+            const error = new Error('Storage quota exceeded');
+            error.name = 'QuotaExceededError';
+            
+            await errorHandlingManager.handleError(error, {
+                storageType: 'localStorage',
+                attemptedSize: '50MB'
+            });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initializeSystems);
+    </script>
+</body>
+</html>
