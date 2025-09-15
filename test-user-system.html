@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExploreX User System Test</title>
+  
+  <!-- Load ExploreX Styles -->
+  <link rel="stylesheet" href="explorex-ui-styles.css">
+  <link rel="stylesheet" href="explorex-user-styles.css">
+  
+  <style>
+    body {
+      font-family: 'Work Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+      min-height: 100vh;
+    }
+    
+    .test-header {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .test-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin: 0;
+    }
+    
+    .test-controls {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 20px;
+      margin: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .test-controls h3 {
+      margin: 0 0 16px 0;
+      color: #1a1a2e;
+    }
+    
+    .test-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .test-button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .test-button.primary {
+      background: linear-gradient(135deg, #64b5f6, #42a5f5);
+      color: #ffffff;
+    }
+    
+    .test-button.primary:hover {
+      background: linear-gradient(135deg, #42a5f5, #1e88e5);
+      transform: translateY(-2px);
+    }
+    
+    .test-button.secondary {
+      background: #ffffff;
+      color: #64b5f6;
+      border: 2px solid #64b5f6;
+    }
+    
+    .test-button.secondary:hover {
+      background: #64b5f6;
+      color: #ffffff;
+    }
+    
+    .test-info {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 16px;
+      margin: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #10b981;
+    }
+    
+    .test-info h4 {
+      margin: 0 0 8px 0;
+      color: #2e7d32;
+    }
+    
+    .test-info p {
+      margin: 0;
+      color: #388e3c;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    .main-content {
+      margin: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .demo-section {
+      margin-bottom: 40px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .demo-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+    
+    .demo-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1a1a2e;
+      margin: 0 0 16px 0;
+    }
+    
+    .demo-description {
+      color: #666666;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    
+    .demo-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .status-display {
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 20px 0;
+    }
+    
+    .status-title {
+      font-weight: 600;
+      color: #1a1a2e;
+      margin-bottom: 8px;
+    }
+    
+    .status-content {
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #333333;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-header">
+    <h1 class="test-title">👤 ExploreX User System Test</h1>
+    <!-- User navigation will be injected here -->
+  </div>
+  
+  <div class="test-controls">
+    <h3>Test Controls</h3>
+    <div class="test-buttons">
+      <button class="test-button primary" onclick="initializeUserSystem()">Initialize User System</button>
+      <button class="test-button secondary" onclick="testRegistration()">Test Registration</button>
+      <button class="test-button secondary" onclick="testLogin()">Test Login</button>
+      <button class="test-button secondary" onclick="testPreferences()">Test Preferences</button>
+      <button class="test-button secondary" onclick="testSavedExperiences()">Test Saved Experiences</button>
+      <button class="test-button secondary" onclick="clearUserData()">Clear User Data</button>
+    </div>
+  </div>
+  
+  <div class="test-info">
+    <h4>✅ Features Being Tested</h4>
+    <p>
+      • User registration and authentication system with email validation<br>
+      • User profile management with avatar upload and personal information<br>
+      • Comprehensive preferences system (experience types, budget, accessibility)<br>
+      • Saved experiences and favorites management with notes and tags<br>
+      • User dashboard with statistics and activity tracking<br>
+      • Notification preferences and privacy settings
+    </p>
+  </div>
+  
+  <div class="main-content">
+    <div class="demo-section">
+      <h2 class="demo-title">🔐 Authentication System</h2>
+      <p class="demo-description">
+        Test user registration, login, and password reset functionality with form validation and error handling.
+      </p>
+      <div class="demo-actions">
+        <button class="test-button secondary" onclick="showLoginModal()">Show Login Modal</button>
+        <button class="test-button secondary" onclick="showRegisterModal()">Show Register Modal</button>
+        <button class="test-button secondary" onclick="showPasswordResetModal()">Show Password Reset</button>
+      </div>
+    </div>
+    
+    <div class="demo-section">
+      <h2 class="demo-title">👤 User Profile Management</h2>
+      <p class="demo-description">
+        Test user profile editing, avatar upload, and personal information management.
+      </p>
+      <div class="demo-actions">
+        <button class="test-button secondary" onclick="showUserProfile()">Show Profile Modal</button>
+        <button class="test-button secondary" onclick="simulateProfileUpdate()">Simulate Profile Update</button>
+      </div>
+    </div>
+    
+    <div class="demo-section">
+      <h2 class="demo-title">⚙️ User Preferences</h2>
+      <p class="demo-description">
+        Test comprehensive preferences system including experience types, budget ranges, accessibility needs, and notifications.
+      </p>
+      <div class="demo-actions">
+        <button class="test-button secondary" onclick="showUserPreferences()">Show Preferences Modal</button>
+        <button class="test-button secondary" onclick="simulatePreferenceChange()">Simulate Preference Change</button>
+      </div>
+    </div>
+    
+    <div class="demo-section">
+      <h2 class="demo-title">❤️ Saved Experiences</h2>
+      <p class="demo-description">
+        Test saving and managing favorite experiences with notes, tags, and visit tracking.
+      </p>
+      <div class="demo-actions">
+        <button class="test-button secondary" onclick="showSavedExperiences()">Show Saved Experiences</button>
+        <button class="test-button secondary" onclick="simulateSaveExperience()">Simulate Save Experience</button>
+        <button class="test-button secondary" onclick="simulateUnsaveExperience()">Simulate Unsave Experience</button>
+      </div>
+    </div>
+    
+    <div class="demo-section">
+      <h2 class="demo-title">📊 User Dashboard</h2>
+      <p class="demo-description">
+        Test user dashboard with statistics, recent activity, and personalized recommendations.
+      </p>
+      <div class="demo-actions">
+        <button class="test-button secondary" onclick="showUserDashboard()">Show Dashboard Modal</button>
+        <button class="test-button secondary" onclick="simulateUserActivity()">Simulate User Activity</button>
+      </div>
+    </div>
+    
+    <div class="status-display">
+      <div class="status-title">System Status</div>
+      <div class="status-content" id="status-content">
+        User system not initialized. Click "Initialize User System" to begin testing.
+      </div>
+    </div>
+  </div>
+
+  <!-- Load ExploreX JavaScript -->
+  <script src="explorex-models.js"></script>
+  <script src="explorex-utils.js"></script>
+  <script src="explorex-ui-components.js"></script>
+  <script src="explorex-user-system.js"></script>
+  <script src="explorex-user-ui.js"></script>
+
+  <script>
+    let userAccountManager = null;
+    let userUI = null;
+    let isInitialized = false;
+
+    // Initialize test environment
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('👤 ExploreX User System Test Initialized');
+      updateStatus('Test environment loaded. Ready to initialize user system.');
+    });
+
+    async function initializeUserSystem() {
+      try {
+        console.log('👤 Initializing User System...');
+        updateStatus('Initializing user account system...');
+        
+        // Initialize user account manager
+        userAccountManager = new window.ExploreXUserSystem.UserAccountManager();
+        await userAccountManager.initialize();
+        
+        // Initialize user UI
+        userUI = new window.ExploreXUserUI(userAccountManager);
+        userUI.initialize();
+        
+        // Make methods globally available
+        userUI.makeGlobalMethods();
+        
+        // Setup event listeners
+        setupEventListeners();
+        
+        isInitialized = true;
+        console.log('✅ User System initialized successfully');
+        updateStatus('User system initialized successfully. Authentication and profile management ready.');
+        
+        // Show success message
+        const toastManager = window.exploreXApp?.toastManager;
+        if (toastManager) {
+          toastManager.success('User System initialized successfully!');
+        }
+        
+      } catch (error) {
+        console.error('❌ Failed to initialize User System:', error);
+        updateStatus(`Initialization failed: ${error.message}`);
+      }
+    }
+
+    function setupEventListeners() {
+      // Listen for user events
+      document.addEventListener('userLoggedIn', (event) => {
+        const user = event.detail.user;
+        updateStatus(`User logged in: ${user.firstName} ${user.lastName} (${user.email})`);
+        console.log('👤 User logged in:', user);
+      });
+      
+      document.addEventListener('userLoggedOut', (event) => {
+        updateStatus('User logged out successfully');
+        console.log('👋 User logged out');
+      });
+      
+      document.addEventListener('userProfileUpdated', (event) => {
+        const user = event.detail.user;
+        updateStatus(`Profile updated for: ${user.firstName} ${user.lastName}`);
+        console.log('👤 Profile updated:', user);
+      });
+      
+      document.addEventListener('userPreferencesUpdated', (event) => {
+        const preferences = event.detail.preferences;
+        updateStatus(`Preferences updated: ${preferences.experienceTypes.length} experience types selected`);
+        console.log('⚙️ Preferences updated:', preferences);
+      });
+      
+      document.addEventListener('experienceSaved', (event) => {
+        const { experienceId, totalSaved } = event.detail;
+        updateStatus(`Experience saved: ${experienceId}. Total saved: ${totalSaved}`);
+        console.log('❤️ Experience saved:', event.detail);
+      });
+      
+      document.addEventListener('experienceUnsaved', (event) => {
+        const { experienceId, totalSaved } = event.detail;
+        updateStatus(`Experience removed: ${experienceId}. Total saved: ${totalSaved}`);
+        console.log('🗑️ Experience unsaved:', event.detail);
+      });
+    }
+
+    function testRegistration() {
+      if (!isInitialized) {
+        alert('Please initialize the User System first');
+        return;
+      }
+      
+      console.log('📝 Testing user registration...');
+      
+      // Simulate registration with test data
+      const testUserData = {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+        password: 'testpassword123',
+        dateOfBirth: '1990-01-01',
+        accessibility: ['wheelchair']
+      };
+      
+      userAccountManager.registerUser(testUserData).then(result => {
+        if (result.success) {
+          updateStatus(`Registration successful: ${result.user.email}`);
+          console.log('✅ Registration test completed:', result);
+        } else {
+          updateStatus(`Registration failed: ${result.error}`);
+          console.error('❌ Registration test failed:', result.error);
+        }
+      });
+    }
+
+    function testLogin() {
+      if (!isInitialized) {
+        alert('Please initialize the User System first');
+        return;
+      }
+      
+      console.log('🔐 Testing user login...');
+      
+      // First register a test user, then login
+      const testUserData = {
+        firstName: 'Jane',
+        lastName: 'Smith',
+        email: 'jane.smith@example.com',
+        password: 'testpassword123',
+        dateOfBirth: '1985-05-15'
+      };
+      
+      userAccountManager.registerUser(testUserData).then(regResult => {
+        if (regResult.success) {
+          // Now try to login
+          return userAccountManager.loginUser(testUserData.email, testUserData.password, true);
+        } else {
+          throw new Error(regResult.error);
+        }
+      }).then(loginResult => {
+        if (loginResult.success) {
+          updateStatus(`Login successful: ${loginResult.user.email}`);
+          console.log('✅ Login test completed:', loginResult);
+        } else {
+          updateStatus(`Login failed: ${loginResult.error}`);
+          console.error('❌ Login test failed:', loginResult.error);
+        }
+      }).catch(error => {
+        updateStatus(`Login test error: ${error.message}`);
+        console.error('❌ Login test error:', error);
+      });
+    }
+
+    function testPreferences() {
+      if (!isInitialized) {
+        alert('Please initialize the User System first');
+        return;
+      }
+      
+      if (!userAccountManager.isAuthenticated) {
+        alert('Please login first to test preferences');
+        return;
+      }
+      
+      console.log('⚙️ Testing user preferences...');
+      
+      const testPreferences = {
+        experienceTypes: ['observatory', 'planetarium', 'space_center'],
+        budgetRange: 'medium',
+        maxDistance: 75,
+        accessibility: ['wheelchair', 'hearing'],
+        notifications: {
+          new_experiences: true,
+          events: true,
+          weather: false,
+          recommendations: true,
+          favorites: true
+        }
+      };
+      
+      userAccountManager.updateUserPreferences(testPreferences).then(result => {
+        if (result.success) {
+          updateStatus(`Preferences updated: ${result.preferences.experienceTypes.length} types, ${result.preferences.budgetRange} budget`);
+          console.log('✅ Preferences test completed:', result);
+        } else {
+          updateStatus(`Preferences update failed: ${result.error}`);
+          console.error('❌ Preferences test failed:', result.error);
+        }
+      });
+    }
+
+    function testSavedExperiences() {
+      if (!isInitialized) {
+        alert('Please initialize the User System first');
+        return;
+      }
+      
+      console.log('❤️ Testing saved experiences...');
+      
+      // Create mock experience data
+      const mockExperience = {
+        id: 'test-experience-1',
+        name: 'Griffith Observatory',
+        type: 'observatory',
+        address: {
+          city: 'Los Angeles',
+          state: 'CA'
+        }
+      };
+      
+      userAccountManager.saveExperience(mockExperience.id, mockExperience).then(result => {
+        if (result.success) {
+          updateStatus(`Experience saved: ${mockExperience.name}`);
+          console.log('✅ Save experience test completed:', result);
+          
+          // Test getting saved experiences
+          const savedExperiences = userAccountManager.getSavedExperiences();
+          console.log('📋 Saved experiences:', savedExperiences);
+        } else {
+          updateStatus(`Save experience failed: ${result.error}`);
+          console.error('❌ Save experience test failed:', result.error);
+        }
+      });
+    }
+
+    function simulateProfileUpdate() {
+      if (!isInitialized || !userAccountManager.isAuthenticated) {
+        alert('Please login first');
+        return;
+      }
+      
+      const profileUpdates = {
+        firstName: 'Updated',
+        lastName: 'Name',
+        location: 'New York, NY'
+      };
+      
+      userAccountManager.updateUserProfile(profileUpdates).then(result => {
+        if (result.success) {
+          console.log('✅ Profile update simulation completed');
+        }
+      });
+    }
+
+    function simulatePreferenceChange() {
+      if (!isInitialized) {
+        alert('Please initialize the User System first');
+        return;
+      }
+      
+      const preferences = userAccountManager.getUserPreferences();
+      preferences.maxDistance = Math.floor(Math.random() * 200) + 10;
+      
+      userAccountManager.updateUserPreferences(preferences);
+    }
+
+    function simulateSaveExperience() {
+      if (!isInitialized) {
+        alert('Please initialize the User System first');
+        return;
+      }
+      
+      const mockExperiences = [
+        { id: 'exp-1', name: 'Kennedy Space Center', type: 'space_center' },
+        { id: 'exp-2', name: 'Hayden Planetarium', type: 'planetarium' },
+        { id: 'exp-3', name: 'Palomar Observatory', type: 'observatory' }
+      ];
+      
+      const randomExp = mockExperiences[Math.floor(Math.random() * mockExperiences.length)];
+      userAccountManager.saveExperience(randomExp.id, randomExp);
+    }
+
+    function simulateUnsaveExperience() {
+      if (!isInitialized) {
+        alert('Please initialize the User System first');
+        return;
+      }
+      
+      const savedExperiences = userAccountManager.getSavedExperiences();
+      if (savedExperiences.length > 0) {
+        const randomExp = savedExperiences[Math.floor(Math.random() * savedExperiences.length)];
+        userAccountManager.unsaveExperience(randomExp.id);
+      } else {
+        updateStatus('No saved experiences to remove');
+      }
+    }
+
+    function simulateUserActivity() {
+      if (!isInitialized) {
+        alert('Please initialize the User System first');
+        return;
+      }
+      
+      // Simulate some user activity
+      simulateSaveExperience();
+      setTimeout(() => {
+        simulatePreferenceChange();
+      }, 1000);
+      
+      updateStatus('Simulated user activity: saved experience and updated preferences');
+    }
+
+    function clearUserData() {
+      if (!isInitialized) {
+        alert('Please initialize the User System first');
+        return;
+      }
+      
+      // Clear all user data
+      localStorage.removeItem('explorex_user_profile');
+      localStorage.removeItem('explorex_user_preferences');
+      localStorage.removeItem('explorex_saved_experiences');
+      localStorage.removeItem('explorex_auth_token');
+      localStorage.removeItem('mock_users');
+      
+      // Logout if authenticated
+      if (userAccountManager.isAuthenticated) {
+        userAccountManager.logoutUser();
+      }
+      
+      updateStatus('All user data cleared');
+      console.log('🧹 User data cleared');
+    }
+
+    function updateStatus(message) {
+      const statusContent = document.getElementById('status-content');
+      if (statusContent) {
+        const timestamp = new Date().toLocaleTimeString();
+        statusContent.textContent = `[${timestamp}] ${message}`;
+      }
+    }
+
+    // Global methods for UI components
+    window.showLoginModal = () => {
+      if (userUI) userUI.showLoginModal();
+    };
+
+    window.showRegisterModal = () => {
+      if (userUI) userUI.showRegisterModal();
+    };
+
+    window.showPasswordResetModal = () => {
+      if (userUI) userUI.showPasswordResetModal();
+    };
+
+    window.showUserProfile = () => {
+      if (userUI) userUI.showUserProfile();
+    };
+
+    window.showUserPreferences = () => {
+      if (userUI) userUI.showUserPreferences();
+    };
+
+    window.showSavedExperiences = () => {
+      if (userUI) userUI.showSavedExperiences();
+    };
+
+    window.showUserDashboard = () => {
+      if (userUI) userUI.showUserDashboard();
+    };
+  </script>
+</body>
+</html>

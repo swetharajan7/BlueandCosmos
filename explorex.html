@@ -625,6 +625,7 @@
   <link rel="stylesheet" href="explorex-modal-styles.css">
   <link rel="stylesheet" href="explorex-events-styles.css">
   <link rel="stylesheet" href="explorex-weather-styles.css">
+  <link rel="stylesheet" href="explorex-user-styles.css">
 </head>
 
 <body>
@@ -897,6 +898,8 @@
   <script src="explorex-events-integration.js"></script>
   <script src="explorex-weather-api.js"></script>
   <script src="explorex-weather-integration.js"></script>
+  <script src="explorex-user-system.js"></script>
+  <script src="explorex-user-ui.js"></script>
   
   <!-- Load Styles -->
   <link rel="stylesheet" href="explorex-location-styles.css" />
@@ -956,6 +959,7 @@
         this.initializeLocationServices();
         this.initializeEventsSystem();
         this.initializeWeatherSystem();
+        this.initializeUserSystem();
         this.setupAdvancedFilters();
         this.setupPopularDestinations();
         this.setupDatabaseStats();
@@ -1525,6 +1529,149 @@
         experienceCards.forEach(card => {
           if (this.weatherIntegration) {
             this.weatherIntegration.addWeatherSuitabilityToCard(card);
+          }
+        });
+      }
+
+      async initializeUserSystem() {
+        try {
+          // Initialize user account manager
+          this.userAccountManager = new window.ExploreXUserSystem.UserAccountManager();
+          await this.userAccountManager.initialize();
+          
+          // Initialize user UI
+          this.userUI = new window.ExploreXUserUI(this.userAccountManager);
+          this.userUI.initialize();
+          
+          // Make UI methods globally available
+          this.userUI.makeGlobalMethods();
+          
+          // Setup event listeners for user system integration
+          document.addEventListener('userLoggedIn', this.handleUserLogin.bind(this));
+          document.addEventListener('userLoggedOut', this.handleUserLogout.bind(this));
+          document.addEventListener('userPreferencesUpdated', this.handleUserPreferencesUpdate.bind(this));
+          document.addEventListener('experienceSaved', this.handleExperienceSaved.bind(this));
+          
+          if (this.config.debug) {
+            console.log('👤 User System initialized successfully');
+          }
+          
+        } catch (error) {
+          console.error('❌ Failed to initialize User System:', error);
+          
+          // Show error toast
+          if (this.toastManager) {
+            this.toastManager.error('User system unavailable. Some features may be limited.');
+          }
+        }
+      }
+
+      handleUserLogin(event) {
+        const user = event.detail.user;
+        
+        if (this.config.debug) {
+          console.log('👤 User logged in:', user.email);
+        }
+        
+        // Update search results with user preferences
+        this.updateSearchWithUserPreferences();
+        
+        // Show welcome message
+        if (this.toastManager) {
+          this.toastManager.success(`Welcome back, ${user.firstName}!`);
+        }
+      }
+
+      handleUserLogout(event) {
+        if (this.config.debug) {
+          console.log('👋 User logged out');
+        }
+        
+        // Reset to default search behavior
+        this.resetSearchToDefaults();
+        
+        // Show goodbye message
+        if (this.toastManager) {
+          this.toastManager.info('You have been logged out successfully');
+        }
+      }
+
+      handleUserPreferencesUpdate(event) {
+        const preferences = event.detail.preferences;
+        
+        if (this.config.debug) {
+          console.log('⚙️ User preferences updated:', preferences);
+        }
+        
+        // Update search results based on new preferences
+        this.updateSearchWithUserPreferences();
+        
+        // Show success message
+        if (this.toastManager) {
+          this.toastManager.success('Preferences updated successfully!');
+        }
+      }
+
+      handleExperienceSaved(event) {
+        const { experienceId, totalSaved } = event.detail;
+        
+        if (this.config.debug) {
+          console.log('❤️ Experience saved:', experienceId);
+        }
+        
+        // Update UI to reflect saved state
+        this.updateExperienceCardSavedState(experienceId, true);
+        
+        // Show success message
+        if (this.toastManager) {
+          this.toastManager.success(`Experience saved! You have ${totalSaved} saved experiences.`);
+        }
+      }
+
+      updateSearchWithUserPreferences() {
+        if (!this.userAccountManager || !this.userAccountManager.isAuthenticated) return;
+        
+        const preferences = this.userAccountManager.getUserPreferences();
+        
+        // Update search engine with user preferences
+        if (this.searchEngine) {
+          this.searchEngine.setUserPreferences(preferences);
+        }
+        
+        // Update location services with max distance preference
+        if (this.locationServices && preferences.maxDistance) {
+          this.locationServices.setDefaultRadius(preferences.maxDistance);
+        }
+        
+        // Update weather system with accessibility preferences
+        if (this.weatherIntegration && preferences.accessibility) {
+          this.weatherIntegration.setAccessibilityPreferences(preferences.accessibility);
+        }
+      }
+
+      resetSearchToDefaults() {
+        // Reset search engine to default behavior
+        if (this.searchEngine) {
+          this.searchEngine.clearUserPreferences();
+        }
+        
+        // Reset location services to default radius
+        if (this.locationServices) {
+          this.locationServices.setDefaultRadius(50); // Default 50 miles
+        }
+      }
+
+      updateExperienceCardSavedState(experienceId, isSaved) {
+        // Find and update experience cards to show saved state
+        const experienceCards = document.querySelectorAll(`[data-experience-id="${experienceId}"]`);
+        experienceCards.forEach(card => {
+          const saveButton = card.querySelector('.save-experience-button');
+          if (saveButton) {
+            saveButton.classList.toggle('saved', isSaved);
+            const icon = saveButton.querySelector('.button-icon');
+            const text = saveButton.querySelector('.button-text');
+            if (icon) icon.textContent = isSaved ? '❤️' : '🤍';
+            if (text) text.textContent = isSaved ? 'Saved' : 'Save';
           }
         });
       }
