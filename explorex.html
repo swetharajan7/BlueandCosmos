@@ -624,6 +624,7 @@
   <!-- External CSS Files -->
   <link rel="stylesheet" href="explorex-modal-styles.css">
   <link rel="stylesheet" href="explorex-events-styles.css">
+  <link rel="stylesheet" href="explorex-weather-styles.css">
 </head>
 
 <body>
@@ -894,6 +895,8 @@
   <script src="explorex-experience-modal.js"></script>
   <script src="explorex-events-api.js"></script>
   <script src="explorex-events-integration.js"></script>
+  <script src="explorex-weather-api.js"></script>
+  <script src="explorex-weather-integration.js"></script>
   
   <!-- Load Styles -->
   <link rel="stylesheet" href="explorex-location-styles.css" />
@@ -952,6 +955,7 @@
         this.initializeDataModels();
         this.initializeLocationServices();
         this.initializeEventsSystem();
+        this.initializeWeatherSystem();
         this.setupAdvancedFilters();
         this.setupPopularDestinations();
         this.setupDatabaseStats();
@@ -1460,6 +1464,71 @@
         }
       }
 
+      async initializeWeatherSystem() {
+        try {
+          // Initialize weather integration
+          this.weatherIntegration = new window.ExploreXWeatherIntegration({
+            enableWeatherDisplay: true,
+            enableViewingRecommendations: true,
+            enableWeatherAlerts: true,
+            autoRefreshInterval: 15 * 60 * 1000, // 15 minutes
+            forecastDays: 5
+          });
+          
+          await this.weatherIntegration.initialize();
+          
+          // Setup event listeners for weather integration
+          document.addEventListener('weatherDataUpdated', this.handleWeatherUpdate.bind(this));
+          document.addEventListener('viewingConditionsChanged', this.handleViewingConditionsChange.bind(this));
+          
+          if (this.config.debug) {
+            console.log('🌤️ Weather System initialized successfully');
+          }
+          
+        } catch (error) {
+          console.error('❌ Failed to initialize Weather System:', error);
+          
+          // Show error toast
+          if (this.toastManager) {
+            this.toastManager.error('Weather system unavailable. Some features may be limited.');
+          }
+        }
+      }
+
+      handleWeatherUpdate(event) {
+        const weatherData = event.detail.weather;
+        
+        if (this.config.debug) {
+          console.log('🌤️ Weather data updated:', weatherData.location.name);
+        }
+        
+        // Update search results with weather information
+        this.updateSearchResultsWithWeather(weatherData);
+      }
+
+      handleViewingConditionsChange(event) {
+        const conditions = event.detail.conditions;
+        
+        if (this.config.debug) {
+          console.log('🌌 Viewing conditions changed:', conditions.rating);
+        }
+        
+        // Show notification for significant condition changes
+        if (conditions.rating === 'excellent' && this.toastManager) {
+          this.toastManager.success('Excellent stargazing conditions detected!');
+        }
+      }
+
+      updateSearchResultsWithWeather(weatherData) {
+        // Update experience cards with weather suitability
+        const experienceCards = document.querySelectorAll('.experience-card');
+        experienceCards.forEach(card => {
+          if (this.weatherIntegration) {
+            this.weatherIntegration.addWeatherSuitabilityToCard(card);
+          }
+        });
+      }
+
       setupPopularDestinations() {
         const popularDestinationsGrid = document.getElementById('popular-destinations-grid');
         const popularDestinationsSection = document.getElementById('popular-destinations');
@@ -1552,6 +1621,11 @@
         // Set location for events system
         if (this.eventsIntegration) {
           this.eventsIntegration.setLocation(location);
+        }
+
+        // Set location for weather system
+        if (this.weatherIntegration) {
+          this.weatherIntegration.setLocation(location);
         }
 
         // Hide popular destinations when location is selected

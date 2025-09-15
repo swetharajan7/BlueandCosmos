@@ -64,7 +64,7 @@
   - Add event availability and capacity tracking
   - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
-- [ ] 9. Build weather and astronomical condition integration
+- [x] 9. Build weather and astronomical condition integration
   - Integrate weather API for cloud cover and visibility forecasts
   - Add astronomical twilight and moon phase calculations
   - Implement optimal viewing time recommendations

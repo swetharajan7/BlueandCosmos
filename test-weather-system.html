@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExploreX Weather System Test</title>
+  
+  <!-- Load ExploreX Styles -->
+  <link rel="stylesheet" href="explorex-ui-styles.css">
+  <link rel="stylesheet" href="explorex-weather-styles.css">
+  
+  <style>
+    body {
+      font-family: 'Work Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+      min-height: 100vh;
+    }
+    
+    .test-header {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .test-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin: 0 0 8px 0;
+    }
+    
+    .test-subtitle {
+      font-size: 16px;
+      color: #666666;
+      margin: 0;
+    }
+    
+    .test-controls {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 20px;
+      margin: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .test-controls h3 {
+      margin: 0 0 16px 0;
+      color: #1a1a2e;
+    }
+    
+    .test-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .test-button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .test-button.primary {
+      background: linear-gradient(135deg, #64b5f6, #42a5f5);
+      color: #ffffff;
+    }
+    
+    .test-button.primary:hover {
+      background: linear-gradient(135deg, #42a5f5, #1e88e5);
+      transform: translateY(-2px);
+    }
+    
+    .test-button.secondary {
+      background: #ffffff;
+      color: #64b5f6;
+      border: 2px solid #64b5f6;
+    }
+    
+    .test-button.secondary:hover {
+      background: #64b5f6;
+      color: #ffffff;
+    }
+    
+    .test-info {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 16px;
+      margin: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #10b981;
+    }
+    
+    .test-info h4 {
+      margin: 0 0 8px 0;
+      color: #2e7d32;
+    }
+    
+    .test-info p {
+      margin: 0;
+      color: #388e3c;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    .location-selector {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 16px;
+      margin: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #3b82f6;
+    }
+    
+    .location-selector h4 {
+      margin: 0 0 12px 0;
+      color: #1e40af;
+    }
+    
+    .location-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .location-button {
+      padding: 6px 12px;
+      background: #3b82f6;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .location-button:hover {
+      background: #2563eb;
+    }
+    
+    .main-content {
+      margin: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-header">
+    <h1 class="test-title">🌤️ ExploreX Weather System Test</h1>
+    <p class="test-subtitle">Test the comprehensive weather and astronomical conditions integration</p>
+  </div>
+  
+  <div class="test-controls">
+    <h3>Test Controls</h3>
+    <div class="test-buttons">
+      <button class="test-button primary" onclick="initializeWeatherSystem()">Initialize Weather System</button>
+      <button class="test-button secondary" onclick="loadCurrentWeather()">Load Current Weather</button>
+      <button class="test-button secondary" onclick="loadWeatherForecast()">Load 5-Day Forecast</button>
+      <button class="test-button secondary" onclick="testAstronomicalCalculations()">Test Astronomy</button>
+      <button class="test-button secondary" onclick="testViewingConditions()">Test Viewing Conditions</button>
+      <button class="test-button secondary" onclick="clearWeatherData()">Clear Weather</button>
+    </div>
+  </div>
+  
+  <div class="location-selector">
+    <h4>🌍 Test Locations</h4>
+    <div class="location-buttons">
+      <button class="location-button" onclick="setTestLocation('los-angeles')">Los Angeles, CA</button>
+      <button class="location-button" onclick="setTestLocation('new-york')">New York, NY</button>
+      <button class="location-button" onclick="setTestLocation('london')">London, UK</button>
+      <button class="location-button" onclick="setTestLocation('tokyo')">Tokyo, Japan</button>
+      <button class="location-button" onclick="setTestLocation('sydney')">Sydney, Australia</button>
+      <button class="location-button" onclick="setTestLocation('reykjavik')">Reykjavik, Iceland</button>
+    </div>
+  </div>
+  
+  <div class="test-info">
+    <h4>✅ Features Being Tested</h4>
+    <p>
+      • Weather API integration with current conditions and 5-day forecasts<br>
+      • Astronomical calculations (sun/moon positions, twilight times, darkness periods)<br>
+      • Viewing condition assessment and scoring system<br>
+      • Weather-based experience recommendations and suitability indicators<br>
+      • Interactive weather widgets and forecast displays<br>
+      • Real-time weather updates and caching system
+    </p>
+  </div>
+  
+  <div class="main-content">
+    <!-- Weather system will be injected here -->
+  </div>
+
+  <!-- Load ExploreX JavaScript -->
+  <script src="explorex-models.js"></script>
+  <script src="explorex-utils.js"></script>
+  <script src="explorex-ui-components.js"></script>
+  <script src="explorex-weather-api.js"></script>
+  <script src="explorex-weather-integration.js"></script>
+
+  <script>
+    let weatherIntegration = null;
+    let currentTestLocation = null;
+
+    // Test locations with coordinates
+    const testLocations = {
+      'los-angeles': {
+        latitude: 34.0522,
+        longitude: -118.2437,
+        name: 'Los Angeles, CA',
+        timezone: 'America/Los_Angeles'
+      },
+      'new-york': {
+        latitude: 40.7128,
+        longitude: -74.0060,
+        name: 'New York, NY',
+        timezone: 'America/New_York'
+      },
+      'london': {
+        latitude: 51.5074,
+        longitude: -0.1278,
+        name: 'London, UK',
+        timezone: 'Europe/London'
+      },
+      'tokyo': {
+        latitude: 35.6762,
+        longitude: 139.6503,
+        name: 'Tokyo, Japan',
+        timezone: 'Asia/Tokyo'
+      },
+      'sydney': {
+        latitude: -33.8688,
+        longitude: 151.2093,
+        name: 'Sydney, Australia',
+        timezone: 'Australia/Sydney'
+      },
+      'reykjavik': {
+        latitude: 64.1466,
+        longitude: -21.9426,
+        name: 'Reykjavik, Iceland',
+        timezone: 'Atlantic/Reykjavik'
+      }
+    };
+
+    // Initialize test environment
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('🌤️ ExploreX Weather System Test Initialized');
+      
+      // Set default test location
+      currentTestLocation = testLocations['los-angeles'];
+      
+      // Show initial instructions
+      showTestInstructions();
+    });
+
+    function showTestInstructions() {
+      const mainContent = document.querySelector('.main-content');
+      mainContent.innerHTML = `
+        <div style="background: rgba(255, 255, 255, 0.95); padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+          <h2 style="color: #1a1a2e; margin: 0 0 16px 0;">🎯 Ready to Test Weather System</h2>
+          <p style="color: #666666; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
+            Click "Initialize Weather System" above to start testing the comprehensive weather and astronomical conditions integration.
+            The system will provide real-time weather data, astronomical calculations, and viewing condition assessments.
+          </p>
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <button class="test-button primary" onclick="initializeWeatherSystem()">
+              🌤️ Initialize Weather System
+            </button>
+            <button class="test-button secondary" onclick="showSystemInfo()">
+              ℹ️ System Information
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    async function initializeWeatherSystem() {
+      try {
+        console.log('🌤️ Initializing Weather System...');
+        
+        // Show loading state
+        const mainContent = document.querySelector('.main-content');
+        mainContent.innerHTML = `
+          <div style="background: rgba(255, 255, 255, 0.95); padding: 40px; border-radius: 12px; text-align: center;">
+            <div style="width: 48px; height: 48px; border: 4px solid #e0e0e0; border-top: 4px solid #64b5f6; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px;"></div>
+            <h3 style="color: #1a1a2e; margin: 0 0 8px 0;">Initializing Weather System</h3>
+            <p style="color: #666666; margin: 0;">Setting up weather APIs and astronomical calculations...</p>
+          </div>
+        `;
+        
+        // Initialize the weather integration
+        weatherIntegration = new window.ExploreXWeatherIntegration({
+          enableWeatherDisplay: true,
+          enableViewingRecommendations: true,
+          enableWeatherAlerts: true,
+          autoRefreshInterval: 0, // Disable auto-refresh for testing
+          forecastDays: 5
+        });
+        
+        await weatherIntegration.initialize();
+        
+        // Inject the weather UI into main content
+        mainContent.innerHTML = '';
+        weatherIntegration.setupWeatherUI();
+        
+        // Move weather widgets to main content
+        const weatherWidget = document.getElementById('weather-widget');
+        const viewingPanel = document.getElementById('viewing-conditions-panel');
+        
+        if (weatherWidget) {
+          mainContent.appendChild(weatherWidget);
+          weatherWidget.style.display = 'block';
+        }
+        
+        if (viewingPanel) {
+          mainContent.appendChild(viewingPanel);
+          viewingPanel.style.display = 'block';
+        }
+        
+        // Load initial weather data
+        await loadCurrentWeather();
+        
+        console.log('✅ Weather System initialized successfully');
+        
+        // Show success message
+        const toastManager = window.exploreXApp?.toastManager;
+        if (toastManager) {
+          toastManager.success('Weather System initialized successfully!');
+        }
+        
+      } catch (error) {
+        console.error('❌ Failed to initialize Weather System:', error);
+        
+        const mainContent = document.querySelector('.main-content');
+        mainContent.innerHTML = `
+          <div style="background: rgba(255, 255, 255, 0.95); padding: 40px; border-radius: 12px; text-align: center; border-left: 4px solid #ef4444;">
+            <h3 style="color: #dc2626; margin: 0 0 8px 0;">❌ Initialization Failed</h3>
+            <p style="color: #666666; margin: 0 0 16px 0;">
+              Failed to initialize the Weather System. Check the console for details.
+            </p>
+            <button class="test-button secondary" onclick="initializeWeatherSystem()">
+              🔄 Try Again
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    async function loadCurrentWeather() {
+      if (!weatherIntegration) {
+        alert('Please initialize the Weather System first');
+        return;
+      }
+      
+      try {
+        console.log(`🌤️ Loading current weather for ${currentTestLocation.name}...`);
+        
+        // Load weather data for current test location
+        await weatherIntegration.loadWeatherData(currentTestLocation);
+        
+        console.log('✅ Current weather loaded successfully');
+        
+      } catch (error) {
+        console.error('❌ Failed to load current weather:', error);
+      }
+    }
+
+    async function loadWeatherForecast() {
+      if (!weatherIntegration) {
+        alert('Please initialize the Weather System first');
+        return;
+      }
+      
+      try {
+        console.log(`📅 Loading weather forecast for ${currentTestLocation.name}...`);
+        
+        // Toggle forecast display
+        weatherIntegration.toggleWeatherForecast();
+        
+        console.log('✅ Weather forecast loaded successfully');
+        
+      } catch (error) {
+        console.error('❌ Failed to load weather forecast:', error);
+      }
+    }
+
+    function testAstronomicalCalculations() {
+      if (!weatherIntegration || !weatherIntegration.weatherAPIManager) {
+        alert('Please initialize the Weather System first');
+        return;
+      }
+      
+      console.log('🌌 Testing astronomical calculations...');
+      
+      // Test astronomical calculations for current location
+      const astronomy = weatherIntegration.weatherAPIManager.calculateAstronomicalConditions(
+        currentTestLocation, 
+        new Date()
+      );
+      
+      console.log('Astronomical Data:', astronomy);
+      
+      // Display results in console
+      console.log(`Sun: Rise ${astronomy.sun.sunrise.toLocaleTimeString()}, Set ${astronomy.sun.sunset.toLocaleTimeString()}`);
+      console.log(`Moon: ${astronomy.moon.phase} (${Math.round(astronomy.moon.illumination)}% illuminated)`);
+      console.log(`Darkness: ${astronomy.darkness.hasDarkness ? 
+        `${Math.round(astronomy.darkness.duration / 60)} hours` : 'No darkness'}`);
+      
+      console.log('✅ Astronomical calculations test completed');
+    }
+
+    function testViewingConditions() {
+      if (!weatherIntegration) {
+        alert('Please initialize the Weather System first');
+        return;
+      }
+      
+      console.log('🔍 Testing viewing conditions assessment...');
+      
+      // Toggle viewing conditions panel
+      weatherIntegration.toggleViewingConditions();
+      
+      // Test different weather scenarios
+      const testScenarios = [
+        { name: 'Perfect Clear Night', cloudCover: 5, visibility: 25, humidity: 45, windSpeed: 8 },
+        { name: 'Partly Cloudy', cloudCover: 35, visibility: 15, humidity: 65, windSpeed: 15 },
+        { name: 'Overcast', cloudCover: 85, visibility: 8, humidity: 80, windSpeed: 25 },
+        { name: 'Poor Conditions', cloudCover: 95, visibility: 3, humidity: 90, windSpeed: 35 }
+      ];
+      
+      testScenarios.forEach(scenario => {
+        const viewing = weatherIntegration.weatherAPIManager.assessViewingConditions(scenario);
+        console.log(`${scenario.name}: ${viewing.rating} (${viewing.score}/100) - ${viewing.description}`);
+      });
+      
+      console.log('✅ Viewing conditions test completed');
+    }
+
+    function setTestLocation(locationKey) {
+      const location = testLocations[locationKey];
+      if (!location) {
+        console.error('Invalid location key:', locationKey);
+        return;
+      }
+      
+      currentTestLocation = location;
+      console.log(`📍 Test location set to: ${location.name}`);
+      
+      // Update location display
+      const locationButtons = document.querySelectorAll('.location-button');
+      locationButtons.forEach(button => {
+        button.style.background = button.textContent.includes(location.name.split(',')[0]) ? '#1e40af' : '#3b82f6';
+      });
+      
+      // Reload weather data if system is initialized
+      if (weatherIntegration) {
+        loadCurrentWeather();
+      }
+    }
+
+    function clearWeatherData() {
+      const weatherWidget = document.getElementById('weather-widget');
+      const viewingPanel = document.getElementById('viewing-conditions-panel');
+      
+      if (weatherWidget) {
+        weatherWidget.style.display = 'none';
+      }
+      
+      if (viewingPanel) {
+        viewingPanel.style.display = 'none';
+      }
+      
+      console.log('🧹 Weather data cleared');
+    }
+
+    function showSystemInfo() {
+      const mainContent = document.querySelector('.main-content');
+      mainContent.innerHTML = `
+        <div style="background: rgba(255, 255, 255, 0.95); padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+          <h2 style="color: #1a1a2e; margin: 0 0 20px 0;">🌤️ Weather System Information</h2>
+          
+          <div style="display: grid; gap: 20px;">
+            <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; border-left: 4px solid #3b82f6;">
+              <h4 style="margin: 0 0 8px 0; color: #1e40af;">🔌 Weather APIs</h4>
+              <ul style="margin: 0; padding-left: 20px; color: #374151;">
+                <li>OpenWeatherMap API for current conditions and forecasts</li>
+                <li>WeatherAPI.com for enhanced weather data</li>
+                <li>Custom astronomical calculations for sun/moon positions</li>
+                <li>Twilight and darkness period calculations</li>
+              </ul>
+            </div>
+            
+            <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; border-left: 4px solid #10b981;">
+              <h4 style="margin: 0 0 8px 0; color: #059669;">🌌 Astronomical Features</h4>
+              <ul style="margin: 0; padding-left: 20px; color: #374151;">
+                <li>Sun rise/set times and solar elevation</li>
+                <li>Moon phases and illumination percentages</li>
+                <li>Civil, nautical, and astronomical twilight</li>
+                <li>Optimal darkness periods for stargazing</li>
+                <li>Seasonal viewing recommendations</li>
+              </ul>
+            </div>
+            
+            <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; border-left: 4px solid #f59e0b;">
+              <h4 style="margin: 0 0 8px 0; color: #d97706;">📊 Viewing Conditions</h4>
+              <ul style="margin: 0; padding-left: 20px; color: #374151;">
+                <li>Cloud cover impact assessment (0-100% scoring)</li>
+                <li>Visibility and atmospheric clarity analysis</li>
+                <li>Humidity and wind speed considerations</li>
+                <li>Experience suitability recommendations</li>
+                <li>Weather-based activity suggestions</li>
+              </ul>
+            </div>
+            
+            <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; border-left: 4px solid #ef4444;">
+              <h4 style="margin: 0 0 8px 0; color: #dc2626;">⚡ Real-Time Features</h4>
+              <ul style="margin: 0; padding-left: 20px; color: #374151;">
+                <li>Live weather data with 15-minute refresh cycles</li>
+                <li>5-day forecast with hourly breakdowns</li>
+                <li>Intelligent caching for optimal performance</li>
+                <li>Weather alerts and condition notifications</li>
+                <li>Mobile-responsive weather widgets</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div style="margin-top: 24px; text-align: center;">
+            <button class="test-button primary" onclick="initializeWeatherSystem()">
+              🌤️ Start Testing
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Global handlers for weather integration
+    window.toggleWeatherForecast = function() {
+      if (weatherIntegration) {
+        weatherIntegration.toggleWeatherForecast();
+      }
+    };
+
+    window.toggleViewingConditions = function() {
+      if (weatherIntegration) {
+        weatherIntegration.toggleViewingConditions();
+      }
+    };
+
+    // Add CSS animation for loading spinner
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>
