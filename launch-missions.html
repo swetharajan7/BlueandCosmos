@@ -62,7 +62,7 @@
       color: var(--text-white);
       padding: 1em 2em;
       display: grid;
-      grid-template-columns: auto 1fr auto auto auto;
+      grid-template-columns: auto auto 1fr auto auto;
       align-items: center;
       gap: 1.5em;
       position: sticky;
@@ -74,7 +74,8 @@
       display: flex; 
       align-items: center; 
       text-decoration: none; 
-      color: inherit; 
+      color: inherit;
+      grid-column: 1;
     }
 
     .logo-area { 
@@ -117,6 +118,7 @@
       align-items: center; 
       justify-content: flex-end; 
       gap: 1.2em;
+      grid-column: 5;
     }
 
     .nav-right > * { 
@@ -130,6 +132,7 @@
       align-items: center; 
       gap: 0.6em; 
       justify-self: center;
+      grid-column: 3;
       min-width: 220px; 
       user-select: none; 
       text-decoration: none; 
@@ -182,7 +185,8 @@
       display: flex;
       align-items: center;
       gap: 0.6em;
-      justify-self: center;
+      justify-self: start;
+      grid-column: 2;
       user-select: none;
       text-decoration: none;
       color: inherit;
@@ -228,7 +232,8 @@
       display: flex; 
       align-items: center; 
       gap: 0.6em; 
-      justify-self: center;
+      justify-self: end;
+      grid-column: 4;
       user-select: none; 
       text-decoration: none; 
       color: inherit;
