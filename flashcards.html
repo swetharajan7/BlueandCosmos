@@ -9,6 +9,171 @@
   <link rel="stylesheet" href="flashcards.css" />
   <link rel="stylesheet" href="newsletter-component.css" />
   
+  <style>
+    /* Override header styles to match index.html */
+    :root {
+      --accent: #0033a0;
+      --flag-blue: #002366;
+      --highlight: #ff4081;
+      --text-white: #ffffff;
+      --text-light: #cce0ff;
+      --dark-bg: #121212;
+      --dark-accent: #001f5b;
+    }
+
+    header {
+      background: var(--accent) !important;
+      color: var(--text-white) !important;
+      padding: 1em 2em !important;
+      display: grid !important;
+      grid-template-columns: auto 1fr auto auto auto !important;
+      align-items: center !important;
+      gap: 1.5em !important;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 1000 !important;
+      border-bottom: none !important;
+    }
+    .logo-link { display: flex; align-items: center; text-decoration: none; color: inherit; }
+    .logo-area { display: flex; align-items: center; gap: 0.4em; }
+    .logo-area img { height: 50px; width: 50px; margin: 0; padding: 0; background-color: transparent; display: block; }
+    .logo-text { display: flex; flex-direction: column; line-height: 1.2; margin-left: -4px; }
+    .logo-text .title { font-size: 1.4em; font-weight: bold; color: #fff !important; margin: 0; }
+    .logo-text .tagline { font-size: 0.85em; color: var(--text-light) !important; margin: 0; }
+
+    .nav-right {
+      display: flex; align-items: center; justify-content: flex-end; gap: 1.2em;
+    }
+    .nav-right > * { display: inline-flex; align-items: center; }
+
+    /* Moon Widget */
+    .moon-widget {
+      display: flex; align-items: center; gap: 0.6em; justify-self: center;
+      min-width: 220px; user-select: none; text-decoration: none; color: inherit;
+    }
+    .moon-icon { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+    .moon-info { display: flex; flex-direction: column; gap: 0.1em; }
+    .moon-label { color: var(--text-light); font-size: 0.95em; white-space: nowrap; font-weight: 500; }
+    .moon-context { color: var(--text-light); font-size: 0.75em; opacity: 0.8; white-space: nowrap; }
+    body.dark .moon-label, body.dark .moon-context { color: #e0ecff; }
+    @media (max-width: 900px) { .moon-widget { display: none; } }
+
+    /* ExploreX Widget */
+    .explorex-widget {
+      display: flex; align-items: center; gap: 0.6em; justify-self: center;
+      user-select: none; text-decoration: none; color: inherit;
+      transition: transform 0.2s ease;
+    }
+    .explorex-label {
+      color: var(--text-light); 
+      font-size: 0.95em; 
+      font-weight: 600; 
+      white-space: nowrap;
+    }
+    body.dark .explorex-label { color: #e0ecff; }
+    .explorex-widget:hover { transform: scale(1.05); }
+    .explorex-icon { 
+      width: 32px; height: 32px; border-radius: 50%; 
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%); 
+      display: flex; align-items: center; justify-content: center; 
+      flex-shrink: 0;
+      font-size: 16px;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+      border: 2px solid rgba(59, 130, 246, 0.3);
+    }
+    @media (max-width: 1050px) { .explorex-widget { display: none; } }
+
+    /* Mars Widget */
+    .mars-widget {
+      display: flex; align-items: center; gap: 0.6em; justify-self: center;
+      user-select: none; text-decoration: none; color: inherit;
+      transition: transform 0.2s ease;
+    }
+    .mars-label {
+      color: var(--text-light); 
+      font-size: 0.95em; 
+      font-weight: 600; 
+      white-space: nowrap;
+    }
+    body.dark .mars-label { color: #e0ecff; }
+    .mars-widget:hover { transform: scale(1.05); }
+    .mars-icon { 
+      width: 32px; height: 32px; border-radius: 50%; 
+      background-image: url('https://photojournal.jpl.nasa.gov/jpeg/PIA00407.jpg');
+      background-size: cover;
+      background-position: center;
+      display: flex; align-items: center; justify-content: center; 
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(205, 92, 92, 0.4);
+      border: 2px solid rgba(205, 92, 92, 0.3);
+    }
+    @media (max-width: 1100px) { .mars-widget { display: none; } }
+
+    /* Navigation Dropdown Styles */
+    nav { display: contents; }
+    .dropdown { position: relative; }
+    .dropbtn {
+      background: none;
+      border: none;
+      color: var(--text-light);
+      padding: 0.5em 1em;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      font-size: 1em;
+      font-family: inherit;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .dropbtn:hover, .dropdown:hover .dropbtn {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background: var(--accent);
+      min-width: 200px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1001;
+      border-radius: 4px;
+      overflow: hidden;
+      top: 100%;
+      right: 0;
+    }
+    .dropdown-content a {
+      color: var(--text-light);
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      transition: background 0.3s ease;
+    }
+    .dropdown-content a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    .dropdown:hover .dropdown-content { display: block; }
+
+    .toggle-theme { cursor: pointer; font-size: 1.5em; line-height: 1; user-select: none; }
+
+    body.dark header, body.dark footer { background-color: var(--dark-accent); }
+
+    /* Footer Styles */
+    footer {
+      background-color: var(--accent);
+      color: #fff;
+      padding: 2em 1em;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+      gap: 1em;
+    }
+    footer a { color: #fff; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+  
   <!-- PWA Manifest -->
   <link rel="manifest" href="flashcards-manifest.json">
   <meta name="theme-color" content="#0033a0">
@@ -18,8 +183,7 @@
 </head>
 
 <body>
-  <!-- Header -->
-  <header class="header">
+  <header>
     <a href="index.html" class="logo-link" aria-label="BlueandCosmos Home">
       <div class="logo-area">
         <img src="https://cdn.jsdelivr.net/gh/swetharajan7/blueandcosmos/assets/logo-transparent.png" alt="BlueandCosmos Logo" />
@@ -30,11 +194,55 @@
       </div>
     </a>
 
-    <div class="flashcards-title">🧠 STEM Flashcards</div>
+    <a href="moon.html" class="moon-widget" title="View detailed moon phase information">
+      <div class="moon-icon" id="moon-display">🌗</div>
+      <div class="moon-info">
+        <span class="moon-label">Last Quarter</span>
+        <span class="moon-context" id="moon-context">Dec 15, 2025</span>
+      </div>
+    </a>
 
-    <nav class="nav-right">
-      <div class="toggle-theme" id="themeToggle">🌙</div>
-      <a href="dashboard.html" class="nav-back">← Dashboard</a>
+    <a href="explorex.html" class="explorex-widget" title="ExploreX - Discover Space Travel Experiences">
+      <div class="explorex-icon">🚀</div>
+      <span class="explorex-label">ExploreX</span>
+    </a>
+
+    <a href="mars.html" class="mars-widget" title="Explore Mars - The Red Planet">
+      <div class="mars-icon"></div>
+      <span class="mars-label">MARS</span>
+    </a>
+
+    <nav>
+      <div class="nav-right">
+        <!-- About (internal links, same tab) -->
+        <div class="dropdown" data-menu="about">
+          <button class="dropbtn">About</button>
+          <div class="dropdown-content" role="menu" aria-label="About submenu">
+            <a href="about.html" role="menuitem">About BlueandCosmos</a>
+          </div>
+        </div>
+
+        <!-- Livestream (internal placeholders as relative links) -->
+        <div class="dropdown" data-menu="livestream">
+          <button class="dropbtn">Livestream</button>
+          <div class="dropdown-content" role="menu" aria-label="Livestream submenu">
+            <a href="livestream-images.html" role="menuitem">Live Stream Images</a>
+            <a href="launch-missions.html" role="menuitem">Launch Missions</a>
+          </div>
+        </div>
+
+        <!-- Dashboard (educational tools and features) -->
+        <div class="dropdown" data-menu="dashboard">
+          <a href="dashboard.html" class="dropbtn">Dashboard</a>
+          <div class="dropdown-content" role="menu" aria-label="Dashboard submenu">
+            <a href="moon.html" role="menuitem">🌙 Lunar Intelligence Center</a>
+            <a href="telescope.html" role="menuitem">🔭 Telescope</a>
+            <a href="flashcards.html" role="menuitem">🧠 Flashcards</a>
+            <a href="discussion.html" role="menuitem">💬 Community</a>
+          </div>
+        </div>
+        <div class="toggle-theme" id="themeToggle">🌙</div>
+      </div>
     </nav>
   </header>
 
@@ -452,37 +660,28 @@
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-section">
-        <a href="#">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play Store" style="height: 40px;" />
-        </a>
-        <a href="#">
-          <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Store" style="height: 40px;" />
-        </a>
-      </div>
+  <footer>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:0.5em;">
+      <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play Store" style="height:40px;"></a>
+      <a href="#"><img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Store" style="height:40px;"></a>
+    </div>
 
-      <div class="footer-section">
-        <div style="font-weight: bold;">BlueandCosmos™ 2025</div>
-        <div class="footer-links">
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="terms.html">Terms of Use</a>
-          <a href="contact.html">Contact Us</a>
-        </div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0.5em;">
+      <div style="font-weight:bold;">BlueandCosmos™ 2025</div>
+      <div style="display:flex;flex-wrap:wrap;gap:1em;justify-content:center;font-size:0.9em;">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Use</a>
+        <a href="sitemap.html">Sitemap</a>
       </div>
+    </div>
 
-      <div class="footer-section">
-        <div style="font-weight: bold;">Let's Connect!</div>
-        <div class="social-links">
-          <a href="https://twitter.com/blueandcosmos" target="_blank">
-            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X" style="height: 24px; filter: invert(1);" />
-          </a>
-          <a href="https://instagram.com/blueandcosmos" target="_blank">
-            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" style="height: 24px; filter: invert(1);" />
-          </a>
-        </div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:flex-end;gap:0.5em;">
+      <div style="font-weight:bold;">Let's Connect!</div>
+      <div style="display:flex;gap:0.5em;">
+        <a href="https://twitter.com/blueandcosmos" target="_blank" rel="noopener"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X" style="height:24px;filter:invert(1);"></a>
+        <a href="https://instagram.com/blueandcosmos" target="_blank" rel="noopener"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" style="height:24px;filter:invert(1);"></a>
+        <a href="https://tiktok.com/@blueandcosmos" target="_blank" rel="noopener"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok" style="height:24px;filter:invert(1);"></a>
+        <a href="https://youtube.com/@blueandcosmos" target="_blank" rel="noopener"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube" style="height:24px;filter:invert(1);"></a>
       </div>
     </div>
   </footer>
