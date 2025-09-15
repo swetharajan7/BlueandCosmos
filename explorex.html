@@ -666,6 +666,21 @@
         display: none;
       }
     }
+
+    footer {
+      display: flex;
+      padding: 2em;
+      background-color: var(--accent);
+      color: #fff;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1em;
+    }
+    footer a { color: #fff; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    body.dark header, body.dark footer { background-color: var(--dark-accent); }
   </style>
   
   <!-- External CSS Files -->
@@ -676,11 +691,6 @@
 </head>
 
 <body>
-  <!-- Development Environment Indicator -->
-  <div class="dev-indicator">
-    🚧 Development Mode
-  </div>
-
   <header>
     <a href="index.html" class="logo-link" aria-label="BlueandCosmos Home">
       <div class="logo-area">
@@ -3727,5 +3737,31 @@
       };
     }
   </script>
+
+  <footer>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:0.5em;">
+      <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play Store" style="height:40px;"></a>
+      <a href="#"><img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Store" style="height:40px;"></a>
+    </div>
+
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0.5em;">
+      <div style="font-weight:bold;">BlueandCosmos™ 2025</div>
+      <div style="display:flex;flex-wrap:wrap;gap:1em;justify-content:center;font-size:0.9em;">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Use</a>
+        <a href="sitemap.html">Sitemap</a>
+      </div>
+    </div>
+
+    <div style="flex:1;display:flex;flex-direction:column;align-items:flex-end;gap:0.5em;">
+      <div style="font-weight:bold;">Let's Connect!</div>
+      <div style="display:flex;gap:0.5em;">
+        <a href="https://twitter.com/blueandcosmos" target="_blank" rel="noopener"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X" style="height:24px;filter:invert(1);"></a>
+        <a href="https://instagram.com/blueandcosmos" target="_blank" rel="noopener"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" style="height:24px;filter:invert(1);"></a>
+        <a href="https://tiktok.com/@blueandcosmos" target="_blank" rel="noopener"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok" style="height:24px;filter:invert(1);"></a>
+        <a href="https://youtube.com/@blueandcosmos" target="_blank" rel="noopener"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube" style="height:24px;filter:invert(1);"></a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
