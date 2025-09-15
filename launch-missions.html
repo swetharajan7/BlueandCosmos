@@ -14,7 +14,7 @@
       --flag-blue: #002366;
       --highlight: #ff4081;
       --text-white: #ffffff;
-      --text-light: #ffffff;
+      --text-light: #cce0ff;
       --dark-bg: #121212;
       --dark-accent: #001f5b;
       
@@ -61,8 +61,8 @@
       background: var(--accent);
       color: var(--text-white);
       padding: 1em 2em;
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: auto 1fr auto auto auto;
       align-items: center;
       gap: 1.5em;
       position: sticky;
@@ -75,7 +75,6 @@
       align-items: center; 
       text-decoration: none; 
       color: inherit;
-      flex-shrink: 0;
     }
 
     .logo-area { 
@@ -118,7 +117,6 @@
       align-items: center; 
       justify-content: flex-end; 
       gap: 1.2em;
-      flex-shrink: 0;
     }
 
     .nav-right > * { 
@@ -126,20 +124,12 @@
       align-items: center; 
     }
 
-    /* Header Center Section */
-    .header-center {
-      display: flex;
-      align-items: center;
-      gap: 2em;
-      flex: 1;
-      justify-content: center;
-    }
-
     /* Moon Widget */
     .moon-widget {
       display: flex; 
       align-items: center; 
       gap: 0.6em; 
+      justify-self: center;
       min-width: 220px; 
       user-select: none; 
       text-decoration: none; 
@@ -163,16 +153,16 @@
     }
 
     .moon-label { 
-      color: #ffffff; 
+      color: var(--text-light); 
       font-size: 0.95em; 
       white-space: nowrap; 
       font-weight: 500; 
     }
 
     .moon-context { 
-      color: #e6f0ff; 
+      color: var(--text-light); 
       font-size: 0.75em; 
-      opacity: 0.9; 
+      opacity: 0.8; 
       white-space: nowrap; 
     }
 
@@ -181,23 +171,8 @@
       color: #e0ecff; 
     }
 
-    @media (max-width: 1200px) {
-      .header-center {
-        gap: 1em;
-      }
-      
-      .moon-widget .moon-info {
-        display: none;
-      }
-      
-      .explorex-label,
-      .mars-label {
-        display: none;
-      }
-    }
-
     @media (max-width: 900px) { 
-      .header-center { 
+      .moon-widget { 
         display: none; 
       } 
     }
@@ -207,6 +182,7 @@
       display: flex;
       align-items: center;
       gap: 0.6em;
+      justify-self: center;
       user-select: none;
       text-decoration: none;
       color: inherit;
@@ -214,9 +190,9 @@
     }
 
     .explorex-label {
-      color: #ffffff;
+      color: var(--text-light);
       font-size: 0.95em;
-      font-weight: 500;
+      font-weight: 600;
       white-space: nowrap;
     }
 
@@ -241,13 +217,18 @@
       border: 2px solid rgba(59, 130, 246, 0.3);
     }
 
-    /* Responsive behavior handled by header-center */
+    @media (max-width: 1050px) {
+      .explorex-widget {
+        display: none;
+      }
+    }
 
     /* Mars Widget */
     .mars-widget {
       display: flex; 
       align-items: center; 
       gap: 0.6em; 
+      justify-self: center;
       user-select: none; 
       text-decoration: none; 
       color: inherit;
@@ -255,7 +236,7 @@
     }
 
     .mars-label {
-      color: #ffffff; 
+      color: var(--text-light); 
       font-size: 0.95em; 
       font-weight: 600; 
       white-space: nowrap;
@@ -284,7 +265,11 @@
       border: 2px solid rgba(205, 92, 92, 0.3);
     }
 
-    /* Responsive behavior handled by header-center */
+    @media (max-width: 1100px) { 
+      .mars-widget { 
+        display: none; 
+      } 
+    }
 
     /* Navigation Styles */
     nav { 
@@ -350,7 +335,7 @@
     }
 
     .dropdown-content a {
-      color: #ffffff; 
+      color: var(--text-light); 
       text-decoration: none;
       padding: 0.8em 1em; 
       position: relative;
@@ -6054,57 +6039,56 @@
       </div>
     </a>
 
-    <div class="header-center">
-      <a href="explorex.html" class="explorex-widget" title="ExploreX - Discover Space Travel Experiences">
-        <div class="explorex-icon">🚀</div>
-        <span class="explorex-label">ExploreX</span>
-      </a>
-
-      <a href="moon.html" class="moon-widget" aria-label="Lunar Intelligence Center">
-        <div class="moon-icon">🌙</div>
-        <div class="moon-info">
-          <div class="moon-label" id="moon-phase">Loading...</div>
-          <div class="moon-context" id="moon-context">Lunar Intelligence</div>
-        </div>
-      </a>
-
-      <a href="mars.html" class="mars-widget" aria-label="Mars Information">
-        <div class="mars-icon"></div>
-        <div class="mars-label">Mars</div>
-      </a>
-    </div>
-
-    <div class="nav-right">
-      <!-- About (internal links, same tab) -->
-      <div class="dropdown" data-menu="about">
-        <button class="dropbtn">About</button>
-        <div class="dropdown-content" role="menu" aria-label="About submenu">
-          <a href="about.html" role="menuitem">About BlueandCosmos</a>
-        </div>
+    <a href="moon.html" class="moon-widget" title="View detailed moon phase information">
+      <div class="moon-icon" id="moon-display">🌙</div>
+      <div class="moon-info">
+        <span class="moon-label" id="moon-phase">Loading moon phase…</span>
+        <span class="moon-context" id="moon-context">New York City, NY</span>
       </div>
+    </a>
 
-      <!-- Livestream (internal placeholders as relative links) -->
-      <div class="dropdown" data-menu="livestream">
-        <button class="dropbtn">Livestream</button>
-        <div class="dropdown-content" role="menu" aria-label="Livestream submenu">
-          <a href="livestream-images.html" role="menuitem">Live Stream Images</a>
-          <a href="launch-missions.html" role="menuitem" class="clicked">Launch Missions</a>
+    <a href="explorex.html" class="explorex-widget" title="ExploreX - Discover Space Travel Experiences">
+      <div class="explorex-icon">🚀</div>
+      <span class="explorex-label">ExploreX</span>
+    </a>
+
+    <a href="mars.html" class="mars-widget" title="Explore Mars - The Red Planet">
+      <div class="mars-icon"></div>
+      <span class="mars-label">MARS</span>
+    </a>
+
+    <nav>
+      <div class="nav-right">
+        <!-- About (internal links, same tab) -->
+        <div class="dropdown" data-menu="about">
+          <button class="dropbtn">About</button>
+          <div class="dropdown-content" role="menu" aria-label="About submenu">
+            <a href="about.html" role="menuitem">About BlueandCosmos</a>
+          </div>
         </div>
-      </div>
 
-      <!-- Dashboard (educational tools and features) -->
-      <div class="dropdown" data-menu="dashboard">
-        <a href="dashboard.html" class="dropbtn">Dashboard</a>
-        <div class="dropdown-content" role="menu" aria-label="Dashboard submenu">
-          <a href="moon.html" role="menuitem">🌙 Lunar Intelligence Center</a>
-          <a href="telescope.html" role="menuitem">🔭 Telescope</a>
-          <a href="flashcards.html" role="menuitem">🧠 Flashcards</a>
-          <a href="discussion.html" role="menuitem">💬 Community</a>
+        <!-- Livestream (internal placeholders as relative links) -->
+        <div class="dropdown" data-menu="livestream">
+          <button class="dropbtn">Livestream</button>
+          <div class="dropdown-content" role="menu" aria-label="Livestream submenu">
+            <a href="livestream-images.html" role="menuitem">Live Stream Images</a>
+            <a href="launch-missions.html" role="menuitem" class="clicked">Launch Missions</a>
+          </div>
         </div>
-      </div>
 
-      <span class="toggle-theme" onclick="toggleTheme()" title="Toggle Dark Mode">🌓</span>
-    </div>
+        <!-- Dashboard (educational tools and features) -->
+        <div class="dropdown" data-menu="dashboard">
+          <a href="dashboard.html" class="dropbtn">Dashboard</a>
+          <div class="dropdown-content" role="menu" aria-label="Dashboard submenu">
+            <a href="moon.html" role="menuitem">🌙 Lunar Intelligence Center</a>
+            <a href="telescope.html" role="menuitem">🔭 Telescope</a>
+            <a href="flashcards.html" role="menuitem">🧠 Flashcards</a>
+            <a href="discussion.html" role="menuitem">💬 Community</a>
+          </div>
+        </div>
+        <div class="toggle-theme" id="themeToggle">🌙</div>
+      </div>
+    </nav>
   </header>
 
   <main class="launch-dashboard">
@@ -6857,47 +6841,32 @@
 
   <script>
     // Theme Toggle Functionality (Inherited from BlueandCosmos)
-    function toggleTheme() {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    }
-
-    // Load saved theme
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.body.classList.add('dark');
-    }
+    (function initTheme(){
+      const saved = localStorage.getItem("theme");
+      if(saved==="dark"){document.body.classList.add("dark");document.getElementById("themeToggle").textContent="☀️";}
+      document.getElementById("themeToggle").addEventListener("click",()=>{
+        document.body.classList.toggle("dark");
+        const isDark=document.body.classList.contains("dark");
+        document.getElementById("themeToggle").textContent=isDark?"☀️":"🌙";
+        localStorage.setItem("theme",isDark?"dark":"light");
+      });
+    })();
 
     // Moon Phase Widget (Inherited functionality)
-    function updateMoonPhase() {
-      const moonPhases = [
-        { phase: "New Moon", icon: "🌑", context: "New Beginnings" },
-        { phase: "Waxing Crescent", icon: "🌒", context: "Growing Light" },
-        { phase: "First Quarter", icon: "🌓", context: "Half Illuminated" },
-        { phase: "Waxing Gibbous", icon: "🌔", context: "Nearly Full" },
-        { phase: "Full Moon", icon: "🌕", context: "Complete Illumination" },
-        { phase: "Waning Gibbous", icon: "🌖", context: "Decreasing Light" },
-        { phase: "Last Quarter", icon: "🌗", context: "Half in Shadow" },
-        { phase: "Waning Crescent", icon: "🌘", context: "Fading Light" }
-      ];
-
-      // Simple moon phase calculation (approximate)
-      const now = new Date();
-      const daysSinceNewMoon = Math.floor((now.getTime() - new Date('2024-01-11').getTime()) / (1000 * 60 * 60 * 24));
-      const phaseIndex = Math.floor((daysSinceNewMoon % 29.53) / 29.53 * 8);
-      const currentPhase = moonPhases[phaseIndex] || moonPhases[0];
-
-      const moonLabel = document.getElementById('moon-phase');
-      const moonContext = document.getElementById('moon-context');
-      const moonIcon = document.querySelector('.moon-icon');
-
-      if (moonLabel && moonContext && moonIcon) {
-        moonLabel.textContent = currentPhase.phase;
-        moonContext.textContent = currentPhase.context;
-        moonIcon.textContent = currentPhase.icon;
+    (function initMoonPhase(){
+      function getMoonPhase(){
+        const now=new Date();const m=now.getMonth()+1;const d=now.getDate();const y=now.getFullYear();
+        if(y===2025&&m===8){
+          if(d<=3)return 7;if(d<=6)return 0;if(d<=10)return 1;if(d<=13)return 2;if(d<=17)return 3;if(d<=20)return 4;if(d<=24)return 5;if(d<=27)return 6;return 7;
+        }
+        const base=new Date(2024,7,4);const days=(now-base)/(1000*60*60*24);const cycle=days/29.53;return Math.floor((cycle-Math.floor(cycle))*8)%8;
       }
-    }
+      function info(p){return[{name:"New Moon",emoji:"🌑"},{name:"Waxing Crescent",emoji:"🌒"},{name:"First Quarter",emoji:"🌓"},{name:"Waxing Gibbous",emoji:"🌔"},{name:"Full Moon",emoji:"🌕"},{name:"Waning Gibbous",emoji:"🌖"},{name:"Last Quarter",emoji:"🌗"},{name:"Waning Crescent",emoji:"🌘"}][p];}
+      const phase=getMoonPhase(),data=info(phase),now=new Date();
+      document.getElementById("moon-display").textContent=data.emoji;
+      document.querySelector(".moon-label").textContent=data.name;
+      document.getElementById("moon-context").textContent=`${now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} • New York City, NY`;
+    })();
 
     // Dropdown Navigation (Inherited functionality)
     (function stickyDropdowns() {
@@ -19774,7 +19743,6 @@
 
     // Initialize page
     document.addEventListener('DOMContentLoaded', function() {
-      updateMoonPhase();
       initializeControls();
       animateSkeletons();
       handleResponsiveLayout();
