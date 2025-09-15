@@ -1,0 +1,217 @@
+{
+  "name": "ExploreX - Space Travel Experience Finder",
+  "short_name": "ExploreX",
+  "description": "Discover amazing space-related experiences, observatories, planetariums, and astronomy events near you.",
+  "start_url": "/explorex.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#667eea",
+  "background_color": "#1a1a2e",
+  "scope": "/",
+  "lang": "en-US",
+  "dir": "ltr",
+  
+  "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  
+  "screenshots": [
+    {
+      "src": "/screenshots/mobile-search.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Search for space experiences"
+    },
+    {
+      "src": "/screenshots/mobile-experience.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Experience details and reviews"
+    },
+    {
+      "src": "/screenshots/mobile-itinerary.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Plan your space adventure"
+    },
+    {
+      "src": "/screenshots/desktop-dashboard.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "Desktop experience dashboard"
+    }
+  ],
+  
+  "categories": [
+    "travel",
+    "education",
+    "entertainment",
+    "lifestyle"
+  ],
+  
+  "shortcuts": [
+    {
+      "name": "Search Experiences",
+      "short_name": "Search",
+      "description": "Find space experiences near you",
+      "url": "/explorex.html#search",
+      "icons": [
+        {
+          "src": "/icons/shortcut-search.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "My Itineraries",
+      "short_name": "Plans",
+      "description": "View your travel plans",
+      "url": "/explorex.html#itineraries",
+      "icons": [
+        {
+          "src": "/icons/shortcut-itinerary.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Nearby Experiences",
+      "short_name": "Nearby",
+      "description": "Discover experiences around you",
+      "url": "/explorex.html#nearby",
+      "icons": [
+        {
+          "src": "/icons/shortcut-nearby.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Community",
+      "short_name": "Social",
+      "description": "Connect with space enthusiasts",
+      "url": "/explorex.html#community",
+      "icons": [
+        {
+          "src": "/icons/shortcut-community.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://explorex.space/manifest.json"
+    }
+  ],
+  
+  "prefer_related_applications": false,
+  
+  "protocol_handlers": [
+    {
+      "protocol": "web+explorex",
+      "url": "/explorex.html?action=%s"
+    }
+  ],
+  
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "photos",
+          "accept": ["image/*"]
+        }
+      ]
+    }
+  },
+  
+  "file_handlers": [
+    {
+      "action": "/open-itinerary",
+      "accept": {
+        "application/json": [".json"],
+        "text/calendar": [".ics"]
+      }
+    }
+  ],
+  
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  
+  "display_override": [
+    "window-controls-overlay",
+    "minimal-ui",
+    "standalone",
+    "browser"
+  ],
+  
+  "handle_links": "preferred"
+}

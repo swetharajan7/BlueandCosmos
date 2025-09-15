@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExploreX Mobile System Test</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="explorex-mobile-styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .test-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .test-title {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .test-subtitle {
+            font-size: 1.2rem;
+            color: #ccc;
+            margin-bottom: 2rem;
+        }
+
+        .test-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .test-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .test-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .test-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .test-results {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .info { color: #2196F3; }
+        .warning { color: #ff9800; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        .device-info {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .device-capability {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .capability-name {
+            font-weight: 500;
+            color: #ddd;
+        }
+
+        .capability-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .capability-status.supported {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+        }
+
+        .capability-status.not-supported {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+        }
+
+        .gesture-demo {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 1rem 0;
+            text-align: center;
+            border: 2px dashed rgba(102, 126, 234, 0.3);
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .gesture-demo.active {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .gesture-instruction {
+            font-size: 1.1rem;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .gesture-feedback {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        .location-display {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .location-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+        }
+
+        .location-label {
+            font-weight: 500;
+            color: #ddd;
+        }
+
+        .location-value {
+            color: #667eea;
+            font-family: monospace;
+        }
+
+        .performance-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minspan(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .metric {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #4CAF50;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: #ccc;
+            margin-top: 0.25rem;
+        }
+
+        .pwa-install {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .pwa-install.show {
+            display: block;
+        }
+
+        .network-indicator {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 1000;
+        }
+
+        .network-indicator.online {
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+        }
+
+        .network-indicator.offline {
+            background: rgba(244, 67, 54, 0.9);
+            color: white;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #667eea;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .test-controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            
+            .test-container {
+                padding: 1rem;
+            }
+            
+            .test-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="network-indicator" id="network-indicator">🟢 Online</div>
+    
+    <div class="test-container">
+        <div class="test-header">
+            <h1 class="test-title">📱 ExploreX Mobile System</h1>
+            <p class="test-subtitle">Progressive Web App & Mobile Optimization Testing Suite</p>
+        </div>
+
+        <!-- System Status -->
+        <div class="test-section">
+            <h2 class="section-title">🔧 System Status</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="system-status">Loading...</div>
+                    <div class="stat-label">System Status</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="device-type">Unknown</div>
+                    <div class="stat-label">Device Type</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="pwa-status">Not Installed</div>
+                    <div class="stat-label">PWA Status</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="sw-status">Not Active</div>
+                    <div class="stat-label">Service Worker</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PWA Features -->
+        <div class="test-section">
+            <h2 class="section-title">🚀 PWA Features</h2>
+            <div class="test-controls">
+                <button class="test-button" onclick="initializePWA()">
+                    <span>🔧</span> Initialize PWA
+                </button>
+                <button class="test-button" onclick="registerServiceWorker()">
+                    <span>⚙️</span> Register Service Worker
+                </button>
+                <button class="test-button" onclick="testOfflineCapabilities()">
+                    <span>📱</span> Test Offline Mode
+                </button>
+                <button class="test-button" onclick="testPushNotifications()">
+                    <span>🔔</span> Test Notifications
+                </button>
+                <button class="test-button" onclick="testBackgroundSync()">
+                    <span>🔄</span> Test Background Sync
+                </button>
+                <button class="test-button" onclick="clearCaches()">
+                    <span>🗑️</span> Clear Caches
+                </button>
+            </div>
+            <button class="pwa-install" id="pwa-install-btn" onclick="installPWA()">
+                📱 Install ExploreX App
+            </button>
+            <div class="test-results" id="pwa-results"></div>
+        </div>
+
+        <!-- Mobile Optimization -->
+        <div class="test-section">
+            <h2 class="section-title">📱 Mobile Optimization</h2>
+            <div class="test-controls">
+                <button class="test-button" onclick="initializeMobileOptimization()">
+                    <span>🎯</span> Initialize Mobile System
+                </button>
+                <button class="test-button" onclick="testTouchGestures()">
+                    <span>👆</span> Test Touch Gestures
+                </button>
+                <button class="test-button" onclick="testGPSIntegration()">
+                    <span>🛰️</span> Test GPS Integration
+                </button>
+                <button class="test-button" onclick="testPerformanceOptimization()">
+                    <span>⚡</span> Test Performance
+                </button>
+                <button class="test-button" onclick="testBatteryOptimization()">
+                    <span>🔋</span> Test Battery Saver
+                </button>
+                <button class="test-button" onclick="testNetworkAdaptation()">
+                    <span>📶</span> Test Network Adaptation
+                </button>
+            </div>
+            <div class="test-results" id="mobile-results"></div>
+        </div>
+
+        <!-- Device Capabilities -->
+        <div class="test-section">
+            <h2 class="section-title">📋 Device Capabilities</h2>
+            <div id="device-capabilities" class="device-info"></div>
+        </div>
+
+        <!-- Touch Gesture Demo -->
+        <div class="test-section">
+            <h2 class="section-title">👆 Touch Gesture Demo</h2>
+            <div class="gesture-demo" id="gesture-demo">
+                <div class="gesture-instruction">Try different gestures here</div>
+                <div class="gesture-feedback">Tap, swipe, long press, or pinch to test</div>
+            </div>
+            <div class="test-results" id="gesture-results"></div>
+        </div>
+
+        <!-- GPS Location -->
+        <div class="test-section">
+            <h2 class="section-title">🛰️ GPS Location</h2>
+            <div class="location-display" id="location-display">
+                <div class="location-item">
+                    <span class="location-label">Status:</span>
+                    <span class="location-value" id="gps-status">Not requested</span>
+                </div>
+                <div class="location-item">
+                    <span class="location-label">Latitude:</span>
+                    <span class="location-value" id="gps-lat">--</span>
+                </div>
+                <div class="location-item">
+                    <span class="location-label">Longitude:</span>
+                    <span class="location-value" id="gps-lng">--</span>
+                </div>
+                <div class="location-item">
+                    <span class="location-label">Accuracy:</span>
+                    <span class="location-value" id="gps-accuracy">--</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Metrics -->
+        <div class="test-section">
+            <h2 class="section-title">📊 Performance Metrics</h2>
+            <div class="performance-metrics" id="performance-metrics"></div>
+        </div>
+    </div>
+
+    <!-- Load Dependencies -->
+    <script src="explorex-mobile-optimization.js"></script>
+
+    <script>
+        // Global test variables
+        let mobileOptimizationManager;
+        let serviceWorkerRegistration;
+        let deferredPrompt;
+        
+        let testMetrics = {
+            gesturesDetected: 0,
+            locationUpdates: 0,
+            cacheHits: 0,
+            performanceScore: 0
+        };
+
+        // PWA install prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('pwa-install-btn').classList.add('show');
+        });
+
+        // Network status monitoring
+        function updateNetworkStatus() {
+            const indicator = document.getElementById('network-indicator');
+            
+            if (navigator.onLine) {
+                indicator.className = 'network-indicator online';
+                indicator.textContent = '🟢 Online';
+            } else {
+                indicator.className = 'network-indicator offline';
+                indicator.textContent = '🔴 Offline';
+            }
+        }
+
+        window.addEventListener('online', updateNetworkStatus);
+        window.addEventListener('offline', updateNetworkStatus);
+
+        // Initialize system
+        async function initializePWA() {
+            const startTime = performance.now();
+            try {
+                log('🚀 Initializing PWA features...', 'info', 'pwa-results');
+                
+                // Check PWA support
+                const pwaSupported = 'serviceWorker' in navigator && 'PushManager' in window;
+                
+                if (!pwaSupported) {
+                    throw new Error('PWA features not supported in this browser');
+                }
+                
+                // Register service worker
+                await registerServiceWorker();
+                
+                // Check if app is installed
+                const isInstalled = window.matchMedia('(display-mode: standalone)').matches;
+                document.getElementById('pwa-status').textContent = isInstalled ? 'Installed' : 'Browser';
+                
+                // Update system status
+                document.getElementById('system-status').textContent = 'Ready';
+                document.getElementById('system-status').style.color = '#4CAF50';
+                
+                log('✅ PWA initialized successfully!', 'success', 'pwa-results');
+                
+            } catch (error) {
+                log(`❌ PWA initialization failed: ${error.message}`, 'error', 'pwa-results');
+                document.getElementById('system-status').textContent = 'Error';
+                document.getElementById('system-status').style.color = '#f44336';
+            }
+            
+            recordPerformance('PWA Initialization', performance.now() - startTime);
+        }
+
+        async function registerServiceWorker() {
+            try {
+                log('⚙️ Registering service worker...', 'info', 'pwa-results');
+                
+                serviceWorkerRegistration = await navigator.serviceWorker.register('/explorex-service-worker.js');
+                
+                log('✅ Service worker registered successfully', 'success', 'pwa-results');
+                document.getElementById('sw-status').textContent = 'Active';
+                document.getElementById('sw-status').style.color = '#4CAF50';
+                
+                // Listen for updates
+                serviceWorkerRegistration.addEventListener('updatefound', () => {
+                    log('🔄 Service worker update found', 'info', 'pwa-results');
+                });
+                
+            } catch (error) {
+                log(`❌ Service worker registration failed: ${error.message}`, 'error', 'pwa-results');
+                document.getElementById('sw-status').textContent = 'Failed';
+                document.getElementById('sw-status').style.color = '#f44336';
+            }
+        }
+
+        async function initializeMobileOptimization() {
+            const startTime = performance.now();
+            try {
+                log('📱 Initializing Mobile Optimization...', 'info', 'mobile-results');
+                
+                mobileOptimizationManager = new window.ExploreXMobile.MobileOptimizationManager();
+                await mobileOptimizationManager.initialize();
+                
+                // Update device type
+                const deviceType = mobileOptimizationManager.isMobile ? 'Mobile' : 'Desktop';
+                document.getElementById('device-type').textContent = deviceType;
+                
+                log('✅ Mobile optimization initialized successfully!', 'success', 'mobile-results');
+                
+                // Display device capabilities
+                displayDeviceCapabilities();
+                
+            } catch (error) {
+                log(`❌ Mobile optimization failed: ${error.message}`, 'error', 'mobile-results');
+            }
+            
+            recordPerformance('Mobile Optimization', performance.now() - startTime);
+        }
+
+        async function testOfflineCapabilities() {
+            const startTime = performance.now();
+            try {
+                log('📱 Testing offline capabilities...', 'info', 'pwa-results');
+                
+                // Test cache functionality
+                const cache = await caches.open('explorex-test');
+                await cache.add('/offline.html');
+                
+                // Test offline page
+                const offlineResponse = await cache.match('/offline.html');
+                
+                if (offlineResponse) {
+                    log('✅ Offline page cached successfully', 'success', 'pwa-results');
+                    testMetrics.cacheHits++;
+                } else {
+                    throw new Error('Offline page not found in cache');
+                }
+                
+                // Test background sync registration
+                if ('serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype) {
+                    log('✅ Background sync supported', 'success', 'pwa-results');
+                } else {
+                    log('⚠️ Background sync not supported', 'warning', 'pwa-results');
+                }
+                
+                updateStats();
+                
+            } catch (error) {
+                log(`❌ Offline capabilities test failed: ${error.message}`, 'error', 'pwa-results');
+            }
+            
+            recordPerformance('Offline Capabilities', performance.now() - startTime);
+        }
+
+        async function testPushNotifications() {
+            const startTime = performance.now();
+            try {
+                log('🔔 Testing push notifications...', 'info', 'pwa-results');
+                
+                // Check notification permission
+                if (!('Notification' in window)) {
+                    throw new Error('Notifications not supported');
+                }
+                
+                let permission = Notification.permission;
+                
+                if (permission === 'default') {
+                    permission = await Notification.requestPermission();
+                }
+                
+                if (permission === 'granted') {
+                    // Show test notification
+                    new Notification('ExploreX Test', {
+                        body: 'Push notifications are working!',
+                        icon: '/icons/icon-192x192.png',
+                        tag: 'test-notification'
+                    });
+                    
+                    log('✅ Push notification sent successfully', 'success', 'pwa-results');
+                } else {
+                    log('⚠️ Notification permission denied', 'warning', 'pwa-results');
+                }
+                
+            } catch (error) {
+                log(`❌ Push notification test failed: ${error.message}`, 'error', 'pwa-results');
+            }
+            
+            recordPerformance('Push Notifications', performance.now() - startTime);
+        }
+
+        async function testTouchGestures() {
+            const startTime = performance.now();
+            try {
+                log('👆 Testing touch gestures...', 'info', 'mobile-results');
+                
+                if (!mobileOptimizationManager) {
+                    throw new Error('Mobile optimization not initialized');
+                }
+                
+                // Setup gesture demo
+                const gestureDemo = document.getElementById('gesture-demo');
+                let gestureCount = 0;
+                
+                // Add gesture listeners
+                gestureDemo.addEventListener('touchstart', (e) => {
+                    gestureDemo.classList.add('active');
+                    logGesture('Touch Start', e);
+                    gestureCount++;
+                });
+                
+                gestureDemo.addEventListener('touchend', (e) => {
+                    gestureDemo.classList.remove('active');
+                    logGesture('Touch End', e);
+                });
+                
+                gestureDemo.addEventListener('click', (e) => {
+                    logGesture('Click/Tap', e);
+                    gestureCount++;
+                });
+                
+                log('✅ Touch gesture listeners activated', 'success', 'mobile-results');
+                log('   Try interacting with the gesture demo area', 'info', 'mobile-results');
+                
+                testMetrics.gesturesDetected = gestureCount;
+                updateStats();
+                
+            } catch (error) {
+                log(`❌ Touch gesture test failed: ${error.message}`, 'error', 'mobile-results');
+            }
+            
+            recordPerformance('Touch Gestures', performance.now() - startTime);
+        }
+
+        async function testGPSIntegration() {
+            const startTime = performance.now();
+            try {
+                log('🛰️ Testing GPS integration...', 'info', 'mobile-results');
+                
+                if (!navigator.geolocation) {
+                    throw new Error('Geolocation not supported');
+                }
+                
+                document.getElementById('gps-status').textContent = 'Requesting...';
+                
+                const position = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject, {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 300000
+                    });
+                });
+                
+                const { latitude, longitude, accuracy } = position.coords;
+                
+                document.getElementById('gps-status').textContent = 'Active';
+                document.getElementById('gps-lat').textContent = latitude.toFixed(6);
+                document.getElementById('gps-lng').textContent = longitude.toFixed(6);
+                document.getElementById('gps-accuracy').textContent = `±${Math.round(accuracy)}m`;
+                
+                log(`✅ GPS location obtained: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`, 'success', 'mobile-results');
+                log(`   Accuracy: ±${Math.round(accuracy)} meters`, 'info', 'mobile-results');
+                
+                testMetrics.locationUpdates++;
+                updateStats();
+                
+            } catch (error) {
+                log(`❌ GPS integration test failed: ${error.message}`, 'error', 'mobile-results');
+                document.getElementById('gps-status').textContent = 'Failed';
+            }
+            
+            recordPerformance('GPS Integration', performance.now() - startTime);
+        }
+
+        async function testPerformanceOptimization() {
+            const startTime = performance.now();
+            try {
+                log('⚡ Testing performance optimization...', 'info', 'mobile-results');
+                
+                // Test image lazy loading
+                const images = document.querySelectorAll('img[data-src]');
+                log(`   Found ${images.length} lazy-loadable images`, 'info', 'mobile-results');
+                
+                // Test network information
+                if ('connection' in navigator) {
+                    const connection = navigator.connection;
+                    log(`   Network: ${connection.effectiveType} (${connection.downlink} Mbps)`, 'info', 'mobile-results');
+                } else {
+                    log('   Network API not supported', 'warning', 'mobile-results');
+                }
+                
+                // Test performance metrics
+                if ('performance' in window) {
+                    const navigation = performance.getEntriesByType('navigation')[0];
+                    const loadTime = navigation.loadEventEnd - navigation.loadEventStart;
+                    log(`   Page load time: ${Math.round(loadTime)}ms`, 'info', 'mobile-results');
+                    
+                    testMetrics.performanceScore = Math.max(0, 100 - (loadTime / 10));
+                }
+                
+                log('✅ Performance optimization tests completed', 'success', 'mobile-results');
+                updateStats();
+                
+            } catch (error) {
+                log(`❌ Performance optimization test failed: ${error.message}`, 'error', 'mobile-results');
+            }
+            
+            recordPerformance('Performance Optimization', performance.now() - startTime);
+        }
+
+        async function testBatteryOptimization() {
+            const startTime = performance.now();
+            try {
+                log('🔋 Testing battery optimization...', 'info', 'mobile-results');
+                
+                if ('getBattery' in navigator) {
+                    const battery = await navigator.getBattery();
+                    
+                    const level = Math.round(battery.level * 100);
+                    const charging = battery.charging;
+                    
+                    log(`✅ Battery level: ${level}% ${charging ? '(charging)' : ''}`, 'success', 'mobile-results');
+                    
+                    if (level < 20 && !charging) {
+                        log('   Battery saver mode would be activated', 'warning', 'mobile-results');
+                        document.body.classList.add('battery-saver');
+                        
+                        setTimeout(() => {
+                            document.body.classList.remove('battery-saver');
+                        }, 3000);
+                    }
+                    
+                } else {
+                    log('⚠️ Battery API not supported', 'warning', 'mobile-results');
+                }
+                
+            } catch (error) {
+                log(`❌ Battery optimization test failed: ${error.message}`, 'error', 'mobile-results');
+            }
+            
+            recordPerformance('Battery Optimization', performance.now() - startTime);
+        }
+
+        async function testNetworkAdaptation() {
+            const startTime = performance.now();
+            try {
+                log('📶 Testing network adaptation...', 'info', 'mobile-results');
+                
+                if ('connection' in navigator) {
+                    const connection = navigator.connection;
+                    
+                    log(`   Connection type: ${connection.effectiveType}`, 'info', 'mobile-results');
+                    log(`   Downlink: ${connection.downlink} Mbps`, 'info', 'mobile-results');
+                    log(`   RTT: ${connection.rtt}ms`, 'info', 'mobile-results');
+                    
+                    if (connection.saveData) {
+                        log('   Data saver mode detected', 'warning', 'mobile-results');
+                    }
+                    
+                    // Simulate quality adjustment
+                    let quality = 'high';
+                    switch (connection.effectiveType) {
+                        case 'slow-2g':
+                        case '2g':
+                            quality = 'low';
+                            break;
+                        case '3g':
+                            quality = 'medium';
+                            break;
+                        default:
+                            quality = 'high';
+                    }
+                    
+                    log(`   Content quality adjusted to: ${quality}`, 'success', 'mobile-results');
+                    
+                } else {
+                    log('⚠️ Network Information API not supported', 'warning', 'mobile-results');
+                }
+                
+            } catch (error) {
+                log(`❌ Network adaptation test failed: ${error.message}`, 'error', 'mobile-results');
+            }
+            
+            recordPerformance('Network Adaptation', performance.now() - startTime);
+        }
+
+        async function testBackgroundSync() {
+            try {
+                log('🔄 Testing background sync...', 'info', 'pwa-results');
+                
+                if (serviceWorkerRegistration && 'sync' in serviceWorkerRegistration) {
+                    await serviceWorkerRegistration.sync.register('test-sync');
+                    log('✅ Background sync registered', 'success', 'pwa-results');
+                } else {
+                    log('⚠️ Background sync not supported', 'warning', 'pwa-results');
+                }
+                
+            } catch (error) {
+                log(`❌ Background sync test failed: ${error.message}`, 'error', 'pwa-results');
+            }
+        }
+
+        async function clearCaches() {
+            try {
+                log('🗑️ Clearing caches...', 'info', 'pwa-results');
+                
+                const cacheNames = await caches.keys();
+                await Promise.all(cacheNames.map(name => caches.delete(name)));
+                
+                log(`✅ Cleared ${cacheNames.length} caches`, 'success', 'pwa-results');
+                
+            } catch (error) {
+                log(`❌ Cache clearing failed: ${error.message}`, 'error', 'pwa-results');
+            }
+        }
+
+        async function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                
+                if (outcome === 'accepted') {
+                    log('✅ PWA installation accepted', 'success', 'pwa-results');
+                    document.getElementById('pwa-install-btn').classList.remove('show');
+                } else {
+                    log('❌ PWA installation declined', 'warning', 'pwa-results');
+                }
+                
+                deferredPrompt = null;
+            }
+        }
+
+        // Display device capabilities
+        function displayDeviceCapabilities() {
+            const container = document.getElementById('device-capabilities');
+            
+            const capabilities = {
+                'Touch Support': 'ontouchstart' in window,
+                'Geolocation': 'geolocation' in navigator,
+                'Service Worker': 'serviceWorker' in navigator,
+                'Push Notifications': 'PushManager' in window,
+                'Background Sync': 'serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype,
+                'Device Motion': 'DeviceMotionEvent' in window,
+                'Device Orientation': 'DeviceOrientationEvent' in window,
+                'Vibration': 'vibrate' in navigator,
+                'Camera': 'mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices,
+                'Battery API': 'getBattery' in navigator,
+                'Network Information': 'connection' in navigator,
+                'Web Share': 'share' in navigator,
+                'WebGL': (() => {
+                    try {
+                        const canvas = document.createElement('canvas');
+                        return !!(window.WebGLRenderingContext && canvas.getContext('webgl'));
+                    } catch (e) {
+                        return false;
+                    }
+                })()
+            };
+            
+            container.innerHTML = Object.entries(capabilities).map(([name, supported]) => `
+                <div class="device-capability">
+                    <span class="capability-name">${name}</span>
+                    <span class="capability-status ${supported ? 'supported' : 'not-supported'}">
+                        ${supported ? 'Supported' : 'Not Supported'}
+                    </span>
+                </div>
+            `).join('');
+        }
+
+        // Utility functions
+        function logGesture(type, event) {
+            log(`👆 ${type} detected`, 'info', 'gesture-results');
+            testMetrics.gesturesDetected++;
+        }
+
+        function log(message, type = 'info', containerId = 'pwa-results') {
+            const results = document.getElementById(containerId);
+            
+            if (results) {
+                const timestamp = new Date().toLocaleTimeString();
+                const logEntry = document.createElement('div');
+                logEntry.className = type;
+                logEntry.textContent = `[${timestamp}] ${message}`;
+                results.appendChild(logEntry);
+                results.scrollTop = results.scrollHeight;
+            }
+            
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        function updateStats() {
+            updatePerformanceMetrics();
+        }
+
+        function recordPerformance(operation, duration) {
+            console.log(`⏱️ ${operation}: ${duration.toFixed(2)}ms`);
+        }
+
+        function updatePerformanceMetrics() {
+            const container = document.getElementById('performance-metrics');
+            container.innerHTML = `
+                <div class="metric">
+                    <div class="metric-value">${testMetrics.gesturesDetected}</div>
+                    <div class="metric-label">Gestures Detected</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">${testMetrics.locationUpdates}</div>
+                    <div class="metric-label">Location Updates</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">${testMetrics.cacheHits}</div>
+                    <div class="metric-label">Cache Hits</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">${Math.round(testMetrics.performanceScore)}</div>
+                    <div class="metric-label">Performance Score</div>
+                </div>
+            `;
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateNetworkStatus();
+            updatePerformanceMetrics();
+            
+            // Auto-detect device type
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            document.getElementById('device-type').textContent = isMobile ? 'Mobile' : 'Desktop';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExploreX - Offline</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .offline-container {
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .offline-icon {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .offline-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .offline-message {
+            font-size: 1.1rem;
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .offline-features {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .offline-features h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            text-align: left;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            color: #ddd;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .feature-icon {
+            font-size: 1.2rem;
+            color: #667eea;
+        }
+
+        .retry-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin: 1rem 0.5rem;
+        }
+
+        .retry-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .home-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ccc;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin: 1rem 0.5rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .home-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .network-status {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .network-status.online {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            color: #4CAF50;
+        }
+
+        .network-status.offline {
+            background: rgba(244, 67, 54, 0.1);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            color: #f44336;
+        }
+
+        .cached-content {
+            margin-top: 2rem;
+            text-align: left;
+        }
+
+        .cached-content h4 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .cached-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cached-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .cached-item-title {
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.25rem;
+        }
+
+        .cached-item-description {
+            font-size: 0.85rem;
+            color: #ccc;
+        }
+
+        @media (max-width: 768px) {
+            .offline-title {
+                font-size: 2rem;
+            }
+            
+            .offline-container {
+                padding: 1rem;
+            }
+            
+            .offline-features {
+                padding: 1.5rem;
+            }
+            
+            .retry-button,
+            .home-button {
+                display: block;
+                width: 100%;
+                margin: 0.5rem 0;
+            }
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #667eea;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">🛰️</div>
+        
+        <h1 class="offline-title">You're Offline</h1>
+        
+        <p class="offline-message">
+            Don't worry! ExploreX works offline too. You can still access your saved experiences, 
+            itineraries, and explore cached content while you're disconnected.
+        </p>
+
+        <div class="offline-features">
+            <h3>Available Offline Features</h3>
+            <ul class="feature-list">
+                <li>
+                    <span class="feature-icon">📋</span>
+                    View your saved itineraries and plans
+                </li>
+                <li>
+                    <span class="feature-icon">❤️</span>
+                    Browse your favorite experiences
+                </li>
+                <li>
+                    <span class="feature-icon">📸</span>
+                    View cached photos and reviews
+                </li>
+                <li>
+                    <span class="feature-icon">📍</span>
+                    Access previously viewed locations
+                </li>
+                <li>
+                    <span class="feature-icon">⭐</span>
+                    Read offline reviews and ratings
+                </li>
+                <li>
+                    <span class="feature-icon">🔄</span>
+                    Sync when you're back online
+                </li>
+            </ul>
+        </div>
+
+        <div class="cached-content">
+            <h4>Recently Viewed Experiences</h4>
+            <div id="cached-experiences">
+                <div class="cached-item" onclick="openCachedExperience('griffith-observatory')">
+                    <div class="cached-item-title">🔭 Griffith Observatory</div>
+                    <div class="cached-item-description">Los Angeles, CA • Free admission • 4.5★</div>
+                </div>
+                <div class="cached-item" onclick="openCachedExperience('kennedy-space-center')">
+                    <div class="cached-item-title">🚀 Kennedy Space Center</div>
+                    <div class="cached-item-description">Florida, FL • $75 • 4.8★</div>
+                </div>
+                <div class="cached-item" onclick="openCachedExperience('smithsonian-air-space')">
+                    <div class="cached-item-title">🏛️ Smithsonian Air & Space</div>
+                    <div class="cached-item-description">Washington, DC • $25 • 4.6★</div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <button class="retry-button" onclick="retryConnection()">
+                <span id="retry-text">Try Again</span>
+                <span id="retry-spinner" class="loading-spinner hidden"></span>
+            </button>
+            <a href="/explorex.html" class="home-button">Go to Home</a>
+        </div>
+
+        <div id="network-status" class="network-status offline">
+            🔴 No internet connection detected
+        </div>
+    </div>
+
+    <script>
+        // Network status monitoring
+        function updateNetworkStatus() {
+            const statusElement = document.getElementById('network-status');
+            
+            if (navigator.onLine) {
+                statusElement.className = 'network-status online';
+                statusElement.innerHTML = '🟢 Connection restored! Redirecting...';
+                
+                // Redirect to main app after a short delay
+                setTimeout(() => {
+                    window.location.href = '/explorex.html';
+                }, 2000);
+            } else {
+                statusElement.className = 'network-status offline';
+                statusElement.innerHTML = '🔴 No internet connection detected';
+            }
+        }
+
+        // Retry connection
+        function retryConnection() {
+            const retryText = document.getElementById('retry-text');
+            const retrySpinner = document.getElementById('retry-spinner');
+            
+            retryText.textContent = 'Checking...';
+            retrySpinner.classList.remove('hidden');
+            
+            // Simulate connection check
+            setTimeout(() => {
+                if (navigator.onLine) {
+                    retryText.textContent = 'Connected!';
+                    retrySpinner.classList.add('hidden');
+                    
+                    setTimeout(() => {
+                        window.location.href = '/explorex.html';
+                    }, 1000);
+                } else {
+                    retryText.textContent = 'Still Offline';
+                    retrySpinner.classList.add('hidden');
+                    
+                    setTimeout(() => {
+                        retryText.textContent = 'Try Again';
+                    }, 2000);
+                }
+            }, 1500);
+        }
+
+        // Open cached experience
+        function openCachedExperience(experienceId) {
+            // In a real implementation, this would load cached data
+            alert(`Opening cached data for ${experienceId}. This would show offline content in the full app.`);
+        }
+
+        // Load cached experiences from localStorage
+        function loadCachedExperiences() {
+            try {
+                const cached = localStorage.getItem('explorex-cached-experiences');
+                if (cached) {
+                    const experiences = JSON.parse(cached);
+                    const container = document.getElementById('cached-experiences');
+                    
+                    container.innerHTML = experiences.map(exp => `
+                        <div class="cached-item" onclick="openCachedExperience('${exp.id}')">
+                            <div class="cached-item-title">${exp.icon} ${exp.name}</div>
+                            <div class="cached-item-description">${exp.location} • ${exp.price} • ${exp.rating}★</div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.log('No cached experiences found');
+            }
+        }
+
+        // Event listeners
+        window.addEventListener('online', updateNetworkStatus);
+        window.addEventListener('offline', updateNetworkStatus);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateNetworkStatus();
+            loadCachedExperiences();
+        });
+
+        // Service worker registration check
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.ready.then(registration => {
+                console.log('Service Worker is ready');
+                
+                // Listen for updates
+                registration.addEventListener('updatefound', () => {
+                    console.log('New version available');
+                });
+            });
+        }
+
+        // Periodic connection check
+        setInterval(() => {
+            if (navigator.onLine) {
+                updateNetworkStatus();
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
