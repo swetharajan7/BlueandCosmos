@@ -903,12 +903,14 @@
   <script src="explorex-analytics.js"></script>
   <script src="explorex-performance-monitor.js"></script>
   <script src="explorex-analytics-dashboard.js"></script>
+  <script src="explorex-security-system.js"></script>
   
   <!-- Load Styles -->
   <link rel="stylesheet" href="explorex-location-styles.css" />
   <link rel="stylesheet" href="explorex-search-styles.css" />
   <link rel="stylesheet" href="explorex-ui-styles.css" />
   <link rel="stylesheet" href="explorex-analytics-styles.css" />
+  <link rel="stylesheet" href="explorex-security-styles.css" />
 
   <script>
     // Development Environment Configuration
@@ -965,6 +967,7 @@
         this.initializeWeatherSystem();
         this.initializeUserSystem();
         await this.initializeAnalyticsSystem();
+        await this.initializeSecuritySystem();
         this.setupAdvancedFilters();
         this.setupPopularDestinations();
         this.setupDatabaseStats();
@@ -1050,6 +1053,14 @@
             this.analyticsDashboard.toggleDashboard();
           }
         }
+
+        // Security dashboard shortcut (Ctrl+Shift+S)
+        if (event.ctrlKey && event.shiftKey && event.key === 'S') {
+          event.preventDefault();
+          if (this.securityManager) {
+            this.toggleSecurityDashboard();
+          }
+        }
         
         if (event.key === 'Escape') {
           // Close any open modals or overlays
@@ -1065,6 +1076,77 @@
           searchInput.focus();
           searchInput.select();
         }
+      }
+
+      toggleSecurityDashboard() {
+        // Create security dashboard if it doesn't exist
+        let dashboard = document.getElementById('security-dashboard');
+        
+        if (!dashboard) {
+          dashboard = document.createElement('div');
+          dashboard.id = 'security-dashboard';
+          dashboard.className = 'security-dashboard';
+          
+          const securityData = this.securityManager.getSecurityDashboard();
+          
+          dashboard.innerHTML = `
+            <div class="security-dashboard-header">
+              <h2 class="security-dashboard-title">
+                🔒 Security Dashboard
+                <button class="security-dashboard-close" onclick="this.closest('.security-dashboard').classList.remove('open')">×</button>
+              </h2>
+            </div>
+            <div class="security-dashboard-content">
+              <div class="security-section">
+                <h3>System Status</h3>
+                <div class="security-metric">
+                  <span class="security-metric-label">Active Sessions</span>
+                  <span class="security-metric-value">${securityData.sessions.active}</span>
+                </div>
+                <div class="security-metric">
+                  <span class="security-metric-label">Rate Limit Violations</span>
+                  <span class="security-metric-value">${securityData.rateLimits.violations}</span>
+                </div>
+                <div class="security-metric">
+                  <span class="security-metric-label">XSS Attempts Blocked</span>
+                  <span class="security-metric-value">${securityData.security.xssBlocked}</span>
+                </div>
+              </div>
+              
+              <div class="security-section">
+                <h3>Protection Status</h3>
+                <div class="security-metric">
+                  <span class="security-metric-label">Input Validation</span>
+                  <span class="security-status good">Active</span>
+                </div>
+                <div class="security-metric">
+                  <span class="security-metric-label">Rate Limiting</span>
+                  <span class="security-status good">Active</span>
+                </div>
+                <div class="security-metric">
+                  <span class="security-metric-label">GDPR Compliance</span>
+                  <span class="security-status ${securityData.security.gdprConsent === 'granted' ? 'good' : 'warning'}">${securityData.security.gdprConsent}</span>
+                </div>
+              </div>
+              
+              <div class="security-section">
+                <h3>Recent Events</h3>
+                <div class="security-events">
+                  ${securityData.recentEvents.map(event => `
+                    <div class="security-event ${event.type.includes('violation') || event.type.includes('blocked') ? 'warning' : ''}">
+                      <div class="security-event-type">${event.type.replace(/_/g, ' ').toUpperCase()}</div>
+                      <div class="security-event-time">${new Date(event.timestamp).toLocaleTimeString()}</div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+          `;
+          
+          document.body.appendChild(dashboard);
+        }
+        
+        dashboard.classList.toggle('open');
       }
 
       showExperienceDetails(experience) {
@@ -1717,6 +1799,92 @@
             });
           });
         }
+      }
+
+      async initializeSecuritySystem() {
+        try {
+          if (this.config.debug) {
+            console.log('🔒 Initializing Security System...');
+          }
+
+          // Initialize Security Manager
+          this.securityManager = new window.ExploreXSecurity.SecurityManager();
+          await this.securityManager.initialize();
+
+          // Setup security event listeners
+          this.setupSecurityEventListeners();
+
+          // Make security globally available for debugging
+          if (this.config.debug) {
+            window.ExploreXSecurityDebug = {
+              manager: this.securityManager,
+              getReport: () => this.securityManager.getSecurityDashboard(),
+              showGDPRBanner: () => this.securityManager.showGDPRBanner(),
+              validateInput: (input) => this.securityManager.validateInput(input),
+              checkRateLimit: (type) => this.securityManager.checkRateLimit(type)
+            };
+          }
+
+          if (this.config.debug) {
+            console.log('✅ Security System initialized successfully');
+          }
+
+        } catch (error) {
+          console.error('❌ Failed to initialize Security System:', error);
+          
+          // Security failure shouldn't break the app, but log it
+          if (this.toastManager) {
+            this.toastManager.warning('Security system unavailable');
+          }
+        }
+      }
+
+      setupSecurityEventListeners() {
+        // Track security events in analytics
+        document.addEventListener('securityEvent', (event) => {
+          if (this.analyticsManager) {
+            this.analyticsManager.trackEvent('security_event', {
+              securityEventType: event.detail.type,
+              ...event.detail.data
+            });
+          }
+        });
+
+        // Enhanced form validation
+        document.addEventListener('submit', (event) => {
+          if (this.securityManager && !this.securityManager.validateForm(event.target)) {
+            event.preventDefault();
+            
+            if (this.toastManager) {
+              this.toastManager.error('Please correct the form errors before submitting');
+            }
+          }
+        });
+
+        // Rate limiting for search
+        const originalPerformSearch = this.performSearch.bind(this);
+        this.performSearch = async (locationQuery, dateQuery) => {
+          if (this.securityManager && !this.securityManager.checkRateLimit('search')) {
+            if (this.toastManager) {
+              this.toastManager.warning('Too many searches. Please wait a moment before searching again.');
+            }
+            return;
+          }
+          
+          return originalPerformSearch(locationQuery, dateQuery);
+        };
+
+        // Security monitoring for user actions
+        document.addEventListener('click', (event) => {
+          // Track suspicious click patterns
+          if (this.securityManager && event.target.matches('a[href^="javascript:"], *[onclick]')) {
+            this.securityManager.logSecurityEvent('suspicious_click', {
+              element: event.target.tagName,
+              href: event.target.href,
+              onclick: event.target.onclick?.toString()
+            });
+          }
+        });
       }
 
       handleUserLogin(event) {
