@@ -4,37 +4,197 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Site Map – BlueandCosmos</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
+    :root {
+      --accent: #0033a0;
+      --flag-blue: #002366;
+      --highlight: #ff4081;
+      --text-white: #ffffff;
+      --text-light: #cce0ff;
+      --dark-bg: #121212;
+      --dark-accent: #001f5b;
+    }
+
+    html, body { height: 100%; }
     body {
       margin: 0;
       font-family: 'Work Sans', sans-serif;
-      background-color: #f8f8f8;
-      color: #222;
+      background: #fff;
+      color: #000;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
+    body.dark { background-color: var(--dark-bg); color: var(--text-white); }
+    main { flex: 1 0 auto; }
+    :focus-visible { outline: 2px dashed var(--highlight); outline-offset: 2px; }
 
     header {
-      background-color: #0033a0;
+      background: var(--accent);
+      color: var(--text-white);
+      padding: 1em 2em;
+      display: grid;
+      grid-template-columns: auto 1fr auto auto auto;
+      align-items: center;
+      gap: 1.5em;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo-link { display: flex; align-items: center; text-decoration: none; color: inherit; }
+    .logo-area { display: flex; align-items: center; gap: 0.4em; }
+    .logo-area img { height: 50px; width: 50px; margin: 0; padding: 0; background-color: transparent; display: block; }
+    .logo-text { display: flex; flex-direction: column; line-height: 1.2; margin-left: -4px; }
+    .logo-text .title { font-size: 1.4em; font-weight: bold; color: #fff; margin: 0; }
+    .logo-text .tagline { font-size: 0.85em; color: var(--text-light); margin: 0; }
+
+    .nav-right {
+      display: flex; align-items: center; justify-content: flex-end; gap: 1.2em;
+    }
+    .nav-right > * { display: inline-flex; align-items: center; }
+
+    .moon-widget {
+      display: flex; align-items: center; gap: 0.6em; justify-self: center;
+      min-width: 220px; user-select: none; text-decoration: none; color: inherit;
+    }
+    .moon-icon { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+    .moon-info { display: flex; flex-direction: column; gap: 0.1em; }
+    .moon-label { color: var(--text-light); font-size: 0.95em; white-space: nowrap; font-weight: 500; }
+    .moon-context { color: var(--text-light); font-size: 0.75em; opacity: 0.8; white-space: nowrap; }
+    body.dark .moon-label, body.dark .moon-context { color: #e0ecff; }
+    @media (max-width: 900px) { .moon-widget { display: none; } }
+
+    .explorex-widget {
+      display: flex; align-items: center; gap: 0.6em; justify-self: center;
+      user-select: none; text-decoration: none; color: inherit;
+      transition: transform 0.2s ease;
+    }
+    .explorex-label {
+      color: var(--text-light); 
+      font-size: 0.95em; 
+      font-weight: 600; 
+      white-space: nowrap;
+    }
+    body.dark .explorex-label { color: #e0ecff; }
+    .explorex-widget:hover { transform: scale(1.05); }
+    .explorex-icon { 
+      width: 32px; height: 32px; border-radius: 50%; 
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%); 
+      display: flex; align-items: center; justify-content: center; 
+      flex-shrink: 0;
+      font-size: 16px;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+      border: 2px solid rgba(59, 130, 246, 0.3);
+    }
+    @media (max-width: 1050px) { .explorex-widget { display: none; } }
+
+    .mars-widget {
+      display: flex; align-items: center; gap: 0.6em; justify-self: center;
+      user-select: none; text-decoration: none; color: inherit;
+      transition: transform 0.2s ease;
+    }
+    .mars-label {
+      color: var(--text-light); 
+      font-size: 0.95em; 
+      font-weight: 600; 
+      white-space: nowrap;
+    }
+    body.dark .mars-label { color: #e0ecff; }
+    .mars-widget:hover { transform: scale(1.05); }
+    .mars-icon { 
+      width: 32px; height: 32px; border-radius: 50%; 
+      background-image: url('https://photojournal.jpl.nasa.gov/jpeg/PIA00407.jpg');
+      background-size: cover;
+      background-position: center;
+      display: flex; align-items: center; justify-content: center; 
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(205, 92, 92, 0.4);
+      border: 2px solid rgba(205, 92, 92, 0.3);
+    }
+    @media (max-width: 1100px) { .mars-widget { display: none; } }
+
+    nav { display: contents; }
+    .dropdown { position: relative; }
+    .dropbtn {
+      background: none;
+      border: none;
+      color: var(--text-light);
+      padding: 0.5em 1em;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      font-size: 1em;
+      font-family: inherit;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .dropbtn:hover, .dropdown:hover .dropbtn {
+      background: rgba(255, 255, 255, 0.1);
       color: white;
-      padding: 1.5rem;
-      text-align: center;
     }
-
-    h1 {
-      margin: 0;
-      font-size: 2rem;
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background: var(--accent);
+      min-width: 200px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1001;
+      border-radius: 4px;
+      overflow: hidden;
+      top: 100%;
+      right: 0;
     }
+    .dropdown-content a {
+      color: var(--text-light);
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      transition: background 0.3s ease;
+    }
+    .dropdown-content a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    .dropdown:hover .dropdown-content { display: block; }
 
-    main {
-      max-width: 700px;
+    .toggle-theme { cursor: pointer; font-size: 1.5em; line-height: 1; user-select: none; }
+
+    body.dark header, body.dark footer { background-color: var(--dark-accent); }
+
+    .sitemap-content {
+      max-width: 1000px;
       margin: 2rem auto;
       padding: 1rem 2rem;
     }
 
+    .sitemap-intro {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding: 2rem;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .sitemap-intro h1 {
+      margin: 0 0 1rem 0;
+      font-size: 2.5rem;
+      color: var(--accent);
+    }
+
+    .sitemap-intro p {
+      font-size: 1.1rem;
+      color: #666;
+      margin: 0;
+    }
+
     h2 {
-      color: #0033a0;
-      border-bottom: 2px solid #0033a0;
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent);
       padding-bottom: 0.5rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
     }
 
     ul {
@@ -44,11 +204,20 @@
 
     ul li {
       margin-bottom: 0.75rem;
+      padding: 0.5rem;
+      background: rgba(0, 51, 160, 0.05);
+      border-radius: 5px;
+      transition: background 0.3s ease;
+    }
+
+    ul li:hover {
+      background: rgba(0, 51, 160, 0.1);
     }
 
     a {
-      color: #0033a0;
+      color: var(--accent);
       text-decoration: none;
+      font-weight: 500;
     }
 
     a:hover {
@@ -56,54 +225,212 @@
     }
 
     footer {
-      background-color: #0033a0;
-      color: white;
+      background-color: var(--accent);
+      color: #fff;
+      padding: 2em 1em;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
       text-align: center;
-      padding: 1.5rem;
-      margin-top: 3rem;
+      gap: 1em;
     }
+    footer a { color: #fff; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Site Map</h1>
+    <a href="index.html" class="logo-link" aria-label="BlueandCosmos Home">
+      <div class="logo-area">
+        <img src="https://cdn.jsdelivr.net/gh/swetharajan7/blueandcosmos/assets/logo-transparent.png" alt="BlueandCosmos Logo" />
+        <div class="logo-text">
+          <div class="title">BlueandCosmos</div>
+          <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="moon.html" class="moon-widget" title="View detailed moon phase information">
+      <div class="moon-icon" id="moon-display">🌙</div>
+      <div class="moon-info">
+        <span class="moon-label">Loading moon phase…</span>
+        <span class="moon-context" id="moon-context">New York City, NY</span>
+      </div>
+    </a>
+
+    <a href="explorex.html" class="explorex-widget" title="ExploreX - Discover Space Travel Experiences">
+      <div class="explorex-icon">🚀</div>
+      <span class="explorex-label">ExploreX</span>
+    </a>
+
+    <a href="mars.html" class="mars-widget" title="Explore Mars - The Red Planet">
+      <div class="mars-icon"></div>
+      <span class="mars-label">MARS</span>
+    </a>
+
+    <nav>
+      <div class="nav-right">
+        <div class="dropdown" data-menu="about">
+          <button class="dropbtn">About</button>
+          <div class="dropdown-content" role="menu" aria-label="About submenu">
+            <a href="about.html" role="menuitem">About BlueandCosmos</a>
+          </div>
+        </div>
+
+        <div class="dropdown" data-menu="livestream">
+          <button class="dropbtn">Livestream</button>
+          <div class="dropdown-content" role="menu" aria-label="Livestream submenu">
+            <a href="livestream-images.html" role="menuitem">Live Stream Images</a>
+            <a href="launch-missions.html" role="menuitem">Launch Missions</a>
+          </div>
+        </div>
+
+        <div class="dropdown" data-menu="dashboard">
+          <a href="dashboard.html" class="dropbtn">Dashboard</a>
+          <div class="dropdown-content" role="menu" aria-label="Dashboard submenu">
+            <a href="moon.html" role="menuitem">🌙 Lunar Intelligence Center</a>
+            <a href="telescope.html" role="menuitem">🔭 Telescope</a>
+            <a href="flashcards.html" role="menuitem">🧠 Flashcards</a>
+            <a href="discussion.html" role="menuitem">💬 Community</a>
+          </div>
+        </div>
+        <div class="toggle-theme" id="themeToggle">🌙</div>
+      </div>
+    </nav>
   </header>
 
+  <main class="sitemap-content">
+    <div class="sitemap-intro">
+      <h1>🗺️ Site Map</h1>
+      <p>Complete navigation guide to all BlueandCosmos features and pages</p>
+    </div>
+
   <main>
-    <h2>Pages</h2>
+    <h2>Main Pages</h2>
     <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="dashboard.html">Dashboard</a></li>
-      <li><a href="ads.html">Advertisements</a></li>
-      <li><a href="privacy.html">Privacy Policy</a></li>
-      <li><a href="terms.html">Terms of Use</a></li>
-      <li><a href="contact.html">Contact Us</a></li>
-      <li><a href="sitemap.html">Site Map</a></li>
+      <li><a href="index.html">🏠 Home</a> - Main BlueandCosmos homepage with moon phase widget</li>
+      <li><a href="about.html">ℹ️ About BlueandCosmos</a> - Learn about our mission and team</li>
+      <li><a href="dashboard.html">📊 Dashboard</a> - Real-time Earth-Sky Intelligence Platform</li>
     </ul>
 
-    <h2>Dashboard Sections</h2>
+    <h2>Educational Tools & Features</h2>
     <ul>
-      <li>Weather</li>
-      <li>NYT Science News</li>
-      <li>Space Fact</li>
-      <li>Launch Tracker</li>
-      <li>Celestial Events</li>
-      <li>Chatbot</li>
-      <li>Subscription</li>
+      <li><a href="moon.html">🌙 Lunar Intelligence Center</a> - 15 years of moon phase data, eclipses, and tidal information</li>
+      <li><a href="telescope.html">🔭 Virtual Observatory</a> - Interactive telescope operation and celestial object identification</li>
+      <li><a href="flashcards.html">🧠 STEM Flashcards</a> - Spaced repetition learning for physics, math, chemistry, and astronomy</li>
+      <li><a href="discussion.html">💬 Cosmic Community Hub</a> - Connect with students and researchers worldwide</li>
     </ul>
 
-    <h2>Categories</h2>
+    <h2>Space Exploration</h2>
     <ul>
-      <li>Productivity & Workflows</li>
-      <li>Games & Entertainment</li>
-      <li>Educational Apps</li>
+      <li><a href="mars.html">🔴 Mars Exploration</a> - Discover the Red Planet with interactive features</li>
+      <li><a href="explorex.html">🚀 ExploreX Travel Platform</a> - Space tourism and travel experiences</li>
+      <li><a href="launch-missions.html">🛰️ Launch Missions</a> - Live rocket launch tracking and mission updates</li>
+      <li><a href="livestream-images.html">📡 Live Stream Images</a> - Real-time satellite and space imagery</li>
     </ul>
+
+    <h2>Mobile & Offline</h2>
+    <ul>
+      <li><a href="offline.html">📱 Offline Mode</a> - Access BlueandCosmos without internet connection</li>
+      <li><a href="manifest.json">📋 Web App Manifest</a> - Progressive Web App configuration</li>
+    </ul>
+
+    <h2>Legal & Information</h2>
+    <ul>
+      <li><a href="privacy.html">🔒 Privacy Policy</a> - How we protect your data</li>
+      <li><a href="terms.html">📜 Terms of Use</a> - Website usage terms and conditions</li>
+      <li><a href="contact.html">📧 Contact Us</a> - Get in touch with our team</li>
+      <li><a href="sitemap.html">🗺️ Site Map</a> - This page - complete website structure</li>
+    </ul>
+
+    <h2>Additional Resources</h2>
+    <ul>
+      <li><a href="ads.html">📢 Advertisements</a> - Sponsored content and partnerships</li>
+      <li><a href="newsletter-component.html">📰 Newsletter</a> - Subscribe to space science updates</li>
+    </ul>
+
+    <h2>Testing & Development</h2>
+    <ul>
+      <li><a href="final-integration-test.html">🧪 Integration Tests</a> - System testing interface</li>
+      <li><a href="test-comprehensive-suite.html">🔬 Comprehensive Test Suite</a> - Full system validation</li>
+    </ul>
+
+    <h2>University Applications (Beta)</h2>
+    <ul>
+      <li><a href="columbia-mba-rec.html">🎓 Columbia MBA Recommendations</a> - MBA application assistance</li>
+      <li><a href="universal-rec.html">🏫 Universal Recommendations</a> - General university application support</li>
+    </ul>
+
+    <div style="margin-top: 3rem; padding: 2rem; background: rgba(0, 51, 160, 0.05); border-radius: 10px; text-align: center;">
+      <h2 style="border: none; margin-top: 0;">🚀 Ready to Explore?</h2>
+      <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">Start your cosmic journey with our most popular features!</p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="dashboard.html" style="background: var(--accent); color: white; padding: 0.75rem 1.5rem; border-radius: 25px; text-decoration: none; font-weight: bold;">📊 Dashboard</a>
+        <a href="moon.html" style="background: var(--accent); color: white; padding: 0.75rem 1.5rem; border-radius: 25px; text-decoration: none; font-weight: bold;">🌙 Moon Phases</a>
+        <a href="telescope.html" style="background: var(--accent); color: white; padding: 0.75rem 1.5rem; border-radius: 25px; text-decoration: none; font-weight: bold;">🔭 Telescope</a>
+        <a href="discussion.html" style="background: var(--accent); color: white; padding: 0.75rem 1.5rem; border-radius: 25px; text-decoration: none; font-weight: bold;">💬 Community</a>
+      </div>
+    </div>
   </main>
 
   <footer>
-    © BlueandCosmos™ 2025 &nbsp;|&nbsp; <a href="privacy.html" style="color:white; text-decoration:underline;">Privacy Policy</a> &nbsp;|&nbsp; <a href="terms.html" style="color:white; text-decoration:underline;">Terms of Use</a>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:0.5em;">
+      <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play Store" style="height:40px;"></a>
+      <a href="#"><img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Store" style="height:40px;"></a>
+    </div>
+
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0.5em;">
+      <div style="font-weight:bold;">BlueandCosmos™ 2025</div>
+      <div style="display:flex;flex-wrap:wrap;gap:1em;justify-content:center;font-size:0.9em;">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Use</a>
+        <a href="sitemap.html">Sitemap</a>
+      </div>
+    </div>
+
+    <div style="flex:1;display:flex;flex-direction:column;align-items:flex-end;gap:0.5em;">
+      <div style="font-weight:bold;">Let's Connect!</div>
+      <div style="display:flex;gap:0.5em;">
+        <a href="https://twitter.com/blueandcosmos" target="_blank" rel="noopener"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X" style="height:24px;filter:invert(1);"></a>
+        <a href="https://instagram.com/blueandcosmos" target="_blank" rel="noopener"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" style="height:24px;filter:invert(1);"></a>
+        <a href="https://tiktok.com/@blueandcosmos" target="_blank" rel="noopener"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok" style="height:24px;filter:invert(1);"></a>
+        <a href="https://youtube.com/@blueandcosmos" target="_blank" rel="noopener"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube" style="height:24px;filter:invert(1);"></a>
+      </div>
+    </div>
   </footer>
+
+  <script>
+    // Moon Phase Widget
+    (function initMoonPhase(){
+      function getMoonPhase(){
+        const now=new Date();const m=now.getMonth()+1;const d=now.getDate();const y=now.getFullYear();
+        if(y===2025&&m===9){
+          if(d<=2)return 0;if(d<=9)return 1;if(d<=16)return 6;if(d<=24)return 7;return 0;
+        }
+        const base=new Date(2024,7,4);const days=(now-base)/(1000*60*60*24);const cycle=days/29.53;return Math.floor((cycle-Math.floor(cycle))*8)%8;
+      }
+      function info(p){return[{name:"New Moon",emoji:"🌑"},{name:"Waxing Crescent",emoji:"🌒"},{name:"First Quarter",emoji:"🌓"},{name:"Waxing Gibbous",emoji:"🌔"},{name:"Full Moon",emoji:"🌕"},{name:"Waning Gibbous",emoji:"🌖"},{name:"Last Quarter",emoji:"🌗"},{name:"Waning Crescent",emoji:"🌘"}][p];}
+      const phase=getMoonPhase(),data=info(phase),now=new Date();
+      const moonDisplay = document.getElementById("moon-display");
+      const moonLabel = document.querySelector(".moon-label");
+      const moonContext = document.getElementById("moon-context");
+      
+      if(moonDisplay) moonDisplay.textContent=data.emoji;
+      if(moonLabel) moonLabel.textContent=data.name;
+      if(moonContext) moonContext.textContent=`${now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} • New York City, NY`;
+    })();
+
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark');
+        themeToggle.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+      });
+    }
+  </script>
 
 </body>
 </html>
