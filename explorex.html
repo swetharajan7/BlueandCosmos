@@ -900,11 +900,15 @@
   <script src="explorex-weather-integration.js"></script>
   <script src="explorex-user-system.js"></script>
   <script src="explorex-user-ui.js"></script>
+  <script src="explorex-analytics.js"></script>
+  <script src="explorex-performance-monitor.js"></script>
+  <script src="explorex-analytics-dashboard.js"></script>
   
   <!-- Load Styles -->
   <link rel="stylesheet" href="explorex-location-styles.css" />
   <link rel="stylesheet" href="explorex-search-styles.css" />
   <link rel="stylesheet" href="explorex-ui-styles.css" />
+  <link rel="stylesheet" href="explorex-analytics-styles.css" />
 
   <script>
     // Development Environment Configuration
@@ -960,6 +964,7 @@
         this.initializeEventsSystem();
         this.initializeWeatherSystem();
         this.initializeUserSystem();
+        await this.initializeAnalyticsSystem();
         this.setupAdvancedFilters();
         this.setupPopularDestinations();
         this.setupDatabaseStats();
@@ -1037,6 +1042,14 @@
               break;
           }
         }
+
+        // Analytics dashboard shortcut (Ctrl+Shift+A)
+        if (event.ctrlKey && event.shiftKey && event.key === 'A') {
+          event.preventDefault();
+          if (this.analyticsDashboard) {
+            this.analyticsDashboard.toggleDashboard();
+          }
+        }
         
         if (event.key === 'Escape') {
           // Close any open modals or overlays
@@ -1055,6 +1068,30 @@
       }
 
       showExperienceDetails(experience) {
+        // Track experience view analytics
+        if (this.analyticsManager) {
+          this.analyticsManager.trackExperienceView(experience.id, {
+            name: experience.name,
+            type: experience.type,
+            location: experience.location,
+            rating: experience.rating,
+            featured: experience.featured,
+            verified: experience.verified
+          });
+
+          // Emit experience viewed event
+          document.dispatchEvent(new CustomEvent('experienceViewed', {
+            detail: {
+              experienceId: experience.id,
+              experienceData: {
+                name: experience.name,
+                type: experience.type,
+                location: experience.location
+              }
+            }
+          }));
+        }
+
         // Use the new comprehensive experience modal
         if (!this.experienceDetailModal) {
           this.experienceDetailModal = new window.ExploreXExperienceModal();
@@ -1563,6 +1600,122 @@
           if (this.toastManager) {
             this.toastManager.error('User system unavailable. Some features may be limited.');
           }
+        }
+      }
+
+      async initializeAnalyticsSystem() {
+        try {
+          if (this.config.debug) {
+            console.log('📊 Initializing Analytics System...');
+          }
+
+          // Initialize Analytics Manager
+          this.analyticsManager = new window.ExploreXAnalytics.AnalyticsManager();
+          await this.analyticsManager.initialize();
+
+          // Initialize Performance Monitor
+          this.performanceMonitor = new window.ExploreXPerformanceMonitor.PerformanceMonitor();
+          await this.performanceMonitor.initialize();
+
+          // Initialize Analytics Dashboard
+          this.analyticsDashboard = new window.ExploreXAnalyticsDashboard.AnalyticsDashboard();
+          await this.analyticsDashboard.initialize(this.analyticsManager, this.performanceMonitor);
+
+          // Track initial page view
+          this.analyticsManager.trackPageView('/', {
+            source: 'direct',
+            timestamp: Date.now()
+          });
+
+          // Setup analytics event listeners
+          this.setupAnalyticsEventListeners();
+
+          // Make analytics globally available for debugging
+          if (this.config.debug) {
+            window.ExploreXAnalyticsDebug = {
+              manager: this.analyticsManager,
+              performance: this.performanceMonitor,
+              dashboard: this.analyticsDashboard,
+              showDashboard: () => this.analyticsDashboard.showDashboard(),
+              hideDashboard: () => this.analyticsDashboard.hideDashboard(),
+              getReport: () => this.analyticsManager.getAnalyticsDashboard('24h')
+            };
+          }
+
+          if (this.config.debug) {
+            console.log('✅ Analytics System initialized successfully');
+          }
+
+        } catch (error) {
+          console.error('❌ Failed to initialize Analytics System:', error);
+          
+          // Analytics failure shouldn't break the app
+          if (this.toastManager) {
+            this.toastManager.warning('Analytics system unavailable');
+          }
+        }
+      }
+
+      setupAnalyticsEventListeners() {
+        // Track search events
+        document.addEventListener('searchPerformed', (event) => {
+          this.analyticsManager.trackSearch(
+            event.detail.query,
+            event.detail.filters,
+            event.detail.results
+          );
+        });
+
+        // Track experience interactions
+        document.addEventListener('experienceViewed', (event) => {
+          this.analyticsManager.trackExperienceView(
+            event.detail.experienceId,
+            event.detail.experienceData
+          );
+        });
+
+        // Track user interactions
+        document.addEventListener('click', (event) => {
+          // Track clicks on important elements
+          if (event.target.matches('.experience-card, .search-btn, .filter-btn, .cta-button')) {
+            this.analyticsManager.trackUserInteraction(
+              event.target,
+              'click',
+              {
+                elementType: event.target.className,
+                timestamp: Date.now()
+              }
+            );
+          }
+        });
+
+        // Track conversions
+        document.addEventListener('bookingCompleted', (event) => {
+          this.analyticsManager.trackConversion('booking', {
+            experienceId: event.detail.experienceId,
+            value: event.detail.price,
+            timestamp: Date.now()
+          });
+        });
+
+        // Track errors
+        window.addEventListener('error', (event) => {
+          this.analyticsManager.trackError(event.error, {
+            filename: event.filename,
+            lineno: event.lineno,
+            colno: event.colno
+          });
+        });
+
+        // Track performance metrics
+        if (this.performanceMonitor) {
+          // Track search performance
+          document.addEventListener('searchCompleted', (event) => {
+            this.performanceMonitor.recordMetric('search_duration', event.detail.duration, {
+              query: event.detail.query,
+              resultCount: event.detail.resultCount
+            });
+          });
         }
       }
 
@@ -2565,8 +2718,40 @@
           });
 
           // Search using database
+          const searchStartTime = performance.now();
           const searchResult = this.database.searchExperiences(searchCriteria);
           let results = searchResult.experiences;
+          const searchDuration = performance.now() - searchStartTime;
+
+          // Track search analytics
+          if (this.analyticsManager) {
+            this.analyticsManager.trackSearch(locationQuery || '', {
+              location: searchLocation,
+              hasLocation: !!searchLocation,
+              maxDistance: searchCriteria.maxDistance,
+              sortBy: searchCriteria.sortBy
+            }, results);
+
+            // Emit search event for other listeners
+            document.dispatchEvent(new CustomEvent('searchPerformed', {
+              detail: {
+                query: locationQuery || '',
+                filters: searchCriteria,
+                results: results,
+                duration: searchDuration,
+                resultCount: results.length
+              }
+            }));
+          }
+
+          // Track performance
+          if (this.performanceMonitor) {
+            this.performanceMonitor.recordMetric('search_duration', searchDuration, {
+              query: locationQuery || '',
+              resultCount: results.length,
+              hasLocation: !!searchLocation
+            });
+          }
 
           // Display results
           this.displaySearchResults(results, locationQuery, dateQuery, searchLocation);
