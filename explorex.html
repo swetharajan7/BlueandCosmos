@@ -699,34 +699,124 @@
         </div>
       </section>
 
-      <!-- Search Interface -->
+      <!-- Advanced Search Interface -->
       <section class="search-container">
         <form class="search-form" id="exploreXSearch">
-          <div class="form-group">
-            <label for="location" class="form-label">📍 Destination</label>
-            <div class="location-input-container">
-              <input 
-                type="text" 
-                id="location" 
-                class="form-input location-autocomplete-input" 
-                placeholder="Enter city, state, or space destination"
-                autocomplete="off"
-              />
-            </div>
-            <div id="location-validation" class="location-validation"></div>
-          </div>
-          <div class="form-group">
-            <label for="dates" class="form-label">📅 Travel Dates</label>
+          <div class="search-input-wrapper">
+            <span class="search-input-icon">🔍</span>
             <input 
-              type="date" 
-              id="dates" 
-              class="form-input"
+              type="text" 
+              id="searchInput" 
+              class="search-input" 
+              placeholder="Search space experiences, locations, or attractions..."
+              autocomplete="off"
             />
           </div>
-          <button type="submit" class="search-button">
-            🔍 Explore
+          <button type="submit" class="search-button" id="searchButton">
+            🚀 Explore
           </button>
         </form>
+
+        <!-- Advanced Filters -->
+        <div class="filters-container" id="filtersContainer">
+          <div class="filters-header">
+            <h3 class="filters-title">Filters</h3>
+            <button type="button" class="filters-toggle" id="filtersToggle">
+              Show Filters
+            </button>
+          </div>
+          <div class="filters-content" id="filtersContent" style="display: none;">
+            
+            <!-- Experience Type Filters -->
+            <div class="filter-group">
+              <div class="filter-label">Experience Types</div>
+              <div class="type-filters" id="typeFilters">
+                <!-- Populated by JavaScript -->
+              </div>
+            </div>
+
+            <!-- Location & Distance -->
+            <div class="filter-group">
+              <div class="filter-label">Location & Distance</div>
+              <div class="location-input-container">
+                <input 
+                  type="text" 
+                  id="locationFilter" 
+                  class="form-input location-autocomplete-input" 
+                  placeholder="Enter city, state, or space destination"
+                  autocomplete="off"
+                />
+              </div>
+              <div class="range-filter">
+                <input 
+                  type="range" 
+                  id="radiusFilter" 
+                  class="range-input" 
+                  min="10" 
+                  max="500" 
+                  value="50"
+                />
+                <div class="range-labels">
+                  <span>10 mi</span>
+                  <span>500 mi</span>
+                </div>
+                <div class="range-value" id="radiusValue">50 miles</div>
+              </div>
+            </div>
+
+            <!-- Price Range -->
+            <div class="filter-group">
+              <div class="filter-label">Price Range</div>
+              <div class="price-filters" id="priceFilters">
+                <!-- Populated by JavaScript -->
+              </div>
+            </div>
+
+            <!-- Rating Filter -->
+            <div class="filter-group">
+              <div class="filter-label">Minimum Rating</div>
+              <div class="rating-filters" id="ratingFilters">
+                <!-- Populated by JavaScript -->
+              </div>
+            </div>
+
+            <!-- Accessibility -->
+            <div class="filter-group">
+              <div class="filter-label">Accessibility Features</div>
+              <div class="accessibility-filters" id="accessibilityFilters">
+                <!-- Populated by JavaScript -->
+              </div>
+            </div>
+
+            <!-- Special Features -->
+            <div class="filter-group">
+              <div class="filter-label">Special Features</div>
+              <div class="special-filters">
+                <label class="type-filter" id="featuredFilter">
+                  <span class="type-filter-icon">⭐</span>
+                  <span class="type-filter-label">Featured Only</span>
+                </label>
+                <label class="type-filter" id="verifiedFilter">
+                  <span class="type-filter-icon">✅</span>
+                  <span class="type-filter-label">Verified Only</span>
+                </label>
+                <label class="type-filter" id="freeFilter">
+                  <span class="type-filter-icon">🆓</span>
+                  <span class="type-filter-label">Free Admission</span>
+                </label>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Sort Controls -->
+        <div class="sort-controls" id="sortControls" style="display: none;">
+          <span class="sort-label">Sort by:</span>
+          <select class="sort-select" id="sortSelect">
+            <!-- Populated by JavaScript -->
+          </select>
+        </div>
         
         <!-- Popular Destinations Section -->
         <div class="popular-destinations" id="popular-destinations" style="display: none;">
@@ -785,7 +875,7 @@
         <p class="coming-soon-text">
           ExploreX is currently being built with cutting-edge technology to provide you with the best space travel experience recommendations.
         </p>
-        <span class="development-status">Task 4 Complete - Experience Database & Data Seeding Ready</span>
+        <span class="development-status">Task 5 Complete - Advanced Search & Filtering Engine Ready</span>
       </section>
     </div>
   </main>
@@ -795,9 +885,11 @@
   <script src="explorex-utils.js"></script>
   <script src="explorex-location-services.js"></script>
   <script src="explorex-database.js"></script>
+  <script src="explorex-search-engine.js"></script>
   
-  <!-- Load Location Services Styles -->
+  <!-- Load Styles -->
   <link rel="stylesheet" href="explorex-location-styles.css" />
+  <link rel="stylesheet" href="explorex-search-styles.css" />
 
   <script>
     // Development Environment Configuration
@@ -828,6 +920,8 @@
         this.utils = window.ExploreXUtils;
         this.locationServices = window.ExploreXLocationServices;
         this.database = new window.ExploreXDatabase.ExperienceDatabase();
+        this.searchEngine = null;
+        this.searchUI = null;
         this.currentLocation = null;
         this.selectedLocation = null;
         this.init();
@@ -839,14 +933,34 @@
         this.setupMoonPhase();
         this.setupDropdowns();
         await this.initializeDatabase();
+        this.initializeSearchEngine();
         this.initializeDataModels();
         this.initializeLocationServices();
+        this.setupAdvancedFilters();
         this.setupPopularDestinations();
         this.setupDatabaseStats();
         this.logInitialization();
       }
 
 
+
+      initializeSearchEngine() {
+        // Initialize search engine with database
+        this.searchEngine = new window.ExploreXSearchEngine.SearchEngine(this.database);
+        
+        // Initialize search UI controller
+        this.searchUI = new window.ExploreXSearchEngine.SearchUIController(this.searchEngine);
+        
+        // Setup search interface
+        this.setupSearchInterface();
+        
+        if (this.config.debug) {
+          console.log('🔍 Search Engine initialized');
+          
+          // Test search functionality
+          this.testSearchEngine();
+        }
+      }
 
       async initializeDatabase() {
         try {
@@ -1038,6 +1152,557 @@
         if (popularDestinationsSection && source !== 'popular_destination') {
           popularDestinationsSection.style.display = 'none';
         }
+      }
+
+      setupSearchInterface() {
+        const searchInput = document.getElementById('searchInput');
+        const searchForm = document.getElementById('exploreXSearch');
+        
+        if (!searchInput || !searchForm) return;
+
+        // Setup search form submission
+        searchForm.addEventListener('submit', this.handleAdvancedSearch.bind(this));
+        
+        // Setup real-time search suggestions
+        const debouncedSuggestions = this.utils.PerformanceUtils.debounce(
+          this.handleSearchSuggestions.bind(this), 300
+        );
+        
+        searchInput.addEventListener('input', debouncedSuggestions);
+        searchInput.addEventListener('focus', this.handleSearchFocus.bind(this));
+        
+        // Setup filters toggle
+        const filtersToggle = document.getElementById('filtersToggle');
+        const filtersContent = document.getElementById('filtersContent');
+        
+        if (filtersToggle && filtersContent) {
+          filtersToggle.addEventListener('click', () => {
+            const isVisible = filtersContent.style.display !== 'none';
+            filtersContent.style.display = isVisible ? 'none' : 'block';
+            filtersToggle.textContent = isVisible ? 'Show Filters' : 'Hide Filters';
+          });
+        }
+      }
+
+      setupAdvancedFilters() {
+        const filterOptions = this.searchEngine.getFilterOptions();
+        
+        // Setup experience type filters
+        this.setupTypeFilters(filterOptions.types);
+        
+        // Setup price range filters
+        this.setupPriceFilters(filterOptions.priceRanges);
+        
+        // Setup rating filters
+        this.setupRatingFilters(filterOptions.ratings);
+        
+        // Setup accessibility filters
+        this.setupAccessibilityFilters(filterOptions.accessibility);
+        
+        // Setup sort options
+        this.setupSortOptions(filterOptions.sortOptions);
+        
+        // Setup special filters
+        this.setupSpecialFilters();
+        
+        // Setup radius filter
+        this.setupRadiusFilter();
+      }
+
+      setupTypeFilters(types) {
+        const container = document.getElementById('typeFilters');
+        if (!container) return;
+
+        container.innerHTML = '';
+        
+        types.forEach(type => {
+          const filter = document.createElement('label');
+          filter.className = 'type-filter';
+          filter.dataset.type = type.value;
+          
+          filter.innerHTML = `
+            <span class="type-filter-icon">${type.icon}</span>
+            <span class="type-filter-label">${type.label}</span>
+            <span class="type-filter-count">${type.count}</span>
+          `;
+          
+          filter.addEventListener('click', () => {
+            filter.classList.toggle('active');
+            this.updateFiltersFromUI();
+          });
+          
+          container.appendChild(filter);
+        });
+      }
+
+      setupPriceFilters(priceRanges) {
+        const container = document.getElementById('priceFilters');
+        if (!container) return;
+
+        container.innerHTML = '';
+        
+        priceRanges.forEach(range => {
+          const filter = document.createElement('button');
+          filter.className = 'price-filter';
+          filter.dataset.range = range.label;
+          filter.textContent = range.label;
+          
+          filter.addEventListener('click', () => {
+            // Toggle active state
+            const wasActive = filter.classList.contains('active');
+            container.querySelectorAll('.price-filter').forEach(f => f.classList.remove('active'));
+            
+            if (!wasActive) {
+              filter.classList.add('active');
+            }
+            
+            this.updateFiltersFromUI();
+          });
+          
+          container.appendChild(filter);
+        });
+      }
+
+      setupRatingFilters(ratings) {
+        const container = document.getElementById('ratingFilters');
+        if (!container) return;
+
+        container.innerHTML = '';
+        
+        ratings.forEach(rating => {
+          const filter = document.createElement('label');
+          filter.className = 'rating-filter';
+          filter.dataset.rating = rating.value;
+          
+          const stars = '★'.repeat(Math.floor(rating.value)) + '☆'.repeat(5 - Math.floor(rating.value));
+          
+          filter.innerHTML = `
+            <span class="rating-stars">${stars}</span>
+            <span>${rating.label}</span>
+          `;
+          
+          filter.addEventListener('click', () => {
+            // Toggle active state
+            const wasActive = filter.classList.contains('active');
+            container.querySelectorAll('.rating-filter').forEach(f => f.classList.remove('active'));
+            
+            if (!wasActive) {
+              filter.classList.add('active');
+            }
+            
+            this.updateFiltersFromUI();
+          });
+          
+          container.appendChild(filter);
+        });
+      }
+
+      setupAccessibilityFilters(accessibility) {
+        const container = document.getElementById('accessibilityFilters');
+        if (!container) return;
+
+        container.innerHTML = '';
+        
+        accessibility.forEach(feature => {
+          const filter = document.createElement('label');
+          filter.className = 'accessibility-filter';
+          filter.dataset.feature = feature.value;
+          
+          filter.innerHTML = `
+            <span class="accessibility-icon">${feature.icon}</span>
+            <span>${feature.label}</span>
+          `;
+          
+          filter.addEventListener('click', () => {
+            filter.classList.toggle('active');
+            this.updateFiltersFromUI();
+          });
+          
+          container.appendChild(filter);
+        });
+      }
+
+      setupSortOptions(sortOptions) {
+        const select = document.getElementById('sortSelect');
+        if (!select) return;
+
+        select.innerHTML = '';
+        
+        sortOptions.forEach(option => {
+          const optionElement = document.createElement('option');
+          optionElement.value = option.value;
+          optionElement.textContent = `${option.icon} ${option.label}`;
+          select.appendChild(optionElement);
+        });
+        
+        select.addEventListener('change', () => {
+          this.updateFiltersFromUI();
+        });
+      }
+
+      setupSpecialFilters() {
+        const featuredFilter = document.getElementById('featuredFilter');
+        const verifiedFilter = document.getElementById('verifiedFilter');
+        const freeFilter = document.getElementById('freeFilter');
+        
+        [featuredFilter, verifiedFilter, freeFilter].forEach(filter => {
+          if (filter) {
+            filter.addEventListener('click', () => {
+              filter.classList.toggle('active');
+              this.updateFiltersFromUI();
+            });
+          }
+        });
+      }
+
+      setupRadiusFilter() {
+        const radiusFilter = document.getElementById('radiusFilter');
+        const radiusValue = document.getElementById('radiusValue');
+        
+        if (radiusFilter && radiusValue) {
+          radiusFilter.addEventListener('input', (e) => {
+            const value = e.target.value;
+            radiusValue.textContent = `${value} miles`;
+            
+            // Debounced filter update
+            clearTimeout(this.radiusTimeout);
+            this.radiusTimeout = setTimeout(() => {
+              this.updateFiltersFromUI();
+            }, 500);
+          });
+        }
+      }
+
+      updateFiltersFromUI() {
+        const filters = {};
+        
+        // Get selected types
+        const activeTypes = Array.from(document.querySelectorAll('.type-filter.active'))
+          .map(filter => filter.dataset.type);
+        if (activeTypes.length > 0) {
+          filters.types = activeTypes;
+        }
+        
+        // Get selected price range
+        const activePriceFilter = document.querySelector('.price-filter.active');
+        if (activePriceFilter) {
+          filters.priceRange = activePriceFilter.dataset.range;
+        }
+        
+        // Get selected rating
+        const activeRatingFilter = document.querySelector('.rating-filter.active');
+        if (activeRatingFilter) {
+          filters.minRating = parseFloat(activeRatingFilter.dataset.rating);
+        }
+        
+        // Get selected accessibility features
+        const activeAccessibility = Array.from(document.querySelectorAll('.accessibility-filter.active'))
+          .map(filter => filter.dataset.feature);
+        if (activeAccessibility.length > 0) {
+          filters.accessibility = activeAccessibility;
+        }
+        
+        // Get special filters
+        filters.featured = document.getElementById('featuredFilter')?.classList.contains('active') || null;
+        filters.verified = document.getElementById('verifiedFilter')?.classList.contains('active') || null;
+        filters.freeOnly = document.getElementById('freeFilter')?.classList.contains('active') || false;
+        
+        // Get radius
+        const radiusFilter = document.getElementById('radiusFilter');
+        if (radiusFilter) {
+          filters.radius = parseInt(radiusFilter.value);
+        }
+        
+        // Get sort option
+        const sortSelect = document.getElementById('sortSelect');
+        if (sortSelect) {
+          filters.sortBy = sortSelect.value;
+        }
+        
+        // Get location filter
+        if (this.selectedLocation) {
+          filters.location = this.selectedLocation.location;
+        }
+        
+        // Update search engine filters
+        this.searchEngine.updateFilters(filters);
+        
+        // Perform search with new filters
+        this.performAdvancedSearch();
+      }
+
+      async handleAdvancedSearch(event) {
+        event.preventDefault();
+        this.performAdvancedSearch();
+      }
+
+      async performAdvancedSearch() {
+        const searchInput = document.getElementById('searchInput');
+        const query = searchInput ? searchInput.value.trim() : '';
+        
+        try {
+          // Show loading state
+          this.setSearchLoading(true);
+          
+          // Perform search
+          const result = await this.searchEngine.search(query);
+          
+          if (result) {
+            this.displayAdvancedSearchResults(result);
+            
+            // Show sort controls if we have results
+            const sortControls = document.getElementById('sortControls');
+            if (sortControls) {
+              sortControls.style.display = result.total > 0 ? 'flex' : 'none';
+            }
+          }
+          
+        } catch (error) {
+          console.error('Advanced search failed:', error);
+          this.displaySearchError(error);
+        } finally {
+          this.setSearchLoading(false);
+        }
+      }
+
+      async handleSearchSuggestions(event) {
+        const query = event.target.value.trim();
+        
+        if (query.length >= 2) {
+          try {
+            const suggestions = await this.searchEngine.getSearchSuggestions(query);
+            this.showSearchSuggestions(suggestions);
+          } catch (error) {
+            console.error('Failed to get search suggestions:', error);
+          }
+        } else {
+          this.hideSearchSuggestions();
+        }
+      }
+
+      handleSearchFocus() {
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput && searchInput.value.trim().length === 0) {
+          const popularSearches = this.searchEngine.getPopularSearches();
+          this.showSearchSuggestions(popularSearches);
+        }
+      }
+
+      showSearchSuggestions(suggestions) {
+        // Create or get suggestions container
+        let container = document.querySelector('.search-suggestions');
+        if (!container) {
+          container = document.createElement('div');
+          container.className = 'search-suggestions';
+          const searchWrapper = document.querySelector('.search-input-wrapper');
+          if (searchWrapper) {
+            searchWrapper.appendChild(container);
+          }
+        }
+        
+        container.innerHTML = '';
+        
+        suggestions.forEach(suggestion => {
+          const item = document.createElement('div');
+          item.className = 'search-suggestion-item';
+          item.innerHTML = `
+            <span class="suggestion-icon">${suggestion.icon}</span>
+            <div class="suggestion-content">
+              <div class="suggestion-text">${suggestion.text}</div>
+              <div class="suggestion-subtitle">${suggestion.subtitle}</div>
+            </div>
+          `;
+          
+          item.addEventListener('click', () => {
+            this.selectSearchSuggestion(suggestion);
+          });
+          
+          container.appendChild(item);
+        });
+        
+        container.style.display = 'block';
+      }
+
+      hideSearchSuggestions() {
+        const container = document.querySelector('.search-suggestions');
+        if (container) {
+          container.style.display = 'none';
+        }
+      }
+
+      selectSearchSuggestion(suggestion) {
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+          searchInput.value = suggestion.text;
+        }
+        
+        this.hideSearchSuggestions();
+        this.performAdvancedSearch();
+      }
+
+      displayAdvancedSearchResults(result) {
+        // Create or get results container
+        let resultsSection = document.getElementById('search-results');
+        if (!resultsSection) {
+          resultsSection = document.createElement('section');
+          resultsSection.id = 'search-results';
+          resultsSection.className = 'search-results';
+          
+          const container = document.querySelector('.explorex-container');
+          container.appendChild(resultsSection);
+        }
+
+        // Clear previous results
+        resultsSection.innerHTML = '';
+
+        if (result.total === 0) {
+          this.displayNoResults(resultsSection, result);
+          return;
+        }
+
+        // Create results header
+        const header = document.createElement('div');
+        header.className = 'results-header';
+        header.innerHTML = `
+          <div class="results-summary">
+            <span class="results-count">${result.total}</span> space experience${result.total !== 1 ? 's' : ''} found
+            ${result.query ? ` for "${result.query}"` : ''}
+          </div>
+          <div class="results-meta">
+            <span>Search took ${result.executionTime}ms</span>
+            ${result.filters.location ? `<span>Within ${result.filters.radius} miles</span>` : ''}
+          </div>
+        `;
+        resultsSection.appendChild(header);
+
+        // Create results grid
+        const grid = document.createElement('div');
+        grid.className = 'results-grid';
+        
+        result.experiences.forEach(experience => {
+          const card = this.createAdvancedExperienceCard(experience);
+          grid.appendChild(card);
+        });
+
+        resultsSection.appendChild(grid);
+
+        // Scroll to results
+        resultsSection.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      displayNoResults(container, result) {
+        container.innerHTML = `
+          <div class="no-results">
+            <div class="no-results-icon">🔍</div>
+            <h3>No experiences found</h3>
+            <p>We couldn't find any space experiences matching your criteria.</p>
+            
+            <div class="no-results-suggestions">
+              <h4>Try these suggestions:</h4>
+              <div class="suggestion-chips">
+                <button class="suggestion-chip" onclick="this.clearFiltersAndSearch()">Clear all filters</button>
+                <button class="suggestion-chip" onclick="this.searchPopular('observatory')">Search observatories</button>
+                <button class="suggestion-chip" onclick="this.searchPopular('free')">Find free experiences</button>
+                <button class="suggestion-chip" onclick="this.searchPopular('california')">Explore California</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      createAdvancedExperienceCard(experience) {
+        const card = document.createElement('div');
+        card.className = 'experience-card';
+        
+        // Generate star rating
+        const stars = '★'.repeat(Math.floor(experience.rating)) + 
+                     '☆'.repeat(5 - Math.floor(experience.rating));
+        
+        // Format type for display
+        const typeDisplay = this.utils.StringUtils.toTitleCase(
+          experience.type.replace(/_/g, ' ')
+        );
+        
+        // Create badges
+        const badges = [];
+        if (experience.featured) badges.push('<span class="experience-badge badge-featured">Featured</span>');
+        if (experience.verified) badges.push('<span class="experience-badge badge-verified">Verified</span>');
+        if (experience.admissionFee.isFree) badges.push('<span class="experience-badge badge-free">Free</span>');
+        
+        card.innerHTML = `
+          <div class="experience-header">
+            <h3 class="experience-title">${experience.name}</h3>
+            <div class="experience-badges">
+              ${badges.join('')}
+            </div>
+          </div>
+          
+          <div class="experience-type">
+            <span>${this.searchEngine.getTypeIcon(experience.type)}</span>
+            <span>${typeDisplay}</span>
+          </div>
+          
+          <div class="experience-rating">
+            <span class="rating-stars">${stars}</span>
+            <span class="rating-value">${experience.rating}</span>
+            <span class="rating-count">(${this.utils.NumberUtils.formatNumber(experience.reviewCount)} reviews)</span>
+          </div>
+          
+          <p class="experience-description">
+            ${this.utils.StringUtils.truncate(experience.shortDescription || experience.description, 120)}
+          </p>
+          
+          <div class="experience-details">
+            <span class="experience-location">
+              📍 ${experience.address.city}, ${experience.address.state}
+              ${experience.distance ? `<span class="experience-distance"> • ${this.utils.NumberUtils.round(experience.distance, 1)} mi</span>` : ''}
+            </span>
+            <span class="experience-price ${experience.admissionFee.isFree ? 'price-free' : ''}">
+              ${experience.admissionFee.formatPrice()}
+            </span>
+          </div>
+        `;
+        
+        // Add click handler
+        card.addEventListener('click', () => {
+          if (this.config.debug) {
+            console.log('Experience clicked:', experience);
+          }
+          alert(`🚧 Experience details coming soon!\n\n${experience.name}\n${experience.description}`);
+        });
+        
+        return card;
+      }
+
+      setSearchLoading(isLoading) {
+        const searchButton = document.getElementById('searchButton');
+        if (searchButton) {
+          if (isLoading) {
+            searchButton.textContent = '🔍 Searching...';
+            searchButton.disabled = true;
+          } else {
+            searchButton.textContent = '🚀 Explore';
+            searchButton.disabled = false;
+          }
+        }
+      }
+
+      testSearchEngine() {
+        // Test search functionality
+        setTimeout(async () => {
+          try {
+            const testResult = await this.searchEngine.search('observatory');
+            console.log('🧪 Test Search Result:', testResult.total, 'observatories found');
+            
+            const suggestions = await this.searchEngine.getSearchSuggestions('cal');
+            console.log('🧪 Test Suggestions:', suggestions.length, 'suggestions for "cal"');
+            
+            const analytics = this.searchEngine.getSearchAnalytics();
+            console.log('🧪 Search Analytics:', analytics);
+          } catch (error) {
+            console.error('Search engine test failed:', error);
+          }
+        }, 1000);
       }
 
       setupDatabaseStats() {
