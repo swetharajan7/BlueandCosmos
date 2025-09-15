@@ -704,13 +704,16 @@
         <form class="search-form" id="exploreXSearch">
           <div class="form-group">
             <label for="location" class="form-label">📍 Destination</label>
-            <input 
-              type="text" 
-              id="location" 
-              class="form-input" 
-              placeholder="Enter city, state, or country"
-              autocomplete="off"
-            />
+            <div class="location-input-container">
+              <input 
+                type="text" 
+                id="location" 
+                class="form-input location-autocomplete-input" 
+                placeholder="Enter city, state, or space destination"
+                autocomplete="off"
+              />
+            </div>
+            <div id="location-validation" class="location-validation"></div>
           </div>
           <div class="form-group">
             <label for="dates" class="form-label">📅 Travel Dates</label>
@@ -724,6 +727,14 @@
             🔍 Explore
           </button>
         </form>
+        
+        <!-- Popular Destinations Section -->
+        <div class="popular-destinations" id="popular-destinations" style="display: none;">
+          <div class="popular-destinations-title">Popular Space Destinations</div>
+          <div class="popular-destinations-grid" id="popular-destinations-grid">
+            <!-- Populated by JavaScript -->
+          </div>
+        </div>
       </section>
 
       <!-- Features Grid -->
@@ -766,7 +777,7 @@
         <p class="coming-soon-text">
           ExploreX is currently being built with cutting-edge technology to provide you with the best space travel experience recommendations.
         </p>
-        <span class="development-status">Task 2 Complete - Data Models & Search Ready</span>
+        <span class="development-status">Task 3 Complete - Location Services & GPS Ready</span>
       </section>
     </div>
   </main>
@@ -774,6 +785,10 @@
   <!-- Load Data Models and Utilities -->
   <script src="explorex-models.js"></script>
   <script src="explorex-utils.js"></script>
+  <script src="explorex-location-services.js"></script>
+  
+  <!-- Load Location Services Styles -->
+  <link rel="stylesheet" href="explorex-location-styles.css" />
 
   <script>
     // Development Environment Configuration
@@ -802,7 +817,10 @@
         this.config = ExploreXConfig;
         this.models = window.ExploreXModels;
         this.utils = window.ExploreXUtils;
+        this.locationServices = window.ExploreXLocationServices;
         this.sampleData = this.generateSampleData();
+        this.currentLocation = null;
+        this.selectedLocation = null;
         this.init();
       }
 
@@ -812,6 +830,8 @@
         this.setupMoonPhase();
         this.setupDropdowns();
         this.initializeDataModels();
+        this.initializeLocationServices();
+        this.setupPopularDestinations();
         this.logInitialization();
       }
 
@@ -979,6 +999,186 @@
         }
       }
 
+      initializeLocationServices() {
+        // Initialize location autocomplete
+        const locationInput = document.getElementById('location');
+        if (locationInput) {
+          this.locationAutocomplete = new this.locationServices.LocationAutocomplete(locationInput, {
+            minLength: 2,
+            maxSuggestions: 8,
+            showPopularDestinations: true,
+            enableGPS: true,
+            placeholder: 'Enter city, state, or space destination'
+          });
+
+          // Listen for location selection
+          locationInput.addEventListener('locationSelected', this.handleLocationSelected.bind(this));
+        }
+
+        // Test location services
+        if (this.config.debug) {
+          console.log('🌍 Testing Location Services:');
+          
+          const locationService = new this.locationServices.LocationServices();
+          
+          // Test location validation
+          const validationTests = [
+            'Los Angeles, CA',
+            'Kennedy Space Center',
+            '34.1184, -118.3004',
+            'Invalid Location 123',
+            ''
+          ];
+          
+          validationTests.forEach(test => {
+            const result = locationService.validateLocation(test);
+            console.log(`Validation for "${test}":`, result);
+          });
+        }
+      }
+
+      setupPopularDestinations() {
+        const popularDestinationsGrid = document.getElementById('popular-destinations-grid');
+        const popularDestinationsSection = document.getElementById('popular-destinations');
+        
+        if (!popularDestinationsGrid) return;
+
+        // Get popular destinations from location services
+        const locationService = new this.locationServices.LocationServices();
+        const destinations = locationService.getPopularDestinations();
+
+        // Clear existing content
+        popularDestinationsGrid.innerHTML = '';
+
+        // Create destination cards
+        destinations.slice(0, 6).forEach(destination => {
+          const card = document.createElement('div');
+          card.className = 'popular-destination-card';
+          
+          const icon = this.getDestinationIcon(destination.category);
+          const name = destination.name.split(',')[0]; // Get just the name part
+          const location = destination.name.split(',')[1]?.trim() || '';
+          
+          card.innerHTML = `
+            <span class="popular-destination-icon">${icon}</span>
+            <div class="popular-destination-name">${name}</div>
+            <div class="popular-destination-type">${location}</div>
+          `;
+          
+          card.addEventListener('click', () => {
+            this.selectPopularDestination(destination);
+          });
+          
+          popularDestinationsGrid.appendChild(card);
+        });
+
+        // Show popular destinations section
+        popularDestinationsSection.style.display = 'block';
+      }
+
+      getDestinationIcon(category) {
+        const icons = {
+          observatory: '🔭',
+          planetarium: '🌌',
+          space_center: '🚀',
+          museum: '🏛️',
+          research: '🔬',
+          default: '⭐'
+        };
+        
+        return icons[category] || icons.default;
+      }
+
+      selectPopularDestination(destination) {
+        const locationInput = document.getElementById('location');
+        if (locationInput) {
+          locationInput.value = destination.name;
+          
+          // Trigger location selected event
+          locationInput.dispatchEvent(new CustomEvent('locationSelected', {
+            bubbles: true,
+            detail: {
+              location: destination.location,
+              name: destination.name,
+              type: destination.type,
+              category: destination.category,
+              source: 'popular_destination'
+            }
+          }));
+        }
+      }
+
+      handleLocationSelected(event) {
+        const { location, name, type, category, source } = event.detail;
+        
+        this.selectedLocation = {
+          location,
+          name,
+          type,
+          category,
+          source
+        };
+
+        if (this.config.debug) {
+          console.log('📍 Location Selected:', this.selectedLocation);
+        }
+
+        // Update validation display
+        this.showLocationValidation(true, `Location set: ${name}`);
+
+        // Hide popular destinations when location is selected
+        const popularDestinationsSection = document.getElementById('popular-destinations');
+        if (popularDestinationsSection && source !== 'popular_destination') {
+          popularDestinationsSection.style.display = 'none';
+        }
+      }
+
+      showLocationValidation(isValid, message, suggestions = []) {
+        const validationContainer = document.getElementById('location-validation');
+        if (!validationContainer) return;
+
+        validationContainer.innerHTML = '';
+
+        if (isValid) {
+          const successDiv = document.createElement('div');
+          successDiv.className = 'location-success';
+          successDiv.innerHTML = `
+            <span class="location-success-icon">✅</span>
+            <span>${message}</span>
+          `;
+          validationContainer.appendChild(successDiv);
+        } else {
+          const errorDiv = document.createElement('div');
+          errorDiv.className = 'location-error';
+          errorDiv.innerHTML = `
+            <span class="location-error-icon">❌</span>
+            <span>${message}</span>
+          `;
+          validationContainer.appendChild(errorDiv);
+
+          if (suggestions.length > 0) {
+            const suggestionsDiv = document.createElement('div');
+            suggestionsDiv.className = 'location-error-suggestions';
+            suggestionsDiv.innerHTML = `
+              <div class="location-error-suggestions-title">Did you mean:</div>
+            `;
+            
+            suggestions.forEach(suggestion => {
+              const suggestionSpan = document.createElement('span');
+              suggestionSpan.className = 'location-error-suggestion';
+              suggestionSpan.textContent = suggestion.name;
+              suggestionSpan.addEventListener('click', () => {
+                document.getElementById('location').value = suggestion.name;
+                this.showLocationValidation(true, `Location set: ${suggestion.name}`);
+              });
+              suggestionsDiv.appendChild(suggestionSpan);
+            });
+            
+            validationContainer.appendChild(suggestionsDiv);
+          }
+        }
+      }
+
       setupEventListeners() {
         const searchForm = document.getElementById('exploreXSearch');
         if (searchForm) {
@@ -1012,32 +1212,72 @@
           searchButton.textContent = '🔍 Searching...';
           searchButton.disabled = true;
 
-          // Simulate API delay
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          // Validate and geocode location if needed
+          let searchLocation = null;
+          if (this.selectedLocation) {
+            searchLocation = this.selectedLocation.location;
+          } else if (locationQuery && locationQuery.trim()) {
+            // Try to geocode the location
+            try {
+              const locationService = new this.locationServices.LocationServices();
+              const geocodeResults = await locationService.geocodeAddress(locationQuery);
+              
+              if (geocodeResults.length > 0) {
+                searchLocation = geocodeResults[0].location;
+                this.selectedLocation = {
+                  location: searchLocation,
+                  name: geocodeResults[0].name,
+                  source: 'geocoded'
+                };
+              }
+            } catch (geocodeError) {
+              console.warn('Geocoding failed:', geocodeError);
+              this.showLocationValidation(false, 'Could not find location. Please try a different search term.');
+            }
+          }
 
-          // For development, use sample data
+          // Simulate API delay
+          await new Promise(resolve => setTimeout(resolve, 800));
+
+          // For development, use sample data with location-based filtering
           let results = [...this.sampleData.experiences];
 
-          // Simple text-based filtering for demo
-          if (locationQuery && locationQuery.trim()) {
-            const query = locationQuery.toLowerCase();
-            results = results.filter(exp => 
-              exp.name.toLowerCase().includes(query) ||
-              exp.address.city.toLowerCase().includes(query) ||
-              exp.address.state.toLowerCase().includes(query) ||
-              exp.tags.some(tag => tag.toLowerCase().includes(query))
+          // Location-based filtering
+          if (searchLocation) {
+            // Calculate distances and filter by proximity
+            results = results.map(exp => ({
+              ...exp,
+              distance: searchLocation.distanceTo(exp.location)
+            })).filter(exp => exp.distance <= 100); // Within 100 miles
+
+            // Sort by distance and relevance
+            results = this.utils.ArrayUtils.sortBy(results, 
+              { key: 'featured', order: 'desc' },
+              { key: 'distance', order: 'asc' },
+              { key: 'rating', order: 'desc' }
+            );
+          } else {
+            // Fallback to text-based filtering
+            if (locationQuery && locationQuery.trim()) {
+              const query = locationQuery.toLowerCase();
+              results = results.filter(exp => 
+                exp.name.toLowerCase().includes(query) ||
+                exp.address.city.toLowerCase().includes(query) ||
+                exp.address.state.toLowerCase().includes(query) ||
+                exp.tags.some(tag => tag.toLowerCase().includes(query))
+              );
+            }
+
+            // Sort by rating and relevance
+            results = this.utils.ArrayUtils.sortBy(results, 
+              { key: 'featured', order: 'desc' },
+              { key: 'rating', order: 'desc' },
+              { key: 'reviewCount', order: 'desc' }
             );
           }
 
-          // Sort by rating and relevance
-          results = this.utils.ArrayUtils.sortBy(results, 
-            { key: 'featured', order: 'desc' },
-            { key: 'rating', order: 'desc' },
-            { key: 'reviewCount', order: 'desc' }
-          );
-
           // Display results
-          this.displaySearchResults(results, locationQuery, dateQuery);
+          this.displaySearchResults(results, locationQuery, dateQuery, searchLocation);
 
           // Reset button
           searchButton.textContent = originalText;
@@ -1051,7 +1291,7 @@
           });
           
           // Show error message
-          alert('❌ Search failed. Please try again.');
+          this.showLocationValidation(false, 'Search failed. Please check your location and try again.');
           
           // Reset button
           const searchButton = document.querySelector('.search-button');
@@ -1060,7 +1300,7 @@
         }
       }
 
-      displaySearchResults(results, locationQuery, dateQuery) {
+      displaySearchResults(results, locationQuery, dateQuery, searchLocation = null) {
         // Create results section if it doesn't exist
         let resultsSection = document.getElementById('search-results');
         if (!resultsSection) {
@@ -1099,7 +1339,7 @@
         grid.className = 'results-grid';
         
         results.forEach(experience => {
-          const card = this.createExperienceCard(experience);
+          const card = this.createExperienceCard(experience, searchLocation);
           grid.appendChild(card);
         });
 
@@ -1216,7 +1456,7 @@
         resultsSection.scrollIntoView({ behavior: 'smooth' });
       }
 
-      createExperienceCard(experience) {
+      createExperienceCard(experience, searchLocation = null) {
         const card = document.createElement('div');
         card.className = 'experience-card';
         
@@ -1248,6 +1488,7 @@
           <div class="experience-details">
             <span class="experience-location">
               📍 ${experience.address.city}, ${experience.address.state}
+              ${experience.distance ? ` • ${this.utils.NumberUtils.round(experience.distance, 1)} mi` : ''}
             </span>
             <span class="experience-price">
               ${experience.admissionFee.formatPrice()}

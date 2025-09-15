@@ -1,0 +1,529 @@
+/**
+ * ExploreX Location Services Styles
+ * CSS for location autocomplete, GPS integration, and location UI components
+ */
+
+/* =============================================================================
+   LOCATION INPUT AND AUTOCOMPLETE STYLES
+   ============================================================================= */
+
+.location-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.location-autocomplete-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.location-autocomplete-input:focus {
+  outline: none;
+  border-color: var(--explorex-secondary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.location-autocomplete-input.loading {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'%3E%3Cpath fill='%236b7280' d='M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z' opacity='.25'/%3E%3Cpath fill='%233b82f6' d='M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z'%3E%3CanimateTransform attributeName='transform' dur='0.75s' repeatCount='indefinite' type='rotate' values='0 12 12;360 12 12'/%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 20px 20px;
+  padding-right: 40px;
+}
+
+/* GPS Location Button */
+.gps-location-button {
+  background: var(--explorex-gradient);
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gps-location-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.gps-location-button:active {
+  transform: translateY(0);
+}
+
+.gps-location-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Location Suggestions Dropdown */
+.location-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 4px;
+}
+
+.location-suggestion-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.location-suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.location-suggestion-item:hover,
+.location-suggestion-item.selected {
+  background-color: var(--bg-secondary);
+}
+
+.location-suggestion-item.selected {
+  background-color: var(--explorex-secondary);
+  color: white;
+}
+
+.suggestion-icon {
+  font-size: 1.2rem;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+}
+
+.suggestion-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.suggestion-name {
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.location-suggestion-item.selected .suggestion-name {
+  color: white;
+}
+
+.suggestion-category {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.location-suggestion-item.selected .suggestion-category {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* =============================================================================
+   LOCATION DISPLAY COMPONENTS
+   ============================================================================= */
+
+.location-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+  font-size: 0.875rem;
+}
+
+.location-display-icon {
+  color: var(--explorex-secondary);
+}
+
+.location-display-text {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.location-display-distance {
+  color: var(--text-secondary);
+  margin-left: auto;
+}
+
+/* Location Status Indicators */
+.location-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.location-status.gps {
+  background: var(--explorex-success);
+  color: white;
+}
+
+.location-status.geocoded {
+  background: var(--explorex-secondary);
+  color: white;
+}
+
+.location-status.approximate {
+  background: var(--explorex-warning);
+  color: white;
+}
+
+.location-status.unknown {
+  background: var(--text-secondary);
+  color: white;
+}
+
+/* =============================================================================
+   LOCATION HISTORY AND FAVORITES
+   ============================================================================= */
+
+.location-history {
+  margin-top: 1rem;
+}
+
+.location-history-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.location-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.location-history-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.location-history-item:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.location-history-icon {
+  margin-right: 0.5rem;
+  color: var(--text-secondary);
+}
+
+.location-history-name {
+  flex: 1;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.location-history-time {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* =============================================================================
+   POPULAR DESTINATIONS
+   ============================================================================= */
+
+.popular-destinations {
+  margin-top: 1rem;
+}
+
+.popular-destinations-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.popular-destinations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.popular-destination-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.popular-destination-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.popular-destination-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.popular-destination-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.popular-destination-type {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: capitalize;
+}
+
+/* =============================================================================
+   LOCATION VALIDATION AND ERRORS
+   ============================================================================= */
+
+.location-validation {
+  margin-top: 0.5rem;
+}
+
+.location-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--explorex-error);
+  border-radius: 6px;
+  color: var(--explorex-error);
+  font-size: 0.875rem;
+}
+
+.location-error-icon {
+  flex-shrink: 0;
+}
+
+.location-success {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid var(--explorex-success);
+  border-radius: 6px;
+  color: var(--explorex-success);
+  font-size: 0.875rem;
+}
+
+.location-success-icon {
+  flex-shrink: 0;
+}
+
+/* Location Suggestions for Errors */
+.location-error-suggestions {
+  margin-top: 0.5rem;
+}
+
+.location-error-suggestions-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.location-error-suggestion {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  margin-right: 0.5rem;
+  margin-bottom: 0.25rem;
+  transition: background-color 0.2s ease;
+}
+
+.location-error-suggestion:hover {
+  background-color: var(--bg-tertiary);
+}
+
+/* =============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================= */
+
+@media (max-width: 768px) {
+  .location-input-container {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .gps-location-button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .location-suggestions {
+    left: -1rem;
+    right: -1rem;
+  }
+  
+  .popular-destinations-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .location-suggestion-item {
+    padding: 1rem;
+  }
+  
+  .suggestion-name {
+    font-size: 1rem;
+  }
+}
+
+/* =============================================================================
+   DARK THEME ADJUSTMENTS
+   ============================================================================= */
+
+body.dark .location-suggestions {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+body.dark .location-suggestion-item:hover {
+  background-color: var(--bg-tertiary);
+}
+
+body.dark .location-error {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+body.dark .location-success {
+  background: rgba(16, 185, 129, 0.2);
+}
+
+/* =============================================================================
+   ANIMATIONS AND TRANSITIONS
+   ============================================================================= */
+
+.location-suggestions {
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.location-suggestion-item {
+  animation: fadeIn 0.1s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* GPS Button Loading Animation */
+.gps-location-button.loading {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+}
+
+/* =============================================================================
+   ACCESSIBILITY IMPROVEMENTS
+   ============================================================================= */
+
+.location-autocomplete-input:focus-visible,
+.gps-location-button:focus-visible {
+  outline: 2px solid var(--highlight);
+  outline-offset: 2px;
+}
+
+.location-suggestion-item:focus {
+  background-color: var(--explorex-secondary);
+  color: white;
+  outline: none;
+}
+
+/* Screen reader only text */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .location-autocomplete-input {
+    border-width: 3px;
+  }
+  
+  .location-suggestion-item.selected {
+    outline: 3px solid currentColor;
+  }
+}
