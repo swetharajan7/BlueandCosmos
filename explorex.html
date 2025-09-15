@@ -667,6 +667,96 @@
       }
     }
 
+    /* Live Data Status Panel */
+    .live-data-status {
+      background: linear-gradient(135deg, #1f2937, #374151);
+      border: 1px solid #4b5563;
+      border-radius: 12px;
+      margin: 1rem 0;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+
+    .status-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem;
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+      cursor: pointer;
+    }
+
+    .status-icon {
+      font-size: 1rem;
+      animation: pulse 2s infinite;
+    }
+
+    .status-title {
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .status-toggle {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+
+    .status-toggle:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .status-details {
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-top: 1px solid #4b5563;
+    }
+
+    .status-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .status-item:last-child {
+      border-bottom: none;
+    }
+
+    .status-label {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .status-value {
+      font-size: 0.875rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    .status-value.active {
+      background: #10b981;
+      color: white;
+    }
+
+    .status-value.inactive {
+      background: #6b7280;
+      color: white;
+    }
+
+    .status-value.checking {
+      background: #f59e0b;
+      color: white;
+      animation: pulse 1.5s infinite;
+    }
+
     footer {
       display: flex;
       padding: 2em;
@@ -781,6 +871,33 @@
             🚀 Explore
           </button>
         </form>
+
+        <!-- Live Data Status Panel -->
+        <div class="live-data-status" id="liveDataStatus" style="display: none;">
+          <div class="status-header">
+            <span class="status-icon">🔴</span>
+            <span class="status-title">Live Data Active</span>
+            <button class="status-toggle" onclick="this.toggleDataStatus()">ℹ️</button>
+          </div>
+          <div class="status-details" id="statusDetails" style="display: none;">
+            <div class="status-item">
+              <span class="status-label">Location Services:</span>
+              <span class="status-value" id="locationStatus">Checking...</span>
+            </div>
+            <div class="status-item">
+              <span class="status-label">Weather Data:</span>
+              <span class="status-value" id="weatherStatus">Checking...</span>
+            </div>
+            <div class="status-item">
+              <span class="status-label">ISS Tracking:</span>
+              <span class="status-value" id="issStatus">Checking...</span>
+            </div>
+            <div class="status-item">
+              <span class="status-label">Astronomy Data:</span>
+              <span class="status-value" id="astronomyStatus">Checking...</span>
+            </div>
+          </div>
+        </div>
 
         <!-- Advanced Filters -->
         <div class="filters-container" id="filtersContainer">
@@ -942,6 +1059,7 @@
   <script src="explorex-utils.js"></script>
   <script src="explorex-location-services.js"></script>
   <script src="explorex-database.js"></script>
+  <script src="explorex-live-integration.js"></script>
   <script src="explorex-search-engine.js"></script>
   <script src="explorex-ui-components.js"></script>
   <script src="explorex-experience-modal.js"></script>
@@ -1029,6 +1147,7 @@
         await this.initializeTestingFramework();
         await this.initializeAdminSystem();
         await this.initializePerformanceOptimization();
+        this.initializeLiveDataStatus();
         this.setupAdvancedFilters();
         this.setupPopularDestinations();
         this.setupDatabaseStats();
@@ -2184,6 +2303,124 @@
         }
       }
 
+      /**
+       * Initialize Live Data Status Panel
+       */
+      initializeLiveDataStatus() {
+        try {
+          console.log('🔴 Initializing Live Data Status Panel...');
+
+          // Show the status panel
+          const statusPanel = document.getElementById('liveDataStatus');
+          if (statusPanel) {
+            statusPanel.style.display = 'block';
+          }
+
+          // Set up status monitoring
+          this.setupLiveDataMonitoring();
+
+          // Add toggle functionality
+          window.toggleDataStatus = () => {
+            const details = document.getElementById('statusDetails');
+            if (details) {
+              details.style.display = details.style.display === 'none' ? 'block' : 'none';
+            }
+          };
+
+          // Listen for live integration updates
+          if (window.ExploreXLiveIntegration) {
+            // Monitor live integration initialization
+            const checkLiveIntegration = () => {
+              if (window.ExploreXLiveIntegration.isInitialized) {
+                this.updateLiveDataStatus();
+                // Set up periodic status updates
+                setInterval(() => this.updateLiveDataStatus(), 30000); // Every 30 seconds
+              } else {
+                setTimeout(checkLiveIntegration, 1000); // Check again in 1 second
+              }
+            };
+            checkLiveIntegration();
+          }
+
+          console.log('✅ Live Data Status Panel initialized');
+
+        } catch (error) {
+          console.error('❌ Failed to initialize Live Data Status Panel:', error);
+        }
+      }
+
+      /**
+       * Set up live data monitoring
+       */
+      setupLiveDataMonitoring() {
+        // Listen for live data events
+        window.addEventListener('issLocationUpdate', (event) => {
+          this.updateStatusItem('issStatus', 'Active', 'active');
+        });
+
+        window.addEventListener('weatherDataUpdate', (event) => {
+          this.updateStatusItem('weatherStatus', 'Active', 'active');
+        });
+
+        window.addEventListener('astronomyDataUpdate', (event) => {
+          this.updateStatusItem('astronomyStatus', 'Active', 'active');
+        });
+
+        // Check geolocation status
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            () => this.updateStatusItem('locationStatus', 'Active', 'active'),
+            () => this.updateStatusItem('locationStatus', 'Denied', 'inactive')
+          );
+        } else {
+          this.updateStatusItem('locationStatus', 'Not Supported', 'inactive');
+        }
+      }
+
+      /**
+       * Update live data status display
+       */
+      updateLiveDataStatus() {
+        if (!window.ExploreXLiveIntegration) return;
+
+        const integration = window.ExploreXLiveIntegration;
+
+        // Check API status
+        if (integration.apiStatus) {
+          // ISS Status
+          const issStatus = integration.apiStatus.get('ISS Location');
+          this.updateStatusItem('issStatus', 
+            issStatus === 'available' ? 'Live' : 'Mock Data', 
+            issStatus === 'available' ? 'active' : 'inactive'
+          );
+
+          // Astronomy Status
+          const astronomyStatus = integration.apiStatus.get('NASA APOD');
+          this.updateStatusItem('astronomyStatus', 
+            astronomyStatus === 'available' ? 'Live' : 'Mock Data', 
+            astronomyStatus === 'available' ? 'active' : 'inactive'
+          );
+
+          // Weather Status (check if we have real weather data)
+          const sunriseStatus = integration.apiStatus.get('Sunrise/Sunset');
+          this.updateStatusItem('weatherStatus', 
+            sunriseStatus === 'available' ? 'Enhanced' : 'Mock Data', 
+            sunriseStatus === 'available' ? 'active' : 'inactive'
+          );
+        }
+      }
+
+      /**
+       * Update individual status item
+       */
+      updateStatusItem(itemId, text, status) {
+        const element = document.getElementById(itemId);
+        if (element) {
+          element.textContent = text;
+          element.className = `status-value ${status}`;
+        }
+      }
+
       setupOptimizedSearch() {
         // Cache search results for better performance
         const originalPerformSearch = this.performSearch.bind(this);
@@ -3314,9 +3551,19 @@
             limit: 20
           });
 
-          // Search using database
+          // Search using enhanced live data integration
           const searchStartTime = performance.now();
-          const searchResult = this.database.searchExperiences(searchCriteria);
+          
+          // Use live integration if available, fallback to database
+          let searchResult;
+          if (window.ExploreXLiveIntegration && window.ExploreXLiveIntegration.isInitialized) {
+            console.log('🔍 Using enhanced search with live data');
+            searchResult = await window.ExploreXLiveIntegration.enhancedSearch(searchCriteria);
+          } else {
+            console.log('🔍 Using database search (live integration not available)');
+            searchResult = this.database.searchExperiences(searchCriteria);
+          }
+          
           let results = searchResult.experiences;
           const searchDuration = performance.now() - searchStartTime;
 
@@ -3399,11 +3646,21 @@
           return;
         }
 
-        // Create results header
+        // Create results header with live data indicator
         const header = document.createElement('div');
         header.className = 'results-header';
+        
+        // Check if we have live data enhancement
+        const hasLiveData = results.some(r => r.enhancedWithLiveData || r.currentConditions || r.realTimeDistance);
+        const liveDataIndicator = hasLiveData ? 
+          '<span class="live-data-badge">🔴 LIVE DATA</span>' : 
+          '<span class="mock-data-badge">📊 DEMO DATA</span>';
+        
         header.innerHTML = `
-          <h2>Space Experiences ${locationQuery ? `near "${locationQuery}"` : ''}</h2>
+          <div class="results-title-row">
+            <h2>Space Experiences ${locationQuery ? `near "${locationQuery}"` : ''}</h2>
+            ${liveDataIndicator}
+          </div>
           <p>Found ${results.length} experience${results.length !== 1 ? 's' : ''} ${dateQuery ? `for ${this.utils.DateUtils.formatDate(new Date(dateQuery))}` : ''}</p>
         `;
         resultsSection.appendChild(header);
@@ -3428,9 +3685,44 @@
               margin-top: 2rem;
             }
             
+            .results-title-row {
+              display: flex;
+              align-items: center;
+              gap: 1rem;
+              margin-bottom: 0.5rem;
+            }
+            
             .results-header h2 {
               color: var(--explorex-primary);
-              margin-bottom: 0.5rem;
+              margin: 0;
+            }
+            
+            .live-data-badge {
+              background: linear-gradient(135deg, #ef4444, #dc2626);
+              color: white;
+              padding: 0.25rem 0.75rem;
+              border-radius: 20px;
+              font-size: 0.75rem;
+              font-weight: 600;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+              animation: pulse 2s infinite;
+            }
+            
+            .mock-data-badge {
+              background: linear-gradient(135deg, #6b7280, #4b5563);
+              color: white;
+              padding: 0.25rem 0.75rem;
+              border-radius: 20px;
+              font-size: 0.75rem;
+              font-weight: 600;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+            }
+            
+            @keyframes pulse {
+              0%, 100% { opacity: 1; }
+              50% { opacity: 0.7; }
             }
             
             .results-header p {

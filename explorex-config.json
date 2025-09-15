@@ -22,17 +22,17 @@
   },
   "features": {
     "locationAutocomplete": {
-      "enabled": false,
+      "enabled": true,
       "provider": "google-places",
       "apiKey": "GOOGLE_PLACES_API_KEY"
     },
     "weatherIntegration": {
-      "enabled": false,
+      "enabled": true,
       "provider": "openweathermap",
       "apiKey": "OPENWEATHER_API_KEY"
     },
     "eventIntegration": {
-      "enabled": false,
+      "enabled": true,
       "providers": {
         "eventbrite": "EVENTBRITE_API_KEY",
         "astronomyCalendar": "ASTRONOMY_API_KEY"
