@@ -193,6 +193,53 @@
       } 
     }
 
+    /* ExploreX Widget */
+    .explorex-widget {
+      display: flex; 
+      align-items: center; 
+      gap: 0.6em; 
+      justify-self: center;
+      user-select: none; 
+      text-decoration: none; 
+      color: inherit;
+      transition: transform 0.2s ease;
+    }
+
+    .explorex-label {
+      color: var(--text-light); 
+      font-size: 0.95em; 
+      font-weight: 600; 
+      white-space: nowrap;
+    }
+
+    body.dark .explorex-label { 
+      color: #e0ecff; 
+    }
+
+    .explorex-widget:hover { 
+      transform: scale(1.05); 
+    }
+
+    .explorex-icon { 
+      width: 32px; 
+      height: 32px; 
+      border-radius: 50%; 
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%); 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      flex-shrink: 0;
+      font-size: 16px;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+      border: 2px solid rgba(59, 130, 246, 0.3);
+    }
+
+    @media (max-width: 1050px) { 
+      .explorex-widget { 
+        display: none; 
+      } 
+    }
+
     /* Mars Widget */
     .mars-widget {
       display: flex; 
@@ -653,6 +700,11 @@
       </div>
     </a>
 
+    <a href="explorex.html" class="explorex-widget" title="ExploreX - Discover Space Travel Experiences">
+      <div class="explorex-icon">🚀</div>
+      <span class="explorex-label">ExploreX</span>
+    </a>
+
     <a href="mars.html" class="mars-widget" title="Explore Mars - The Red Planet">
       <div class="mars-icon"></div>
       <span class="mars-label">MARS</span>
@@ -686,7 +738,6 @@
             <a href="telescope.html" role="menuitem">🔭 Telescope</a>
             <a href="flashcards.html" role="menuitem">🧠 Flashcards</a>
             <a href="stellarrec.html" role="menuitem">⭐ StellarRec</a>
-            <a href="explorex.html" role="menuitem" class="clicked">🚀 ExploreX</a>
             <a href="discussion.html" role="menuitem">💬 Community</a>
           </div>
         </div>
