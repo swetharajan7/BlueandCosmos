@@ -138,14 +138,60 @@
     .mars-widget:hover { transform: scale(1.05); }
     .mars-icon { 
       width: 32px; height: 32px; border-radius: 50%; 
-      background: linear-gradient(135deg, #dc2626 0%, #f97316 50%, #eab308 100%); 
+      background-image: url('https://photojournal.jpl.nasa.gov/jpeg/PIA00407.jpg');
+      background-size: cover;
+      background-position: center;
       display: flex; align-items: center; justify-content: center; 
       flex-shrink: 0;
-      font-size: 16px;
-      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
-      border: 2px solid rgba(220, 38, 38, 0.3);
+      box-shadow: 0 2px 8px rgba(205, 92, 92, 0.4);
+      border: 2px solid rgba(205, 92, 92, 0.3);
     }
-    @media (max-width: 1200px) { .mars-widget { display: none; } }
+    @media (max-width: 1100px) { .mars-widget { display: none; } }
+
+    /* Navigation Dropdown Styles */
+    nav { display: contents; }
+    .dropdown { position: relative; }
+    .dropbtn {
+      background: none;
+      border: none;
+      color: var(--text-light);
+      padding: 0.5em 1em;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      font-size: 1em;
+      font-family: inherit;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .dropbtn:hover, .dropdown:hover .dropbtn {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background: var(--accent);
+      min-width: 200px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1001;
+      border-radius: 4px;
+      overflow: hidden;
+      top: 100%;
+      right: 0;
+    }
+    .dropdown-content a {
+      color: var(--text-light);
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      transition: background 0.3s ease;
+    }
+    .dropdown-content a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    .dropdown:hover .dropdown-content { display: block; }
 
     .toggle-theme { cursor: pointer; font-size: 1.5em; line-height: 1; user-select: none; }
 
@@ -645,12 +691,10 @@
 <body>
   <div class="cosmic-bg"></div>
 
-  <!-- Header -->
   <header>
     <a href="index.html" class="logo-link" aria-label="BlueandCosmos Home">
       <div class="logo-area">
-        <img src="https://cdn.jsdelivr.net/gh/swetharajan7/blueandcosmos/assets/logo-transparent.png"
-          alt="BlueandCosmos Logo" />
+        <img src="https://cdn.jsdelivr.net/gh/swetharajan7/blueandcosmos/assets/logo-transparent.png" alt="BlueandCosmos Logo" />
         <div class="logo-text">
           <div class="title">BlueandCosmos</div>
           <div class="tagline">Exploring the Cosmos. Protecting the Earth.</div>
@@ -658,27 +702,56 @@
       </div>
     </a>
 
-    <a href="moon.html" class="moon-widget" aria-label="Current Moon Phase">
-      <div class="moon-icon">🌗</div>
+    <a href="moon.html" class="moon-widget" title="View detailed moon phase information">
+      <div class="moon-icon" id="moon-display">🌙</div>
       <div class="moon-info">
-        <div class="moon-label">Last Quarter</div>
-        <div class="moon-context">Dec 15, 2025</div>
+        <span class="moon-label">Loading moon phase…</span>
+        <span class="moon-context" id="moon-context">New York City, NY</span>
       </div>
     </a>
 
-    <a href="explorex.html" class="explorex-widget" aria-label="ExploreX Travel Platform">
-      <div class="explorex-icon">🗺️</div>
-      <div class="explorex-label">ExploreX</div>
+    <a href="explorex.html" class="explorex-widget" title="ExploreX - Discover Space Travel Experiences">
+      <div class="explorex-icon">🚀</div>
+      <span class="explorex-label">ExploreX</span>
     </a>
 
-    <a href="mars.html" class="mars-widget" aria-label="Mars Exploration">
-      <div class="mars-icon">🔴</div>
-      <div class="mars-label">Mars</div>
+    <a href="mars.html" class="mars-widget" title="Explore Mars - The Red Planet">
+      <div class="mars-icon"></div>
+      <span class="mars-label">MARS</span>
     </a>
 
-    <div class="nav-right">
-      <div class="toggle-theme" id="themeToggle" role="button" aria-label="Toggle theme">🌙</div>
-    </div>
+    <nav>
+      <div class="nav-right">
+        <!-- About (internal links, same tab) -->
+        <div class="dropdown" data-menu="about">
+          <button class="dropbtn">About</button>
+          <div class="dropdown-content" role="menu" aria-label="About submenu">
+            <a href="about.html" role="menuitem">About BlueandCosmos</a>
+          </div>
+        </div>
+
+        <!-- Livestream (internal placeholders as relative links) -->
+        <div class="dropdown" data-menu="livestream">
+          <button class="dropbtn">Livestream</button>
+          <div class="dropdown-content" role="menu" aria-label="Livestream submenu">
+            <a href="livestream-images.html" role="menuitem">Live Stream Images</a>
+            <a href="launch-missions.html" role="menuitem">Launch Missions</a>
+          </div>
+        </div>
+
+        <!-- Dashboard (educational tools and features) -->
+        <div class="dropdown" data-menu="dashboard">
+          <a href="dashboard.html" class="dropbtn">Dashboard</a>
+          <div class="dropdown-content" role="menu" aria-label="Dashboard submenu">
+            <a href="moon.html" role="menuitem">🌙 Lunar Intelligence Center</a>
+            <a href="telescope.html" role="menuitem">🔭 Telescope</a>
+            <a href="flashcards.html" role="menuitem">🧠 Flashcards</a>
+            <a href="discussion.html" role="menuitem">💬 Community</a>
+          </div>
+        </div>
+        <div class="toggle-theme" id="themeToggle">🌙</div>
+      </div>
+    </nav>
   </header>
 
   <!-- Main Container -->
