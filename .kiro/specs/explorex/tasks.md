@@ -24,7 +24,7 @@
   - Build location-based radius search functionality
   - _Requirements: 1.1, 1.2, 7.2_
 
-- [ ] 4. Create experience database and data seeding
+- [x] 4. Create experience database and data seeding
   - Design database schema for observatories, planetariums, and space centers
   - Create data seeding scripts for major space attractions
   - Implement CRUD operations for experience management

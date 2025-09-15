@@ -735,6 +735,14 @@
             <!-- Populated by JavaScript -->
           </div>
         </div>
+
+        <!-- Database Statistics (Development Mode) -->
+        <div class="database-stats" id="database-stats" style="display: none;">
+          <div class="database-stats-title">Database Statistics</div>
+          <div class="database-stats-content" id="database-stats-content">
+            <!-- Populated by JavaScript -->
+          </div>
+        </div>
       </section>
 
       <!-- Features Grid -->
@@ -777,7 +785,7 @@
         <p class="coming-soon-text">
           ExploreX is currently being built with cutting-edge technology to provide you with the best space travel experience recommendations.
         </p>
-        <span class="development-status">Task 3 Complete - Location Services & GPS Ready</span>
+        <span class="development-status">Task 4 Complete - Experience Database & Data Seeding Ready</span>
       </section>
     </div>
   </main>
@@ -786,6 +794,7 @@
   <script src="explorex-models.js"></script>
   <script src="explorex-utils.js"></script>
   <script src="explorex-location-services.js"></script>
+  <script src="explorex-database.js"></script>
   
   <!-- Load Location Services Styles -->
   <link rel="stylesheet" href="explorex-location-styles.css" />
@@ -818,184 +827,82 @@
         this.models = window.ExploreXModels;
         this.utils = window.ExploreXUtils;
         this.locationServices = window.ExploreXLocationServices;
-        this.sampleData = this.generateSampleData();
+        this.database = new window.ExploreXDatabase.ExperienceDatabase();
         this.currentLocation = null;
         this.selectedLocation = null;
         this.init();
       }
 
-      init() {
+      async init() {
         this.setupEventListeners();
         this.setupTheme();
         this.setupMoonPhase();
         this.setupDropdowns();
+        await this.initializeDatabase();
         this.initializeDataModels();
         this.initializeLocationServices();
         this.setupPopularDestinations();
+        this.setupDatabaseStats();
         this.logInitialization();
       }
 
-      generateSampleData() {
-        // Create sample experiences for development
-        const sampleExperiences = [
-          new this.models.Experience({
-            name: "Griffith Observatory",
-            type: this.models.ExperienceType.OBSERVATORY,
-            description: "Iconic observatory with planetarium shows and telescope viewing",
-            shortDescription: "Famous LA observatory with stunning city views",
-            location: new this.models.GeoLocation({ latitude: 34.1184, longitude: -118.3004 }),
-            address: new this.models.Address({
-              street: "2800 E Observatory Rd",
-              city: "Los Angeles",
-              state: "CA",
-              country: "USA",
-              postalCode: "90027",
-              formattedAddress: "2800 E Observatory Rd, Los Angeles, CA 90027"
-            }),
-            rating: 4.5,
-            reviewCount: 1250,
-            admissionFee: new this.models.PricingInfo({ isFree: true }),
-            tags: ["observatory", "planetarium", "los angeles", "hollywood"],
-            featured: true,
-            verified: true
-          }),
+
+
+      async initializeDatabase() {
+        try {
+          await this.database.initialize();
           
-          new this.models.Experience({
-            name: "Kennedy Space Center",
-            type: this.models.ExperienceType.SPACE_CENTER,
-            description: "NASA's primary launch center with space shuttle exhibits and astronaut experiences",
-            shortDescription: "NASA's historic launch site with interactive exhibits",
-            location: new this.models.GeoLocation({ latitude: 28.5721, longitude: -80.6480 }),
-            address: new this.models.Address({
-              street: "Space Commerce Way",
-              city: "Merritt Island",
-              state: "FL",
-              country: "USA",
-              postalCode: "32953",
-              formattedAddress: "Kennedy Space Center, Merritt Island, FL 32953"
-            }),
-            rating: 4.8,
-            reviewCount: 3420,
-            admissionFee: new this.models.PricingInfo({ 
-              adultPrice: 75, 
-              childPrice: 65, 
-              seniorPrice: 70 
-            }),
-            tags: ["nasa", "space center", "rockets", "astronauts", "florida"],
-            featured: true,
-            verified: true
-          }),
-
-          new this.models.Experience({
-            name: "Hayden Planetarium",
-            type: this.models.ExperienceType.PLANETARIUM,
-            description: "World-renowned planetarium at the American Museum of Natural History",
-            shortDescription: "NYC's premier planetarium with immersive space shows",
-            location: new this.models.GeoLocation({ latitude: 40.7813, longitude: -73.9737 }),
-            address: new this.models.Address({
-              street: "200 Central Park West",
-              city: "New York",
-              state: "NY",
-              country: "USA",
-              postalCode: "10024",
-              formattedAddress: "200 Central Park West, New York, NY 10024"
-            }),
-            rating: 4.6,
-            reviewCount: 890,
-            admissionFee: new this.models.PricingInfo({ 
-              adultPrice: 28, 
-              childPrice: 22, 
-              studentPrice: 25 
-            }),
-            tags: ["planetarium", "museum", "new york", "education"],
-            featured: true,
-            verified: true
-          })
-        ];
-
-        // Create sample events
-        const sampleEvents = [
-          new this.models.Event({
-            title: "Stargazing Night: Winter Constellations",
-            type: this.models.EventType.STARGAZING,
-            description: "Join us for an evening of stargazing and learn about winter constellations",
-            startDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Next week
-            endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000 + 3 * 60 * 60 * 1000), // 3 hours later
-            location: new this.models.GeoLocation({ latitude: 34.1184, longitude: -118.3004 }),
-            venue: "Griffith Observatory",
-            organizer: "Los Angeles Astronomical Society",
-            registrationRequired: true,
-            capacity: 50,
-            availableSpots: 23,
-            price: new this.models.PricingInfo({ adultPrice: 15, childPrice: 10 }),
-            difficulty: this.models.DifficultyLevel.BEGINNER,
-            tags: ["stargazing", "constellations", "beginner-friendly"]
-          }),
-
-          new this.models.Event({
-            title: "Astrophotography Workshop",
-            type: this.models.EventType.WORKSHOP,
-            description: "Learn the basics of capturing stunning images of the night sky",
-            startDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // Two weeks from now
-            endDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000 + 4 * 60 * 60 * 1000), // 4 hours later
-            location: new this.models.GeoLocation({ latitude: 40.7813, longitude: -73.9737 }),
-            venue: "Hayden Planetarium",
-            organizer: "NYC Astrophotography Club",
-            registrationRequired: true,
-            capacity: 20,
-            availableSpots: 8,
-            price: new this.models.PricingInfo({ adultPrice: 85 }),
-            difficulty: this.models.DifficultyLevel.INTERMEDIATE,
-            equipment: ["DSLR Camera", "Tripod", "Laptop"],
-            tags: ["astrophotography", "workshop", "photography", "intermediate"]
-          })
-        ];
-
-        return {
-          experiences: sampleExperiences,
-          events: sampleEvents
-        };
+          if (this.config.debug) {
+            console.log('📊 Database Statistics:', this.database.getStatistics());
+            
+            // Test database functionality
+            const featuredExperiences = this.database.getFeaturedExperiences(3);
+            console.log('Featured Experiences:', featuredExperiences.map(exp => exp.name));
+            
+            const topRated = this.database.getTopRatedExperiences(3);
+            console.log('Top Rated Experiences:', topRated.map(exp => `${exp.name} (${exp.rating}⭐)`));
+          }
+        } catch (error) {
+          console.error('Failed to initialize database:', error);
+        }
       }
 
       initializeDataModels() {
         // Test data model functionality
         if (this.config.debug) {
-          console.log('🧪 Testing Data Models:');
+          console.log('🧪 Testing Data Models with Database:');
           
-          // Test Experience model
-          const testExperience = this.sampleData.experiences[0];
-          console.log('Sample Experience:', testExperience);
-          console.log('Experience Rating:', testExperience.rating);
-          console.log('Is Featured:', testExperience.featured);
-          console.log('Primary Photo:', testExperience.getPrimaryPhoto());
+          // Test Experience model from database
+          const featuredExperiences = this.database.getFeaturedExperiences(1);
+          if (featuredExperiences.length > 0) {
+            const testExperience = featuredExperiences[0];
+            console.log('Sample Experience from DB:', testExperience.name);
+            console.log('Experience Rating:', testExperience.rating);
+            console.log('Is Featured:', testExperience.featured);
+            console.log('Primary Photo:', testExperience.getPrimaryPhoto());
+            
+            // Test location distance calculation
+            const userLocation = new this.models.GeoLocation({ latitude: 34.0522, longitude: -118.2437 }); // LA Downtown
+            const distance = testExperience.distanceFrom(userLocation);
+            console.log(`Distance from downtown LA: ${this.utils.NumberUtils.round(distance, 1)} miles`);
+          }
           
-          // Test location distance calculation
-          const userLocation = new this.models.GeoLocation({ latitude: 34.0522, longitude: -118.2437 }); // LA Downtown
-          const distance = testExperience.distanceFrom(userLocation);
-          console.log(`Distance from downtown LA: ${this.utils.NumberUtils.round(distance, 1)} miles`);
-          
-          // Test search criteria
+          // Test database search
           const searchCriteria = new this.models.SearchCriteria({
-            location: userLocation,
-            maxDistance: 25,
             types: [this.models.ExperienceType.OBSERVATORY],
-            minRating: 4.0
+            minRating: 4.0,
+            limit: 5
           });
           
-          const matchingExperiences = this.sampleData.experiences.filter(exp => 
-            exp.matchesCriteria(searchCriteria)
-          );
-          console.log('Matching Experiences:', matchingExperiences.length);
-          
-          // Test event model
-          const testEvent = this.sampleData.events[0];
-          console.log('Sample Event:', testEvent);
-          console.log('Event Duration:', testEvent.getDurationHours(), 'hours');
-          console.log('Can Register:', testEvent.canRegister());
+          const searchResult = this.database.searchExperiences(searchCriteria);
+          console.log('Database Search Results:', searchResult.experiences.length, 'observatories found');
           
           // Test utilities
           console.log('Formatted Date:', this.utils.DateUtils.formatDate(new Date()));
-          console.log('Relative Time:', this.utils.DateUtils.getRelativeTime(testEvent.startDate));
+          
+          // Test database statistics
+          const stats = this.database.getStatistics();
+          console.log('Database Stats:', `${stats.totalExperiences} experiences, ${stats.featuredCount} featured`);
         }
       }
 
@@ -1133,6 +1040,151 @@
         }
       }
 
+      setupDatabaseStats() {
+        if (!this.config.debug) return;
+
+        const statsSection = document.getElementById('database-stats');
+        const statsContent = document.getElementById('database-stats-content');
+        
+        if (!statsSection || !statsContent) return;
+
+        const stats = this.database.getStatistics();
+        
+        statsContent.innerHTML = `
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-number">${stats.totalExperiences}</div>
+              <div class="stat-label">Total Experiences</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">${stats.featuredCount}</div>
+              <div class="stat-label">Featured</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">${stats.verifiedCount}</div>
+              <div class="stat-label">Verified</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">${stats.freeExperiences}</div>
+              <div class="stat-label">Free Admission</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">${this.utils.NumberUtils.round(stats.averageRating, 1)}⭐</div>
+              <div class="stat-label">Average Rating</div>
+            </div>
+          </div>
+          
+          <div class="stats-breakdown">
+            <div class="breakdown-section">
+              <h4>By Type</h4>
+              ${Object.entries(stats.byType).map(([type, count]) => 
+                `<div class="breakdown-item">
+                  <span class="breakdown-label">${this.utils.StringUtils.toTitleCase(type.replace(/_/g, ' '))}</span>
+                  <span class="breakdown-count">${count}</span>
+                </div>`
+              ).join('')}
+            </div>
+            
+            <div class="breakdown-section">
+              <h4>By State</h4>
+              ${Object.entries(stats.byState).slice(0, 5).map(([state, count]) => 
+                `<div class="breakdown-item">
+                  <span class="breakdown-label">${state}</span>
+                  <span class="breakdown-count">${count}</span>
+                </div>`
+              ).join('')}
+            </div>
+          </div>
+        `;
+
+        // Add CSS for stats if not already added
+        if (!document.getElementById('database-stats-styles')) {
+          const style = document.createElement('style');
+          style.id = 'database-stats-styles';
+          style.textContent = `
+            .database-stats {
+              background: var(--bg-secondary);
+              border-radius: 12px;
+              padding: 1.5rem;
+              margin-top: 2rem;
+              border: 1px solid var(--border-color);
+            }
+            
+            .database-stats-title {
+              font-size: 1.125rem;
+              font-weight: 600;
+              color: var(--text-primary);
+              margin-bottom: 1rem;
+            }
+            
+            .stats-grid {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+              gap: 1rem;
+              margin-bottom: 1.5rem;
+            }
+            
+            .stat-item {
+              text-align: center;
+              padding: 1rem;
+              background: var(--bg-primary);
+              border-radius: 8px;
+              border: 1px solid var(--border-color);
+            }
+            
+            .stat-number {
+              font-size: 1.5rem;
+              font-weight: bold;
+              color: var(--explorex-primary);
+              margin-bottom: 0.25rem;
+            }
+            
+            .stat-label {
+              font-size: 0.875rem;
+              color: var(--text-secondary);
+            }
+            
+            .stats-breakdown {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+              gap: 1.5rem;
+            }
+            
+            .breakdown-section h4 {
+              margin: 0 0 0.75rem 0;
+              color: var(--text-primary);
+              font-size: 1rem;
+            }
+            
+            .breakdown-item {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 0.5rem 0;
+              border-bottom: 1px solid var(--border-color);
+            }
+            
+            .breakdown-item:last-child {
+              border-bottom: none;
+            }
+            
+            .breakdown-label {
+              color: var(--text-primary);
+              font-size: 0.875rem;
+            }
+            
+            .breakdown-count {
+              color: var(--explorex-secondary);
+              font-weight: 600;
+              font-size: 0.875rem;
+            }
+          `;
+          document.head.appendChild(style);
+        }
+
+        statsSection.style.display = 'block';
+      }
+
       showLocationValidation(isValid, message, suggestions = []) {
         const validationContainer = document.getElementById('location-validation');
         if (!validationContainer) return;
@@ -1239,42 +1291,18 @@
           // Simulate API delay
           await new Promise(resolve => setTimeout(resolve, 800));
 
-          // For development, use sample data with location-based filtering
-          let results = [...this.sampleData.experiences];
+          // Create search criteria
+          const searchCriteria = new this.models.SearchCriteria({
+            location: searchLocation,
+            maxDistance: searchLocation ? 100 : undefined, // 100 miles if location provided
+            searchText: locationQuery && !searchLocation ? locationQuery : undefined,
+            sortBy: searchLocation ? 'distance' : 'relevance',
+            limit: 20
+          });
 
-          // Location-based filtering
-          if (searchLocation) {
-            // Calculate distances and filter by proximity
-            results = results.map(exp => ({
-              ...exp,
-              distance: searchLocation.distanceTo(exp.location)
-            })).filter(exp => exp.distance <= 100); // Within 100 miles
-
-            // Sort by distance and relevance
-            results = this.utils.ArrayUtils.sortBy(results, 
-              { key: 'featured', order: 'desc' },
-              { key: 'distance', order: 'asc' },
-              { key: 'rating', order: 'desc' }
-            );
-          } else {
-            // Fallback to text-based filtering
-            if (locationQuery && locationQuery.trim()) {
-              const query = locationQuery.toLowerCase();
-              results = results.filter(exp => 
-                exp.name.toLowerCase().includes(query) ||
-                exp.address.city.toLowerCase().includes(query) ||
-                exp.address.state.toLowerCase().includes(query) ||
-                exp.tags.some(tag => tag.toLowerCase().includes(query))
-              );
-            }
-
-            // Sort by rating and relevance
-            results = this.utils.ArrayUtils.sortBy(results, 
-              { key: 'featured', order: 'desc' },
-              { key: 'rating', order: 'desc' },
-              { key: 'reviewCount', order: 'desc' }
-            );
-          }
+          // Search using database
+          const searchResult = this.database.searchExperiences(searchCriteria);
+          let results = searchResult.experiences;
 
           // Display results
           this.displaySearchResults(results, locationQuery, dateQuery, searchLocation);
