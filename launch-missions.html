@@ -6861,7 +6861,7 @@
       function getMoonPhase(){
         const now=new Date();const m=now.getMonth()+1;const d=now.getDate();const y=now.getFullYear();
         if(y===2025&&m===9){
-          if(d<=2)return 0;if(d<=9)return 1;if(d<=16)return 2;if(d<=24)return 3;return 4;
+          if(d<=2)return 0;if(d<=9)return 1;if(d<=16)return 6;if(d<=24)return 7;return 0;
         }
         const base=new Date(2024,7,4);const days=(now-base)/(1000*60*60*24);const cycle=days/29.53;return Math.floor((cycle-Math.floor(cycle))*8)%8;
       }
