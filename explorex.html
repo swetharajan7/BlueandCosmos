@@ -905,6 +905,7 @@
   <script src="explorex-analytics-dashboard.js"></script>
   <script src="explorex-security-system.js"></script>
   <script src="explorex-testing-framework.js"></script>
+  <script src="explorex-admin-system.js"></script>
   
   <!-- Load Styles -->
   <link rel="stylesheet" href="explorex-location-styles.css" />
@@ -913,6 +914,7 @@
   <link rel="stylesheet" href="explorex-analytics-styles.css" />
   <link rel="stylesheet" href="explorex-security-styles.css" />
   <link rel="stylesheet" href="explorex-testing-styles.css" />
+  <link rel="stylesheet" href="explorex-admin-styles.css" />
 
   <script>
     // Development Environment Configuration
@@ -971,6 +973,7 @@
         await this.initializeAnalyticsSystem();
         await this.initializeSecuritySystem();
         await this.initializeTestingFramework();
+        await this.initializeAdminSystem();
         this.setupAdvancedFilters();
         this.setupPopularDestinations();
         this.setupDatabaseStats();
@@ -1070,6 +1073,14 @@
           event.preventDefault();
           if (this.testingFramework && this.config.debug) {
             this.showTestRunner();
+          }
+        }
+
+        // Admin dashboard shortcut (Ctrl+Shift+D)
+        if (event.ctrlKey && event.shiftKey && event.key === 'D') {
+          event.preventDefault();
+          if (this.adminManager && this.adminManager.config.enableAdminMode) {
+            this.adminManager.showDashboard();
           }
         }
         
@@ -2027,6 +2038,45 @@
         }
         
         testRunner.classList.toggle('open');
+      }
+
+      async initializeAdminSystem() {
+        try {
+          if (this.config.debug) {
+            console.log('👑 Initializing Admin System...');
+          }
+
+          // Initialize Admin Dashboard
+          this.adminManager = window.ExploreXAdmin;
+          await this.adminManager.initialize();
+
+          // Make admin system globally available for debugging
+          if (this.config.debug) {
+            window.ExploreXAdminDebug = {
+              manager: this.adminManager,
+              login: (credentials) => this.adminManager.adminLogin(credentials),
+              logout: () => this.adminManager.adminLogout(),
+              showDashboard: () => this.adminManager.showDashboard(),
+              showContentManager: () => this.adminManager.showContentManager(),
+              showUserManager: () => this.adminManager.showUserManager(),
+              showSystemMonitor: () => this.adminManager.showSystemMonitor(),
+              checkPermissions: (permission) => this.adminManager.hasPermission(permission),
+              getAuditLog: () => this.adminManager.auditLog
+            };
+          }
+
+          if (this.config.debug) {
+            console.log('✅ Admin System initialized successfully');
+          }
+
+        } catch (error) {
+          console.error('❌ Failed to initialize Admin System:', error);
+          
+          // Admin failure shouldn't break the app
+          if (this.toastManager && this.config.debug) {
+            this.toastManager.warning('Admin system unavailable');
+          }
+        }
       }
 
       handleUserLogin(event) {
