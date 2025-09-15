@@ -14,7 +14,7 @@
       --flag-blue: #002366;
       --highlight: #ff4081;
       --text-white: #ffffff;
-      --text-light: #cce0ff;
+      --text-light: #ffffff;
       --dark-bg: #121212;
       --dark-accent: #001f5b;
       
@@ -61,8 +61,8 @@
       background: var(--accent);
       color: var(--text-white);
       padding: 1em 2em;
-      display: grid;
-      grid-template-columns: auto auto 1fr auto auto;
+      display: flex;
+      justify-content: space-between;
       align-items: center;
       gap: 1.5em;
       position: sticky;
@@ -75,7 +75,7 @@
       align-items: center; 
       text-decoration: none; 
       color: inherit;
-      grid-column: 1;
+      flex-shrink: 0;
     }
 
     .logo-area { 
@@ -118,7 +118,7 @@
       align-items: center; 
       justify-content: flex-end; 
       gap: 1.2em;
-      grid-column: 5;
+      flex-shrink: 0;
     }
 
     .nav-right > * { 
@@ -126,13 +126,20 @@
       align-items: center; 
     }
 
+    /* Header Center Section */
+    .header-center {
+      display: flex;
+      align-items: center;
+      gap: 2em;
+      flex: 1;
+      justify-content: center;
+    }
+
     /* Moon Widget */
     .moon-widget {
       display: flex; 
       align-items: center; 
       gap: 0.6em; 
-      justify-self: center;
-      grid-column: 3;
       min-width: 220px; 
       user-select: none; 
       text-decoration: none; 
@@ -156,16 +163,16 @@
     }
 
     .moon-label { 
-      color: var(--text-light); 
+      color: #ffffff; 
       font-size: 0.95em; 
       white-space: nowrap; 
       font-weight: 500; 
     }
 
     .moon-context { 
-      color: var(--text-light); 
+      color: #e6f0ff; 
       font-size: 0.75em; 
-      opacity: 0.8; 
+      opacity: 0.9; 
       white-space: nowrap; 
     }
 
@@ -174,8 +181,23 @@
       color: #e0ecff; 
     }
 
+    @media (max-width: 1200px) {
+      .header-center {
+        gap: 1em;
+      }
+      
+      .moon-widget .moon-info {
+        display: none;
+      }
+      
+      .explorex-label,
+      .mars-label {
+        display: none;
+      }
+    }
+
     @media (max-width: 900px) { 
-      .moon-widget { 
+      .header-center { 
         display: none; 
       } 
     }
@@ -185,8 +207,6 @@
       display: flex;
       align-items: center;
       gap: 0.6em;
-      justify-self: start;
-      grid-column: 2;
       user-select: none;
       text-decoration: none;
       color: inherit;
@@ -194,7 +214,7 @@
     }
 
     .explorex-label {
-      color: var(--text-light);
+      color: #ffffff;
       font-size: 0.95em;
       font-weight: 500;
       white-space: nowrap;
@@ -221,19 +241,13 @@
       border: 2px solid rgba(59, 130, 246, 0.3);
     }
 
-    @media (max-width: 1050px) {
-      .explorex-widget {
-        display: none;
-      }
-    }
+    /* Responsive behavior handled by header-center */
 
     /* Mars Widget */
     .mars-widget {
       display: flex; 
       align-items: center; 
       gap: 0.6em; 
-      justify-self: end;
-      grid-column: 4;
       user-select: none; 
       text-decoration: none; 
       color: inherit;
@@ -241,7 +255,7 @@
     }
 
     .mars-label {
-      color: var(--text-light); 
+      color: #ffffff; 
       font-size: 0.95em; 
       font-weight: 600; 
       white-space: nowrap;
@@ -270,11 +284,7 @@
       border: 2px solid rgba(205, 92, 92, 0.3);
     }
 
-    @media (max-width: 1100px) { 
-      .mars-widget { 
-        display: none; 
-      } 
-    }
+    /* Responsive behavior handled by header-center */
 
     /* Navigation Styles */
     nav { 
@@ -340,7 +350,7 @@
     }
 
     .dropdown-content a {
-      color: var(--text-light); 
+      color: #ffffff; 
       text-decoration: none;
       padding: 0.8em 1em; 
       position: relative;
@@ -6044,23 +6054,25 @@
       </div>
     </a>
 
-    <a href="moon.html" class="moon-widget" aria-label="Lunar Intelligence Center">
-      <div class="moon-icon">🌙</div>
-      <div class="moon-info">
-        <div class="moon-label" id="moon-phase">Loading...</div>
-        <div class="moon-context" id="moon-context">Lunar Intelligence</div>
-      </div>
-    </a>
+    <div class="header-center">
+      <a href="explorex.html" class="explorex-widget" title="ExploreX - Discover Space Travel Experiences">
+        <div class="explorex-icon">🚀</div>
+        <span class="explorex-label">ExploreX</span>
+      </a>
 
-    <a href="explorex.html" class="explorex-widget" title="ExploreX - Discover Space Travel Experiences">
-      <div class="explorex-icon">🚀</div>
-      <span class="explorex-label">ExploreX</span>
-    </a>
+      <a href="moon.html" class="moon-widget" aria-label="Lunar Intelligence Center">
+        <div class="moon-icon">🌙</div>
+        <div class="moon-info">
+          <div class="moon-label" id="moon-phase">Loading...</div>
+          <div class="moon-context" id="moon-context">Lunar Intelligence</div>
+        </div>
+      </a>
 
-    <a href="mars.html" class="mars-widget" aria-label="Mars Information">
-      <div class="mars-icon"></div>
-      <div class="mars-label">Mars</div>
-    </a>
+      <a href="mars.html" class="mars-widget" aria-label="Mars Information">
+        <div class="mars-icon"></div>
+        <div class="mars-label">Mars</div>
+      </a>
+    </div>
 
     <div class="nav-right">
       <!-- About (internal links, same tab) -->
@@ -19834,6 +19846,11 @@
           notification.style.animation = 'slideOutRight 0.3s ease';
           setTimeout(() => notification.remove(), 300);
         }, 4000);
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
       }, 1000);
     });
   </script>
