@@ -875,7 +875,7 @@
         <p class="coming-soon-text">
           ExploreX is currently being built with cutting-edge technology to provide you with the best space travel experience recommendations.
         </p>
-        <span class="development-status">Task 5 Complete - Advanced Search & Filtering Engine Ready</span>
+        <span class="development-status">Task 6 Complete - UI Components & Responsive Layout Ready</span>
       </section>
     </div>
   </main>
@@ -886,10 +886,12 @@
   <script src="explorex-location-services.js"></script>
   <script src="explorex-database.js"></script>
   <script src="explorex-search-engine.js"></script>
+  <script src="explorex-ui-components.js"></script>
   
   <!-- Load Styles -->
   <link rel="stylesheet" href="explorex-location-styles.css" />
   <link rel="stylesheet" href="explorex-search-styles.css" />
+  <link rel="stylesheet" href="explorex-ui-styles.css" />
 
   <script>
     // Development Environment Configuration
@@ -922,6 +924,11 @@
         this.database = new window.ExploreXDatabase.ExperienceDatabase();
         this.searchEngine = null;
         this.searchUI = null;
+        this.ui = window.ExploreXUI;
+        this.layoutManager = null;
+        this.toastManager = null;
+        this.loadingManager = null;
+        this.experienceModal = null;
         this.currentLocation = null;
         this.selectedLocation = null;
         this.init();
@@ -933,6 +940,7 @@
         this.setupMoonPhase();
         this.setupDropdowns();
         await this.initializeDatabase();
+        this.initializeUIComponents();
         this.initializeSearchEngine();
         this.initializeDataModels();
         this.initializeLocationServices();
@@ -943,6 +951,343 @@
       }
 
 
+
+      initializeUIComponents() {
+        // Initialize responsive layout manager
+        this.layoutManager = new this.ui.ResponsiveLayoutManager();
+        
+        // Initialize toast manager for notifications
+        this.toastManager = new this.ui.ToastManager();
+        
+        // Initialize loading manager
+        this.loadingManager = new this.ui.LoadingManager();
+        
+        // Initialize experience detail modal
+        this.experienceModal = new this.ui.Modal({
+          size: 'large',
+          closeOnBackdrop: true,
+          closeOnEscape: true
+        });
+        
+        // Setup global event listeners
+        this.setupGlobalUIEvents();
+        
+        if (this.config.debug) {
+          console.log('🎨 UI Components initialized');
+          
+          // Test toast notifications
+          setTimeout(() => {
+            this.toastManager.success('ExploreX UI components loaded successfully!');
+          }, 1000);
+        }
+      }
+
+      setupGlobalUIEvents() {
+        // Listen for experience card clicks
+        document.addEventListener('experienceCardClick', this.handleExperienceCardClick.bind(this));
+        
+        // Listen for modal events
+        document.addEventListener('modalOpen', this.handleModalOpen.bind(this));
+        document.addEventListener('modalClose', this.handleModalClose.bind(this));
+        
+        // Setup keyboard shortcuts
+        document.addEventListener('keydown', this.handleGlobalKeydown.bind(this));
+      }
+
+      handleExperienceCardClick(event) {
+        const { experience } = event.detail;
+        this.showExperienceDetails(experience);
+      }
+
+      handleModalOpen(event) {
+        if (this.config.debug) {
+          console.log('Modal opened:', event.detail.modal);
+        }
+      }
+
+      handleModalClose(event) {
+        if (this.config.debug) {
+          console.log('Modal closed:', event.detail.modal);
+        }
+      }
+
+      handleGlobalKeydown(event) {
+        // Global keyboard shortcuts
+        if (event.ctrlKey || event.metaKey) {
+          switch (event.key) {
+            case 'k':
+              event.preventDefault();
+              this.focusSearchInput();
+              break;
+            case '/':
+              event.preventDefault();
+              this.focusSearchInput();
+              break;
+          }
+        }
+        
+        if (event.key === 'Escape') {
+          // Close any open modals or overlays
+          if (this.experienceModal && this.experienceModal.isOpen) {
+            this.experienceModal.close();
+          }
+        }
+      }
+
+      focusSearchInput() {
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+          searchInput.focus();
+          searchInput.select();
+        }
+      }
+
+      showExperienceDetails(experience) {
+        const modalContent = this.createExperienceModalContent(experience);
+        
+        this.experienceModal.open({
+          title: experience.name,
+          body: modalContent,
+          footer: this.createExperienceModalFooter(experience)
+        });
+      }
+
+      createExperienceModalContent(experience) {
+        const container = document.createElement('div');
+        container.className = 'experience-modal-content';
+        
+        // Generate star rating
+        const stars = '★'.repeat(Math.floor(experience.rating)) + 
+                     '☆'.repeat(5 - Math.floor(experience.rating));
+        
+        // Format type for display
+        const typeDisplay = this.utils.StringUtils.toTitleCase(
+          experience.type.replace(/_/g, ' ')
+        );
+        
+        container.innerHTML = `
+          <div class="experience-modal-header">
+            <div class="experience-modal-image" style="background-image: url('${this.getExperienceImage(experience)}')">
+              <div class="experience-modal-badges">
+                ${experience.featured ? '<span class="experience-badge badge-featured">Featured</span>' : ''}
+                ${experience.verified ? '<span class="experience-badge badge-verified">Verified</span>' : ''}
+                ${experience.admissionFee.isFree ? '<span class="experience-badge badge-free">Free</span>' : ''}
+              </div>
+            </div>
+            
+            <div class="experience-modal-info">
+              <div class="experience-type">
+                <span class="type-icon">${this.getTypeIcon(experience.type)}</span>
+                <span class="type-label">${typeDisplay}</span>
+              </div>
+              
+              <div class="experience-rating">
+                <span class="rating-stars">${stars}</span>
+                <span class="rating-value">${experience.rating}</span>
+                <span class="rating-count">(${this.utils.NumberUtils.formatNumber(experience.reviewCount)} reviews)</span>
+              </div>
+              
+              <div class="experience-location">
+                <span class="location-icon">📍</span>
+                <span class="location-text">${experience.address.toString()}</span>
+                ${experience.distance ? 
+                  `<span class="experience-distance">${this.utils.NumberUtils.round(experience.distance, 1)} miles away</span>` : ''}
+              </div>
+              
+              <div class="experience-price">
+                <strong>${experience.admissionFee.formatPrice()}</strong>
+                ${!experience.admissionFee.isFree && experience.admissionFee.notes ? 
+                  `<span class="price-notes">${experience.admissionFee.notes}</span>` : ''}
+              </div>
+            </div>
+          </div>
+          
+          <div class="experience-modal-body">
+            <div class="experience-description">
+              <h4>About This Experience</h4>
+              <p>${experience.description}</p>
+            </div>
+            
+            <div class="experience-details-grid">
+              <div class="detail-section">
+                <h5>Operating Hours</h5>
+                <div class="operating-hours">
+                  ${this.formatOperatingHours(experience.operatingHours)}
+                </div>
+              </div>
+              
+              <div class="detail-section">
+                <h5>Amenities</h5>
+                <div class="amenities-list">
+                  ${experience.amenities.map(amenity => 
+                    `<span class="amenity-tag">${this.formatAmenity(amenity)}</span>`
+                  ).join('')}
+                </div>
+              </div>
+              
+              <div class="detail-section">
+                <h5>Accessibility</h5>
+                <div class="accessibility-info">
+                  ${this.formatAccessibilityInfo(experience.accessibility)}
+                </div>
+              </div>
+              
+              <div class="detail-section">
+                <h5>Contact Information</h5>
+                <div class="contact-info">
+                  ${experience.contactInfo.phone ? `<div>📞 ${experience.contactInfo.phone}</div>` : ''}
+                  ${experience.contactInfo.website ? `<div>🌐 <a href="${experience.contactInfo.website}" target="_blank" rel="noopener">Visit Website</a></div>` : ''}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        return container;
+      }
+
+      createExperienceModalFooter(experience) {
+        const footer = document.createElement('div');
+        footer.className = 'experience-modal-footer';
+        
+        footer.innerHTML = `
+          <button class="modal-button secondary" onclick="this.saveExperience('${experience.id}')">
+            <span class="button-icon">❤️</span>
+            <span class="button-text">Save for Later</span>
+          </button>
+          <button class="modal-button secondary" onclick="this.shareExperience('${experience.id}')">
+            <span class="button-icon">📤</span>
+            <span class="button-text">Share</span>
+          </button>
+          <button class="modal-button primary" onclick="this.getDirections('${experience.address.formattedAddress}')">
+            <span class="button-icon">🗺️</span>
+            <span class="button-text">Get Directions</span>
+          </button>
+        `;
+        
+        return footer;
+      }
+
+      getExperienceImage(experience) {
+        // Return placeholder image based on experience type
+        const imageMap = {
+          observatory: 'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=800&h=400&fit=crop',
+          planetarium: 'https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=800&h=400&fit=crop',
+          space_center: 'https://images.unsplash.com/photo-1517976487492-5750f3195933?w=800&h=400&fit=crop',
+          space_museum: 'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=800&h=400&fit=crop',
+          science_center: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=400&fit=crop'
+        };
+        
+        return imageMap[experience.type] || imageMap.observatory;
+      }
+
+      getTypeIcon(type) {
+        const iconMap = {
+          observatory: '🔭',
+          planetarium: '🌌',
+          space_center: '🚀',
+          space_museum: '🏛️',
+          science_center: '🔬',
+          astronomy_lab: '🧪',
+          stargazing_site: '✨'
+        };
+        
+        return iconMap[type] || '📍';
+      }
+
+      formatOperatingHours(hours) {
+        if (!hours || hours.length === 0) {
+          return '<p>Hours not available</p>';
+        }
+        
+        const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        
+        return hours.map(hour => {
+          const dayName = dayNames[hour.dayOfWeek];
+          if (hour.isClosed) {
+            return `<div class="hours-day"><strong>${dayName}:</strong> Closed</div>`;
+          } else {
+            return `<div class="hours-day"><strong>${dayName}:</strong> ${hour.openTime} - ${hour.closeTime}</div>`;
+          }
+        }).join('');
+      }
+
+      formatAmenity(amenity) {
+        const amenityMap = {
+          parking: '🅿️ Parking',
+          restaurant: '🍽️ Restaurant',
+          gift_shop: '🛍️ Gift Shop',
+          restrooms: '🚻 Restrooms',
+          wheelchair_accessible: '♿ Wheelchair Accessible',
+          guided_tours: '👥 Guided Tours',
+          telescope_viewing: '🔭 Telescope Viewing',
+          planetarium: '🌌 Planetarium',
+          imax_theater: '🎬 IMAX Theater',
+          visitor_center: 'ℹ️ Visitor Center',
+          tram_tours: '🚋 Tram Tours',
+          self_guided_tours: '🚶 Self-Guided Tours'
+        };
+        
+        return amenityMap[amenity] || amenity.replace(/_/g, ' ');
+      }
+
+      formatAccessibilityInfo(accessibility) {
+        const features = [];
+        
+        if (accessibility.wheelchairAccessible) {
+          features.push('♿ Wheelchair Accessible');
+        }
+        if (accessibility.hearingImpairedSupport) {
+          features.push('🦻 Hearing Impaired Support');
+        }
+        if (accessibility.visualImpairedSupport) {
+          features.push('👁️ Visual Impaired Support');
+        }
+        if (accessibility.signLanguageAvailable) {
+          features.push('🤟 Sign Language Available');
+        }
+        if (accessibility.assistiveListening) {
+          features.push('🎧 Assistive Listening Devices');
+        }
+        
+        if (features.length === 0) {
+          return '<p>Accessibility information not available</p>';
+        }
+        
+        return features.map(feature => `<div class="accessibility-feature">${feature}</div>`).join('');
+      }
+
+      saveExperience(experienceId) {
+        // Save experience to user's favorites
+        this.toastManager.success('Experience saved to your favorites!');
+        
+        if (this.config.debug) {
+          console.log('Saving experience:', experienceId);
+        }
+      }
+
+      shareExperience(experienceId) {
+        // Share experience
+        if (navigator.share) {
+          const experience = this.database.getExperience(experienceId);
+          navigator.share({
+            title: experience.name,
+            text: experience.shortDescription,
+            url: window.location.href
+          });
+        } else {
+          // Fallback to clipboard
+          navigator.clipboard.writeText(window.location.href);
+          this.toastManager.success('Link copied to clipboard!');
+        }
+      }
+
+      getDirections(address) {
+        // Open directions in default map app
+        const encodedAddress = encodeURIComponent(address);
+        const mapsUrl = `https://maps.google.com/maps?daddr=${encodedAddress}`;
+        window.open(mapsUrl, '_blank', 'noopener');
+      }
 
       initializeSearchEngine() {
         // Initialize search engine with database
@@ -1611,67 +1956,23 @@
       }
 
       createAdvancedExperienceCard(experience) {
-        const card = document.createElement('div');
-        card.className = 'experience-card';
+        const cardElement = document.createElement('div');
         
-        // Generate star rating
-        const stars = '★'.repeat(Math.floor(experience.rating)) + 
-                     '☆'.repeat(5 - Math.floor(experience.rating));
-        
-        // Format type for display
-        const typeDisplay = this.utils.StringUtils.toTitleCase(
-          experience.type.replace(/_/g, ' ')
-        );
-        
-        // Create badges
-        const badges = [];
-        if (experience.featured) badges.push('<span class="experience-badge badge-featured">Featured</span>');
-        if (experience.verified) badges.push('<span class="experience-badge badge-verified">Verified</span>');
-        if (experience.admissionFee.isFree) badges.push('<span class="experience-badge badge-free">Free</span>');
-        
-        card.innerHTML = `
-          <div class="experience-header">
-            <h3 class="experience-title">${experience.name}</h3>
-            <div class="experience-badges">
-              ${badges.join('')}
-            </div>
-          </div>
-          
-          <div class="experience-type">
-            <span>${this.searchEngine.getTypeIcon(experience.type)}</span>
-            <span>${typeDisplay}</span>
-          </div>
-          
-          <div class="experience-rating">
-            <span class="rating-stars">${stars}</span>
-            <span class="rating-value">${experience.rating}</span>
-            <span class="rating-count">(${this.utils.NumberUtils.formatNumber(experience.reviewCount)} reviews)</span>
-          </div>
-          
-          <p class="experience-description">
-            ${this.utils.StringUtils.truncate(experience.shortDescription || experience.description, 120)}
-          </p>
-          
-          <div class="experience-details">
-            <span class="experience-location">
-              📍 ${experience.address.city}, ${experience.address.state}
-              ${experience.distance ? `<span class="experience-distance"> • ${this.utils.NumberUtils.round(experience.distance, 1)} mi</span>` : ''}
-            </span>
-            <span class="experience-price ${experience.admissionFee.isFree ? 'price-free' : ''}">
-              ${experience.admissionFee.formatPrice()}
-            </span>
-          </div>
-        `;
-        
-        // Add click handler
-        card.addEventListener('click', () => {
-          if (this.config.debug) {
-            console.log('Experience clicked:', experience);
-          }
-          alert(`🚧 Experience details coming soon!\n\n${experience.name}\n${experience.description}`);
+        // Create experience card component
+        const experienceCard = new this.ui.ExperienceCard(cardElement, experience, {
+          showDistance: true,
+          showRating: true,
+          showPrice: true,
+          showBadges: true,
+          enableHover: true,
+          enableClick: true,
+          animateOnScroll: true
         });
         
-        return card;
+        // Initialize the card component
+        experienceCard.initialize();
+        
+        return cardElement;
       }
 
       setSearchLoading(isLoading) {
@@ -1680,9 +1981,24 @@
           if (isLoading) {
             searchButton.textContent = '🔍 Searching...';
             searchButton.disabled = true;
+            
+            // Show loading overlay on results area
+            const resultsSection = document.getElementById('search-results');
+            if (resultsSection) {
+              this.searchLoader = this.loadingManager.show(resultsSection, {
+                message: 'Searching for amazing space experiences...',
+                size: 'medium'
+              });
+            }
           } else {
             searchButton.textContent = '🚀 Explore';
             searchButton.disabled = false;
+            
+            // Hide loading overlay
+            if (this.searchLoader) {
+              this.searchLoader.hide();
+              this.searchLoader = null;
+            }
           }
         }
       }
