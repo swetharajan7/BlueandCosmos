@@ -906,6 +906,7 @@
   <script src="explorex-security-system.js"></script>
   <script src="explorex-testing-framework.js"></script>
   <script src="explorex-admin-system.js"></script>
+  <script src="explorex-performance-optimization.js"></script>
   
   <!-- Load Styles -->
   <link rel="stylesheet" href="explorex-location-styles.css" />
@@ -915,6 +916,7 @@
   <link rel="stylesheet" href="explorex-security-styles.css" />
   <link rel="stylesheet" href="explorex-testing-styles.css" />
   <link rel="stylesheet" href="explorex-admin-styles.css" />
+  <link rel="stylesheet" href="explorex-performance-styles.css" />
 
   <script>
     // Development Environment Configuration
@@ -974,6 +976,7 @@
         await this.initializeSecuritySystem();
         await this.initializeTestingFramework();
         await this.initializeAdminSystem();
+        await this.initializePerformanceOptimization();
         this.setupAdvancedFilters();
         this.setupPopularDestinations();
         this.setupDatabaseStats();
@@ -1081,6 +1084,14 @@
           event.preventDefault();
           if (this.adminManager && this.adminManager.config.enableAdminMode) {
             this.adminManager.showDashboard();
+          }
+        }
+
+        // Performance dashboard shortcut (Ctrl+Shift+P)
+        if (event.ctrlKey && event.shiftKey && event.key === 'P') {
+          event.preventDefault();
+          if (this.performanceManager) {
+            this.showPerformanceDashboard();
           }
         }
         
@@ -2077,6 +2088,180 @@
             this.toastManager.warning('Admin system unavailable');
           }
         }
+      }
+
+      async initializePerformanceOptimization() {
+        try {
+          if (this.config.debug) {
+            console.log('⚡ Initializing Performance Optimization...');
+          }
+
+          // Initialize Performance Optimization Manager
+          this.performanceManager = new window.ExploreXPerformance.PerformanceOptimizationManager();
+          await this.performanceManager.initialize();
+
+          // Setup performance-optimized search
+          this.setupOptimizedSearch();
+
+          // Setup performance monitoring integration
+          this.setupPerformanceMonitoringIntegration();
+
+          // Make performance manager globally available for debugging
+          if (this.config.debug) {
+            window.ExploreXPerformanceDebug = {
+              manager: this.performanceManager,
+              getCache: (key) => this.performanceManager.getCache(key),
+              setCache: (key, data, options) => this.performanceManager.setCache(key, data, options),
+              getSummary: () => this.performanceManager.getPerformanceSummary(),
+              clearCache: () => this.performanceManager.cache.clear(),
+              showDashboard: () => this.showPerformanceDashboard()
+            };
+          }
+
+          if (this.config.debug) {
+            console.log('✅ Performance Optimization initialized successfully');
+          }
+
+        } catch (error) {
+          console.error('❌ Failed to initialize Performance Optimization:', error);
+          
+          // Performance failure shouldn't break the app
+          if (this.toastManager && this.config.debug) {
+            this.toastManager.warning('Performance optimization unavailable');
+          }
+        }
+      }
+
+      setupOptimizedSearch() {
+        // Cache search results for better performance
+        const originalPerformSearch = this.performSearch.bind(this);
+        
+        this.performSearch = async (locationQuery, dateQuery) => {
+          const cacheKey = `search_${locationQuery}_${dateQuery}`;
+          
+          // Try to get cached results first
+          const cachedResults = this.performanceManager.getCache(cacheKey);
+          if (cachedResults) {
+            console.log('🚀 Serving cached search results');
+            this.displaySearchResults(cachedResults.results, locationQuery, dateQuery, cachedResults.searchLocation);
+            return;
+          }
+          
+          // Perform original search
+          const startTime = performance.now();
+          const result = await originalPerformSearch(locationQuery, dateQuery);
+          const searchDuration = performance.now() - startTime;
+          
+          // Cache the results
+          if (result && result.results) {
+            this.performanceManager.setCache(cacheKey, {
+              results: result.results,
+              searchLocation: result.searchLocation,
+              timestamp: Date.now()
+            }, { type: 'search' });
+          }
+          
+          // Track performance
+          this.performanceManager.recordMetric('search_duration', searchDuration);
+          
+          return result;
+        };
+      }
+
+      setupPerformanceMonitoringIntegration() {
+        // Integrate with analytics system
+        if (this.analyticsManager) {
+          setInterval(() => {
+            const summary = this.performanceManager.getPerformanceSummary();
+            
+            // Track cache performance
+            this.analyticsManager.trackPerformance('cache_hit_rate', summary.cache.hitRate);
+            
+            // Track Core Web Vitals if available
+            if (summary.metrics.LCP) {
+              this.analyticsManager.trackPerformance('lcp', summary.metrics.LCP.current);
+            }
+            
+            if (summary.metrics.FID) {
+              this.analyticsManager.trackPerformance('fid', summary.metrics.FID.current);
+            }
+          }, 60000); // Every minute
+        }
+      }
+
+      showPerformanceDashboard() {
+        // Create performance dashboard if it doesn't exist
+        let dashboard = document.getElementById('performance-dashboard');
+        
+        if (!dashboard) {
+          dashboard = document.createElement('div');
+          dashboard.id = 'performance-dashboard';
+          dashboard.className = 'performance-dashboard';
+          
+          const summary = this.performanceManager.getPerformanceSummary();
+          
+          dashboard.innerHTML = `
+            <div class="performance-dashboard-header">
+              <h2 class="performance-dashboard-title">
+                ⚡ Performance Dashboard
+                <button class="performance-dashboard-close" onclick="this.closest('.performance-dashboard').classList.remove('open')">×</button>
+              </h2>
+            </div>
+            <div class="performance-dashboard-content">
+              <div class="performance-section">
+                <h3>Cache Performance</h3>
+                <div class="performance-metric">
+                  <span class="performance-metric-label">Hit Rate</span>
+                  <span class="performance-metric-value">${summary.cache.hitRate}%</span>
+                </div>
+                <div class="performance-metric">
+                  <span class="performance-metric-label">Cache Size</span>
+                  <span class="performance-metric-value">${summary.cache.size}</span>
+                </div>
+                <div class="performance-metric">
+                  <span class="performance-metric-label">Entries</span>
+                  <span class="performance-metric-value">${summary.cache.entries}</span>
+                </div>
+              </div>
+              
+              <div class="performance-section">
+                <h3>Core Web Vitals</h3>
+                ${summary.metrics.LCP ? `
+                  <div class="performance-metric">
+                    <span class="performance-metric-label">LCP</span>
+                    <span class="performance-metric-value">${Math.round(summary.metrics.LCP.current)}ms</span>
+                  </div>
+                ` : ''}
+                ${summary.metrics.FID ? `
+                  <div class="performance-metric">
+                    <span class="performance-metric-label">FID</span>
+                    <span class="performance-metric-value">${Math.round(summary.metrics.FID.current)}ms</span>
+                  </div>
+                ` : ''}
+              </div>
+              
+              <div class="performance-section">
+                <h3>Optimizations</h3>
+                <div class="performance-metric">
+                  <span class="performance-metric-label">Caching</span>
+                  <span class="performance-status ${summary.optimizations.caching ? 'excellent' : 'poor'}">
+                    ${summary.optimizations.caching ? 'Enabled' : 'Disabled'}
+                  </span>
+                </div>
+                <div class="performance-metric">
+                  <span class="performance-metric-label">Lazy Loading</span>
+                  <span class="performance-status ${summary.optimizations.lazyLoading ? 'excellent' : 'poor'}">
+                    ${summary.optimizations.lazyLoading ? 'Enabled' : 'Disabled'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          `;
+          
+          document.body.appendChild(dashboard);
+        }
+        
+        dashboard.classList.toggle('open');
       }
 
       handleUserLogin(event) {

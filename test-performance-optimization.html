@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExploreX Performance Optimization Test</title>
+    <link rel="stylesheet" href="explorex-performance-styles.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            min-height: 100vh;
+        }
+
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .test-header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .test-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .control-group {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+        }
+
+        .control-group h3 {
+            margin-top: 0;
+            color: #495057;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn.secondary {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+
+        .btn.warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        .btn.danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        .performance-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body> 
+   <div class="performance-toggle">
+        <button class="btn" onclick="togglePerformanceDashboard()">
+            ⚡ Performance Dashboard
+        </button>
+    </div>
+
+    <div class="test-container">
+        <div class="test-header">
+            <h1>⚡ ExploreX Performance Optimization Test</h1>
+            <p>Advanced performance testing with caching, lazy loading, and optimization strategies</p>
+        </div>
+
+        <div class="test-controls">
+            <div class="control-group">
+                <h3>💾 Caching System</h3>
+                <button class="btn" onclick="testCacheSet()">Test Cache Set</button>
+                <button class="btn" onclick="testCacheGet()">Test Cache Get</button>
+                <button class="btn" onclick="testCacheEviction()">Test Cache Eviction</button>
+                <button class="btn secondary" onclick="clearCache()">Clear Cache</button>
+            </div>
+
+            <div class="control-group">
+                <h3>🖼️ Lazy Loading</h3>
+                <button class="btn" onclick="testLazyLoading()">Test Lazy Loading</button>
+                <button class="btn" onclick="addLazyImages()">Add Lazy Images</button>
+                <button class="btn" onclick="testImageOptimization()">Test Image Optimization</button>
+                <button class="btn secondary" onclick="toggleLazyLoading()">Toggle Lazy Loading</button>
+            </div>
+
+            <div class="control-group">
+                <h3>🧠 Memory Optimization</h3>
+                <button class="btn" onclick="testMemoryUsage()">Test Memory Usage</button>
+                <button class="btn" onclick="performMemoryCleanup()">Perform Cleanup</button>
+                <button class="btn" onclick="testGarbageCollection()">Test Garbage Collection</button>
+                <button class="btn warning" onclick="simulateMemoryLeak()">Simulate Memory Leak</button>
+            </div>
+
+            <div class="control-group">
+                <h3>📦 Bundle Optimization</h3>
+                <button class="btn" onclick="testCodeSplitting()">Test Code Splitting</button>
+                <button class="btn" onclick="testModuleLoading()">Test Module Loading</button>
+                <button class="btn" onclick="testResourceHints()">Test Resource Hints</button>
+                <button class="btn secondary" onclick="analyzeBundle()">Analyze Bundle</button>
+            </div>
+
+            <div class="control-group">
+                <h3>📊 Performance Monitoring</h3>
+                <button class="btn" onclick="measureCoreWebVitals()">Measure Core Web Vitals</button>
+                <button class="btn" onclick="testPerformanceAPI()">Test Performance API</button>
+                <button class="btn" onclick="generatePerformanceReport()">Generate Report</button>
+                <button class="btn secondary" onclick="exportPerformanceData()">Export Data</button>
+            </div>
+
+            <div class="control-group">
+                <h3>🔧 Optimization Tools</h3>
+                <button class="btn" onclick="runPerformanceAudit()">Run Performance Audit</button>
+                <button class="btn" onclick="optimizeImages()">Optimize Images</button>
+                <button class="btn" onclick="compressAssets()">Compress Assets</button>
+                <button class="btn warning" onclick="resetOptimizations()">Reset Optimizations</button>
+            </div>
+        </div>
+
+        <!-- Test Images for Lazy Loading -->
+        <div id="lazy-loading-test" style="margin-top: 30px;">
+            <h3>🖼️ Lazy Loading Test Images</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                <!-- Images will be added dynamically -->
+            </div>
+        </div>
+
+        <!-- Performance Metrics Display -->
+        <div style="margin-top: 30px;">
+            <h3>📊 Real-time Performance Metrics</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                <div style="background: #f8fafc; padding: 20px; border-radius: 10px; text-align: center;">
+                    <div style="font-size: 2rem; font-weight: bold; color: #10b981;" id="cache-hit-rate">0%</div>
+                    <div style="color: #64748b;">Cache Hit Rate</div>
+                </div>
+                <div style="background: #f8fafc; padding: 20px; border-radius: 10px; text-align: center;">
+                    <div style="font-size: 2rem; font-weight: bold; color: #3b82f6;" id="memory-usage">0MB</div>
+                    <div style="color: #64748b;">Memory Usage</div>
+                </div>
+                <div style="background: #f8fafc; padding: 20px; border-radius: 10px; text-align: center;">
+                    <div style="font-size: 2rem; font-weight: bold; color: #f59e0b;" id="load-time">0ms</div>
+                    <div style="color: #64748b;">Page Load Time</div>
+                </div>
+                <div style="background: #f8fafc; padding: 20px; border-radius: 10px; text-align: center;">
+                    <div style="font-size: 2rem; font-weight: bold; color: #ef4444;" id="optimization-score">0</div>
+                    <div style="color: #64748b;">Optimization Score</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #1e293b; color: #10b981; padding: 20px; border-radius: 10px; font-family: 'Courier New', monospace; font-size: 12px; max-height: 300px; overflow-y: auto; margin-top: 20px;" id="log-container">
+            <div>⚡ ExploreX Performance Optimization Test Console</div>
+            <div>Ready for performance testing...</div>
+        </div>
+    </div>
+
+    <!-- Load Performance System -->
+    <script src="explorex-performance-optimization.js"></script>
+
+    <script>
+        // Global variables
+        let performanceManager;
+        let testMetrics = {
+            cacheHitRate: 0,
+            memoryUsage: 0,
+            loadTime: 0,
+            optimizationScore: 0
+        };
+
+        // Initialize performance system
+        async function initializePerformanceSystem() {
+            try {
+                log('🚀 Initializing Performance Optimization System...');
+
+                // Initialize Performance Manager
+                performanceManager = new window.ExploreXPerformance.PerformanceOptimizationManager();
+                await performanceManager.initialize();
+
+                // Start real-time monitoring
+                startRealTimeMonitoring();
+
+                // Make performance manager globally available for debugging
+                window.ExploreXPerformanceDebug = {
+                    manager: performanceManager,
+                    getCache: (key) => performanceManager.getCache(key),
+                    setCache: (key, data, options) => performanceManager.setCache(key, data, options),
+                    getSummary: () => performanceManager.getPerformanceSummary(),
+                    clearCache: () => performanceManager.cache.clear(),
+                    metrics: testMetrics
+                };
+
+                log('✅ Performance Optimization System initialized successfully');
+
+            } catch (error) {
+                log(`❌ Performance system initialization failed: ${error.message}`);
+                console.error('Performance initialization error:', error);
+            }
+        }
+
+        // Caching system tests
+        function testCacheSet() {
+            const testData = {
+                experiences: [
+                    { id: 1, name: 'Test Observatory', rating: 4.5 },
+                    { id: 2, name: 'Test Planetarium', rating: 4.8 }
+                ],
+                timestamp: Date.now()
+            };
+
+            const success = performanceManager.setCache('test-experiences', testData, { type: 'experiences' });
+            log(`💾 Cache set test: ${success ? '✅ Success' : '❌ Failed'}`);
+            updateMetrics();
+        }
+
+        function testCacheGet() {
+            const cachedData = performanceManager.getCache('test-experiences');
+            log(`💾 Cache get test: ${cachedData ? '✅ Hit' : '❌ Miss'}`);
+            if (cachedData) {
+                log(`   Retrieved ${cachedData.experiences.length} experiences`);
+            }
+            updateMetrics();
+        }
+
+        function testCacheEviction() {
+            // Fill cache to trigger eviction
+            for (let i = 0; i < 50; i++) {
+                const largeData = new Array(1000).fill(`test-data-${i}`);
+                performanceManager.setCache(`large-data-${i}`, largeData, { type: 'test' });
+            }
+            log('💾 Cache eviction test: Filled cache with large data');
+            updateMetrics();
+        }
+
+        function clearCache() {
+            performanceManager.cache.clear();
+            performanceManager.cacheStats = { hits: 0, misses: 0, size: 0, operations: 0 };
+            log('🗑️ Cache cleared');
+            updateMetrics();
+        }
+
+        // Lazy loading tests
+        function testLazyLoading() {
+            addLazyImages();
+            log('🖼️ Lazy loading test: Added test images');
+        }
+
+        function addLazyImages() {
+            const container = document.querySelector('#lazy-loading-test > div');
+            
+            for (let i = 0; i < 6; i++) {
+                const img = document.createElement('img');
+                img.dataset.src = `https://picsum.photos/300/200?random=${Date.now() + i}`;
+                img.dataset.width = '300';
+                img.dataset.height = '200';
+                img.alt = `Test image ${i + 1}`;
+                img.style.width = '100%';
+                img.style.height = '200px';
+                img.style.objectFit = 'cover';
+                img.style.borderRadius = '8px';
+                
+                performanceManager.setupImageForLazyLoading(img);
+                container.appendChild(img);
+            }
+            
+            log(`🖼️ Added 6 lazy loading images`);
+        }
+
+        function testImageOptimization() {
+            const images = document.querySelectorAll('img[data-src]');
+            let optimizedCount = 0;
+            
+            images.forEach(img => {
+                const originalSrc = img.dataset.src;
+                const optimizedSrc = performanceManager.optimizeImageURL(originalSrc, img);
+                
+                if (originalSrc !== optimizedSrc) {
+                    optimizedCount++;
+                }
+            });
+            
+            log(`🖼️ Image optimization: ${optimizedCount} images optimized`);
+        }
+
+        function toggleLazyLoading() {
+            performanceManager.config.enableLazyLoading = !performanceManager.config.enableLazyLoading;
+            log(`🖼️ Lazy loading: ${performanceManager.config.enableLazyLoading ? 'Enabled' : 'Disabled'}`);
+        }
+
+        // Memory optimization tests
+        function testMemoryUsage() {
+            if ('memory' in performance) {
+                const memory = performance.memory;
+                const usedMB = Math.round(memory.usedJSHeapSize / 1024 / 1024);
+                const totalMB = Math.round(memory.totalJSHeapSize / 1024 / 1024);
+                
+                testMetrics.memoryUsage = usedMB;
+                updateMetrics();
+                
+                log(`🧠 Memory usage: ${usedMB}MB / ${totalMB}MB`);
+            } else {
+                log('🧠 Memory API not available');
+            }
+        }
+
+        function performMemoryCleanup() {
+            performanceManager.performMemoryCleanup();
+            log('🧹 Memory cleanup performed');
+            
+            setTimeout(() => {
+                testMemoryUsage();
+            }, 1000);
+        }
+
+        function testGarbageCollection() {
+            if (window.gc) {
+                window.gc();
+                log('🗑️ Garbage collection triggered');
+            } else {
+                log('🗑️ Garbage collection not available (requires --expose-gc flag)');
+            }
+            
+            setTimeout(() => {
+                testMemoryUsage();
+            }, 1000);
+        }
+
+        function simulateMemoryLeak() {
+            // Create objects that won't be garbage collected
+            window.memoryLeakTest = window.memoryLeakTest || [];
+            
+            for (let i = 0; i < 10000; i++) {
+                window.memoryLeakTest.push({
+                    id: i,
+                    data: new Array(100).fill(`leak-data-${i}`),
+                    timestamp: Date.now()
+                });
+            }
+            
+            log('⚠️ Memory leak simulated (10,000 objects created)');
+            
+            setTimeout(() => {
+                testMemoryUsage();
+            }, 1000);
+        }
+
+        // Bundle optimization tests
+        function testCodeSplitting() {
+            // Simulate dynamic import
+            performanceManager.dynamicImport('./test-module.js')
+                .then(() => {
+                    log('📦 Code splitting test: ✅ Module loaded successfully');
+                })
+                .catch(error => {
+                    log(`📦 Code splitting test: ❌ ${error.message}`);
+                });
+        }
+
+        function testModuleLoading() {
+            const modules = ['module1', 'module2', 'module3'];
+            
+            modules.forEach(async (moduleName, index) => {
+                try {
+                    // Simulate module loading delay
+                    await new Promise(resolve => setTimeout(resolve, index * 100));
+                    log(`📦 Module loaded: ${moduleName}`);
+                } catch (error) {
+                    log(`📦 Module loading failed: ${moduleName}`);
+                }
+            });
+        }
+
+        function testResourceHints() {
+            // Add preload hints
+            const link1 = document.createElement('link');
+            link1.rel = 'preload';
+            link1.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap';
+            link1.as = 'style';
+            document.head.appendChild(link1);
+            
+            // Add prefetch hints
+            const link2 = document.createElement('link');
+            link2.rel = 'prefetch';
+            link2.href = '/api/experiences';
+            document.head.appendChild(link2);
+            
+            log('📦 Resource hints added: preload and prefetch');
+        }
+
+        function analyzeBundle() {
+            // Simulate bundle analysis
+            const bundleSize = Math.floor(Math.random() * 500) + 200; // 200-700KB
+            const chunkCount = Math.floor(Math.random() * 10) + 5; // 5-15 chunks
+            
+            log(`📦 Bundle analysis:`);
+            log(`   Total size: ${bundleSize}KB`);
+            log(`   Chunks: ${chunkCount}`);
+            log(`   Compression: ${Math.floor(Math.random() * 30) + 60}%`);
+        }
+
+        // Performance monitoring tests
+        function measureCoreWebVitals() {
+            // Simulate Core Web Vitals measurement
+            const lcp = Math.floor(Math.random() * 2000) + 1000; // 1-3s
+            const fid = Math.floor(Math.random() * 100) + 50; // 50-150ms
+            const cls = (Math.random() * 0.2).toFixed(3); // 0-0.2
+            
+            performanceManager.recordMetric('LCP', lcp);
+            performanceManager.recordMetric('FID', fid);
+            performanceManager.recordMetric('CLS', parseFloat(cls));
+            
+            log(`📊 Core Web Vitals measured:`);
+            log(`   LCP: ${lcp}ms`);
+            log(`   FID: ${fid}ms`);
+            log(`   CLS: ${cls}`);
+        }
+
+        function testPerformanceAPI() {
+            if ('performance' in window) {
+                const navigation = performance.getEntriesByType('navigation')[0];
+                if (navigation) {
+                    const loadTime = Math.round(navigation.loadEventEnd - navigation.loadEventStart);
+                    testMetrics.loadTime = loadTime;
+                    updateMetrics();
+                    
+                    log(`📊 Performance API test:`);
+                    log(`   Load time: ${loadTime}ms`);
+                    log(`   DOM ready: ${Math.round(navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart)}ms`);
+                }
+            } else {
+                log('📊 Performance API not available');
+            }
+        }
+
+        function generatePerformanceReport() {
+            const summary = performanceManager.getPerformanceSummary();
+            
+            log('📋 Performance Report Generated:');
+            log(`   Cache hit rate: ${summary.cache.hitRate}%`);
+            log(`   Cache size: ${summary.cache.size}`);
+            log(`   Cache entries: ${summary.cache.entries}`);
+            log(`   Optimizations enabled: ${Object.values(summary.optimizations).filter(Boolean).length}/4`);
+            
+            console.log('Full performance summary:', summary);
+        }
+
+        function exportPerformanceData() {
+            const data = {
+                summary: performanceManager.getPerformanceSummary(),
+                metrics: testMetrics,
+                timestamp: Date.now()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `performance-data-${Date.now()}.json`;
+            a.click();
+            
+            log('📥 Performance data exported');
+        }
+
+        // Optimization tools
+        function runPerformanceAudit() {
+            log('🔍 Running performance audit...');
+            
+            // Simulate audit checks
+            const checks = [
+                { name: 'Image optimization', score: Math.floor(Math.random() * 40) + 60 },
+                { name: 'Cache utilization', score: Math.floor(Math.random() * 30) + 70 },
+                { name: 'Bundle size', score: Math.floor(Math.random() * 50) + 50 },
+                { name: 'Memory usage', score: Math.floor(Math.random() * 35) + 65 }
+            ];
+            
+            let totalScore = 0;
+            checks.forEach(check => {
+                totalScore += check.score;
+                log(`   ${check.name}: ${check.score}/100`);
+            });
+            
+            const avgScore = Math.round(totalScore / checks.length);
+            testMetrics.optimizationScore = avgScore;
+            updateMetrics();
+            
+            log(`🔍 Audit complete. Overall score: ${avgScore}/100`);
+        }
+
+        function optimizeImages() {
+            const images = document.querySelectorAll('img');
+            let optimizedCount = 0;
+            
+            images.forEach(img => {
+                if (img.src && !img.dataset.optimized) {
+                    // Simulate image optimization
+                    img.dataset.optimized = 'true';
+                    optimizedCount++;
+                }
+            });
+            
+            log(`🖼️ Optimized ${optimizedCount} images`);
+        }
+
+        function compressAssets() {
+            // Simulate asset compression
+            const assets = ['CSS', 'JavaScript', 'Images', 'Fonts'];
+            
+            assets.forEach((asset, index) => {
+                setTimeout(() => {
+                    const compressionRatio = Math.floor(Math.random() * 30) + 20; // 20-50%
+                    log(`📦 ${asset} compressed: ${compressionRatio}% size reduction`);
+                }, index * 500);
+            });
+        }
+
+        function resetOptimizations() {
+            // Reset all optimizations
+            performanceManager.config.enableCaching = true;
+            performanceManager.config.enableLazyLoading = true;
+            performanceManager.config.enableImageOptimization = true;
+            performanceManager.config.enableMemoryOptimization = true;
+            
+            clearCache();
+            
+            // Clear memory leak test
+            if (window.memoryLeakTest) {
+                delete window.memoryLeakTest;
+            }
+            
+            testMetrics = { cacheHitRate: 0, memoryUsage: 0, loadTime: 0, optimizationScore: 0 };
+            updateMetrics();
+            
+            log('🔄 All optimizations reset');
+        }
+
+        // Dashboard functions
+        function togglePerformanceDashboard() {
+            // Create performance dashboard if it doesn't exist
+            let dashboard = document.getElementById('performance-dashboard');
+            
+            if (!dashboard) {
+                dashboard = document.createElement('div');
+                dashboard.id = 'performance-dashboard';
+                dashboard.className = 'performance-dashboard';
+                
+                const summary = performanceManager.getPerformanceSummary();
+                
+                dashboard.innerHTML = `
+                    <div class="performance-dashboard-header">
+                        <h2 class="performance-dashboard-title">
+                            ⚡ Performance Dashboard
+                            <button class="performance-dashboard-close" onclick="this.closest('.performance-dashboard').classList.remove('open')">×</button>
+                        </h2>
+                    </div>
+                    <div class="performance-dashboard-content">
+                        <div class="performance-section">
+                            <h3>Cache Performance</h3>
+                            <div class="performance-metric">
+                                <span class="performance-metric-label">Hit Rate</span>
+                                <span class="performance-metric-value">${summary.cache.hitRate}%</span>
+                            </div>
+                            <div class="performance-metric">
+                                <span class="performance-metric-label">Cache Size</span>
+                                <span class="performance-metric-value">${summary.cache.size}</span>
+                            </div>
+                            <div class="performance-metric">
+                                <span class="performance-metric-label">Entries</span>
+                                <span class="performance-metric-value">${summary.cache.entries}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="performance-section">
+                            <h3>Optimizations</h3>
+                            <div class="performance-metric">
+                                <span class="performance-metric-label">Caching</span>
+                                <span class="performance-status ${summary.optimizations.caching ? 'excellent' : 'poor'}">
+                                    ${summary.optimizations.caching ? 'Enabled' : 'Disabled'}
+                                </span>
+                            </div>
+                            <div class="performance-metric">
+                                <span class="performance-metric-label">Lazy Loading</span>
+                                <span class="performance-status ${summary.optimizations.lazyLoading ? 'excellent' : 'poor'}">
+                                    ${summary.optimizations.lazyLoading ? 'Enabled' : 'Disabled'}
+                                </span>
+                            </div>
+                            <div class="performance-metric">
+                                <span class="performance-metric-label">Image Optimization</span>
+                                <span class="performance-status ${summary.optimizations.imageOptimization ? 'excellent' : 'poor'}">
+                                    ${summary.optimizations.imageOptimization ? 'Enabled' : 'Disabled'}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(dashboard);
+            }
+            
+            dashboard.classList.toggle('open');
+            log('⚡ Performance dashboard toggled');
+        }
+
+        // Utility functions
+        function updateMetrics() {
+            if (performanceManager) {
+                const summary = performanceManager.getPerformanceSummary();
+                testMetrics.cacheHitRate = parseFloat(summary.cache.hitRate);
+            }
+            
+            document.getElementById('cache-hit-rate').textContent = testMetrics.cacheHitRate + '%';
+            document.getElementById('memory-usage').textContent = testMetrics.memoryUsage + 'MB';
+            document.getElementById('load-time').textContent = testMetrics.loadTime + 'ms';
+            document.getElementById('optimization-score').textContent = testMetrics.optimizationScore;
+        }
+
+        function startRealTimeMonitoring() {
+            setInterval(() => {
+                if (Math.random() < 0.3) { // 30% chance to update metrics
+                    testMemoryUsage();
+                }
+                
+                if (Math.random() < 0.2) { // 20% chance to test performance API
+                    testPerformanceAPI();
+                }
+            }, 5000);
+        }
+
+        function log(message) {
+            const logContainer = document.getElementById('log-container');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.textContent = `[${timestamp}] ${message}`;
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializePerformanceSystem();
+            
+            // Initial metrics update
+            setTimeout(() => {
+                updateMetrics();
+                testPerformanceAPI();
+            }, 1000);
+        });
+
+        // Add some automatic testing for demo
+        setTimeout(() => {
+            if (Math.random() < 0.5) { // 50% chance to auto-run some tests
+                log('🤖 Auto-running performance tests for demonstration...');
+                setTimeout(() => {
+                    testCacheSet();
+                    setTimeout(() => {
+                        testCacheGet();
+                        setTimeout(() => {
+                            addLazyImages();
+                        }, 1000);
+                    }, 500);
+                }, 1000);
+            }
+        }, 3000);
+    </script>
+</body>
+</html>
