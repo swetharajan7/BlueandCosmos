@@ -1,0 +1,781 @@
+/**
+ * ExploreX Testing Framework Styles
+ * 
+ * Styling for testing components including:
+ * - Test runner interface and controls
+ * - Test results display and reporting
+ * - Performance metrics visualization
+ * - Accessibility testing indicators
+ */
+
+/* =============================================================================
+   TEST RUNNER INTERFACE
+   ============================================================================= */
+
+.test-runner {
+  position: fixed;
+  top: 0;
+  left: -400px;
+  width: 400px;
+  height: 100vh;
+  background: white;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.test-runner.open {
+  left: 0;
+}
+
+.test-runner-header {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+  padding: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.test-runner-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.test-runner-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.test-runner-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.test-runner-controls {
+  padding: 20px;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.test-control-group {
+  margin-bottom: 20px;
+}
+
+.test-control-group h4 {
+  margin: 0 0 10px 0;
+  color: #374151;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.test-suite-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+}
+
+.test-suite-checkbox {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.test-suite-checkbox.checked {
+  background: #8b5cf6;
+  border-color: #8b5cf6;
+}
+
+.test-suite-checkbox.checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.test-suite-label {
+  font-size: 0.9rem;
+  color: #374151;
+  cursor: pointer;
+}
+
+.test-run-button {
+  width: 100%;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 15px;
+}
+
+.test-run-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+}
+
+.test-run-button:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.test-run-button.running {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+/* =============================================================================
+   TEST RESULTS DISPLAY
+   ============================================================================= */
+
+.test-results {
+  padding: 20px;
+}
+
+.test-summary {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.test-summary h3 {
+  margin: 0 0 15px 0;
+  color: #1e293b;
+  font-size: 1.1rem;
+}
+
+.test-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.test-metric:last-child {
+  border-bottom: none;
+}
+
+.test-metric-label {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.test-metric-value {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.test-progress {
+  width: 100%;
+  height: 8px;
+  background: #f1f5f9;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 15px 0;
+}
+
+.test-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
+.test-progress-bar.failed {
+  background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+}
+
+/* Test suite results */
+.test-suite-result {
+  margin-bottom: 25px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.test-suite-header {
+  background: #f8fafc;
+  padding: 15px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.2s ease;
+}
+
+.test-suite-header:hover {
+  background: #f1f5f9;
+}
+
+.test-suite-name {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 1rem;
+}
+
+.test-suite-stats {
+  display: flex;
+  gap: 15px;
+  font-size: 0.85rem;
+}
+
+.test-stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.test-stat.passed { color: #10b981; }
+.test-stat.failed { color: #ef4444; }
+.test-stat.skipped { color: #f59e0b; }
+
+.test-suite-toggle-icon {
+  font-size: 0.8rem;
+  color: #64748b;
+  transition: transform 0.2s ease;
+}
+
+.test-suite-result.expanded .test-suite-toggle-icon {
+  transform: rotate(90deg);
+}
+
+.test-suite-tests {
+  display: none;
+  padding: 0;
+}
+
+.test-suite-result.expanded .test-suite-tests {
+  display: block;
+}
+
+.test-result {
+  padding: 12px 20px;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.test-result:last-child {
+  border-bottom: none;
+}
+
+.test-result-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.test-result-icon {
+  font-size: 1rem;
+}
+
+.test-result-name {
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.test-result-duration {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.test-result-error {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: rgba(239, 68, 68, 0.1);
+  border-left: 3px solid #ef4444;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: #dc2626;
+  font-family: 'Courier New', monospace;
+}
+
+/* =============================================================================
+   PERFORMANCE METRICS
+   ============================================================================= */
+
+.performance-metrics {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.performance-metrics h4 {
+  margin: 0 0 15px 0;
+  color: #1e293b;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.performance-chart {
+  height: 200px;
+  background: #f8fafc;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+.performance-thresholds {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.threshold-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #f8fafc;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.threshold-label {
+  color: #64748b;
+}
+
+.threshold-value {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.threshold-status {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-left: 8px;
+}
+
+.threshold-status.good { background: #10b981; }
+.threshold-status.warning { background: #f59e0b; }
+.threshold-status.critical { background: #ef4444; }
+
+/* =============================================================================
+   ACCESSIBILITY INDICATORS
+   ============================================================================= */
+
+.accessibility-results {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.accessibility-results h4 {
+  margin: 0 0 15px 0;
+  color: #1e293b;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.accessibility-score {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.accessibility-score-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: conic-gradient(#10b981 0deg 270deg, #f1f5f9 270deg 360deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+  position: relative;
+}
+
+.accessibility-score-circle::before {
+  content: '';
+  width: 60px;
+  height: 60px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.accessibility-score-text {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  z-index: 1;
+}
+
+.accessibility-issues {
+  display: grid;
+  gap: 10px;
+}
+
+.accessibility-issue {
+  padding: 12px;
+  border-radius: 6px;
+  border-left: 4px solid;
+  font-size: 0.85rem;
+}
+
+.accessibility-issue.critical {
+  background: rgba(239, 68, 68, 0.1);
+  border-left-color: #ef4444;
+  color: #dc2626;
+}
+
+.accessibility-issue.warning {
+  background: rgba(245, 158, 11, 0.1);
+  border-left-color: #f59e0b;
+  color: #d97706;
+}
+
+.accessibility-issue.info {
+  background: rgba(59, 130, 246, 0.1);
+  border-left-color: #3b82f6;
+  color: #2563eb;
+}
+
+/* =============================================================================
+   TEST CONTROLS
+   ============================================================================= */
+
+.test-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid #f1f5f9;
+}
+
+.test-action-btn {
+  flex: 1;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.test-action-btn.primary {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+}
+
+.test-action-btn.secondary {
+  background: #f8fafc;
+  color: #64748b;
+  border: 2px solid #e2e8f0;
+}
+
+.test-action-btn:hover {
+  transform: translateY(-1px);
+}
+
+.test-action-btn.primary:hover {
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.test-action-btn.secondary:hover {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+/* =============================================================================
+   TEST RUNNER TOGGLE
+   ============================================================================= */
+
+.test-runner-toggle {
+  position: fixed;
+  top: 80px;
+  left: 20px;
+  z-index: 1000;
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+.test-runner-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+}
+
+/* =============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================= */
+
+@media (max-width: 768px) {
+  .test-runner {
+    width: 100%;
+    left: -100%;
+  }
+  
+  .test-runner-toggle {
+    left: 10px;
+    top: 70px;
+    padding: 10px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .performance-thresholds {
+    grid-template-columns: 1fr;
+  }
+  
+  .test-actions {
+    flex-direction: column;
+  }
+}
+
+/* =============================================================================
+   DARK THEME SUPPORT
+   ============================================================================= */
+
+body.dark .test-runner {
+  background: #1e293b;
+  color: #f8fafc;
+}
+
+body.dark .test-runner-controls {
+  border-bottom-color: #334155;
+}
+
+body.dark .test-control-group h4 {
+  color: #f8fafc;
+}
+
+body.dark .test-suite-label {
+  color: #cbd5e1;
+}
+
+body.dark .test-suite-checkbox {
+  border-color: #475569;
+}
+
+body.dark .test-summary {
+  background: #334155;
+  border-color: #475569;
+}
+
+body.dark .test-metric {
+  border-bottom-color: #475569;
+}
+
+body.dark .test-metric-label {
+  color: #cbd5e1;
+}
+
+body.dark .test-metric-value {
+  color: #f8fafc;
+}
+
+body.dark .test-suite-result {
+  border-color: #475569;
+}
+
+body.dark .test-suite-header {
+  background: #334155;
+  border-bottom-color: #475569;
+}
+
+body.dark .test-suite-name {
+  color: #f8fafc;
+}
+
+body.dark .test-result {
+  border-bottom-color: #475569;
+}
+
+body.dark .test-result-name {
+  color: #cbd5e1;
+}
+
+body.dark .performance-metrics,
+body.dark .accessibility-results {
+  background: #334155;
+  border-color: #475569;
+}
+
+body.dark .performance-metrics h4,
+body.dark .accessibility-results h4 {
+  color: #f8fafc;
+}
+
+body.dark .performance-chart {
+  background: #475569;
+  color: #cbd5e1;
+}
+
+body.dark .threshold-item {
+  background: #475569;
+}
+
+body.dark .threshold-label {
+  color: #cbd5e1;
+}
+
+body.dark .threshold-value {
+  color: #f8fafc;
+}
+
+body.dark .accessibility-score-circle::before {
+  background: #334155;
+}
+
+body.dark .accessibility-score-text {
+  color: #f8fafc;
+}
+
+body.dark .test-action-btn.secondary {
+  background: #475569;
+  color: #cbd5e1;
+  border-color: #64748b;
+}
+
+body.dark .test-action-btn.secondary:hover {
+  background: #64748b;
+  color: #f8fafc;
+}
+
+/* =============================================================================
+   ANIMATIONS
+   ============================================================================= */
+
+@keyframes testRunning {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.test-running-indicator {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #f3f4f6;
+  border-top: 2px solid #8b5cf6;
+  border-radius: 50%;
+  animation: testRunning 1s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes testProgress {
+  0% { width: 0%; }
+  100% { width: var(--progress-width); }
+}
+
+.test-progress-animated .test-progress-bar {
+  animation: testProgress 0.5s ease-out;
+}
+
+/* =============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================= */
+
+.test-runner:focus-within {
+  outline: 2px solid #8b5cf6;
+  outline-offset: -2px;
+}
+
+.test-run-button:focus,
+.test-action-btn:focus,
+.test-runner-close:focus {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.test-suite-checkbox:focus {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .test-runner {
+    border: 2px solid;
+  }
+  
+  .test-suite-result {
+    border-width: 3px;
+  }
+  
+  .test-progress-bar {
+    border: 1px solid;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .test-runner,
+  .test-run-button,
+  .test-action-btn,
+  .test-suite-toggle-icon {
+    transition: none;
+  }
+  
+  .test-running-indicator {
+    animation: none;
+  }
+  
+  .test-progress-animated .test-progress-bar {
+    animation: none;
+  }
+}

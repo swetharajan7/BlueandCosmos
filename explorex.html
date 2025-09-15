@@ -904,6 +904,7 @@
   <script src="explorex-performance-monitor.js"></script>
   <script src="explorex-analytics-dashboard.js"></script>
   <script src="explorex-security-system.js"></script>
+  <script src="explorex-testing-framework.js"></script>
   
   <!-- Load Styles -->
   <link rel="stylesheet" href="explorex-location-styles.css" />
@@ -911,6 +912,7 @@
   <link rel="stylesheet" href="explorex-ui-styles.css" />
   <link rel="stylesheet" href="explorex-analytics-styles.css" />
   <link rel="stylesheet" href="explorex-security-styles.css" />
+  <link rel="stylesheet" href="explorex-testing-styles.css" />
 
   <script>
     // Development Environment Configuration
@@ -968,6 +970,7 @@
         this.initializeUserSystem();
         await this.initializeAnalyticsSystem();
         await this.initializeSecuritySystem();
+        await this.initializeTestingFramework();
         this.setupAdvancedFilters();
         this.setupPopularDestinations();
         this.setupDatabaseStats();
@@ -1059,6 +1062,14 @@
           event.preventDefault();
           if (this.securityManager) {
             this.toggleSecurityDashboard();
+          }
+        }
+
+        // Test runner shortcut (Ctrl+Shift+T)
+        if (event.ctrlKey && event.shiftKey && event.key === 'T') {
+          event.preventDefault();
+          if (this.testingFramework && this.config.debug) {
+            this.showTestRunner();
           }
         }
         
@@ -1885,6 +1896,137 @@
             });
           }
         });
+      }
+
+      async initializeTestingFramework() {
+        try {
+          // Only initialize testing in development mode
+          if (!this.config.debug) {
+            return;
+          }
+
+          if (this.config.debug) {
+            console.log('🧪 Initializing Testing Framework...');
+          }
+
+          // Initialize Testing Framework
+          this.testingFramework = new window.ExploreXTesting.TestingFramework();
+          await this.testingFramework.initialize();
+
+          // Make testing globally available for debugging
+          if (this.config.debug) {
+            window.ExploreXTestingDebug = {
+              framework: this.testingFramework,
+              runAllTests: () => this.testingFramework.runAllTests(),
+              runUnitTests: () => this.runTestSuite('unit'),
+              runIntegrationTests: () => this.runTestSuite('integration'),
+              runE2ETests: () => this.runTestSuite('e2e'),
+              runPerformanceTests: () => this.runTestSuite('performance'),
+              runAccessibilityTests: () => this.runTestSuite('accessibility'),
+              exportResults: () => this.testingFramework.exportResults(),
+              showTestRunner: () => this.showTestRunner()
+            };
+          }
+
+          if (this.config.debug) {
+            console.log('✅ Testing Framework initialized successfully');
+          }
+
+        } catch (error) {
+          console.error('❌ Failed to initialize Testing Framework:', error);
+          
+          // Testing failure shouldn't break the app in production
+          if (this.toastManager && this.config.debug) {
+            this.toastManager.warning('Testing framework unavailable');
+          }
+        }
+      }
+
+      async runTestSuite(suiteName) {
+        if (!this.testingFramework) {
+          console.warn('Testing framework not initialized');
+          return;
+        }
+
+        const suite = this.testingFramework.testSuites.get(suiteName);
+        if (!suite) {
+          console.warn(`Test suite '${suiteName}' not found`);
+          return;
+        }
+
+        console.log(`🧪 Running ${suite.name}...`);
+        const results = await this.testingFramework.runTestSuite(suite);
+        console.log(`✅ ${suite.name} completed: ${results.passed}/${results.total} passed`);
+        
+        return results;
+      }
+
+      showTestRunner() {
+        // Create test runner if it doesn't exist
+        let testRunner = document.getElementById('test-runner');
+        
+        if (!testRunner) {
+          testRunner = document.createElement('div');
+          testRunner.id = 'test-runner';
+          testRunner.className = 'test-runner';
+          
+          testRunner.innerHTML = `
+            <div class="test-runner-header">
+              <h2 class="test-runner-title">
+                🧪 Test Runner
+                <button class="test-runner-close" onclick="this.closest('.test-runner').classList.remove('open')">×</button>
+              </h2>
+            </div>
+            <div class="test-runner-controls">
+              <div class="test-control-group">
+                <h4>Test Suites</h4>
+                <div class="test-suite-toggle">
+                  <div class="test-suite-checkbox checked"></div>
+                  <span class="test-suite-label">Unit Tests</span>
+                </div>
+                <div class="test-suite-toggle">
+                  <div class="test-suite-checkbox checked"></div>
+                  <span class="test-suite-label">Integration Tests</span>
+                </div>
+                <div class="test-suite-toggle">
+                  <div class="test-suite-checkbox checked"></div>
+                  <span class="test-suite-label">End-to-End Tests</span>
+                </div>
+                <div class="test-suite-toggle">
+                  <div class="test-suite-checkbox checked"></div>
+                  <span class="test-suite-label">Performance Tests</span>
+                </div>
+                <div class="test-suite-toggle">
+                  <div class="test-suite-checkbox checked"></div>
+                  <span class="test-suite-label">Accessibility Tests</span>
+                </div>
+              </div>
+              
+              <button class="test-run-button" onclick="window.ExploreXTestingDebug.runAllTests()">
+                Run All Tests
+              </button>
+              
+              <div class="test-actions">
+                <button class="test-action-btn primary" onclick="window.ExploreXTestingDebug.exportResults()">
+                  Export Results
+                </button>
+                <button class="test-action-btn secondary" onclick="console.log(window.ExploreXTestingDebug.framework.testResults)">
+                  View Results
+                </button>
+              </div>
+            </div>
+            <div class="test-results">
+              <div class="test-summary">
+                <h3>Test Results</h3>
+                <p>Run tests to see results here. Check console for detailed output.</p>
+              </div>
+            </div>
+          `;
+          
+          document.body.appendChild(testRunner);
+        }
+        
+        testRunner.classList.toggle('open');
       }
 
       handleUserLogin(event) {
